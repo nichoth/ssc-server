@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "",
+    "copy": "mkdir -p public && cp src/index.html public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
