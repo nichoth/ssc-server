@@ -27,10 +27,13 @@ const handler = async (event, context) => {
       }
 
     case 'POST':
-      // e.g. POST /.netlify/functions/fauna-crud with a body of key value pair objects, NOT strings
+      // e.g. POST /.netlify/functions/fauna-crud with a body of key value
+      // pair objects, NOT strings
       return createRoute.handler(event, context)
+
     case 'PUT':
-      // e.g. PUT /.netlify/functions/fauna-crud/123456 with a body of key value pair objects, NOT strings
+      // e.g. PUT /.netlify/functions/fauna-crud/123456 with a body of key
+      // value pair objects, NOT strings
       if (segments.length === 1) {
         const [id] = segments
         event.id = id
