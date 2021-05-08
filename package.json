@@ -1,1 +1,23 @@
-{}
+{
+  "name": "ssc-server",
+  "description": "[![Netlify Status](https://api.netlify.com/api/v1/badges/ae03a3bc-b5a6-4fb8-b9dc-d95cc4606ca1/deploy-status)](https://app.netlify.com/sites/ssc-server/deploys)",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nichoth/ssc-server.git"
+  },
+  "author": "Nick Thomas <nichoth@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nichoth/ssc-server/issues"
+  },
+  "homepage": "https://github.com/nichoth/ssc-server#readme",
+  "dependencies": {
+    "faunadb": "^4.2.0"
+  }
+}
