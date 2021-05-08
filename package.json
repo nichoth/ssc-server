@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/nichoth/ssc-server#readme",
   "dependencies": {
+    "dotenv": "^8.6.0",
     "faunadb": "^4.2.0"
   }
 }

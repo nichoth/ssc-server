@@ -2,3 +2,5 @@
 .netlify
 
 public/*
+
+.env
