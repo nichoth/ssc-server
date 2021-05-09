@@ -4,16 +4,20 @@ const { query, Client } = require('faunadb')
 
 /* configure faunaDB Client with our secret */
 const client = new Client({
-    secret: process.env.FAUNADB_SERVER_SECRET,
+    secret: process.env.FAUNADB_SERVER_SECRET
 })
+
+console.log('secrets', process.env.FAUNADB_SERVER_SECRET)
 
 /* export our lambda function as named "handler" export */
 const handler = async (event) => {
     /* parse the string body into a useable JS object */
     const data = JSON.parse(event.body)
     console.log('Function `create` invoked', data)
+
     const item = { data }
     console.log('item', item)
+
     /* construct the fauna query */
     try {
         const response = await client.query(
