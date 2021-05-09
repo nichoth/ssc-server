@@ -10,17 +10,8 @@ var _msg
 test('setup', function (t) {
     ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
 
-    // ntl.stdout.on('data', function (d) {
-    //     console.log('stdout', d.toString('utf8'))
-    // })
-
-    // ntl.stdout.once('data', (data) => {
-    //     console.log('***data', data)
-    //     t.end()
-    // })
-
     ntl.stdout.on('data', function (d) {
-        if (d.toString().includes('Server now read')) {
+        if (d.toString().includes('Server now ready')) {
             t.end()
         }
     })
