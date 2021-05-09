@@ -49,7 +49,7 @@ const handler = async (event, context) => {
             }
 
         case 'DELETE':
-          // e.g. DELETE /.netlify/functions/fauna-crud/123456
+            // e.g. DELETE /.netlify/functions/fauna-crud/123456
             if (segments.length === 1) {
                 const [id] = segments
                 event.id = id
@@ -70,4 +70,3 @@ const handler = async (event, context) => {
 }
 
 module.exports = { handler }
-
