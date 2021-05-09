@@ -3,6 +3,8 @@ var fetch = require('node-fetch')
 var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
 
+var ntl
+
 test('setup', function (t) {
     ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
 
