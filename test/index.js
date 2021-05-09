@@ -4,6 +4,8 @@ var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
 
 var ntl
+var keys
+var _msg
 
 test('setup', function (t) {
     ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
@@ -29,12 +31,11 @@ test('setup', function (t) {
 })
 
 // * create and sign msg client side
-test('publish', function (t) {
-    var url = 'http://localhost:8888/.netlify/functions/post-one-message'
+test('publish one message', function (t) {
     var content = { type: 'test', text: 'waaaa' }
-    var keys = ssc.createKeys()
+    keys = ssc.createKeys()
 
-    var _msg = ssc.createMsg(keys, null, content)
+    _msg = ssc.createMsg(keys, null, content)
 
     // {
     //     previous: null,
@@ -51,7 +52,7 @@ test('publish', function (t) {
         msg: _msg
     }
 
-    fetch(url, {
+    fetch('http://localhost:8888/.netlify/functions/post-one-message', {
             method: 'post',
             body:    JSON.stringify(reqBody),
             headers: { 'Content-Type': 'application/json' },
@@ -67,6 +68,36 @@ test('publish', function (t) {
                 t.end()
             })
             .catch(err => t.error(err));
+})
+
+
+
+
+test('publish a second message', function (t) {
+    var req2 = {
+        keys: { public: keys.public },
+        // in here we pass in the previous msg we created
+        // createMsg(keys, prevMsg, content)
+        msg: ssc.createMsg(keys, _msg, { type: 'test2', text: 'ok' })
+    }
+
+    fetch('http://localhost:8888/.netlify/functions/post-one-message', {
+        method: 'post',
+        body:    JSON.stringify(req2),
+        headers: { 'Content-Type': 'application/json' },
+    })
+        .then(res => res.json())
+        .then(res => {
+            t.pass('got a response')
+            t.equal(res.msg.value.signature, req2.msg.signature,
+                'should send back right signature')
+            t.end()
+
+        })
+        .catch(err => {
+            t.error(err)
+            t.end()
+        })
 })
 
 test('all done', function (t) {
