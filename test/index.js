@@ -14,8 +14,15 @@ test('setup', function (t) {
     //     console.log('stdout', d.toString('utf8'))
     // })
 
-    ntl.stdout.once('data', (/* data */) => {
-        t.end()
+    // ntl.stdout.once('data', (data) => {
+    //     console.log('***data', data)
+    //     t.end()
+    // })
+
+    ntl.stdout.on('data', function (d) {
+        if (d.toString().includes('Server now read')) {
+            t.end()
+        }
     })
 
     ntl.stdout.pipe(process.stdout)
@@ -34,6 +41,8 @@ test('setup', function (t) {
 test('publish one message', function (t) {
     var content = { type: 'test', text: 'waaaa' }
     keys = ssc.createKeys()
+
+    console.log('**keys**', keys)
 
     _msg = ssc.createMsg(keys, null, content)
 
@@ -71,8 +80,6 @@ test('publish one message', function (t) {
 })
 
 
-
-
 test('publish a second message', function (t) {
     var req2 = {
         keys: { public: keys.public },
@@ -84,7 +91,7 @@ test('publish a second message', function (t) {
     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
         method: 'post',
         body:    JSON.stringify(req2),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' }
     })
         .then(res => res.json())
         .then(res => {
@@ -92,7 +99,6 @@ test('publish a second message', function (t) {
             t.equal(res.msg.value.signature, req2.msg.signature,
                 'should send back right signature')
             t.end()
-
         })
         .catch(err => {
             t.error(err)
