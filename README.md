@@ -5,3 +5,14 @@
 Trying this
 
 
+----------------------------------------
+
+
+## use `netlify-cli` to create a demo function, 'test'
+
+```
+netlify functions:create test
+```
+
+Then you select 'fauna crud' from the templates.
+
