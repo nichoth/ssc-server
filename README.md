@@ -16,3 +16,12 @@ netlify functions:create test
 
 Then you select 'fauna crud' from the templates.
 
+## make a .env file
+
+Make a `.env` file with a variable `FAUNADB_SERVER_SECRET`. Also put this
+variable in netlify via their GUI.
+
+## try a function call
+
+Use 'postman' to test the `POST` method call, creating a new document.
+

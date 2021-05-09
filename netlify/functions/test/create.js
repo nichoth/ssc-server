@@ -12,10 +12,10 @@ console.log('secrets', process.env.FAUNADB_SERVER_SECRET)
 /* export our lambda function as named "handler" export */
 const handler = async (event) => {
     /* parse the string body into a useable JS object */
-    const data = JSON.parse(event.body)
+    const body = JSON.parse(event.body)
     console.log('Function `create` invoked', data)
 
-    const item = { data }
+    const item = { data: body }
     console.log('item', item)
 
     /* construct the fauna query */
