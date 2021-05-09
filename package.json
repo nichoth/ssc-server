@@ -4,14 +4,14 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && concurrently --kill-others \"npm run watch-sass\" \"npm run watch-js\" \"netlify dev\"",
+    "start": "npm run build && concurrently --kill-others \"npm run watch-sass\" \"npm run watch-js\" \"netlify dev --port=8888\"",
     "build": "npm run copy && npm run build-js && npm run build-sass",
     "build-js": "browserify -p esmify -t uglifyify --debug src/index.js > public/bundle.js",
     "copy": "mkdir -p public && cp src/index.html public",
     "build-sass": "sass src/style/main.scss public/style.css",
     "watch-js": "watchify -t uglifyify --debug -p esmify src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape test/*.js | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,9 @@
     "concurrently": "^6.1.0",
     "esmify": "^2.1.1",
     "sass": "^1.32.12",
-    "uglifyify": "^5.0.2"
+    "tap-spec": "^5.0.0",
+    "tape": "^5.2.2",
+    "uglifyify": "^5.0.2",
+    "xtend": "^4.0.2"
   }
 }

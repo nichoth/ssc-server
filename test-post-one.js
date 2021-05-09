@@ -9,6 +9,8 @@ var url = 'http://localhost:8888/.netlify/functions/post-one-message'
 // this works because we are making a new author every time,
 // so starting a new feed on each call
 
+// IRL you might want to authenticate requests first
+
 function test () {
     var content = { text: 'testing', type: 'test' }
     var msg = ssc.createMsg(keys, null, content)
