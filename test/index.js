@@ -1,8 +1,6 @@
 var test = require('tape')
-// var got = require('got')
 var fetch = require('node-fetch')
 var { spawn } = require('child_process')
-// var xtend = require('xtend')
 var ssc = require('@nichoth/ssc')
 
 test('setup', function (t) {
