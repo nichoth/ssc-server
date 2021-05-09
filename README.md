@@ -25,3 +25,22 @@ variable in netlify via their GUI.
 
 Use 'postman' to test the `POST` method call, creating a new document.
 
+
+-----------------------------------
+
+## test-post-one
+
+note: you need the `author` index to exist in the DB
+
+
+
+
+
+
+
+
+
+
+
+
+
