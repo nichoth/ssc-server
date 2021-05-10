@@ -24,9 +24,15 @@
   },
   "homepage": "https://github.com/nichoth/ssc-server#readme",
   "dependencies": {
-    "@nichoth/ssc": "^0.0.6",
+    "@nichoth/ssc": "^0.0.7",
+    "cloudinary": "^1.25.1",
+    "cloudinary-core": "^2.11.4",
     "dotenv": "^8.6.0",
-    "faunadb": "^4.2.0"
+    "faunadb": "^4.2.0",
+    "htm": "^3.0.4",
+    "multer": "^1.4.2",
+    "preact": "^10.5.13",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
