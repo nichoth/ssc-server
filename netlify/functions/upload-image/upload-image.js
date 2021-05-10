@@ -7,7 +7,7 @@ cloudinary.config({
 });
 
 exports.handler = function (ev, ctx, cb) {
-    var file = ev.body
+    var { file } = JSON.parse(ev.body)
 
     cloudinary.uploader.upload(file, function (err, res) {
         if (err) {
