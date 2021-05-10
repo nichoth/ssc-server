@@ -27,6 +27,7 @@
     "@nichoth/ssc": "^0.0.7",
     "cloudinary": "^1.25.1",
     "cloudinary-core": "^2.11.4",
+    "datauri": "^3.0.0",
     "dotenv": "^8.6.0",
     "faunadb": "^4.2.0",
     "htm": "^3.0.4",

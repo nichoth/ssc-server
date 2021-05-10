@@ -19,18 +19,27 @@ const upload = (file) => {
     }).then(
         response => response.json() // if the response is a JSON object
     ).then(
-        success => console.log(success) // Handle the success response object
+        success => console.log('succes', success) // Handle the success response object
     ).catch(
-        error => console.log(error) // Handle the error response object
+        error => console.log('error', error) // Handle the error response object
     );
 };
 
 function submit (ev) {
     ev.preventDefault()
     var fileList = ev.target.elements.image.files
-    console.log('ddddd', fileList)
     var file = fileList[0]
     console.log('file', file)
+
+    const reader = new FileReader()
+
+    reader.onloadend = () => {
+        upload(reader.result)
+        // logs a bunch
+        // console.log('reader res', reader.result)
+    }
+
+    reader.readAsDataURL(file)
 }
 
 function TestEl (props) {
