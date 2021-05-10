@@ -4,6 +4,11 @@
 
 Trying this
 
+## start a local server
+
+```
+npm start
+```
 
 ----------------------------------------
 
@@ -33,9 +38,11 @@ Use 'postman' to test the `POST` method call, creating a new document.
 note: you need the `author` index to exist in the DB
 
 
+## getting a feed
 
-
-
+```
+GET locahost:8888/.netlify/functions/feed/123456
+```
 
 
 

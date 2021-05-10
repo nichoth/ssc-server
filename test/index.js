@@ -97,6 +97,10 @@ test('publish a second message', function (t) {
         })
 })
 
+test('get a feed', function (t) {
+
+})
+
 test('all done', function (t) {
     ntl.kill()
     t.end()
