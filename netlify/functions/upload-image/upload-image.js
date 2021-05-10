@@ -7,9 +7,13 @@ cloudinary.config({
 });
 
 exports.handler = function (ev, ctx, cb) {
-    var { file } = JSON.parse(ev.body)
+    var { file, hash } = JSON.parse(ev.body)
 
-    cloudinary.uploader.upload(file, function (err, res) {
+    console.log('**hash**', hash)
+
+    cloudinary.uploader.upload(file, {
+        public_id: '' + hash
+    }, function (err, res) {
         if (err) {
             return cb(null, {
                 statusCode: 500,

@@ -1,18 +1,21 @@
 import { html } from 'htm/preact'
 import { render } from 'preact'
+var createHash = require('crypto').createHash
 
-var S = require('pull-stream')
-var fileReader = require('pull-file-reader')
-
-var createHash = require('multiblob/util').createHash
-
-console.log('wooo')
+// var S = require('pull-stream')
+// var fileReader = require('pull-file-reader')
 
 // var createHash = require('multiblob/util').createHash
+
+console.log('wooo')
 
 
 // This will upload the file after having read it
 const upload = (file, hash) => {
+    console.log('the hash', hash)
+
+    console.log('slugified', ('' + hash).replace(/\//g, "-"))
+
     fetch(' /.netlify/functions/upload-image', { // Your POST endpoint
         method: 'POST',
         headers: {
@@ -21,7 +24,7 @@ const upload = (file, hash) => {
             // "Content-Type": "You will perhaps need to define a content-type here"
         },
         body: JSON.stringify({
-            hash: hash,
+            hash: ('' + hash).replace(/\//g, "-"),
             file: file // This is your file object
         })
     }).then(
@@ -37,32 +40,38 @@ function submit (ev) {
     ev.preventDefault()
     var fileList = ev.target.elements.image.files
     var file = fileList[0]
-    var hasher = createHash('sha256')
+    // var hasher = createHash('sha256')
     console.log('file', file)
 
-    S(
-        fileReader(file),
-        hasher,
-        S.collect(function (err, buffs)  {
-            console.log('collected', err, buffs)
-            var contents = Buffer.concat(buffs)
-            console.log('contents', contents)
-            var hash = '&' + hasher.digest
+    const reader = new FileReader()
 
-            const reader = new FileReader()
+    reader.onloadend = () => {
+        var hash = createHash('sha256')
+        hash.update(reader.result)
+        upload(reader.result, hash.digest('base64'))
+    }
 
-            reader.onloadend = () => {
-                upload(reader.result, hash)
-                // logs a bunch
-                // console.log('reader res', reader.result)
-            }
+    // this is bad because we are reading the file *twice*
+    // the first time is b/c we need to get a hash for it
+    reader.readAsDataURL(file)
 
-            // this is bad because we are reading the file *twice*
-            // the first time is b/c we need to get a hash for it
-            reader.readAsDataURL(file)
-            // upload(contents)
-        })
-    )
+
+    // S(
+    //     fileReader(file),
+    //     hasher,
+    //     S.collect(function (err, buffs)  {
+    //         console.log('collected', err, buffs)
+    //         var contents = Buffer.concat(buffs)
+    //         console.log('contents', contents)
+    //         var hash = '&' + hasher.digest
+
+    //         // var hash = algs[alg]()
+    //         // var hash = createHash('sha256')
+    //         // hash.digest()
+               // upload(contents)
+
+    //     })
+    // )
 
     // ---------------------------------------
 
