@@ -14,7 +14,8 @@ console.log('wooo')
 const upload = (file, hash) => {
     console.log('the hash', hash)
 
-    var slugifiedHash = ('' + hash).replace(/\//g, "-")
+    // var slugifiedHash = ('' + hash).replace(/\//g, "-")
+    var slugifiedHash = encodeURIComponent('' + hash)
     var content = { type: 'test', text: 'wooooo' }
 
     fetch('/.netlify/functions/post-one-message', {

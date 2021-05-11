@@ -27,7 +27,7 @@ var createHash = require('crypto').createHash
 
 exports.handler = function (ev, ctx, cb) {
     try {
-        var { keys, msg, file } = JSON.parse(ev.body)
+        var { keys, msg, file, hash } = JSON.parse(ev.body)
     } catch (err) {
         return cb(null, {
             statusCode: 422,
@@ -67,16 +67,25 @@ exports.handler = function (ev, ctx, cb) {
     }
 
 
-    // --------- start doing things ---------------------
+
+    // need to check that the message has a mention for the given image
+    // how to deal with '/' in hash?
+    // would want to 'url encode' the given hash
+
+
+
+    // ------------------ start doing things ---------------------
 
 
 
 
-    var hash = createHash('sha256')
-    hash.update(file)
+    // var hash = createHash('sha256')
+    // hash.update(file)
 
-    var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
+    // var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
+    var slugifiedHash = encodeURIComponent('' + hash)
 
+    console.log('**slug**', slugifiedHash)
 
 
 
@@ -111,12 +120,44 @@ exports.handler = function (ev, ctx, cb) {
             }
 
             // msg list is ok, write it to DB
-            msgAndFile(msg, file, slugifiedHash)
+            return msgAndFile(msg, file, slugifiedHash)
+                .then(res => {
+                    return cb(null, {
+                        statusCode: 200,
+                        body: JSON.stringify({
+                            ok: true,
+                            res: res
+                        })
+                    })
+                })
+                .catch(err => cb(null, {
+                    statusCode: 500,
+                    body: JSON.stringify({
+                        ok: false,
+                        error: err
+                    })
+                }))
         })
         .catch(err => {
             if (err.name === 'NotFound') {
                 // write the msg b/c the feed is new
                 return msgAndFile(msg, file, slugifiedHash)
+                    .then(res => {
+                        cb(null, {
+                            statusCode: 200,
+                            body: JSON.stringify({
+                                ok: true,
+                                res: res
+                            })
+                        })
+                    })
+                    .catch(err => cb(null, {
+                        statusCode: 500,
+                        body: JSON.stringify({
+                            ok: false,
+                            error: err
+                        })
+                    }))
             }
 
             return cb(null, {
@@ -129,24 +170,24 @@ exports.handler = function (ev, ctx, cb) {
         })
 
 
-    function msgAndFile (msg, file, hash) {
+    function msgAndFile (msg, file, slug) {
         return Promise.all([
             writeMsg(msg),
-            upload(file, hash)
+            upload(file, slug)
         ])
-            .catch(err => {
-                revert(msg, file, hash)
+            .catch(() => {
+                revert(msg, file, slug)
             })
     }
 
 
     // undo writing the msg or file
     function revert (msg, file, hash) {
-        console.log('revert this one', msg)
+        console.log('revert this one', msg, hash)
     }
 
 
-    // return the new msg to the client
+    // return the new msg
     function writeMsg (msg) {
         var msgHash = ssc.getId(msg)
 

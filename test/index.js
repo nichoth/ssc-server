@@ -2,6 +2,11 @@ var test = require('tape')
 var fetch = require('node-fetch')
 var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
+var fs = require('fs')
+
+var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
+// let buff = new Buffer(data);
+let base6Caracal = caracal.toString('base64');
 
 var ntl
 var keys
@@ -33,9 +38,11 @@ test('publish one message', function (t) {
     var content = { type: 'test', text: 'waaaa' }
     keys = ssc.createKeys()
 
-    console.log('**keys**', keys)
+    // console.log('**keys**', keys)
 
     _msg = ssc.createMsg(keys, null, content)
+
+    console.log('**msg**', _msg)
 
     // {
     //     previous: null,
@@ -49,7 +56,9 @@ test('publish one message', function (t) {
 
     var reqBody = {
         keys: { public: keys.public },
-        msg: _msg
+        msg: _msg,
+        // @TODO
+        file: base6Caracal
     }
 
     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
