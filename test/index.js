@@ -58,7 +58,7 @@ test('publish one message', function (t) {
         keys: { public: keys.public },
         msg: _msg,
         // @TODO
-        file: base64Caracal
+        file: 'data:image/png;base64,' + base64Caracal
     }
 
     // console.log('req body', reqBody)

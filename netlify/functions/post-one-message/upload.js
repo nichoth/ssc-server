@@ -13,10 +13,10 @@ function upload (file/*, _hash*/) {
 
     var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
 
-    var buf = Buffer.from(file, 'base64')
+    // var buf = Buffer.from(file, 'base64')
 
     return new Promise(function (resolve, reject) {
-        cloudinary.uploader.upload(buf, {
+        cloudinary.uploader.upload(file, {
             public_id: slugifiedHash
         }, function (err, res) {
             if (err) {

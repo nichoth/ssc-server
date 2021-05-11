@@ -175,7 +175,8 @@ exports.handler = function (ev, ctx, cb) {
             writeMsg(msg),
             upload(file, slug)
         ])
-            .catch(() => {
+            .catch((err) => {
+                console.log('errrrrr', err)
                 revert(msg, file, slug)
             })
     }
@@ -190,6 +191,9 @@ exports.handler = function (ev, ctx, cb) {
     // return the new msg
     function writeMsg (msg) {
         var msgHash = ssc.getId(msg)
+
+        // @TODO
+        // should validate the shape of the msg before querying
 
         return client.query(
             q.Create(q.Collection('posts'), {
