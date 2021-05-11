@@ -11,7 +11,8 @@ function upload (file/*, _hash*/) {
     var hash = createHash('sha256')
     hash.update(file)
 
-    var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
+    // var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
+    var slugifiedHash = encodeURIComponent('' + hash.digest('base64'))
 
     // var buf = Buffer.from(file, 'base64')
 
