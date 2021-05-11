@@ -11,6 +11,9 @@ exports.handler = function (ev, ctx, cb) {
 
     console.log('**hash**', hash)
 
+    // should maybe take the hash of the file on the server,
+    // that way we can trust that it's accurate
+
     cloudinary.uploader.upload(file, {
         public_id: '' + hash
     }, function (err, res) {
@@ -19,6 +22,7 @@ exports.handler = function (ev, ctx, cb) {
                 statusCode: 500,
                 body: JSON.stringify({
                     ok: false,
+                    cloudinary: res,
                     message: 'boooo cloudinary'
                 })
             })

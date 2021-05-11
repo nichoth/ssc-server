@@ -1,31 +1,34 @@
 import { html } from 'htm/preact'
 import { render } from 'preact'
+var ssc = require('@nichoth/ssc')
 var createHash = require('crypto').createHash
+
+var keys = ssc.createKeys()
 
 // var S = require('pull-stream')
 // var fileReader = require('pull-file-reader')
 
-// var createHash = require('multiblob/util').createHash
-
 console.log('wooo')
-
 
 // This will upload the file after having read it
 const upload = (file, hash) => {
     console.log('the hash', hash)
 
-    console.log('slugified', ('' + hash).replace(/\//g, "-"))
+    var slugifiedHash = ('' + hash).replace(/\//g, "-")
+    var content = { type: 'test', text: 'wooooo' }
 
-    fetch(' /.netlify/functions/upload-image', { // Your POST endpoint
+    fetch('/.netlify/functions/post-one-message', {
         method: 'POST',
         headers: {
-            // Content-Type may need to be completely **omitted**
-            // or you may need something
-            // "Content-Type": "You will perhaps need to define a content-type here"
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            hash: ('' + hash).replace(/\//g, "-"),
-            file: file // This is your file object
+            hash: slugifiedHash,
+            file: file, // This is your file object
+            keys: {
+                public: keys.public
+            },
+            msg: ssc.createMsg(keys, null, content)
         })
     }).then(
         response => response.json() // if the response is a JSON object
@@ -40,7 +43,6 @@ function submit (ev) {
     ev.preventDefault()
     var fileList = ev.target.elements.image.files
     var file = fileList[0]
-    // var hasher = createHash('sha256')
     console.log('file', file)
 
     const reader = new FileReader()
@@ -51,30 +53,7 @@ function submit (ev) {
         upload(reader.result, hash.digest('base64'))
     }
 
-    // this is bad because we are reading the file *twice*
-    // the first time is b/c we need to get a hash for it
     reader.readAsDataURL(file)
-
-
-    // S(
-    //     fileReader(file),
-    //     hasher,
-    //     S.collect(function (err, buffs)  {
-    //         console.log('collected', err, buffs)
-    //         var contents = Buffer.concat(buffs)
-    //         console.log('contents', contents)
-    //         var hash = '&' + hasher.digest
-
-    //         // var hash = algs[alg]()
-    //         // var hash = createHash('sha256')
-    //         // hash.digest()
-               // upload(contents)
-
-    //     })
-    // )
-
-    // ---------------------------------------
-
 }
 
 function TestEl (props) {

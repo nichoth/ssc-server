@@ -1,87 +1,8 @@
 require('dotenv').config()
 var ssc = require('@nichoth/ssc')
 var faunadb = require('faunadb')
-
-var cloudinary = require('cloudinary').v2;
-cloudinary.config({ 
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-
-var multer = require('multer')
-
-const streamifier = require('streamifier')
-
-const fileUpload = multer()
-
-var middleWare = fileUpload.single('image')
-
-
-
-// -----------------------------------------------
-// https://cloudinary.com/blog/node_js_file_upload_to_a_local_server_or_to_the_cloud
-
-app.post('/upload', fileUpload.single('image'), function (req, res, next) {
-    let streamUpload = (req) => {
-        return new Promise((resolve, reject) => {
-            let stream = cloudinary.uploader.upload_stream(
-                (error, result) => {
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(error);
-                        }
-                }
-            );
-    
-           streamifier.createReadStream(req.file.buffer).pipe(stream);
-        });
-    };
-    
-    async function upload(req) {
-        let result = await streamUpload(req);
-        console.log('**result**', result);
-    }
-    
-    upload(req);
-});
-
-
-// -----------------------------------------------
-
-
-
-
-
-// https://cloudinary.com/blog/node_js_file_upload_to_a_local_server_or_to_the_cloud
-
-// https://dev.to/ebereplenty/image-upload-to-cloudinary-with-nodejs-and-dotenv-4fen
-
-
-
-
-// https://cloudinary.com/documentation/node_integration#quick_example_file_upload
-// https://cloudinary.com/documentation/upload_images#file_source_options
-// cloudinary.uploader.upload("my_image.jpg", (err, res) => {
-//     console.log(err, res)
-// });
-
-
-// need to get the file from request
-const data = {
-    image: request.body.image,
-};
-
-cloudinary.uploader.upload(data.image, (err, res) => {
-    console.log(err, res)
-});
-
-// need to upload from the incoming request
-
-
-
+var upload = require('./upload')
+var createHash = require('crypto').createHash
 
 
 
@@ -106,7 +27,7 @@ cloudinary.uploader.upload(data.image, (err, res) => {
 
 exports.handler = function (ev, ctx, cb) {
     try {
-        var { keys, msg } = JSON.parse(ev.body)
+        var { keys, msg, file } = JSON.parse(ev.body)
     } catch (err) {
         return cb(null, {
             statusCode: 422,
@@ -148,11 +69,21 @@ exports.handler = function (ev, ctx, cb) {
 
     // --------- start doing things ---------------------
 
+
+
+
+    var hash = createHash('sha256')
+    hash.update(file)
+
+    var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
+
+
+
+
     var q = faunadb.query
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
     })
-
 
     // see https://github.com/ssb-js/ssb-validate/blob/main/index.js#L149
 
@@ -179,12 +110,13 @@ exports.handler = function (ev, ctx, cb) {
                 })
             }
 
-            writeMsg(msg)
+            // msg list is ok, write it to DB
+            msgAndFile(msg, file, slugifiedHash)
         })
         .catch(err => {
             if (err.name === 'NotFound') {
                 // write the msg b/c the feed is new
-                return writeMsg(msg)
+                return msgAndFile(msg, file, slugifiedHash)
             }
 
             return cb(null, {
@@ -197,49 +129,39 @@ exports.handler = function (ev, ctx, cb) {
         })
 
 
-//     msg: {
-//         previous: null,
-//         sequence: 1,
-//         author: '@vYAqxqmL4/WDSoHjg54LUJRN4EH9/I4A/OFrMpXIWkQ=.ed25519',
-//         timestamp: 1606692151952,
-//         hash: 'sha256',
-//         content: { type: 'test', text: 'woooo' },
-//         signature: 'wHdXRQBt8k0rFEa9ym35pNqmeHwA+kTTdOC3N6wAn4yOb6dsfIq/X0JpHCBZVJcw6Luo6uH1udpq12I4eYzBAw==.sig.ed25519'
-//     }
+    function msgAndFile (msg, file, hash) {
+        return Promise.all([
+            writeMsg(msg),
+            upload(file, hash)
+        ])
+            .catch(err => {
+                revert(msg, file, hash)
+            })
+    }
 
 
-    // msg is valid, write it to DB
+    // undo writing the msg or file
+    function revert (msg, file, hash) {
+        console.log('revert this one', msg)
+    }
+
+
     // return the new msg to the client
     function writeMsg (msg) {
-        var hash = ssc.getId(msg)
+        var msgHash = ssc.getId(msg)
 
-        client.query(
+        return client.query(
             q.Create(q.Collection('posts'), {
-                key: hash,
-                data: { value: msg, key: hash}
+                key: msgHash,
+                data: { value: msg, key: msgHash }
             })
         )
-            .then(res => {
-                // console.log('res here', res)
-                cb(null, {
-                    statusCode: 200,
-                    body: JSON.stringify({
-                        ok: true,
-                        res: res,
-                        msg: res.data
-                    })
-                })
-            })
-            .catch(err => {
-                // console.log('errrrr in publish', err)
-                cb(null, {
-                    statusCode: 500,
-                    body: JSON.stringify({
-                        ok: false,
-                        error: err
-                    })
-                })
-            })
-            
     }
 }
+
+
+
+
+
+
+
