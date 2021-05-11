@@ -83,9 +83,9 @@ exports.handler = function (ev, ctx, cb) {
     // hash.update(file)
 
     // var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
-    var slugifiedHash = encodeURIComponent('' + hash)
+    // var slugifiedHash = encodeURIComponent('' + hash)
 
-    console.log('**slug**', slugifiedHash)
+    // console.log('**slug**', slugifiedHash)
 
 
 
@@ -120,13 +120,13 @@ exports.handler = function (ev, ctx, cb) {
             }
 
             // msg list is ok, write it to DB
-            return msgAndFile(msg, file, slugifiedHash)
+            return msgAndFile(msg, file/*, slugifiedHash*/)
                 .then(res => {
                     return cb(null, {
                         statusCode: 200,
                         body: JSON.stringify({
                             ok: true,
-                            res: res
+                            res: res[0]
                         })
                     })
                 })
@@ -141,13 +141,13 @@ exports.handler = function (ev, ctx, cb) {
         .catch(err => {
             if (err.name === 'NotFound') {
                 // write the msg b/c the feed is new
-                return msgAndFile(msg, file, slugifiedHash)
+                return msgAndFile(msg, file/*, slugifiedHash*/)
                     .then(res => {
                         cb(null, {
                             statusCode: 200,
                             body: JSON.stringify({
                                 ok: true,
-                                res: res
+                                res: res[0]
                             })
                         })
                     })
