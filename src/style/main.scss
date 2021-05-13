@@ -1,3 +1,24 @@
 body {
     background-color: pink;
 }
+
+a {
+    text-decoration: none;
+}
+
+hr {
+    border: 1px solid gray;
+}
+
+.nav-part {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-evenly;
+
+    li {
+        &.active {
+            border-bottom: 3px solid;
+        }
+    }
+}
