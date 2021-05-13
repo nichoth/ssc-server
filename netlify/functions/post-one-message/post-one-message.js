@@ -24,7 +24,7 @@ var upload = require('./upload')
 
 exports.handler = function (ev, ctx, cb) {
     try {
-        var { keys, msg, file, hash } = JSON.parse(ev.body)
+        var { keys, msg, file/*, hash*/ } = JSON.parse(ev.body)
     } catch (err) {
         return cb(null, {
             statusCode: 422,

@@ -11,7 +11,6 @@ exports.handler = function (ev, ctx, cb) {
     var req = JSON.parse(ev.body)
     var { author } = req
 
-
     console.log('**author**', author)
 
 
@@ -21,34 +20,6 @@ exports.handler = function (ev, ctx, cb) {
     //         body: 'You have to send a GET request'
     //     })
     // }
-
-
-
-    // const path = ev.path.replace(/\.netlify\/functions\/[^/]+/, '')
-    // const segments = path.split('/').filter(Boolean)
-
-    // console.log('path', path)
-    // console.log('segments', segments)
-
-    // e.g. GET /.netlify/functions/feed
-    // if (segments.length === 0) {
-    //     return readAllRoute.handler(event, context)
-    // }
-
-    // e.g. GET /.netlify/functions/feed/123456
-    // if (segments.length !== 1) {
-    //     return cb(null, {
-    //         statusCode: 400,
-    //         body: 'Missing feed id'
-    //     })
-    // }
-
-    // console.log('****path', ev.path)
-
-    // get the feed
-    // var [author] = segments
-    // console.log('author', author)
-
 
 
     client.query(

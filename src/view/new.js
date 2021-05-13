@@ -1,9 +1,6 @@
 import { html } from 'htm/preact'
 var ssc = require('@nichoth/ssc')
 
-// @TODO should keep track of keys
-var keys = ssc.createKeys()
-
 function New (props) {
     return html`<div class="route new-post">
         <${TestEl} />
