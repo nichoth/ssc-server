@@ -7,7 +7,7 @@
     "start": "npm run build && concurrently --kill-others \"npm run watch-sass\" \"npm run watch-js\" \"netlify dev --port=8888\"",
     "build": "npm run copy && npm run build-js && npm run build-sass",
     "build-js": "browserify -p esmify -t uglifyify --debug src/index.js > public/bundle.js",
-    "copy": "mkdir -p public && cp src/index.html public",
+    "copy": "mkdir -p public && cp src/index.html src/_redirects public",
     "build-sass": "sass src/style/main.scss public/style.css",
     "watch-js": "watchify -t uglifyify --debug -p esmify src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
