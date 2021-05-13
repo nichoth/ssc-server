@@ -1,7 +1,18 @@
 import { html } from 'htm/preact'
 import { render } from 'preact'
 var ssc = require('@nichoth/ssc')
-var createHash = require('crypto').createHash
+// var createHash = require('crypto').createHash
+var route = require('route-event')()
+var router = require('./router')()
+
+route(function onRoute (path) {
+    console.log('path', path)
+    var m = router.match(path)
+    var { view } = m.action(m)
+
+    render(html`<${Shell}><${view} /><//>`,
+        document.getElementById('content'))
+})
 
 var keys = ssc.createKeys()
 
@@ -40,30 +51,13 @@ const upload = (file, hash) => {
     );
 };
 
-function submit (ev) {
-    ev.preventDefault()
-    var fileList = ev.target.elements.image.files
-    var file = fileList[0]
-    console.log('file', file)
-
-    const reader = new FileReader()
-
-    reader.onloadend = () => {
-        var hash = createHash('sha256')
-        hash.update(reader.result)
-        upload(reader.result, hash.digest('base64'))
-    }
-
-    reader.readAsDataURL(file)
+function Shell (props) {
+    return html`<div class="shell">
+        <ul class="nav-part">
+            <li><a href="/">home</a></li>
+            <li><a href="/new">new</a></li>
+        </ul>
+        ${props.children}
+    </div>`
 }
 
-function TestEl (props) {
-    return html`<form onsubmit="${submit}">
-        <input type="text" placeholder="woooo" id="text" name="text" />
-        <input type="file" name="image" id="image"
-            accept="image/png, image/jpeg" />
-        <button type="submit">submit</button>
-    </form>`
-}
-
-render(html`<${TestEl} />`, document.getElementById('content'))

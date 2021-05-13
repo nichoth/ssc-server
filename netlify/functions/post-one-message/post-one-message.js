@@ -2,9 +2,6 @@ require('dotenv').config()
 var ssc = require('@nichoth/ssc')
 var faunadb = require('faunadb')
 var upload = require('./upload')
-var createHash = require('crypto').createHash
-
-
 
 // requests are like
 // { keys: { public }, msg: {} }
@@ -69,23 +66,10 @@ exports.handler = function (ev, ctx, cb) {
 
 
     // need to check that the message has a mention for the given image
-    // how to deal with '/' in hash?
-    // would want to 'url encode' the given hash
 
 
 
     // ------------------ start doing things ---------------------
-
-
-
-
-    // var hash = createHash('sha256')
-    // hash.update(file)
-
-    // var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
-    // var slugifiedHash = encodeURIComponent('' + hash)
-
-    // console.log('**slug**', slugifiedHash)
 
 
 
