@@ -32,7 +32,8 @@
     "preact": "^10.5.13",
     "pull-file-reader": "^1.0.2",
     "route-event": "^3.1.0",
-    "ruta3": "^2.0.1"
+    "ruta3": "^2.0.1",
+    "xtend": "^4.0.2"
   },
   "devDependencies": {
     "browserify": "^17.0.0",

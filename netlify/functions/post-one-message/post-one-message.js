@@ -2,6 +2,8 @@ require('dotenv').config()
 var ssc = require('@nichoth/ssc')
 var faunadb = require('faunadb')
 var upload = require('./upload')
+var createHash = require('crypto').createHash
+var xtend = require('xtend')
 
 // requests are like
 // { keys: { public }, msg: {} }
@@ -24,7 +26,7 @@ var upload = require('./upload')
 
 exports.handler = function (ev, ctx, cb) {
     try {
-        var { keys, msg, file/*, hash*/ } = JSON.parse(ev.body)
+        var { keys, msg, file/*, slugifiedHash*/ } = JSON.parse(ev.body)
     } catch (err) {
         return cb(null, {
             statusCode: 422,
@@ -80,6 +82,14 @@ exports.handler = function (ev, ctx, cb) {
 
     // see https://github.com/ssb-js/ssb-validate/blob/main/index.js#L149
 
+
+    var hash = createHash('sha256')
+    hash.update(file)
+    var _hash = hash.digest('base64')
+    var slugifiedHash = encodeURIComponent('' + _hash)
+
+
+
     // get an existing feed
     // to check if the merkle list matches up
     client.query(
@@ -103,8 +113,9 @@ exports.handler = function (ev, ctx, cb) {
                 })
             }
 
+
             // msg list is ok, write it to DB
-            return msgAndFile(msg, file/*, slugifiedHash*/)
+            return msgAndFile(msg, file, slugifiedHash, _hash)
                 .then(res => {
                     return cb(null, {
                         statusCode: 200,
@@ -125,7 +136,8 @@ exports.handler = function (ev, ctx, cb) {
         .catch(err => {
             if (err.name === 'NotFound') {
                 // write the msg b/c the feed is new
-                return msgAndFile(msg, file/*, slugifiedHash*/)
+                console.log('in err', slugifiedHash, _hash)
+                return msgAndFile(msg, file, slugifiedHash, _hash)
                     .then(res => {
                         cb(null, {
                             statusCode: 200,
@@ -154,9 +166,9 @@ exports.handler = function (ev, ctx, cb) {
         })
 
 
-    function msgAndFile (msg, file, slug) {
+    function msgAndFile (msg, file, slug, hash) {
         return Promise.all([
-            writeMsg(msg),
+            writeMsg(msg, hash),
             upload(file, slug)
         ])
             .catch((err) => {
@@ -167,13 +179,20 @@ exports.handler = function (ev, ctx, cb) {
 
 
     // undo writing the msg or file
-    function revert (msg, file, hash) {
-        console.log('revert this one', msg, hash)
+    function revert (msg, file, slug) {
+        console.log('revert this one', msg, slug)
     }
 
 
     // return the new msg
-    function writeMsg (msg) {
+    function writeMsg (_msg, hash) {
+        console.log('writing', hash)
+        var msg = xtend(_msg, {
+            content: xtend(_msg.content, {
+                mentions: [hash]
+            })
+        })
+
         var msgHash = ssc.getId(msg)
 
         // @TODO

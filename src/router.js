@@ -12,9 +12,7 @@ function Router () {
 
     router.addRoute('/new', (match) => {
         return {
-            view: function newPostRoute (props) {
-                return html`<${New} />`
-            }
+            view: New
         }
     })
 

@@ -31,7 +31,6 @@ exports.handler = function (ev, ctx, cb) {
         )
     )
         .then(function (res) {
-            // console.log('**hhhhh**', res)
             return cb(null, {
                 statusCode: 200,
                 body: JSON.stringify({

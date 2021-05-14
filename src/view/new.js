@@ -2,13 +2,15 @@ import { html } from 'htm/preact'
 var ssc = require('@nichoth/ssc')
 
 function New (props) {
+    var { me } = props
     return html`<div class="route new-post">
-        <${TestEl} />
+        <${TestEl} me=${me} />
     </div>`
 }
 
 function TestEl (props) {
-    return html`<form onsubmit="${submit}">
+    var { me } = props
+    return html`<form onsubmit="${submit.bind(null, me)}">
         <input type="text" placeholder="woooo" id="text" name="text" />
         <input type="file" name="image" id="image"
             accept="image/png, image/jpeg" />
@@ -17,18 +19,17 @@ function TestEl (props) {
 }
 
 
-function submit (ev) {
+function submit (me, ev) {
     ev.preventDefault()
     var fileList = ev.target.elements.image.files
     var file = fileList[0]
-    console.log('file', file)
 
     const reader = new FileReader()
 
     reader.onloadend = () => {
-        var hash = createHash('sha256')
-        hash.update(reader.result)
-        upload(reader.result, hash.digest('base64'))
+        // var hash = createHash('sha256')
+        // hash.update(reader.result)
+        upload(me, reader.result/*, hash.digest('base64')*/)
     }
 
     // this gives us base64
@@ -36,11 +37,12 @@ function submit (ev) {
 }
 
 // This will upload the file after having read it
-function upload (file, hash) {
+function upload (me, file, hash) {
     console.log('the hash', hash)
+    var keys = me
 
     // var slugifiedHash = ('' + hash).replace(/\//g, "-")
-    var slugifiedHash = encodeURIComponent('' + hash)
+    // var slugifiedHash = encodeURIComponent('' + hash)
     var content = { type: 'test', text: 'wooooo' }
 
     fetch('/.netlify/functions/post-one-message', {
@@ -49,12 +51,11 @@ function upload (file, hash) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            hash: slugifiedHash,
+            // hash: slugifiedHash,
             file: file, // This is your file object
-            keys: {
-                public: keys.public
-            },
+            keys: me,
             msg: ssc.createMsg(keys, null, content)
+            // slugifiedHash
         })
     }).then(
         response => response.json() // if the response is a JSON object
