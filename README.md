@@ -121,5 +121,16 @@ function sendFile(file) {
 
 Cloudinary already slugifies the URL for pictures (duh). The do `encodeURIComponent`.
 
-
 To get the URI for a pic, take the already slugified URI, then slugify it again
+
+-----------------------------------------
+
+https://cloudinary.com/documentation/node_image_manipulation#direct_url_building
+
+Should try using the cloudinary module in the client-side code too to create the URLs
+
+
+
+
+
+

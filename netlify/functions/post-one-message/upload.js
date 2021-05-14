@@ -1,5 +1,5 @@
 let cloudinary = require("cloudinary").v2;
-var createHash = require('crypto').createHash
+// var createHash = require('crypto').createHash
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,14 +8,6 @@ cloudinary.config({
 });
 
 function upload (file, _hash) {
-    // var hash = createHash('sha256')
-    // hash.update(file)
-
-    // var slugifiedHash = ('' + hash.digest('base64')).replace(/\//g, "-")
-    // var slugifiedHash = encodeURIComponent('' + hash.digest('base64'))
-
-    // var buf = Buffer.from(file, 'base64')
-
     return new Promise(function (resolve, reject) {
         cloudinary.uploader.upload(file, {
             public_id: _hash
@@ -26,9 +18,7 @@ function upload (file, _hash) {
 
             resolve(res)
         })
-
     })
-
 }
 
 module.exports = upload

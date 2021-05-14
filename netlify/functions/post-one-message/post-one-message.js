@@ -186,7 +186,6 @@ exports.handler = function (ev, ctx, cb) {
 
     // return the new msg
     function writeMsg (_msg, hash) {
-        console.log('writing', hash)
         var msg = xtend(_msg, {
             content: xtend(_msg.content, {
                 mentions: [hash]
