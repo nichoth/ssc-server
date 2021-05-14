@@ -5,6 +5,14 @@ var upload = require('./upload')
 var createHash = require('crypto').createHash
 var xtend = require('xtend')
 
+let cloudinary = require("cloudinary").v2;
+
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 // requests are like
 // { keys: { public }, msg: {} }
 
@@ -113,15 +121,31 @@ exports.handler = function (ev, ctx, cb) {
                 })
             }
 
-
             // msg list is ok, write it to DB
             return msgAndFile(msg, file, slugifiedHash, _hash)
                 .then(res => {
+                    // make the url here for the image
+                    // var imgHash = res[0].value.content.mentions[0]
+                    var slugslug = encodeURIComponent(slugifiedHash)
+                    var imgUrl = cloudinary.url(slugslug, {
+                        // width: 100,
+                        // height: 150,
+                        // crop: "fill"
+                    })      
+
+                    var _response = xtend(res[0], {
+                        value: xtend(res[0].value, {
+                            content: xtend(res[0].content, {
+                                mentionUrls: [imgUrl]
+                            })
+                        })
+                    })
+
                     return cb(null, {
                         statusCode: 200,
                         body: JSON.stringify({
                             ok: true,
-                            res: res[0]
+                            res: _response
                         })
                     })
                 })
@@ -136,14 +160,31 @@ exports.handler = function (ev, ctx, cb) {
         .catch(err => {
             if (err.name === 'NotFound') {
                 // write the msg b/c the feed is new
-                console.log('in err', slugifiedHash, _hash)
+                console.log('**in err**', slugifiedHash, _hash)
                 return msgAndFile(msg, file, slugifiedHash, _hash)
                     .then(res => {
-                        cb(null, {
+                        var slugslug = encodeURIComponent(slugifiedHash)
+                        var imgUrl = cloudinary.url(slugslug, {
+                            // width: 100,
+                            // height: 150,
+                            // crop: "fill"
+                        })      
+
+                        console.log('**imgUrl**', imgUrl)
+
+                        var _response = xtend(res[0].data, {
+                            value: xtend(res[0].data.value, {
+                                content: xtend(res[0].data.value.content, {
+                                    mentionUrls: [imgUrl]
+                                })
+                            })
+                        })
+
+                        return cb(null, {
                             statusCode: 200,
                             body: JSON.stringify({
                                 ok: true,
-                                res: res[0]
+                                res: _response
                             })
                         })
                     })
