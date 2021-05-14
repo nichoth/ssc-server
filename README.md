@@ -115,5 +115,11 @@ function sendFile(file) {
 }
 ```
 
+----------------------------------------------------
+
+## 5-13-2021
+
+Cloudinary already slugifies the URL for pictures (duh). The do `encodeURIComponent`.
 
 
+To get the URI for a pic, take the already slugified URI, then slugify it again

@@ -38,12 +38,20 @@ function Home (props) {
 
         <ul class="post-list">
             ${(feed && feed.map(post => {
+
+                var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
+
                 return html`<li class="post">
+                    <img src="${url}" />
                     <pre>${JSON.stringify(post, null, 2)}</pre>
                 </li>`
             }))}
         </ul>
     </div>`
+}
+
+function createURI (mention) {
+    return encodeURIComponent(encodeURIComponent(mention))
 }
 
 module.exports = Home

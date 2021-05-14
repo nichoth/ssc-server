@@ -38,7 +38,7 @@ function submit (me, ev) {
 
 // This will upload the file after having read it
 function upload (me, file, hash) {
-    console.log('the hash', hash)
+    // console.log('the hash', hash)
     var keys = me
 
     // var slugifiedHash = ('' + hash).replace(/\//g, "-")
