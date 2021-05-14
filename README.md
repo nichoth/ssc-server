@@ -127,7 +127,9 @@ To get the URI for a pic, take the already slugified URI, then slugify it again
 
 https://cloudinary.com/documentation/node_image_manipulation#direct_url_building
 
-Should try using the cloudinary module in the client-side code too to create the URLs
+~Should try using the cloudinary module in the client-side code too to create the URLs. Or could create URLs server-side and send in another array in the response body.~
+
+Should put URL(s) into the response on the server
 
 
 
