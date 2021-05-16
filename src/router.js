@@ -1,7 +1,7 @@
 var _router = require('ruta3')
 var Home = require('./view/home')
 var New = require('./view/new')
-import { html } from 'htm/preact'
+// import { html } from 'htm/preact'
 
 function Router () {
     var router = _router()

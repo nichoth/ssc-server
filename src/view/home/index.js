@@ -1,14 +1,12 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
+var evs = require('../../EVENTS')
 
 function Home (props) {
+    var { me, emit } = props;
+    console.log('props in home', props);
 
-    var { me } = props
-    console.log('props in home', props)
-
-    var [feed, setFeed] = useState(null)
-
-    console.log('state', feed)
+    var [feed, setFeed] = useState(null);
 
     useEffect(() => {
         fetch('/.netlify/functions/feed', {
@@ -27,11 +25,12 @@ function Home (props) {
             .then(json => {
                 console.log('json', json)
                 setFeed(json.msgs)
+                emit(evs.feed.got, json.msgs)
             })
             .catch(err => {
                 console.log('errrr in home', err)
             })
-    }, [])
+    }, []);
 
     return html`<div class="home-route">
         <p>the home route</p>
@@ -48,12 +47,12 @@ function Home (props) {
                 </li>`
             }))}
         </ul>
-    </div>`
+    </div>`;
 }
 
 // don't know why you do it twice
-function createURI (mention) {
-    return encodeURIComponent(encodeURIComponent(mention))
-}
+// function createURI (mention) {
+//     return encodeURIComponent(encodeURIComponent(mention))
+// }
 
-module.exports = Home
+module.exports = Home;

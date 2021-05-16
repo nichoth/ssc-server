@@ -54,8 +54,9 @@ function upload (me, file, hash) {
             // hash: slugifiedHash,
             file: file, // This is your file object
             keys: me,
+
+            // @TODO -- should use the existing msg as previous
             msg: ssc.createMsg(keys, null, content)
-            // slugifiedHash
         })
     }).then(
         response => response.json() // if the response is a JSON object
