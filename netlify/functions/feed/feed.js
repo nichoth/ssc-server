@@ -49,14 +49,12 @@ exports.handler = function (ev, ctx, cb) {
                         var mentionUrls = post.data.value.content
                             .mentions.map(mention => {
 
-                                // slugify the hash
+                                // slugify the hash twice
+                                // don't know why we need to do it twice
                                 var slugifiedHash = encodeURIComponent('' + mention)
+                                var slugslug = encodeURIComponent(slugifiedHash)
 
-                                return cloudinary.url(slugifiedHash, {
-                                    // width: 100,
-                                    // height: 150,
-                                    // crop: "fill"
-                                })      
+                                return cloudinary.url(slugslug)      
                             })
 
                         return xtend(post.data, {

@@ -164,6 +164,8 @@ exports.handler = function (ev, ctx, cb) {
                 return msgAndFile(msg, file, slugifiedHash, _hash)
                     .then(res => {
                         var slugslug = encodeURIComponent(slugifiedHash)
+
+                        // we slugify twice
                         var imgUrl = cloudinary.url(slugslug, {
                             // width: 100,
                             // height: 150,
@@ -172,6 +174,7 @@ exports.handler = function (ev, ctx, cb) {
 
                         console.log('**imgUrl**', imgUrl)
 
+                        // here, we add the url for the photo
                         var _response = xtend(res[0].data, {
                             value: xtend(res[0].data.value, {
                                 content: xtend(res[0].data.value.content, {

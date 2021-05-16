@@ -60,7 +60,7 @@ function upload (me, file, hash) {
     }).then(
         response => response.json() // if the response is a JSON object
     ).then(
-        success => console.log('succes', success) // Handle the success response object
+        success => console.log('**succes**', success) // Handle the success response object
     ).catch(
         error => console.log('error', error) // Handle the error response object
     );

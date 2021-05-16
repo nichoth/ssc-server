@@ -37,9 +37,10 @@ function Home (props) {
         <p>the home route</p>
 
         <ul class="post-list">
-            ${(feed && feed.map(post => {
+            ${(feed && feed.map((post, i) => {
 
-                var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
+                // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
+                var url = post.value.content.mentionUrls[i]
 
                 return html`<li class="post">
                     <img src="${url}" />
@@ -50,6 +51,7 @@ function Home (props) {
     </div>`
 }
 
+// don't know why you do it twice
 function createURI (mention) {
     return encodeURIComponent(encodeURIComponent(mention))
 }

@@ -10,7 +10,8 @@ cloudinary.config({
 function upload (file, _hash) {
     return new Promise(function (resolve, reject) {
         cloudinary.uploader.upload(file, {
-            public_id: _hash
+            public_id: _hash,
+            overwrite: true
         }, function (err, res) {
             if (err) {
                 return reject(err)
