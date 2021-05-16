@@ -2,15 +2,15 @@ import { html } from 'htm/preact'
 var ssc = require('@nichoth/ssc')
 
 function New (props) {
-    var { me } = props
+    var { me, feed } = props
     return html`<div class="route new-post">
-        <${TestEl} me=${me} />
+        <${TestEl} me=${me} feed=${feed} />
     </div>`
 }
 
 function TestEl (props) {
-    var { me } = props
-    return html`<form onsubmit="${submit.bind(null, me)}">
+    var { me, feed } = props
+    return html`<form onsubmit="${submit.bind(null, me, feed)}">
         <input type="text" placeholder="woooo" id="text" name="text" />
         <input type="file" name="image" id="image"
             accept="image/png, image/jpeg" />
@@ -19,7 +19,7 @@ function TestEl (props) {
 }
 
 
-function submit (me, ev) {
+function submit (me, feed, ev) {
     ev.preventDefault()
     var fileList = ev.target.elements.image.files
     var file = fileList[0]
@@ -27,9 +27,7 @@ function submit (me, ev) {
     const reader = new FileReader()
 
     reader.onloadend = () => {
-        // var hash = createHash('sha256')
-        // hash.update(reader.result)
-        upload(me, reader.result/*, hash.digest('base64')*/)
+        upload(me, reader.result, feed)
     }
 
     // this gives us base64
@@ -37,13 +35,18 @@ function submit (me, ev) {
 }
 
 // This will upload the file after having read it
-function upload (me, file, hash) {
+function upload (me, file, feed) {
     // console.log('the hash', hash)
     var keys = me
 
-    // var slugifiedHash = ('' + hash).replace(/\//g, "-")
-    // var slugifiedHash = encodeURIComponent('' + hash)
     var content = { type: 'test', text: 'wooooo' }
+
+    var prev
+    var _prev = feed[feed.length - 1]
+    if (_prev) {
+        prev = clone(_prev)
+        delete prev.content.mentionUrls
+    }
 
     fetch('/.netlify/functions/post-one-message', {
         method: 'POST',
@@ -51,12 +54,11 @@ function upload (me, file, hash) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            // hash: slugifiedHash,
             file: file, // This is your file object
             keys: me,
 
             // @TODO -- should use the existing msg as previous
-            msg: ssc.createMsg(keys, null, content)
+            msg: ssc.createMsg(keys, prev || null, content)
         })
     }).then(
         response => response.json() // if the response is a JSON object
@@ -68,3 +70,11 @@ function upload (me, file, hash) {
 };
 
 module.exports = New
+
+function clone (obj) {
+    var _obj = {};
+    for (var k in obj) {
+      if (Object.hasOwnProperty.call(obj, k)) _obj[k] = obj[k];
+    }
+    return _obj;
+}
