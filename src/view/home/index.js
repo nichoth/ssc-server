@@ -3,10 +3,10 @@ import { useState, useEffect } from 'preact/hooks';
 var evs = require('../../EVENTS')
 
 function Home (props) {
-    var { me, emit } = props;
+    var { me, emit, feed } = props;
     console.log('props in home', props);
 
-    var [feed, setFeed] = useState(null);
+    // var [feed, setFeed] = useState(null);
 
     useEffect(() => {
         fetch('/.netlify/functions/feed', {
