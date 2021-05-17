@@ -36,17 +36,21 @@ function submit (me, feed, ev) {
 
 // This will upload the file after having read it
 function upload (me, file, feed) {
-    // console.log('the hash', hash)
     var keys = me
-
     var content = { type: 'test', text: 'wooooo' }
 
-    var prev
-    var _prev = feed[feed.length - 1]
-    if (_prev) {
-        prev = clone(_prev)
-        delete prev.content.mentionUrls
+    var prev = feed ? feed[feed.length - 1] : null
+    if (prev) {
+        prev = clone(prev.value)
     }
+
+    console.log('**prev**', prev)
+    console.log('**prev id**', ssc.getId(prev))
+
+    console.log('**next**', {
+        keys: me,
+        msg: ssc.createMsg(keys, prev || null, content)
+    })
 
     fetch('/.netlify/functions/post-one-message', {
         method: 'POST',
@@ -56,8 +60,6 @@ function upload (me, file, feed) {
         body: JSON.stringify({
             file: file, // This is your file object
             keys: me,
-
-            // @TODO -- should use the existing msg as previous
             msg: ssc.createMsg(keys, prev || null, content)
         })
     }).then(

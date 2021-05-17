@@ -53,17 +53,19 @@ exports.handler = function (ev, ctx, cb) {
                                 // don't know why we need to do it twice
                                 var slugifiedHash = encodeURIComponent('' + mention)
                                 var slugslug = encodeURIComponent(slugifiedHash)
-
                                 return cloudinary.url(slugslug)      
                             })
 
-                        return xtend(post.data, {
-                            value: xtend(post.data.value, {
-                                content: xtend(post.data.value.content, {
-                                    mentionUrls: mentionUrls
-                                })
-                            })
+                        var xtendedMsg = xtend(post.data, {
+                            mentionUrls: mentionUrls
                         })
+
+                        if (!xtendedMsg.value.previous) {
+                            xtendedMsg.value.previous = null
+                        }
+                        console.log('******feed life', xtendedMsg)
+
+                        return xtendedMsg
                     })
                 })
             })

@@ -4,6 +4,7 @@ var faunadb = require('faunadb')
 var upload = require('./upload')
 var createHash = require('crypto').createHash
 var xtend = require('xtend')
+var stringify = require('json-stable-stringify')
 
 let cloudinary = require("cloudinary").v2;
 
@@ -45,6 +46,8 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
     }
+
+    console.log('aaaaaaaaaaaaaaaaa in th req', msg)
 
     var isValid
     try {
@@ -94,6 +97,7 @@ exports.handler = function (ev, ctx, cb) {
     var hash = createHash('sha256')
     hash.update(file)
     var _hash = hash.digest('base64')
+    console.log('******hash', hash)
     var slugifiedHash = encodeURIComponent('' + _hash)
 
 
@@ -112,6 +116,8 @@ exports.handler = function (ev, ctx, cb) {
 
             if (res.data.key !== msg.previous) {
                 console.log('mismatch!!!!!', res.data.key, msg.previous)
+                console.log('**prev key**', res.data.key)
+                console.log('**msg.previous key**', msg.previous)
                 return cb(null, {
                     statusCode: 422,
                     body: JSON.stringify({
@@ -134,11 +140,7 @@ exports.handler = function (ev, ctx, cb) {
                     })      
 
                     var _response = xtend(res[0], {
-                        value: xtend(res[0].value, {
-                            content: xtend(res[0].content, {
-                                mentionUrls: [imgUrl]
-                            })
-                        })
+                        mentionUrls: [imgUrl]
                     })
 
                     return cb(null, {
@@ -160,9 +162,9 @@ exports.handler = function (ev, ctx, cb) {
         .catch(err => {
             if (err.name === 'NotFound') {
                 // write the msg b/c the feed is new
-                console.log('**in err**', slugifiedHash, _hash)
+                // console.log('**in err**', slugifiedHash, _hash)
                 return msgAndFile(msg, file, slugifiedHash, _hash)
-                    .then(res => {
+                    .then(res => {  
                         var slugslug = encodeURIComponent(slugifiedHash)
 
                         // we slugify twice
@@ -176,11 +178,7 @@ exports.handler = function (ev, ctx, cb) {
 
                         // here, we add the url for the photo
                         var _response = xtend(res[0].data, {
-                            value: xtend(res[0].data.value, {
-                                content: xtend(res[0].data.value.content, {
-                                    mentionUrls: [imgUrl]
-                                })
-                            })
+                            mentionUrls: [imgUrl]
                         })
 
                         return cb(null, {
@@ -236,7 +234,15 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
 
+        console.log('**strigigygy**', stringify(msg, null, 2))
+        console.log('msg in here*****', msg)
         var msgHash = ssc.getId(msg)
+        console.log('**hash**', msgHash)
+
+
+        // we use the hash of the message *with* `mentions` array in it
+        // thats what is written to the DB
+
 
         // @TODO
         // should validate the shape of the msg before querying

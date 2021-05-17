@@ -24,7 +24,7 @@ function Home (props) {
             })
             .then(json => {
                 console.log('json', json)
-                setFeed(json.msgs)
+                // setFeed(json.msgs)
                 emit(evs.feed.got, json.msgs)
             })
             .catch(err => {
@@ -39,7 +39,7 @@ function Home (props) {
             ${(feed && feed.map((post, i) => {
 
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
-                var url = post.value.content.mentionUrls[i]
+                var url = post.mentionUrls[i]
 
                 return html`<li class="post">
                     <img src="${url}" />
