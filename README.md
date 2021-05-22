@@ -176,4 +176,43 @@ https://dev-pbbq06so.us.auth0.com/login/callback
 
 has a redirect loop though
 
+-----------------------------------------
+
+doing this https://auth0.com/docs/quickstart/spa/vanillajs/01-login
+
+* fixed the redirect loop by putting the login code into a function on `window`
+
+
+> When a user logs in, Auth0 returns three items:
+> 
+> access_token: to learn more, see the Access Token documentation
+> id_token: to learn more, see the ID Token documentation
+> expires_in: the number of seconds before the Access Token expires
+> You can use these items in your application to set up and manage authentication.
+
+
+
+```
+https://ssc-server.netlify.app/login/callback?code=bystX-9OzlGIvrtM&state=M2phY0ZXTkRJY2tES3FaVEsxRGhhYzY5RDllYzRFclBsfkxmNjh0ampJYw%3D%3D
+```
+
+
+[ID Tokens](https://auth0.com/docs/tokens/id-tokens)
+
+> ID tokens are used in token-based authentication to cache user profile information and provide it to a client application
+
+> Once a user logs in, use the ID token to gather information such as name and email address, which you can then use to auto-generate and send a personalized welcome email.
+
+> ID Tokens should never be used to obtain direct access to APIs or to make authorization decisions.
+
+
+[Access Tokens](https://auth0.com/docs/tokens/access-tokens)
+
+> Access tokens are used in token-based authentication to allow an application to access an API.
+
+
+
+
+
+
 

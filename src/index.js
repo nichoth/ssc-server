@@ -14,28 +14,30 @@ var evs = require('./EVENTS')
 import createAuth0Client from '@auth0/auth0-spa-js';
 var config = require('./auth_config.json')
 
-console.log('config', config)
-
 var bus = Bus({
     memo: true
 });
 
 
-var auth0 = null
+
+
+
+var auth0 = window.auth0 = null
 window.doLogin = doLogin
 
 createAuth0Client({
     domain: config.domain,
     client_id: config.clientId
 }).then(async res => {
-    auth0 = res
+    auth0 = window.auth0 = res
     console.log('auth0000', auth0)
 })
-
 
 function doLogin () {
     // auth0.loginWithPopup()
     // await auth0.loginWithRedirect();
+
+    console.log('auth0', auth0)
 
     auth0.loginWithRedirect({
         // redirect_uri: 'http://localhost:8888'
@@ -44,9 +46,6 @@ function doLogin () {
         console.log('login with redirect', res)
     })
     .catch(err => console.log('errrrrrr', err));
-
-
-    console.log('auth0', auth0)
 }
 
 
