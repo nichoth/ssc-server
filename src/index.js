@@ -22,29 +22,37 @@ var bus = Bus({
 
 
 var auth0 = null
-createAuth0Client({
-    domain: config.domain,
-    client_id: config.clientId
-}).then(async res => {
-    auth0 = res
-    console.log('auth0000', auth0)
+
+window.doLogin = doLogin
+
+function doLogin () {
+    createAuth0Client({
+        domain: config.domain,
+        client_id: config.clientId
+    }).then(async res => {
+        auth0 = res
+        console.log('auth0000', auth0)
 
 
 
-    // auth0.loginWithPopup()
-    // await auth0.loginWithRedirect();
+        // auth0.loginWithPopup()
+        // await auth0.loginWithRedirect();
 
-    await auth0.loginWithRedirect({
-        // redirect_uri: 'http://localhost:8888'
-        redirect_uri: 'https://ssc-server.netlify.app/login/callback'
-    });
+        auth0.loginWithRedirect({
+            // redirect_uri: 'http://localhost:8888'
+            redirect_uri: 'https://ssc-server.netlify.app/login/callback'
+        }).then(res => {
+            console.log('login with redirect', res)
+        })
+        .catch(err => console.log('errrrrrr', err));
 
 
 
 
-}).catch(err => console.log('auth0 errrrr', err))
+    }).catch(err => console.log('auth0 errrrr', err))
 
-console.log('auth0', auth0)
+    console.log('auth0', auth0)
+}
 
 
 
