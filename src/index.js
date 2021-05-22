@@ -40,8 +40,8 @@ function doLogin () {
     console.log('auth0', auth0)
 
     auth0.loginWithRedirect({
-        // redirect_uri: 'http://localhost:8888'
-        redirect_uri: 'https://ssc-server.netlify.app/login/callback'
+        redirect_uri: 'http://localhost:8888'
+        // redirect_uri: 'https://ssc-server.netlify.app/login/callback'
     }).then(res => {
         console.log('login with redirect', res)
     })
