@@ -8,6 +8,7 @@ function Home (props) {
 
     // var [feed, setFeed] = useState(null);
 
+    // this should be in the router maybe
     useEffect(() => {
         fetch('/.netlify/functions/feed', {
             method: 'POST',

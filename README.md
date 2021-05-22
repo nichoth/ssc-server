@@ -132,7 +132,30 @@ https://cloudinary.com/documentation/node_image_manipulation#direct_url_building
 Should put URL(s) into the response on the server
 
 
+----------------------------------------------------------------
+
+## 5-21-2021
+
+### ssc server
+Should do the one concrete use case, getting a 'repo' of images that i can use
+in my website.
+
+Things are already set up for that. Now I need a way to preserve the keys
+between multiple browser sessions. Should look at `auth0` maybe. Or i could
+just password protect the keys on my existing faunaDB. There are also all
+those web3 decentralized id providers.
 
 
+-----------------------------------------------------------------
+
+Trying auth0
+
+https://manage.auth0.com/dashboard/us/dev-pbbq06so/applications/ROBvIjx95pLWvLyZSVKv2ekPmJvMUVUb/quickstart
+
+
+
+`authentication > social` section in auth0 to try the auth
+
+https://manage.auth0.com/dashboard/us/dev-pbbq06so/connections/social/con_ymhlr4g5Us9nmhsZ/settings
 
 

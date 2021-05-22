@@ -11,10 +11,54 @@ var struct = require('observ-struct')
 var Bus = require('@nichoth/events')
 var raf = require('raf')
 var evs = require('./EVENTS')
+import createAuth0Client from '@auth0/auth0-spa-js';
+var config = require('./auth_config.json')
+
+console.log('config', config)
 
 var bus = Bus({
     memo: true
 });
+
+
+var auth0 = null
+createAuth0Client({
+    domain: config.domain,
+    client_id: config.clientId
+}).then(async res => {
+    auth0 = res
+    console.log('auth0000', auth0)
+
+
+
+    // auth0.loginWithPopup()
+    // await auth0.loginWithRedirect();
+
+    await auth0.loginWithRedirect({
+        // redirect_uri: 'http://localhost:8888'
+        redirect_uri: 'https://ssc-server.netlify.app/login/callback'
+    });
+
+
+
+
+}).catch(err => console.log('auth0 errrrr', err))
+
+console.log('auth0', auth0)
+
+
+
+
+
+// error_description=The+redirect_uri+MUST+match+the+registered+callback+URL+
+// for+this+application.&
+// error_uri=https%3A%2F%2Fdocs.github.com%2Fapps%2Fmanaging-oauth-apps%2Ftroubleshooting-authorization-request-errors%2F%23redirect-uri-mismatch&state=oqe3L2DjSCZWie_E247cQR4icvetQB4k
+
+
+
+
+
+
 
 // @TODO should keep track of keys
 var keys = ssc.createKeys();
@@ -45,6 +89,8 @@ function Connector ({ emit, state }) {
     })
 
     var match = router.match(_state.route)
+    console.log('match', match)
+    if (!match) console.log('not match')
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
 
