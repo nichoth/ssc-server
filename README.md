@@ -159,3 +159,19 @@ https://manage.auth0.com/dashboard/us/dev-pbbq06so/applications/ROBvIjx95pLWvLyZ
 https://manage.auth0.com/dashboard/us/dev-pbbq06so/connections/social/con_ymhlr4g5Us9nmhsZ/settings
 
 
+In github, they need the `auth0` url for `Authroization callback URL` --
+
+https://dev-pbbq06so.auth0.com/login/callback
+
+then i had a whole bunch of stuff in the auth0 site:
+
+```
+https://ssc-server.netlify.app/login/callback,
+https://ssc-server.netlify.app/,
+http://localhost:8888,
+https://dev-pbbq06so.auth0.com/login/callback,
+https://dev-pbbq06so.us.auth0.com/login/callback
+```
+
+
+
