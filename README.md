@@ -210,6 +210,38 @@ https://ssc-server.netlify.app/login/callback?code=bystX-9OzlGIvrtM&state=M2phY0
 
 > Access tokens are used in token-based authentication to allow an application to access an API.
 
+--------------------------------------------
+
+> Every time a user is logged in you get access both to the access token and the ID token. The user's profile information is then extracted from the ID token. 
+
+> Typically, the token is used to call your backend application and the profile information is used to display their name and profile picture
+
+
+-----------------------------------------------------------------
+
+did these
+
+`auth0.getTokenSilently()` and `auth0.getUser()`
+
+so that has some user info from gh like an avatar and email
+
+* [x] step one
+
+----------------------------------------------------
+
+step two is [JavaScript: Calling an API](https://auth0.com/docs/quickstart/spa/vanillajs/02-calling-an-api)
+
+> Read the [Backend/API quickstart](https://auth0.com/docs/quickstart/backend) documentation for instructions on how to protect your API.
+
+----------------------------------------------
+
+> Create an enndpoint. This endpoint will require a valid access token to be sent in the `Authorization` header 
+
+>  install some NPM packages that will be used to validate incoming tokens to the server.
+
+
+
+
 
 
 

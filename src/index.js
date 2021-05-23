@@ -22,8 +22,10 @@ var bus = Bus({
 
 
 
+
 var auth0 = window.auth0 = null
 window.doLogin = doLogin
+var accessToken = null
 
 createAuth0Client({
     domain: config.domain,
@@ -31,7 +33,39 @@ createAuth0Client({
 }).then(async res => {
     auth0 = window.auth0 = res
     console.log('auth0000', auth0)
+
+    // handle the state where this is a callback page-load
+
+    const query = window.location.search;
+    if (query.includes("code=") && query.includes("state=")) {
+        // Process the login state
+        auth0.handleRedirectCallback()
+            .then(res => {
+                console.log('*****handled redirect cb', res)
+
+
+                auth0.getTokenSilently().then(token => {
+                    console.log('***token', token)
+                    accessToken = token
+                });
+
+                auth0.getUser().then(user => {
+                    console.log('****user', user)
+                })
+
+
+            })
+            .catch(err => console.log('errrrrrrr', err));
+        
+        // Use replaceState to redirect the user away and remove the
+        // querystring parameters
+        window.history.replaceState({}, document.title, "/");
+    }
 })
+
+
+
+
 
 function doLogin () {
     // auth0.loginWithPopup()
