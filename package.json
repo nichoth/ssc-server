@@ -1,6 +1,6 @@
 {
   "name": "ssc-server",
-  "description": "[![Netlify Status](https://api.netlify.com/api/v1/badges/ae03a3bc-b5a6-4fb8-b9dc-d95cc4606ca1/deploy-status)](https://app.netlify.com/sites/ssc-server/deploys)",
+  "description": "a server for ssc",
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/nichoth/ssc-server#readme",
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.15.0",
     "@nichoth/events": "^1.1.2",
     "@nichoth/ssc": "^0.0.9",
     "@serverless-jwt/netlify": "^0.2.1",

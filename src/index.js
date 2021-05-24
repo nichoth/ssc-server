@@ -11,89 +11,12 @@ var struct = require('observ-struct')
 var Bus = require('@nichoth/events')
 var raf = require('raf')
 var evs = require('./EVENTS')
-import createAuth0Client from '@auth0/auth0-spa-js';
-var config = require('./auth_config.json')
+// import createAuth0Client from '@auth0/auth0-spa-js';
+// var config = require('./auth_config.json')
 
 var bus = Bus({
     memo: true
 });
-
-
-
-
-
-
-var auth0 = window.auth0 = null
-window.doLogin = doLogin
-var accessToken = null
-
-createAuth0Client({
-    domain: config.domain,
-    client_id: config.clientId
-}).then(async res => {
-    auth0 = window.auth0 = res
-    console.log('auth0000', auth0)
-
-    // handle the state where this is a callback page-load
-
-    const query = window.location.search;
-    if (query.includes("code=") && query.includes("state=")) {
-        // Process the login state
-        auth0.handleRedirectCallback()
-            .then(res => {
-                console.log('*****handled redirect cb', res)
-
-
-                auth0.getTokenSilently().then(token => {
-                    console.log('***token', token)
-                    accessToken = token
-                });
-
-                auth0.getUser().then(user => {
-                    console.log('****user', user)
-                })
-
-
-            })
-            .catch(err => console.log('errrrrrrr', err));
-        
-        // Use replaceState to redirect the user away and remove the
-        // querystring parameters
-        window.history.replaceState({}, document.title, "/");
-    }
-})
-
-
-
-
-
-function doLogin () {
-    // auth0.loginWithPopup()
-    // await auth0.loginWithRedirect();
-
-    console.log('auth0', auth0)
-
-    auth0.loginWithRedirect({
-        redirect_uri: 'http://localhost:8888'
-        // redirect_uri: 'https://ssc-server.netlify.app/login/callback'
-    }).then(res => {
-        console.log('login with redirect', res)
-    })
-    .catch(err => console.log('errrrrrr', err));
-}
-
-
-
-
-
-// error_description=The+redirect_uri+MUST+match+the+registered+callback+URL+
-// for+this+application.&
-// error_uri=https%3A%2F%2Fdocs.github.com%2Fapps%2Fmanaging-oauth-apps%2Ftroubleshooting-authorization-request-errors%2F%23redirect-uri-mismatch&state=oqe3L2DjSCZWie_E247cQR4icvetQB4k
-
-
-
-
-
 
 
 // @TODO should keep track of keys
@@ -101,7 +24,8 @@ var keys = ssc.createKeys();
 
 var state = struct({
     feed: observ(null),
-    route: observ('/')
+    route: observ('/'),
+    id: observ({})
 });
 
 subscribe(bus, state)
@@ -141,5 +65,10 @@ function subscribe (bus, state) {
     bus.on(evs.feed.got, msgs => {
         console.log('got feed', msgs)
         state.feed.set(msgs)
+    })
+
+    bus.on(evs.id.got, ev => {
+        console.log('got id', ev)
+        state.id.set(ev.id)
     })
 }

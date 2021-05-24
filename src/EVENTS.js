@@ -1,7 +1,8 @@
 var namespace = require('@nichoth/events/namespace')
 
 var evs = namespace({
-    feed: ['got']
+    feed: ['got'],
+    id: ['got']
 })
 
 module.exports = evs

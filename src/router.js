@@ -1,7 +1,7 @@
 var _router = require('ruta3')
 var Home = require('./view/home')
 var New = require('./view/new')
-// import { html } from 'htm/preact'
+var Whoami = require('./view/whoami')
 
 function Router () {
     var router = _router()
@@ -13,6 +13,12 @@ function Router () {
     router.addRoute('/new', (match) => {
         return {
             view: New
+        }
+    })
+
+    router.addRoute('/whoami', match => {
+        return {
+            view: Whoami
         }
     })
 

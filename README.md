@@ -241,10 +241,268 @@ step two is [JavaScript: Calling an API](https://auth0.com/docs/quickstart/spa/v
 
 
 
+-----------------------------------------------------
+
+## Using faunadb & localStorage for the secrets
+
+* [User authentication](https://docs.fauna.com/fauna/current/tutorials/authentication/user.html)
+
+```
+Create(
+  Collection("users"),
+  {
+    credentials: { password: "secret password" },
+    data: {
+      email: "alice@site.example",
+    },
+  }
+)
+```
+
+[Login](https://docs.fauna.com/fauna/current/api/fql/functions/login?lang=javascript)
+
+> When a user wants to login, they would provide their email address and password. Then we use the Login function to authenticate their access
+
+
+------------------------------------------------------------------
+
+
+[Credentials](https://docs.fauna.com/fauna/current/security/credentials.html)
+
+> A credential document can be created directly, like any other document in Fauna, or indirectly via a document’s credentials field.
+
+> The `password` within the credentials field value is never stored.
+
+----------
+
+> once a credential document has been created, the Identify function can be used to verify the hashed password in the credential document
+
+
+[Create a credential document by adding the credentials field to a document](https://docs.fauna.com/fauna/current/security/credentials.html#operations)
+
+
+[Where to store the password](https://docs.fauna.com/fauna/current/tutorials/basics/authentication.html?lang=javascript#password_store)
+
+> The way to tell Fauna that an entity (such as a user document) "has a password" is by adding a credentials object to the metadata of a document.
+
+So the `credentials` object in the document is special
+
+
+So here we would need a `credentials` object with a password, then if you get the password right you are able to read a document with the secret key in it
+
+
+> the credentials object is not part of the document’s data and it’s never returned when accessing the document.
+
+> All the encryption and verification of passwords is solved for you when using Fauna’s authentication system.
+
+-------------------
+
+
+[Your first custom role](https://docs.fauna.com/fauna/current/tutorials/basics/authentication.html?lang=javascript#custom_role)
+
+> We need to create a role to give them access to collections, indexes, etc.
+
+> The SpaceUsers collection is now a member of the User role. Any token associated with a document from that collection inherits the role’s privileges
+
+---------
+
+https://docs.fauna.com/fauna/current/security/credentials.html#operations
+
+> The `password` within the `credentials` field value is never stored.
+
+-----------
+
+https://docs.fauna.com/fauna/current/tutorials/authentication/abac?lang=javascript
+
+
+-------------------------------------------------------------
+
+https://docs.fauna.com/fauna/current/security/abac
+
+I think the `privileges.resource` below takes a query that could return a single document. And you would want the `membership` to just be a single person, the ID holder.
+
+```
+CreateRole({
+  name: "access_todos",
+  membership: [{ resource: Collection("users") }],
+  privileges: [{
+    resource: Collection("todos"),
+    actions: {
+      create: true,
+      delete: true,
+      write: true
+    }
+  }]
+})
+```
+
+`predicate` example
+```
+CreateRole({
+  name: "can_manage_todos",
+  membership: [
+    {
+      resource: Collection("users"),
+      predicate: Query(Lambda(ref =>
+        Select(["data", "vip"], Get(ref))
+      ))
+    }
+  ],
+  privileges: [
+    {
+      resource: Collection("todos"),
+      actions: {
+        create: Query(Lambda(newData =>
+          Select(["data", "vip"], Get(Identity()))
+        )),
+        // ...
+      }
+    }
+  ]
+})
+```
+
+[https://docs.fauna.com/fauna/current/security/roles](https://docs.fauna.com/fauna/current/security/roles)
+
+
+complete example
+```
+CreateRole({
+  name: "users",
+  membership: [
+    {
+      // This role will be assigned to all users
+      // as long as they are active
+      resource: Collection("users"),
+      predicate: Query(ref =>
+        Select(["data", "isActive"], Get(ref), false)
+      )
+    }
+  ],
+  privileges: [
+    {
+      resource: Collection("todos"),
+      actions: {
+        write:
+          // The following function enforces that you can write to your
+          // own data but, you can't change the owner of the data
+          Query((oldData, newData) =>
+            And(
+              Equals(
+                Identity(),
+                Select(["data", "owner"], oldData)
+              ),
+              Equals(
+                Select(["data", "owner"], oldData),
+                Select(["data", "owner"], newData),
+              )
+            )
+          )
+      }
+    }
+  ]
+})
+```
+
+------------------------------------------------
+
+> The identity of an actor is determined by the token included in the query sent to Fauna. When the token is valid, and the token’s associated identity is listed in a role’s membership, the query’s operations are evaluated against the privileges defined by the role; if the required privileges are granted, the query is permitted to execute.
 
 
 
+-------------------------------------------------
+
+```
+client.query(
+  q.Login(
+    q.Ref(q.Collection('characters'), '181388642114077184'),
+    { password: 'abracadabra' },
+  )
+)
+.then((ret) => console.log(ret))
+.catch((err) => console.error('Error: %s', err))
+```
+
+=>
+```
+{
+  ref: Ref(Tokens(), "268283157930836480"),
+  ts: 1592113607250000,
+  instance: Ref(Collection("characters"), "181388642114077184"),
+  secret: 'fnEDuSIcV7ACAAO5IhwXkAIAMQbrsrZaHs1cUWnligxyD5kUAPE'
+}
+```
 
 
+-------------------------------------------------
+
+
+https://docs.fauna.com/fauna/current/tutorials/authentication/user?lang=javascript
+
+> When a user wants to login, they would provide their email address and password. Then we use the Login function to authenticate their access, and if valid, provide them with a token that they can use to access resources.
+
+
+> The token provided for a successful login is all that is required to perform authenticated queries;
+
+> Your app should use the value in the secret field to create another client instance, which should be used to perform queries as that user.
+
+> If your application is using HTTP requests to interact with Fauna, you can use the token as a username+password via the Basic-Auth header, for every query made by that specific user.
+
+
+
+Is the pw ok?
+
+```
+Login(
+  Match(Index("users_by_email"), "alice@site.example"),
+  { password: "secret password" },
+)
+```
+
+yes? then send back the secrets
+
+
+
+-----------------------------------------------
+
+
+Create a collection `secrets` with an index/field `login-name`
+
+Be sure to use a field `credentials` when you create things in the `secrets` collection
+```
+Create(
+  Collection("secrets"),
+  {
+    credentials: { password: "secret password" },
+    data: {
+      loginName: 'alice',
+      email: "alice@site.example",
+      secrets: { a: 'a', b: 'b' }
+    },
+  }
+)
+```
+
+Then when someone logs in
+
+```
+Login(
+  Match(Index("login-name"), "alice"),
+  { password: "secret password" },
+)
+```
+
+```
+=> {
+  ref: Ref(Ref("tokens"), "299424734057071112"),
+  ts: 1621812528630000,
+  instance: Ref(Collection("secrets"), "299424683622662664"),
+  secret: "fnEEJ8U1jnACCAPrTEeO4AYITP3bXyUgfJIWARTyzJ9HANnSdY8"
+}
+```
+
+The token is the `secret`
+
+We just need to check that the login call returns alright (no error), then can serve the document referenced by `secrets/login-name`
 
 

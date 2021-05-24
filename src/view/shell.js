@@ -11,6 +11,7 @@ function Shell (props) {
         <ul class="nav-part">
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
+            <li class="${active('/whoami')}"><a href="/whoami">whoami</a></li>
         </ul>
 
         <hr />
