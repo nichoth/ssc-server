@@ -30,6 +30,7 @@ function Whoami (props) {
 
     return html`<div class="route whoami">
         <form class="whoami-form" onsubmit=${submit}>
+            <p>Choose an identity</p>
             <p><code>Use ${url} as an ID server</code></p>
 
             <div>
