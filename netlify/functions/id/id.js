@@ -23,19 +23,36 @@ exports.handler = function (ev, ctx, cb) {
 
     // do the db login by `name`
     client.query(
-        q.Login(
-            q.Match(Index("login-name"), name), {
-                password: password
-            }
-        )
+        q.Login(q.Match(q.Index("login-name"), 'alice'), {
+            password: 'secret password'
+        })
     )
         .then(res => {
-            // password is ok, return the secrets
             console.log('res', res)
-            return cb(null, {
-                statusCode: 200,
-                body: JSON.stringify(res)
-            })
+
+            // password is ok, return the secrets
+            client.query(
+                q.Get(
+                    q.Match(q.Index('login-name'), 'alice')
+                )
+            )
+                .then(res => {
+                    console.log('res up here', res)
+                    return cb(null, {
+                        statusCode: 200,
+                        body: JSON.stringify(res.data)
+                    })
+                })
+                .catch(err => {
+                    console.log('err up here', err)
+                    return cb(null, {
+                        statusCode: 500,
+                        body: JSON.stringify({
+                            message: 'oh no',
+                            err: err
+                        })
+                    })
+                })
         })
         .catch(err => {
             // login failed, return an err

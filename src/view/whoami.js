@@ -26,6 +26,11 @@ function Whoami (props) {
                 password: password
             })
         })
+            .then(res => res.json())
+            .then(res => {
+                console.log('id res', res)
+            })
+            .catch(err => console.log('id errrrr', err))
     }
 
     return html`<div class="route whoami">
