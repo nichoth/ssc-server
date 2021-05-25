@@ -52,44 +52,56 @@ function Whoami (props) {
         setCreating(false)
     }
 
+    function createLocal (ev) {
+        ev.preventDefault()
+        console.log('create local id')
+    }
+
     if (isCreating) {
         return html`<div class="route whoami new">
             <h1>Create a new identity</h1>
 
-            <div class="id-source">
-                <h2>Use <code>${url}</code> as an ID server</h2>
+            <div class="id-sources">
+                <div class="id-source">
+                    <h2>Create a local identity</h2>
+                    <button type="submit" onClick=${createLocal}>Create</button>
+                </div>
 
-                <form class="creation-form" onsubmit=${submitCreation}
-                    onreset=${cancel}
-                >
-                    <div>
-                        <label for="login-name">login name</label>
-                        <input placeholder="name" name="login-name" id="login-name"
-                            type="text" required />
-                    </div>
+                <div class="id-source">
+                    <h2>Use <code>${url}</code> as an ID server</h2>
 
-                    <div>
-                        <label for="password">password</label>
-                        <input placeholder="password" name="password" id="password"
-                            type="password" required />
-                    </div>
+                    <form class="creation-form" onsubmit=${submitCreation}
+                        onreset=${cancel}
+                    >
+                        <div>
+                            <label for="login-name">login name</label>
+                            <input placeholder="name" name="login-name" id="login-name"
+                                type="text" required />
+                        </div>
 
-                    <div>
-                        <label for="verification">verify password</label>
-                        <input type="password" placeholder="password"
-                            name="verification" id="verification" required />
-                    </div>
+                        <div>
+                            <label for="password">password</label>
+                            <input placeholder="password" name="password" id="password"
+                                type="password" required />
+                        </div>
 
-                    <button type="reset">cancel</button>
-                    <button type="submit">submit</button>
-                </form>
+                        <div>
+                            <label for="verification">verify password</label>
+                            <input type="password" placeholder="password"
+                                name="verification" id="verification" required />
+                        </div>
+
+                        <button type="reset">cancel</button>
+                        <button type="submit">submit</button>
+                    </form>
+                </div>
             </div>
 
         </div>`
     }
 
-    var idInfo = xtend(me.secrets)
-    idInfo.private = '~~~ redacted ~~~'
+    var idInfo = me ? xtend(me.secrets) : null
+    if (idInfo) idInfo.private = '~~~redacted~~~'
 
     return html`<div class="route whoami">
         <p>who are you?</p>
@@ -103,21 +115,25 @@ function Whoami (props) {
 
         <!-- the login form -->
         <form class="whoami-form" onsubmit=${getId}>
-            <p>Use <code>${url}</code> as an ID server</p>
+            <h1>Use an existing identity</h1>
 
-            <div>
-                <label for="login-name">name</label>
-                <input placeholder="name" name="login-name" id="login-name"
-                    type="text" required />
+            <div class="id-source">
+                <h2>Use <code>${url}</code> as an ID server</h2>
+
+                <div>
+                    <label for="login-name">name</label>
+                    <input placeholder="name" name="login-name" id="login-name"
+                        type="text" required />
+                </div>
+
+                <div>
+                    <label for="password">password</label>
+                    <input placeholder="password" name="password" id="password"
+                        type="password" required />
+                </div>
+
+                <button type="submit">submit</button>
             </div>
-
-            <div>
-                <label for="password">password</label>
-                <input placeholder="password" name="password" id="password"
-                    type="password" required />
-            </div>
-
-            <button type="submit">submit</button>
         </form>
     </div>`
 }

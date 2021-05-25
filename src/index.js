@@ -15,7 +15,7 @@ var bus = Bus({
     memo: true
 });
 
-var keys = Keys.get() || Keys.save(Keys.create())
+var keys = Keys.get() || null
 
 var state = struct({
     feed: observ(null),
