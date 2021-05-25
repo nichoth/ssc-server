@@ -1,7 +1,6 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { render } from 'preact'
-// var createHash = require('crypto').createHash
 var route = require('route-event')()
 var router = require('./router')()
 var Shell = require('./view/shell')
@@ -11,15 +10,12 @@ var Bus = require('@nichoth/events')
 var raf = require('raf')
 var evs = require('./EVENTS')
 var Keys  = require('./keys')
-// import createAuth0Client from '@auth0/auth0-spa-js';
-// var config = require('./auth_config.json')
 
 var bus = Bus({
     memo: true
 });
 
 var keys = Keys.get() || Keys.save(Keys.create())
-// var keys = Keys.create()
 
 var state = struct({
     feed: observ(null),
@@ -53,7 +49,9 @@ function Connector ({ emit, state }) {
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
 
-    return html`<${Shell} emit=${emit} ...${_state} me=${keys}>
+    return html`<${Shell} emit=${emit} ...${_state} me=${keys}
+        path=${_state.route}
+    >
         <${routeView} emit=${emit} ...${_state} me=${keys} />
     <//>`
 }

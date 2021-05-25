@@ -2,6 +2,14 @@ body {
     background-color: pink;
 }
 
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1rem;
+}
+
 a {
     text-decoration: none;
 }
@@ -24,7 +32,7 @@ hr {
 }
 
 .route.whoami {
-    form {
+    .id-source {
         border: 1px solid black;
         padding: 2rem;
         display: inline-block;

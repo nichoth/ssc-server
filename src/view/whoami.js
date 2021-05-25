@@ -54,40 +54,42 @@ function Whoami (props) {
 
     if (isCreating) {
         return html`<div class="route whoami new">
-            <p>Create a new identity</p>
+            <h1>Create a new identity</h1>
 
-            <p><code>Use ${url} as an ID server</code></p>
+            <div class="id-source">
+                <h2>Use <code>${url}</code> as an ID server</h2>
 
-            <form class="creation-form" onsubmit=${submitCreation}
-                onreset=${cancel}
-            >
-                <div>
-                    <label for="login-name">login name</label>
-                    <input placeholder="name" name="login-name" id="login-name"
-                        type="text" required />
-                </div>
+                <form class="creation-form" onsubmit=${submitCreation}
+                    onreset=${cancel}
+                >
+                    <div>
+                        <label for="login-name">login name</label>
+                        <input placeholder="name" name="login-name" id="login-name"
+                            type="text" required />
+                    </div>
 
-                <div>
-                    <label for="password">password</label>
-                    <input placeholder="password" name="password" id="password"
-                        type="password" required />
-                </div>
+                    <div>
+                        <label for="password">password</label>
+                        <input placeholder="password" name="password" id="password"
+                            type="password" required />
+                    </div>
 
-                <div>
-                    <label for="verification">verify password</label>
-                    <input type="password" placeholder="password"
-                        name="verification" id="verification" required />
-                </div>
+                    <div>
+                        <label for="verification">verify password</label>
+                        <input type="password" placeholder="password"
+                            name="verification" id="verification" required />
+                    </div>
 
-                <button type="reset">cancel</button>
-                <button type="submit">submit</button>
-            </form>
+                    <button type="reset">cancel</button>
+                    <button type="submit">submit</button>
+                </form>
+            </div>
 
         </div>`
     }
 
     var idInfo = xtend(me.secrets)
-    delete idInfo.private
+    idInfo.private = '~~~ redacted ~~~'
 
     return html`<div class="route whoami">
         <p>who are you?</p>
