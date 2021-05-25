@@ -15,7 +15,6 @@ exports.handler = function (ev, ctx, cb) {
     }
 
 
-
     var q = faunadb.query
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
@@ -23,21 +22,18 @@ exports.handler = function (ev, ctx, cb) {
 
     // do the db login by `name`
     client.query(
-        q.Login(q.Match(q.Index("login-name"), 'alice'), {
-            password: 'secret password'
+        q.Login(q.Match(q.Index("login-name"), name), {
+            password: password
         })
     )
         .then(res => {
-            console.log('res', res)
-
             // password is ok, return the secrets
             client.query(
                 q.Get(
-                    q.Match(q.Index('login-name'), 'alice')
+                    q.Match(q.Index('login-name'), name)
                 )
             )
                 .then(res => {
-                    console.log('res up here', res)
                     return cb(null, {
                         statusCode: 200,
                         body: JSON.stringify(res.data)
@@ -48,7 +44,7 @@ exports.handler = function (ev, ctx, cb) {
                     return cb(null, {
                         statusCode: 500,
                         body: JSON.stringify({
-                            message: 'oh no',
+                            message: 'The lookup of secrets failed',
                             err: err
                         })
                     })

@@ -25,7 +25,8 @@ var keys = ssc.createKeys();
 var state = struct({
     feed: observ(null),
     route: observ('/'),
-    id: observ({})
+    me: observ(keys)
+    // id: observ({})
 });
 
 subscribe(bus, state)

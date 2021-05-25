@@ -506,3 +506,16 @@ The token is the `secret`
 We just need to check that the login call returns alright (no error), then can serve the document referenced by `secrets/login-name`
 
 
+----------------------------------------------------------------
+
+## 5-24-2021
+
+The id server is working.
+
+Need a way to create new id's
+
+
+
+
+
+
