@@ -5,12 +5,12 @@ import { render } from 'preact'
 var route = require('route-event')()
 var router = require('./router')()
 var Shell = require('./view/shell')
-var ssc = require('@nichoth/ssc')
 var observ = require('observ')
 var struct = require('observ-struct')
 var Bus = require('@nichoth/events')
 var raf = require('raf')
 var evs = require('./EVENTS')
+var Keys  = require('./keys')
 // import createAuth0Client from '@auth0/auth0-spa-js';
 // var config = require('./auth_config.json')
 
@@ -18,15 +18,13 @@ var bus = Bus({
     memo: true
 });
 
-
-// @TODO should keep track of keys
-var keys = ssc.createKeys();
+var keys = Keys.get() || Keys.save(Keys.create())
+// var keys = Keys.create()
 
 var state = struct({
     feed: observ(null),
     route: observ('/'),
     me: observ(keys)
-    // id: observ({})
 });
 
 subscribe(bus, state)

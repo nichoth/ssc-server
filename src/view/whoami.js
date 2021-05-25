@@ -3,6 +3,7 @@ import { useState } from 'preact/hooks';
 // import 'preact/debug';
 var url = 'https://ssc-server.netlify.app'
 var evs = require('../EVENTS')
+var xtend = require('xtend')
 // var ssc = require('@nichoth/ssc')
 
 function Whoami (props) {
@@ -47,7 +48,7 @@ function Whoami (props) {
         ev.preventDefault()
     }
 
-    function cancel (ev) {
+    function cancel () {
         setCreating(false)
     }
 
@@ -85,15 +86,20 @@ function Whoami (props) {
         </div>`
     }
 
-    return html`<div class="route whoami">
+    var idInfo = xtend(me.secrets)
+    delete idInfo.private
 
+    return html`<div class="route whoami">
         <p>who are you?</p>
-        <pre>${JSON.stringify(me, null, 2)}</pre>
+        <pre>
+            ${JSON.stringify(idInfo, null, 2)}
+        </pre>
 
         <div>
             <button onclick=${create}>Create a new identity</button>
         </div>
 
+        <!-- the login form -->
         <form class="whoami-form" onsubmit=${getId}>
             <p>Use <code>${url}</code> as an ID server</p>
 
