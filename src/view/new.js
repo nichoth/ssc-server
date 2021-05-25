@@ -45,7 +45,9 @@ function upload (me, file, feed) {
     }
 
     console.log('**prev**', prev)
-    console.log('**prev id**', ssc.getId(prev))
+    if (prev) {
+        console.log('**prev id**', ssc.getId(prev))
+    }
 
     console.log('**next**', {
         keys: me,
