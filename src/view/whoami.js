@@ -4,6 +4,7 @@ import { useState } from 'preact/hooks';
 var url = 'https://ssc-server.netlify.app'
 var evs = require('../EVENTS')
 var xtend = require('xtend')
+var Keys = require('../keys')
 // var ssc = require('@nichoth/ssc')
 
 function Whoami (props) {
@@ -54,11 +55,21 @@ function Whoami (props) {
 
     function createLocal (ev) {
         ev.preventDefault()
-        console.log('create local id')
+        var keys = Keys.create()
+        console.log('create local id', keys)
+        emit(evs.keys.got, keys)
     }
+
+    var idInfo = me ? xtend(me) : null
+    if (idInfo) idInfo.private = '~~~redacted~~~'
 
     if (isCreating) {
         return html`<div class="route whoami new">
+            <p>who are you?</p>
+            <pre>
+                ${JSON.stringify(idInfo, null, 2)}
+            </pre>
+
             <h1>Create a new identity</h1>
 
             <div class="id-sources">
@@ -99,9 +110,6 @@ function Whoami (props) {
 
         </div>`
     }
-
-    var idInfo = me ? xtend(me.secrets) : null
-    if (idInfo) idInfo.private = '~~~redacted~~~'
 
     return html`<div class="route whoami">
         <p>who are you?</p>

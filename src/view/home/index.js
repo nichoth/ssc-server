@@ -1,5 +1,5 @@
 import { html } from 'htm/preact'
-import { useState, useEffect } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 var evs = require('../../EVENTS')
 
 function Home (props) {

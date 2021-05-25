@@ -2,9 +2,7 @@ var ssc = require('@nichoth/ssc')
 
 var sscKeys = {
     save: function (keys) {
-        window.localStorage.setItem('ssc', JSON.stringify({
-            secrets: keys
-        }));
+        window.localStorage.setItem( 'ssc', JSON.stringify(keys) );
 
         return keys
     },

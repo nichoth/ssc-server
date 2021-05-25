@@ -49,10 +49,8 @@ function Connector ({ emit, state }) {
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
 
-    return html`<${Shell} emit=${emit} ...${_state} me=${keys}
-        path=${_state.route}
-    >
-        <${routeView} emit=${emit} ...${_state} me=${keys} />
+    return html`<${Shell} emit=${emit} ...${_state} path=${_state.route}>
+        <${routeView} emit=${emit} ...${_state} />
     <//>`
 }
 
@@ -64,8 +62,9 @@ function subscribe (bus, state) {
         state.feed.set(msgs)
     })
 
-    bus.on(evs.id.got, ev => {
-        console.log('got id', ev)
-        state.id.set(ev.id)
+    bus.on(evs.keys.got, keys => {
+        console.log('key bus', keys)
+        Keys.save(keys)
+        state.me.set(keys)
     })
 }
