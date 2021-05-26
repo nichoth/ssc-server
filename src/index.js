@@ -67,9 +67,11 @@ function subscribe (bus, state) {
         state.feed.set(msgs)
     })
 
-    bus.on(evs.keys.got, keys => {
-        console.log('key bus', keys)
-        Keys.save(keys)
-        state.me.secrets.set(keys)
+    bus.on(evs.keys.got, ev => {
+        var { secrets, source } = ev
+        console.log('key bus', secrets)
+        Keys.save(secrets)
+        state.me.secrets.set(secrets)
+        state.me.source.set(source || null)
     })
 }

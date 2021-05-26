@@ -1,7 +1,7 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 // import 'preact/debug';
-var url = 'https://ssc-server.netlify.app'
+var URL = 'https://ssc-server.netlify.app'
 var evs = require('../EVENTS')
 var xtend = require('xtend')
 var Keys = require('../keys')
@@ -17,8 +17,6 @@ function Whoami (props) {
     function getId (ev) {
         ev.preventDefault()
         var els = ev.target.elements
-        // console.log('ev', ev)
-        // console.log('els', els)
         console.log('name', els['login-name'].value)
         console.log('pword', els['password'].value)
 
@@ -28,7 +26,7 @@ function Whoami (props) {
         _getId({ name, password })
             .then(res => {
                 console.log('id res', res)
-                emit(evs.id.got, res)
+                emit(evs.keys.got, { source: URL, secrets: res })
             })
             .catch(err => console.log('id errrrr', err))
     }
@@ -50,7 +48,7 @@ function Whoami (props) {
         ev.preventDefault()
         var keys = Keys.create()
         console.log('create local id', keys)
-        emit(evs.keys.got, keys)
+        emit(evs.keys.got, { source: null, secrets: keys })
         setCreating(false)
     }
 
@@ -76,7 +74,7 @@ function Whoami (props) {
                 </div>
 
                 <div class="id-source">
-                    <h2>Use <code>${url}</code> as an ID server</h2>
+                    <h2>Use <code>${URL}</code> as an ID server</h2>
 
                     <form class="creation-form" onsubmit=${submitCreation}
                         onreset=${cancel}
@@ -142,7 +140,7 @@ function Whoami (props) {
             <h2>Use an existing identity</h2>
 
             <div class="id-source">
-                <h2>Use <code>${url}</code> as an ID server</h2>
+                <h2>Use <code>${URL}</code> as an ID server</h2>
 
                 <div>
                     <label for="login-name">name</label>
