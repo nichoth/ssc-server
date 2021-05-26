@@ -140,6 +140,10 @@ function Whoami (props) {
 
         <hr />
 
+        <${NameYourself} me=${me} />
+
+        <hr />
+
         <!-- if me.source is null, show this. lets you save the id to a
         server. null means the id is local -->
         ${(me && me.secrets && !me.source) ?
@@ -221,6 +225,52 @@ function Whoami (props) {
                 <button type="submit">submit</button>
             </div>
         </form>
+    </div>`
+}
+
+function NameYourself ({ me }) {
+    var { userName } = me
+
+    var [isNaming, setNaming] = useState(false)
+
+    function nameYourself (ev) {
+        ev.preventDefault()
+        setNaming(true)
+    }
+
+    function cancelNaming (ev) {
+        setNaming(false)
+    }
+
+    function setName (ev) {
+        ev.preventDefault()
+        var name = ev.target.elements['user-name'].value
+        console.log('set name', name)
+    }
+
+    return html`<div class="name-yourself">
+        ${isNaming ?
+            html`<form onsubmit=${setName} onreset="${cancelNaming}">
+                <div class="form-section">
+                    <label for="user-name">user name </label>
+                    <input type="text" name="user-name" id="user-name"
+                        placeholder=${me.userName || 'Anonymous'}
+                    />
+                </div>
+                <button type="reset">cancel</button>
+                <button type="submit">save</button>
+            </form>` :
+
+            // pencil emoji
+            html`<span class="user-name">
+                <span class="current-name">${userName || 'Anonymous'}</span>
+                <button class="edit-pencil" onClick=${nameYourself}
+                    title="edit"
+                >
+                    ✏
+                </button>
+            </span>`
+        }
     </div>`
 }
 

@@ -18,6 +18,12 @@ hr {
     border: 1px solid gray;
 }
 
+button {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .nav-part {
     list-style: none;
     padding: 0;
@@ -61,6 +67,25 @@ hr {
             min-width: 40rem;
             height: 10rem;
             margin-bottom: 1rem;
+        }
+    }
+
+    .user-name {
+        .current-name {
+            margin-right: 1rem;
+        }
+    }
+
+    .edit-pencil {
+        position: relative;
+        top: 6px;
+        background-color: transparent;
+        border: none;
+        font-size: 2rem;
+        color: blue;
+
+        &:hover {
+            color: cyan;
         }
     }
 }
