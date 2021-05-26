@@ -58,14 +58,17 @@ function Whoami (props) {
         var keys = Keys.create()
         console.log('create local id', keys)
         emit(evs.keys.got, keys)
+        setCreating(false)
     }
 
-    var idInfo = me ? xtend(me) : null
+    var idInfo = me ? xtend(me.secrets) : null
     if (idInfo) idInfo.private = '~~~redacted~~~'
+    var source = me ? me.source : null
 
     if (isCreating) {
         return html`<div class="route whoami new">
-            <p>who are you?</p>
+            <h1>who are you?</h1>
+            <p>source -- ${source || 'local'}</p>
             <pre>
                 ${JSON.stringify(idInfo, null, 2)}
             </pre>
@@ -112,18 +115,35 @@ function Whoami (props) {
     }
 
     return html`<div class="route whoami">
-        <p>who are you?</p>
+        <h1>who are you?</h1>
         <pre>
             ${JSON.stringify(idInfo, null, 2)}
         </pre>
 
+        <hr />
+
+        ${me.source ?
+            null :
+            html`<div>
+                <h2>Save the current local ID to a server</h2>
+                <form>
+                    <button type="submit">save</button>
+                </form>
+            </div>`
+        }
+
+        ${!me.source ? html`<hr />` : null}
+
         <div>
+            <h2>Create a new identity</h2>
             <button onclick=${create}>Create a new identity</button>
         </div>
 
+        <hr />
+
         <!-- the login form -->
         <form class="whoami-form" onsubmit=${getId}>
-            <h1>Use an existing identity</h1>
+            <h2>Use an existing identity</h2>
 
             <div class="id-source">
                 <h2>Use <code>${url}</code> as an ID server</h2>

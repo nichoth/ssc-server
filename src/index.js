@@ -10,6 +10,8 @@ var Bus = require('@nichoth/events')
 var raf = require('raf')
 var evs = require('./EVENTS')
 var Keys  = require('./keys')
+var xtend = require('xtend')
+var Identity = require('./identity')
 
 var bus = Bus({
     memo: true
@@ -20,7 +22,10 @@ var keys = Keys.get() || null
 var state = struct({
     feed: observ(null),
     route: observ('/'),
-    me: observ(keys)
+    me: struct({
+        source: observ(null),
+        secrets: observ(keys)
+    })
 });
 
 subscribe(bus, state)
@@ -65,6 +70,6 @@ function subscribe (bus, state) {
     bus.on(evs.keys.got, keys => {
         console.log('key bus', keys)
         Keys.save(keys)
-        state.me.set(keys)
+        state.me.secrets.set(keys)
     })
 }

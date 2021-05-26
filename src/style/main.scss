@@ -32,6 +32,9 @@ hr {
 }
 
 .route.whoami {
+    hr {
+        margin: 2rem 0;
+    }
 
     .id-sources {
         display: grid;
