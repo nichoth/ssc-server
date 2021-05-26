@@ -87,19 +87,13 @@ function Whoami (props) {
         emit(evs.keys.got, { source: null, secrets: keys })
     }
 
-    var idInfo = me ? xtend(me.secrets) : null
-    if (idInfo) idInfo.private = '~~~redacted~~~'
-    var source = me ? me.source : null
+    // var idInfo = me ? xtend(me.secrets) : null
+    // if (idInfo) idInfo.private = '~~~redacted~~~'
+    // var source = me ? me.source : null
 
     if (isCreating) {
         return html`<div class="route whoami new">
-            <h1>who are you?</h1>
-            <p>source -- ${source || 'local'}</p>
-            <pre>
-                ${JSON.stringify(idInfo, null, 2)}
-            </pre>
-
-            <h1>Create a new identity</h1>
+            <${WhoAreYou} me=${me} />
 
             <div class="id-sources">
                 <div class="id-source">
@@ -142,15 +136,12 @@ function Whoami (props) {
     }
 
     return html`<div class="route whoami">
-        <h1>who are you?</h1>
-        <pre>
-            ${JSON.stringify(idInfo, null, 2)}
-        </pre>
+        <${WhoAreYou} me=${me} />
 
         <hr />
 
         <!-- if me.source is null, show this. lets you save the id to a
-        server. null means it is a local id -->
+        server. null means the id is local -->
         ${(me && me.secrets && !me.source) ?
             html`<div>
                 <h2>Save the current local ID to a server</h2>
@@ -231,6 +222,20 @@ function Whoami (props) {
             </div>
         </form>
     </div>`
+}
+
+function WhoAreYou ({ me }) {
+    var { source } = me
+
+    var idInfo = me ? xtend(me.secrets) : null
+    if (idInfo) idInfo.private = '~~~redacted~~~'
+    var source = me ? me.source : null
+
+    return html`<h1>who are you?</h1>
+        <p>source -- ${source || 'local'}</p>
+        <pre>
+            ${JSON.stringify(idInfo, null, 2)}
+        </pre>`
 }
 
 module.exports = Whoami

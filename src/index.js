@@ -10,8 +10,8 @@ var Bus = require('@nichoth/events')
 var raf = require('raf')
 var evs = require('./EVENTS')
 var Keys  = require('./keys')
-var xtend = require('xtend')
-var Identity = require('./identity')
+// var xtend = require('xtend')
+// var Identity = require('./identity')
 
 var bus = Bus({
     memo: true
@@ -24,7 +24,8 @@ var state = struct({
     route: observ('/'),
     me: struct({
         source: observ(null),
-        secrets: observ(keys)
+        secrets: observ(keys),
+        userName: observ('')
     })
 });
 
