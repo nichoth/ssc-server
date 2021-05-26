@@ -32,6 +32,10 @@ hr {
 }
 
 .route.whoami {
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
     hr {
         margin: 2rem 0;
     }
@@ -47,5 +51,16 @@ hr {
         border: 1px solid black;
         padding: 2rem;
         display: inline-block;
+        margin-bottom: 2rem;
+    }
+
+    .id-paste-form {
+        #key-info {
+            display: block;
+            width: 100%;
+            min-width: 40rem;
+            height: 10rem;
+            margin-bottom: 1rem;
+        }
     }
 }
