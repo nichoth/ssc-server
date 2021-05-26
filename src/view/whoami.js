@@ -5,6 +5,7 @@ var url = 'https://ssc-server.netlify.app'
 var evs = require('../EVENTS')
 var xtend = require('xtend')
 var Keys = require('../keys')
+var _getId = require('../get-id')
 // var ssc = require('@nichoth/ssc')
 
 function Whoami (props) {
@@ -24,15 +25,7 @@ function Whoami (props) {
         var name = els['login-name'].value
         var password = els['password'].value
 
-        fetch('/.netlify/functions/id', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                loginName: name,
-                password: password
-            })
-        })
-            .then(res => res.json())
+        _getId({ name, password })
             .then(res => {
                 console.log('id res', res)
                 emit(evs.id.got, res)
@@ -78,6 +71,7 @@ function Whoami (props) {
             <div class="id-sources">
                 <div class="id-source">
                     <h2>Create a local identity</h2>
+                    <button onclick=${cancel}>cancel</button>
                     <button type="submit" onClick=${createLocal}>Create</button>
                 </div>
 
@@ -122,20 +116,22 @@ function Whoami (props) {
 
         <hr />
 
-        ${me.source ?
-            null :
+        <!-- if me.source is null, lets you save the id to a server
+        b/c null means it is a local id -->
+        ${(me && me.secrets && !me.source) ?
             html`<div>
                 <h2>Save the current local ID to a server</h2>
                 <form>
                     <button type="submit">save</button>
                 </form>
-            </div>`
+            </div>` :
+            null
         }
 
         ${!me.source ? html`<hr />` : null}
 
         <div>
-            <h2>Create a new identity</h2>
+            <h2>Create a new local identity</h2>
             <button onclick=${create}>Create a new identity</button>
         </div>
 

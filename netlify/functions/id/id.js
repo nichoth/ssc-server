@@ -1,5 +1,7 @@
 var faunadb = require('faunadb')
 
+// take a name and password, return the keys
+// do 'login'
 exports.handler = function (ev, ctx, cb) {
     try {
         var { name, password } = JSON.parse(ev.body)
