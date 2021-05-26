@@ -36,7 +36,7 @@ function submit (me, feed, ev) {
 
 // This will upload the file after having read it
 function upload (me, file, feed) {
-    var keys = me
+    var keys = me.secrets
     var content = { type: 'test', text: 'wooooo' }
 
     var prev = feed ? feed[feed.length - 1] : null
@@ -50,7 +50,7 @@ function upload (me, file, feed) {
     }
 
     console.log('**next**', {
-        keys: me,
+        keys: me.secrets,
         msg: ssc.createMsg(keys, prev || null, content)
     })
 
@@ -61,7 +61,7 @@ function upload (me, file, feed) {
         },
         body: JSON.stringify({
             file: file, // This is your file object
-            keys: me,
+            keys: keys,
             msg: ssc.createMsg(keys, prev || null, content)
         })
     }).then(

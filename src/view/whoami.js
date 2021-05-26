@@ -140,7 +140,7 @@ function Whoami (props) {
 
         <hr />
 
-        <${NameYourself} me=${me} />
+        <${NameYourself} me=${me} emit=${emit} />
 
         <hr />
 
@@ -228,7 +228,7 @@ function Whoami (props) {
     </div>`
 }
 
-function NameYourself ({ me }) {
+function NameYourself ({ me, emit }) {
     var { userName } = me
 
     var [isNaming, setNaming] = useState(false)
@@ -246,6 +246,7 @@ function NameYourself ({ me }) {
         ev.preventDefault()
         var name = ev.target.elements['user-name'].value
         console.log('set name', name)
+        emit(evs.identity.setName, name)
     }
 
     return html`<div class="name-yourself">
@@ -254,6 +255,7 @@ function NameYourself ({ me }) {
                 <div class="form-section">
                     <label for="user-name">user name </label>
                     <input type="text" name="user-name" id="user-name"
+                        autofocus
                         placeholder=${me.userName || 'Anonymous'}
                     />
                 </div>
@@ -261,15 +263,16 @@ function NameYourself ({ me }) {
                 <button type="submit">save</button>
             </form>` :
 
-            // pencil emoji
-            html`<span class="user-name">
+            html`<div class="user-name">
+                <div>Your user name: </div>
                 <span class="current-name">${userName || 'Anonymous'}</span>
+                <!-- pencil emoji -->
                 <button class="edit-pencil" onClick=${nameYourself}
                     title="edit"
                 >
                     ✏
                 </button>
-            </span>`
+            </div>`
         }
     </div>`
 }
