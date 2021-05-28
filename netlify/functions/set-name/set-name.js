@@ -21,6 +21,13 @@ exports.handler = async function (ev, ctx) {
         })
     }
 
+
+
+    // TODO -- should verify the msg with the previous in the chain
+
+
+
+
     var isValid
     try {
         isValid = ssc.verifyObj(keys, null, msg)
