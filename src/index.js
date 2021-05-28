@@ -85,7 +85,7 @@ function subscribe (bus, state) {
         // @TODO
         // should use prev msg so we have a merkle list of 'about' type msgs
         // this can be an independent list from the 'feed'
-        // when the app starts we should request the head of the 'about' list
+        // should request the head of the 'about' list
         var prev = {}
 
 

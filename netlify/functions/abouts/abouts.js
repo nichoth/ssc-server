@@ -8,6 +8,40 @@ exports.handler = async function (ev, ctx) {
         secret: process.env.FAUNADB_SERVER_SECRET
     })
 
+    if (ev.httpMethod === 'GET') {
+        // return the head of the about messages
+        try {
+            var lastAboutMsg = await client.query(
+                q.Get(
+                    q.Match(q.Index('about-author'), '@' + keys.public)
+                )
+            );
+        } catch (err) {
+            if (err.message === 'instance not found') {
+                // this means it's a new string of 'about' msgs
+                // and there is no ancestor
+                var lastAboutMsg = null
+            } else {
+                return {
+                    statusCode: 422,
+                    body: JSON.stringify({
+                        ok: false,
+                        error: err,
+                        message: err.message
+                    })
+                }
+            }
+        }
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                ok: true,
+                messages: lastAboutMsg
+            })
+        }
+    }
+
     if (ev.httpMethod === "POST") {
         try {
             var { keys, msg } = JSON.parse(ev.body)
