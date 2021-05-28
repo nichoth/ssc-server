@@ -98,6 +98,7 @@ function Whoami (props) {
             <div class="id-sources">
                 <div class="id-source">
                     <h2>Create a local identity</h2>
+                    <p>This will remove your current ID</p>
                     <button onclick=${cancel}>cancel</button>
                     <button type="submit" onClick=${createLocal}>Create</button>
                 </div>
@@ -110,8 +111,8 @@ function Whoami (props) {
                     >
                         <div>
                             <label for="login-name">login name</label>
-                            <input placeholder="name" name="login-name" id="login-name"
-                                type="text" required />
+                            <input placeholder="name" name="login-name"
+                                id="login-name" type="text" required />
                         </div>
 
                         <div>
@@ -245,6 +246,19 @@ function NameYourself ({ me, emit }) {
         setNaming(false)
     }
 
+    window.abouts = function () {
+        var qs = new URLSearchParams({ author: me.secrets.id }).toString();
+        console.log('meeeee', me)
+        console.log('qsssss', qs)
+        var url = '/.netlify/functions/abouts' + '?' + qs
+
+        fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                console.log('over here', res)
+            })
+    }
+
     async function setName (ev) {
         ev.preventDefault()
         var name = ev.target.elements['user-name'].value
@@ -269,13 +283,14 @@ function NameYourself ({ me, emit }) {
 
         try {
             var _prev = await fetch(url).then(res => res.json())
-            console.log('prevvvvv', _prev.messages)
+            console.log('prevvvvv', _prev.msg)
         } catch (err) {
             console.log('about fetch errr', err)
         }
 
         console.log('prevvviousss', _prev)
-        var prev = _prev.messages
+        var prev = _prev && _prev.msg && _prev.msg.value || null
+        console.log('goood prevvvv', prev)
         var msg = ssc.createMsg(keys, prev || null, msgContent)
 
         fetch('/.netlify/functions/set-name', {
@@ -286,7 +301,9 @@ function NameYourself ({ me, emit }) {
                 msg: msg
             })
         })
+            .then(res => res.json())
             .then(res => {
+                console.log('**set name res**', res)
                 setResolving(false)
                 emit(evs.identity.setName, res)
             })
@@ -319,7 +336,6 @@ function NameYourself ({ me, emit }) {
 
             html`<div class="user-name">
                 <h2>user name</h2>
-                <div>Your user name: </div>
                 <span class="current-name">${userName || 'Anonymous'}</span>
                 <!-- pencil emoji -->
                 <button class="edit-pencil" onClick=${nameYourself}

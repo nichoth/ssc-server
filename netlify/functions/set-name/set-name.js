@@ -8,7 +8,6 @@ exports.handler = async function (ev, ctx) {
         secret: process.env.FAUNADB_SERVER_SECRET
     })
 
-
     try {
         var { keys, msg } = JSON.parse(ev.body)
     } catch (err) {
@@ -22,5 +21,47 @@ exports.handler = async function (ev, ctx) {
         })
     }
 
+    var isValid
+    try {
+        isValid = ssc.verifyObj(keys, null, msg)
+    } catch (err) {
+        return cb(null, {
+            statusCode: 422,
+            body: JSON.stringify({
+                ok: false,
+                error: err,
+                message: msg
+            })
+        })
+    }
+
+    if (!msg || !isValid) {
+        // is invalid
+        // 422 (Unprocessable Entity)
+        return cb(null, {
+            statusCode: 422,
+            body: JSON.stringify({
+                ok: false,
+                error: 'invalid message',
+                message: msg
+            })
+        })
+    }
+
+    var msgHash = ssc.getId(msg)
+
+    var res = client.query(
+        q.Create(q.Collection('abouts'), {
+            data: { value: msg, key: msgHash }
+        })
+    )
+
+    return res.then(res => {
+        console.log('***res in here***', res)
+        return {
+            statusCode: 200,
+            body: JSON.stringify(res.data)
+        }
+    })
 
 }

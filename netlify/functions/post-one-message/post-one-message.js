@@ -47,7 +47,7 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
-    console.log('aaaaaaaaaaaaaaaaa in th req', msg)
+    console.log('aaaaaaaaaaaaaaaaa in the req', msg)
 
     var isValid
     try {

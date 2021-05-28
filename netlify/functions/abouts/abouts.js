@@ -19,13 +19,14 @@ exports.handler = async function (ev, ctx) {
 
             var lastAboutMsg = await client.query(
                 q.Get(
-                    q.Match(q.Index('about-author'), author)
+                    q.Match(q.Index('about-by-author-five'), author)
                 )
             );
         } catch (err) {
             if (err.message === 'instance not found') {
                 // this means it's a new string of 'about' msgs
                 // and there is no ancestor
+                console.log('~~~ not found ~~~~~')
                 var lastAboutMsg = null
             } else {
                 return {
@@ -45,7 +46,7 @@ exports.handler = async function (ev, ctx) {
             statusCode: 200,
             body: JSON.stringify({
                 ok: true,
-                messages: lastAboutMsg
+                msg: (lastAboutMsg && lastAboutMsg.data)
             })
         }
     }
