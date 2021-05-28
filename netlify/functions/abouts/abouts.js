@@ -10,10 +10,16 @@ exports.handler = async function (ev, ctx) {
 
     if (ev.httpMethod === 'GET') {
         // return the head of the about messages
+        var author = ev.queryStringParameters.author
+
+        console.log('***author***', author)
+
         try {
+            console.log('GET', author)
+
             var lastAboutMsg = await client.query(
                 q.Get(
-                    q.Match(q.Index('about-author'), '@' + keys.public)
+                    q.Match(q.Index('about-author'), author)
                 )
             );
         } catch (err) {
@@ -32,6 +38,8 @@ exports.handler = async function (ev, ctx) {
                 }
             }
         }
+
+        console.log('***last about msg***', lastAboutMsg)
 
         return {
             statusCode: 200,

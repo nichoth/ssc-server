@@ -25,8 +25,7 @@ var state = struct({
     me: struct({
         source: observ(null),
         secrets: observ(keys),
-        userName: observ(''),
-        isResolving: observ(false)
+        userName: observ('')
     })
 });
 
@@ -68,56 +67,6 @@ function subscribe (bus, state) {
     bus.on(evs.identity.setName, name => {
         console.log('set name event', name)
 
-        state.me.isResolving.set(true)
-
-
-
-
-
-
-
-        var msgContent = {
-            type: 'about',
-            about: me.secrets.id,
-            name: name
-        }
-
-        // @TODO
-        // should use prev msg so we have a merkle list of 'about' type msgs
-        // this can be an independent list from the 'feed'
-        // should request the head of the 'about' list
-        var prev = {}
-
-
-
-
-
-
-        // make a call to the server
-        fetch('/.netlify/functions/set-name', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                keys: me.secrets,
-                msg: ssc.createMsg(keys, prev || null, msgContent)
-            })
-        })
-            .then(res => {
-                console.log('res', res)
-                return res.json()
-            })
-            .then(json => {
-                state.me.userName.set(json.name)
-                state.me.isResolving.set(false)
-            })
-            .catch(err => {
-                console.log('errrr in home', err)
-                state.me.isResolving.set(false)
-            })
-
-        // then set the name in state after the result
     })
 
     bus.on(evs.feed.got, msgs => {

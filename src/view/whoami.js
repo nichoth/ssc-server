@@ -1,12 +1,12 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 // import 'preact/debug';
-var URL = 'https://ssc-server.netlify.app'
+var MY_URL = 'https://ssc-server.netlify.app'
 var evs = require('../EVENTS')
 var xtend = require('xtend')
 var Keys = require('../keys')
 var _getId = require('../get-id')
-// var ssc = require('@nichoth/ssc')
+var ssc = require('@nichoth/ssc')
 
 function Whoami (props) {
     var { me, emit } = props
@@ -28,7 +28,7 @@ function Whoami (props) {
         _getId({ name, password })
             .then(res => {
                 console.log('id res', res)
-                emit(evs.keys.got, { source: URL, secrets: res })
+                emit(evs.keys.got, { source: MY_URL, secrets: res })
             })
             .catch(err => console.log('id errrrr', err))
     }
@@ -103,7 +103,7 @@ function Whoami (props) {
                 </div>
 
                 <div class="id-source">
-                    <h2>Use <code>${URL}</code> as an ID server</h2>
+                    <h2>Use <code>${MY_URL}</code> as an ID server</h2>
 
                     <form class="creation-form" onsubmit=${submitCreation}
                         onreset=${cancel}
@@ -203,7 +203,7 @@ function Whoami (props) {
 
         <form class="whoami-form" onsubmit=${getId}>
             <div class="id-source">
-                <h3>Use <code>${URL}</code> as an ID server</h3>
+                <h3>Use <code>${MY_URL}</code> as an ID server</h3>
 
                 ${!me.source ?
                     html`<p>This will get rid of your local ID</p>` :
@@ -232,6 +232,9 @@ function NameYourself ({ me, emit }) {
     var { userName } = me
 
     var [isNaming, setNaming] = useState(false)
+    var [isResolving, setResolving] = useState(false)
+
+    window.setNaming = setNaming
 
     function nameYourself (ev) {
         ev.preventDefault()
@@ -242,17 +245,63 @@ function NameYourself ({ me, emit }) {
         setNaming(false)
     }
 
-    function setName (ev) {
+    async function setName (ev) {
         ev.preventDefault()
         var name = ev.target.elements['user-name'].value
-        console.log('set name', name)
-        emit(evs.identity.setName, name)
+        console.log('set name in here', name)
+
+        var msgContent = {
+            type: 'about',
+            about: me.secrets.id,
+            name: name
+        }
+
+        // should make the API call in here
+        // and emit an event when you get a response
+
+        setResolving(true)
+
+        var keys = me.secrets
+        var qs = new URLSearchParams({ author: me.secrets.id }).toString();
+        console.log('meeeee', me)
+        console.log('qsssss', qs)
+        var url = '/.netlify/functions/abouts' + '?' + qs
+
+        try {
+            var _prev = await fetch(url).then(res => res.json())
+            console.log('prevvvvv', _prev.messages)
+        } catch (err) {
+            console.log('about fetch errr', err)
+        }
+
+        console.log('prevvviousss', _prev)
+        var prev = _prev.messages
+        var msg = ssc.createMsg(keys, prev || null, msgContent)
+
+        fetch('/.netlify/functions/set-name', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                keys: me.secrets,
+                msg: msg
+            })
+        })
+            .then(res => {
+                setResolving(false)
+                emit(evs.identity.setName, res)
+            })
+            .catch(err => {
+                setResolving(false)
+                console.log('errrrr', err)
+            })
     }
 
     return html`<div class="name-yourself">
         ${isNaming ?
             html`<form onsubmit=${setName} onreset="${cancelNaming}">
                 <div class="form-section">
+
+                    <h2>user name</h2>
                     <label for="user-name">user name </label>
                     <input type="text" name="user-name" id="user-name"
                         autofocus
@@ -260,10 +309,16 @@ function NameYourself ({ me, emit }) {
                     />
                 </div>
                 <button type="reset">cancel</button>
-                <button type="submit">save</button>
+                ${isResolving ?
+                    html`<button class="resolving" disabled=${true}>
+                        save
+                    </button>` :
+                    html`<button type="submit">save</button>`
+                }
             </form>` :
 
             html`<div class="user-name">
+                <h2>user name</h2>
                 <div>Your user name: </div>
                 <span class="current-name">${userName || 'Anonymous'}</span>
                 <!-- pencil emoji -->
