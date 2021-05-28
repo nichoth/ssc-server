@@ -15,8 +15,6 @@ exports.handler = async function (ev, ctx) {
         console.log('***author***', author)
 
         try {
-            console.log('GET', author)
-
             var lastAboutMsg = await client.query(
                 q.Get(
                     q.Match(q.Index('about-by-author-five'), author)
@@ -30,7 +28,7 @@ exports.handler = async function (ev, ctx) {
                 var lastAboutMsg = null
             } else {
                 return {
-                    statusCode: 422,
+                    statusCode: 500,
                     body: JSON.stringify({
                         ok: false,
                         error: err,
