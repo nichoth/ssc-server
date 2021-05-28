@@ -53,6 +53,16 @@ button {
     padding: 0;
     display: flex;
     justify-content: space-evenly;
+    position: relative;
+
+    li.name {
+        position: absolute;
+        left: 0;
+    }
+
+    h1 {
+        margin: 0;
+    }
 
     li {
         &.active {
