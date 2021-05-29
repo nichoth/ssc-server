@@ -18,6 +18,14 @@ var profile = Identity.get() || null
 var state = State(keys, profile)
 subscribe(bus, state)
 
+
+
+// TODO -- around here, make a request to get the profile from server
+// need to write a server side function
+
+
+
+// save the profile to localStorage when it changes
 state.profile(function onChange (profile) {
     console.log('profile change', profile)
     Identity.save(profile)
