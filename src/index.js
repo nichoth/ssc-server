@@ -7,16 +7,15 @@ var Shell = require('./view/shell')
 var Bus = require('@nichoth/events')
 var raf = require('raf')
 var Keys  = require('./keys')
+var Identity = require('./identity')
 var subscribe = require('./subscribe')
 var State = require('./state')
-// var Identity = require('./identity')
 
-var bus = Bus({
-    memo: true
-});
+var bus = Bus({ memo: true })
 
 var keys = Keys.get() || null
-var state = State(keys)
+var profile = Identity.get() || null
+var state = State(keys, profile)
 subscribe(bus, state)
 
 route(function onRoute (path) {
@@ -43,9 +42,7 @@ function Connector ({ emit, state }) {
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
 
-    return html`<${Shell} name="fooo" emit=${emit} ...${_state}
-        path=${_state.route}
-    >
+    return html`<${Shell} emit=${emit} ...${_state} path=${_state.route}>
         <${routeView} emit=${emit} ...${_state} />
     <//>`
 }

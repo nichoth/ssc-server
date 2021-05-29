@@ -1,15 +1,17 @@
 var observ = require('observ')
 var struct = require('observ-struct')
 
-function State (keys) {
+function State (keys, profile) {
 
     var state = struct({
         feed: observ(null),
         route: observ('/'),
         me: struct({
             source: observ(null),
-            secrets: observ(keys),
-            userName: observ('')
+            secrets: observ(keys)
+        }),
+        profile: struct({
+            userName: observ((profile && profile.name) || null)
         })
     })
 

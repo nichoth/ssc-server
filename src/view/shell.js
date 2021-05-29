@@ -1,7 +1,7 @@
 import { html } from 'htm/preact'
 
 function Shell (props) {
-    var { path, name } = props
+    var { path, profile } = props
 
     function active (href) {
         return href === path ? 'active' : ''
@@ -9,7 +9,9 @@ function Shell (props) {
 
     return html`<div class="shell">
         <ul class="nav-part">
-            <li class="name"><h1>${name}</h1></li>
+            <li class="name">
+                <h1>${(profile && profile.userName) || 'Anonymous'}</h1>
+            </li>
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
             <li class="${active('/whoami')}"><a href="/whoami">whoami</a></li>

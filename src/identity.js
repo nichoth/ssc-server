@@ -1,4 +1,4 @@
-var STORAGE_KEY = 'ssc-id'
+var STORAGE_KEY = 'ssc-profile'
 
 var Identity = {
     save: function (id) {
