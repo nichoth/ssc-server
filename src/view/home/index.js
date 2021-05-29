@@ -48,7 +48,9 @@ function Home (props) {
                 console.log('post, i', post, i)
 
                 return html`<li class="post">
-                    <img src="${url}" />
+                    <a href="/${encodeURIComponent(post.key)}">
+                        <img src="${url}" />
+                    </a>
                     <p>${writing}</p>
                 </li>`
             }))}

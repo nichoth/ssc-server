@@ -515,6 +515,11 @@ The id server is working.
 Need a way to create new id's
 
 
+--------------------------------------------------------------
+
+## 5-29-2020
+
+Need to make a 'key' index for the posts
 
 
 

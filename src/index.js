@@ -32,6 +32,8 @@ state.profile(function onChange (profile) {
 })
 
 route(function onRoute (path) {
+    // we update the state here with the path
+    // then the `connector` finds the view via the router
     state.route.set(path)
 
     var emit = bus.emit.bind(bus)
@@ -52,11 +54,12 @@ function Connector ({ emit, state }) {
     var match = router.match(_state.route)
     console.log('match', match)
     if (!match) console.log('not match')
+    var { params } = match
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
 
     return html`<${Shell} emit=${emit} ...${_state} path=${_state.route}>
-        <${routeView} emit=${emit} ...${_state} />
+        <${routeView} emit=${emit} ...${_state} params=${params} />
     <//>`
 }
 
