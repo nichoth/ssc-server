@@ -2,14 +2,14 @@ import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { render } from 'preact'
 var route = require('route-event')()
-var router = require('./router')()
-var Shell = require('./view/shell')
 var Bus = require('@nichoth/events')
 var raf = require('raf')
 var Keys  = require('./keys')
 var Identity = require('./identity')
 var subscribe = require('./subscribe')
 var State = require('./state')
+var router = require('./router')()
+var Shell = require('./view/shell')
 
 var bus = Bus({ memo: true })
 

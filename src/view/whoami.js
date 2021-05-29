@@ -1,12 +1,12 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 // import 'preact/debug';
-var MY_URL = 'https://ssc-server.netlify.app'
 var evs = require('../EVENTS')
-var xtend = require('xtend')
 var Keys = require('../keys')
 var _getId = require('../get-id')
 var ssc = require('@nichoth/ssc')
+var xtend = require('xtend')
+var MY_URL = 'https://ssc-server.netlify.app'
 
 function Whoami (props) {
     var { me, emit, profile } = props
