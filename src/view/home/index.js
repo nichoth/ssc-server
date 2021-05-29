@@ -16,7 +16,7 @@ function Home (props) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                author: '@' + me.public
+                author: '@' + me.secrets.public
             })
         })
             .then(res => {
