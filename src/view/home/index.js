@@ -40,7 +40,9 @@ function Home (props) {
             ${(feed && feed.map((post, i) => {
 
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
-                var url = post.mentionUrls[i]
+                var url = post.mentionUrls[0]
+
+                console.log('urllllllll', url)
 
                 return html`<li class="post">
                     <img src="${url}" />
