@@ -42,11 +42,11 @@ function Home (props) {
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
                 var url = post.mentionUrls[0]
 
-                console.log('urllllllll', url)
+                console.log('post, i', post, i)
 
                 return html`<li class="post">
                     <img src="${url}" />
-                    <pre>${JSON.stringify(post, null, 2)}</pre>
+                    <!-- <pre>${JSON.stringify(post, null, 2)}</pre> -->
                 </li>`
             }))}
         </ul>

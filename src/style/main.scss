@@ -125,3 +125,21 @@ button {
 }
 
 
+// ----------- post list -----------------------------
+
+.post-list {
+    list-style: none;
+    display: grid;
+    padding: 0;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-rows: repeat(auto-fill, 300px);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+// ----------- post list -----------------------------
