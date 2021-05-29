@@ -7,8 +7,6 @@ function SingleImage (props) {
 
     var [post, setPost] = useState(null)
 
-    // should already by URL encoded b/c we did that in the view
-
     useEffect(() => {
         const qs = new URLSearchParams({ key })
         fetch('/.netlify/functions/single-post?' + qs.toString())
@@ -27,10 +25,13 @@ function SingleImage (props) {
             })
     }, [])
 
+    if (!post) return null
+
     return html`<div class="single-image-route">
         <p>a single image</p>
         <div class="single-image-wrapper">
-            <img src="${(post && post.mentionUrls[0]) || null}" />
+            <img src="${(post.mentionUrls[0]) || null}" />
+            <p>${post.value.content.text}</p>
         </div>
     </div>`
 }
