@@ -9,7 +9,7 @@ var _getId = require('../get-id')
 var ssc = require('@nichoth/ssc')
 
 function Whoami (props) {
-    var { me, emit } = props
+    var { me, emit, profile } = props
     const [isCreating, setCreating] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [keyErr, setKeyErr] = useState(null);
@@ -141,7 +141,7 @@ function Whoami (props) {
 
         <hr />
 
-        <${NameYourself} me=${me} emit=${emit} />
+        <${NameYourself} me=${me} emit=${emit} profile=${profile} />
 
         <hr />
 
@@ -229,15 +229,11 @@ function Whoami (props) {
     </div>`
 }
 
-function NameYourself ({ me, emit }) {
-    var { userName } = me
-
+function NameYourself ({ me, emit, profile }) {
     var [isNaming, setNaming] = useState(false)
     var [isResolving, setResolving] = useState(false)
 
-    window.setNaming = setNaming
-
-    function nameYourself (ev) {
+    function _nameYourself (ev) {
         ev.preventDefault()
         setNaming(true)
     }
@@ -305,7 +301,7 @@ function NameYourself ({ me, emit }) {
             .then(res => {
                 console.log('**set name res**', res)
                 setResolving(false)
-                emit(evs.identity.setName, res)
+                emit(evs.identity.setName, res.value.content.name)
             })
             .catch(err => {
                 setResolving(false)
@@ -322,7 +318,7 @@ function NameYourself ({ me, emit }) {
                     <label for="user-name">user name </label>
                     <input type="text" name="user-name" id="user-name"
                         autofocus
-                        placeholder=${me.userName || 'Anonymous'}
+                        placeholder=${profile.userName || 'Anonymous'}
                     />
                 </div>
                 <button type="reset">cancel</button>
@@ -336,9 +332,9 @@ function NameYourself ({ me, emit }) {
 
             html`<div class="user-name">
                 <h2>user name</h2>
-                <span class="current-name">${userName || 'Anonymous'}</span>
+                <span class="current-name">${profile.userName || 'Anonymous'}</span>
                 <!-- pencil emoji -->
-                <button class="edit-pencil" onClick=${nameYourself}
+                <button class="edit-pencil" onClick=${_nameYourself}
                     title="edit"
                 >
                     ✏

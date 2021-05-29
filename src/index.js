@@ -18,6 +18,11 @@ var profile = Identity.get() || null
 var state = State(keys, profile)
 subscribe(bus, state)
 
+state.profile(function onChange (profile) {
+    console.log('profile change', profile)
+    Identity.save(profile)
+})
+
 route(function onRoute (path) {
     state.route.set(path)
 

@@ -1,9 +1,10 @@
 var STORAGE_KEY = 'ssc-profile'
 
 var Identity = {
-    save: function (id) {
-        window.localStorage.setItem( STORAGE_KEY, JSON.stringify(id) )
-        return id
+    save: function (profile) {
+        console.log('in identity', profile)
+        window.localStorage.setItem( STORAGE_KEY, JSON.stringify(profile) )
+        return profile
     },
 
     get: function () {

@@ -4,7 +4,7 @@ function subscribe (bus, state) {
 
     bus.on(evs.identity.setName, name => {
         console.log('set name event', name)
-
+        state.profile.userName.set(name)
     })
 
     bus.on(evs.feed.got, msgs => {

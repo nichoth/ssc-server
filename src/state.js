@@ -3,6 +3,8 @@ var struct = require('observ-struct')
 
 function State (keys, profile) {
 
+    console.log('in state', profile)
+
     var state = struct({
         feed: observ(null),
         route: observ('/'),
@@ -11,7 +13,7 @@ function State (keys, profile) {
             secrets: observ(keys)
         }),
         profile: struct({
-            userName: observ((profile && profile.name) || null)
+            userName: observ((profile && profile.userName) || null)
         })
     })
 
