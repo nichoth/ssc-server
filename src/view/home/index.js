@@ -41,6 +41,7 @@ function Home (props) {
         <ul class="post-list">
             ${(feed && feed.map((post, i) => {
 
+                var writing = post.value.content.text
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
                 var url = post.mentionUrls[0]
 
@@ -48,7 +49,7 @@ function Home (props) {
 
                 return html`<li class="post">
                     <img src="${url}" />
-                    <!-- <pre>${JSON.stringify(post, null, 2)}</pre> -->
+                    <p>${writing}</p>
                 </li>`
             }))}
         </ul>
