@@ -68,7 +68,7 @@ function Import (props) {
                             type="password" required />
                     </div>
 
-                    <button type="submit">submit</button>
+                    <button type="submit">import</button>
                 </div>
             </form>
 

@@ -37,7 +37,9 @@ function Create (props) {
             <div class="id-source">
                 <h2>Use <code>${MY_URL}</code> as an ID server</h2>
 
-                <p>Create a new ID on a server, and use it locally</p>
+                <p>Create a new ID record on the server,
+                    then use the ID in this client.
+                    To use an existing ID record, see 'import' above^</p>
 
                 <form class="creation-form" onsubmit=${submitCreationToServer}
                     onreset=${reset}
