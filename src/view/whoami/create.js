@@ -29,7 +29,7 @@ function Create (props) {
         <div class="id-sources">
             <div class="id-source">
                 <h2>Create a local identity</h2>
-                <p>This will remove your current ID</p>
+                <p>This will destroy your current ID</p>
                 <button onclick=${reset}>cancel</button>
                 <button type="submit" onClick=${createLocalId}>Create</button>
             </div>
@@ -37,22 +37,24 @@ function Create (props) {
             <div class="id-source">
                 <h2>Use <code>${MY_URL}</code> as an ID server</h2>
 
+                <p>Create a new ID using a server to store it.</p>
+
                 <form class="creation-form" onsubmit=${submitCreationToServer}
-                    onreset=${cancel}
+                    onreset=${reset}
                 >
-                    <div>
+                    <div class="form-group">
                         <label for="login-name">login name</label>
                         <input placeholder="name" name="login-name"
                             id="login-name" type="text" required />
                     </div>
 
-                    <div>
+                    <div class="form-group">
                         <label for="password">password</label>
                         <input placeholder="password" name="password" id="password"
                             type="password" required />
                     </div>
 
-                    <div>
+                    <div class="form-group">
                         <label for="verification">verify password</label>
                         <input type="password" placeholder="password"
                             name="verification" id="verification" required />

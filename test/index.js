@@ -5,7 +5,6 @@ var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
-// let buff = new Buffer(data)
 let base64Caracal = caracal.toString('base64')
 
 var ntl

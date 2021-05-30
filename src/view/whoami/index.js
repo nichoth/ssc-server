@@ -16,6 +16,9 @@ function Whoami (props) {
         return href === path ? 'active' : ''
     }
 
+    var splits = route.split('/')
+    var endpoint = splits[splits.length - 1]
+
     return html`<div class="route whoami">
         <ul class="sub-nav">
             <li class=${isActive('/whoami/save', route)}>
@@ -29,7 +32,7 @@ function Whoami (props) {
             </li>
         </ul>
 
-        <div class="whoami tab">
+        <div class="whoami tab ${endpoint}">
             ${props.children || html`<${Default} ...${props} />`}
         </div>
     </div>`
@@ -134,7 +137,7 @@ function Default (props) {
 //         return html`<div class="route whoami new">
 //             <${WhoAreYou} me=${me} />
 
-//             <div class="id-sources">
+            // <div class="id-sources">
 //                 <div class="id-source">
 //                     <h2>Create a local identity</h2>
 //                     <p>This will remove your current ID</p>
