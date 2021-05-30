@@ -4,7 +4,9 @@ function Shell (props) {
     var { path, profile } = props
 
     function active (href) {
-        return href === path ? 'active' : ''
+        var baseHref = href.split('/')[1]
+        var basePath = path.split('/')[1]
+        return baseHref === basePath ? 'active' : ''
     }
 
     return html`<div class="shell">

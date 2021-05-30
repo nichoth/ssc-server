@@ -47,8 +47,10 @@ function Connector ({ emit, state }) {
     const [_state, setState] = useState(state())
 
     state(function onChange (newState) {
-        console.log('on change', newState)
-        raf(() => setState(newState))
+        raf(() => {
+            console.log('on change', newState)
+            setState(newState)
+        })
     })
 
     var match = router.match(_state.route)
