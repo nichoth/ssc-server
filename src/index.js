@@ -57,9 +57,17 @@ function Connector ({ emit, state }) {
     var { params } = match
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
+    var subView = route ? route.subView : null
 
     return html`<${Shell} emit=${emit} ...${_state} path=${_state.route}>
-        <${routeView} emit=${emit} ...${_state} params=${params} />
+        <${routeView} emit=${emit} ...${_state} params=${params}
+            path=${_state.route}
+        >
+            ${subView ?
+                html`<${subView} emit=${emit} ...${_state} />` :
+                null
+            }
+        <//>
     <//>`
 }
 

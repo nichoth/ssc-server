@@ -4,6 +4,12 @@ var New = require('./view/new')
 var Whoami = require('./view/whoami')
 var SingleImage = require('./view/single-image')
 
+var tabs = {
+    save: require('./view/whoami/save'),
+    create: require('./view/whoami/create'),
+    import: require('./view/whoami/import')
+}
+
 function Router () {
     var router = _router()
 
@@ -20,6 +26,17 @@ function Router () {
     router.addRoute('/whoami', match => {
         return {
             view: Whoami
+        }
+    })
+
+    router.addRoute('/whoami/:subroute', match => {
+        var { params } = match
+        var { subroute } = params
+        var subView = tabs[subroute]
+
+        return {
+            view: Whoami,
+            subView: subView
         }
     })
 
