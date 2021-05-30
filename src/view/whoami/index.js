@@ -46,6 +46,14 @@ function Default (props) {
     return html`
         <h2>Who are you?</h2>
 
+        <p>
+            Source --
+            ${me.source === null ?
+                ' Not linked to an id server.' :
+                html` Using <code>${me.source}</code> as an ID server.`
+            }
+        </p>
+
         <pre>${JSON.stringify(me, null, 2)}</pre>
     `
 }
