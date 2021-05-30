@@ -48,7 +48,7 @@ function Connector ({ emit, state }) {
 
     state(function onChange (newState) {
         raf(() => {
-            console.log('on change', newState)
+            // console.log('on change', newState)
             setState(newState)
         })
     })
