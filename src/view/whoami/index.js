@@ -30,13 +30,22 @@ function Whoami (props) {
         </ul>
 
         <div class="whoami tab">
-            ${props.children || html`<p>default view</p>`}
+            ${props.children || html`<${Default} ...${props} />`}
         </div>
     </div>`
 }
 
 module.exports = Whoami
 
+function Default (props) {
+    var { me } = props
+
+    return html`
+        <h2>Who are you?</h2>
+
+        <pre>${JSON.stringify(me, null, 2)}</pre>
+    `
+}
 
 // function Whoami (props) {
 //     var { me, emit, profile } = props
