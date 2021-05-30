@@ -38,12 +38,12 @@
         margin: 2rem 0;
     }
 
-    // .id-sources {
-        // display: grid;
-        // gap: 1rem;
-        // grid-template-rows: auto;
-        // grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    // }
+    .id-sources {
+        display: grid;
+        gap: 1rem;
+        grid-template-rows: auto;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
 
     .id-source {
         border: 1px solid black;
