@@ -5,8 +5,8 @@ var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
-// let buff = new Buffer(data);
-let base64Caracal = caracal.toString('base64');
+// let buff = new Buffer(data)
+let base64Caracal = caracal.toString('base64')
 
 var ntl
 var keys
@@ -25,11 +25,11 @@ test('setup', function (t) {
     ntl.stderr.pipe(process.stderr)
 
     ntl.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
+        console.error(`stderr: ${data}`)
     })
 
     ntl.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
+        console.log(`child process exited with code ${code}`)
     })
 })
 
@@ -51,6 +51,7 @@ test('publish one message', function (t) {
     //     timestamp: NaN,
     //     hash: 'sha256',
     //     content: { type: 'test', text: 'waaaa' },
+    // eslint-disable-next-line
     //     signature: 'RQXRrMUMqRlANeSBrfZ1AVerC9xGJxEGscx1MZrJUqAVylwVfi5i5r1msyZzqi7FuDf7DYr3OOHrTIO2P6ufDQ==.sig.ed25519'
     //   }
 
@@ -79,7 +80,7 @@ test('publish one message', function (t) {
                 //     'should send back the right signature')
                 t.end()
             })
-            .catch(err => t.error(err));
+            .catch(err => t.error(err))
 })
 
 
