@@ -1,0 +1,72 @@
+.route.whoami {
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .sub-nav {
+        display: flex;
+        list-style: none;
+        justify-content: space-around;
+    }
+
+
+    // ----------- whoami subnav ------------------------
+
+    .sub-nav {
+        li {
+            &.active {
+                border-bottom: 4px solid cyan;
+            }
+        }
+    }
+
+    // ----------- whoami subnav ------------------------
+
+
+    hr {
+        margin: 2rem 0;
+    }
+
+    .id-sources {
+        display: grid;
+        gap: 1rem;
+        grid-template-rows: auto;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+
+    .id-source {
+        border: 1px solid black;
+        padding: 2rem;
+        display: inline-block;
+        margin-bottom: 2rem;
+    }
+
+    .id-paste-form {
+        #key-info {
+            display: block;
+            width: 100%;
+            min-width: 40rem;
+            height: 10rem;
+            margin-bottom: 1rem;
+        }
+    }
+
+    .user-name {
+        .current-name {
+            margin-right: 1rem;
+        }
+    }
+
+    .edit-pencil {
+        position: relative;
+        top: 6px;
+        background-color: transparent;
+        border: none;
+        font-size: 2rem;
+        color: blue;
+
+        &:hover {
+            color: cyan;
+        }
+    }
+}
