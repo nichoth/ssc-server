@@ -57,3 +57,91 @@ function Default (props) {
         <pre>${JSON.stringify(me, null, 2)}</pre>
     `
 }
+
+
+
+
+
+// below this needs to be in `shell` b/c that where you name yourself
+
+
+//     var [isNaming, setNaming] = useState(false)
+//     function _nameYourself (ev) {
+//         ev.preventDefault()
+//         setNaming(true)
+//     }
+
+//     return html`<div class="name-yourself">
+//         ${isNaming ?
+//             html`<form onsubmit=${setName} onreset="${cancelNaming}">
+//                 <div class="form-section">
+
+//                     <h2>user name</h2>
+//                     <label for="user-name">user name </label>
+//                     <input type="text" name="user-name" id="user-name"
+//                         autofocus
+//                         placeholder=${profile.userName || 'Anonymous'}
+//                     />
+//                 </div>
+//                 <button type="reset">cancel</button>
+//                 ${isResolving ?
+//                     html`<button class="resolving" disabled=${true}>
+//                         save
+//                     </button>` :
+//                     html`<button type="submit">save</button>`
+//                 }
+//             </form>` :
+
+// async function setName (ev) {
+    //         ev.preventDefault()
+    //         var name = ev.target.elements['user-name'].value
+    //         console.log('set name in here', name)
+    
+    //         var msgContent = {
+    //             type: 'about',
+    //             about: me.secrets.id,
+    //             name: name
+    //         }
+    
+    //         // should make the API call in here
+    //         // and emit an event when you get a response
+    
+    //         setResolving(true)
+    
+    //         var keys = me.secrets
+    //         var qs = new URLSearchParams({ author: me.secrets.id }).toString();
+    //         console.log('meeeee', me)
+    //         console.log('qsssss', qs)
+    //         var url = '/.netlify/functions/abouts' + '?' + qs
+    
+    //         try {
+    //             var _prev = await fetch(url).then(res => res.json())
+    //             console.log('prevvvvv', _prev.msg)
+    //         } catch (err) {
+    //             console.log('about fetch errr', err)
+    //         }
+    
+    //         console.log('prevvviousss', _prev)
+    //         var prev = _prev && _prev.msg && _prev.msg.value || null
+    //         console.log('goood prevvvv', prev)
+    //         var msg = ssc.createMsg(keys, prev || null, msgContent)
+    
+    //         fetch('/.netlify/functions/set-name', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 keys: me.secrets,
+    //                 msg: msg
+    //             })
+    //         })
+    //             .then(res => res.json())
+    //             .then(res => {
+    //                 console.log('**set name res**', res)
+    //                 setResolving(false)
+    //                 emit(evs.identity.setName, res.value.content.name)
+    //             })
+    //             .catch(err => {
+    //                 setResolving(false)
+    //                 console.log('errrrr', err)
+    //             })
+    //     }

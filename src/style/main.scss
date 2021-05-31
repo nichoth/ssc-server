@@ -1,6 +1,7 @@
 @use './whoami';
 @use './post-list';
 @use './single-image.scss';
+@use './shell';
 
 @keyframes spinner {
     to {transform: rotate(360deg);}
@@ -58,15 +59,6 @@ button {
     display: flex;
     justify-content: space-evenly;
     position: relative;
-
-    li.name {
-        position: absolute;
-        left: 0;
-    }
-
-    h1 {
-        margin: 0;
-    }
 
     li {
         &.active {

@@ -9,6 +9,7 @@ function Save (props) {
         console.log('save the local id to a server')
         var els = ev.target.elements
         console.log('els', els)
+        console.log(els.url)
     }
 
     return html`<form onsubmit=${saveId}>

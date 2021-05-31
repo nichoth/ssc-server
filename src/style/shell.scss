@@ -1,0 +1,28 @@
+.shell {
+    h1 {
+        display: inline-block;
+        margin: 0;
+        margin-right: 1rem;
+    }
+
+    .edit-pencil {
+        position: relative;
+        top: 6px;
+        background-color: transparent;
+        border: none;
+        font-size: 2rem;
+        color: blue;
+
+        &:hover {
+            color: cyan;
+        }
+    }
+
+    li.name {
+        position: absolute;
+        left: 0;
+        top: -0.5rem;
+    }
+
+}
+
