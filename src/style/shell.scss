@@ -22,6 +22,11 @@
         position: absolute;
         left: 0;
         top: -0.5rem;
+
+        .name-editor.resolving {
+            // TODO -- change this so the style makes more sense
+            border-bottom: 4px solid gray;
+        }
     }
 
 }

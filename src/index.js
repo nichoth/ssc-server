@@ -27,7 +27,7 @@ subscribe(bus, state)
 
 // save the profile to localStorage when it changes
 state.profile(function onChange (profile) {
-    console.log('profile change', profile)
+    console.log('***profile change', profile)
     Identity.save(profile)
 })
 
