@@ -521,6 +521,15 @@ Need a way to create new id's
 
 Need to make a 'key' index for the posts
 
+--------------------------------------------------
+
+## 5-31-2020
+
+https://github.com/auditdrivencrypto/private-box
+
+https://github.com/ssb-js/ssb-keys#boxcontent-recipients--boxed
+
+https://github.com/ssbc/ssb-db/search?p=2&q=private
 
 
 

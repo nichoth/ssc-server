@@ -2,6 +2,7 @@
 @use './post-list';
 @use './single-image.scss';
 @use './shell';
+@use './new';
 
 @keyframes spinner {
     to {transform: rotate(360deg);}

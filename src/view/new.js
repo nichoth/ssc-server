@@ -1,23 +1,55 @@
 import { html } from 'htm/preact'
+import { useState } from 'preact/hooks';
 var ssc = require('@nichoth/ssc')
 
 function New (props) {
     var { me, feed } = props
     return html`<div class="route new-post">
-        <${TestEl} me=${me} feed=${feed} />
+        <${FilePicker} selectedFile=${null} />
     </div>`
 }
 
-function TestEl (props) {
+function FilePicker (props) {
+    var [selectedFile, setSelectedFile] = useState(null)
     var { me, feed } = props
-    return html`<form onsubmit="${submit.bind(null, me, feed)}">
-        <input type="text" placeholder="woooo" id="text" name="text" />
-        <input type="file" name="image" id="image"
-            accept="image/png, image/jpeg" />
-        <button type="submit">submit</button>
+
+    function chooseFile (ev) {
+        var file = ev.target.files[0]
+        console.log('****file****', file)
+        setSelectedFile(file)
+    }
+
+    function nevermind (ev) {
+        ev.preventDefault()
+        document.getElementById('image-input').value = ''
+        setSelectedFile(null)
+    }
+
+    return html`<form class="file-preview"
+        onsubmit="${submit.bind(null, me, feed)}"
+    >
+        ${selectedFile ?
+            html`<div class="image-preview">
+                <img src=${URL.createObjectURL(selectedFile)} />
+            </div>` :
+            null
+        }
+
+        <div class="file-inputs">
+            <input type="file" name="image" id="image-input"
+                accept="image/png, image/jpeg" onChange=${chooseFile}
+                required=${true}
+            />
+        </div>
+
+        <textarea id="text" required=${true} name="text"><//>
+
+        <div class="controls">
+            <button onClick=${nevermind}>Nevermind</button>
+            <button type="submit">Save</button>
+        </div>
     </form>`
 }
-
 
 function submit (me, feed, ev) {
     ev.preventDefault()
