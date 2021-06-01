@@ -55,11 +55,14 @@ function submit (me, feed, ev) {
     ev.preventDefault()
     var fileList = ev.target.elements.image.files
     var file = fileList[0]
+    var text = ev.target.elements.text.value
+
+    console.log('text***', text)
 
     const reader = new FileReader()
 
     reader.onloadend = () => {
-        upload(me, reader.result, feed)
+        upload(me, reader.result, text, feed)
     }
 
     // this gives us base64
@@ -67,9 +70,9 @@ function submit (me, feed, ev) {
 }
 
 // This will upload the file after having read it
-function upload (me, file, feed) {
+function upload (me, file, text, feed) {
     var keys = me.secrets
-    var content = { type: 'test', text: 'wooooo' }
+    var content = { type: 'test', text: text }
 
     var prev = feed ? feed[feed.length - 1] : null
     if (prev) {
