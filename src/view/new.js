@@ -3,9 +3,8 @@ import { useState } from 'preact/hooks';
 var ssc = require('@nichoth/ssc')
 
 function New (props) {
-    var { me, feed } = props
     return html`<div class="route new-post">
-        <${FilePicker} selectedFile=${null} />
+        <${FilePicker} selectedFile=${null} ...${props} />
     </div>`
 }
 
