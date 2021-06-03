@@ -5,18 +5,12 @@
         max-width: 40rem;
         margin: 0 auto;
 
-        input {
-            // &:invalid:not(:focus):not(:placeholder-shown) {
-            //     border-bottom: 2px solid red
-            // }
-        }
-
         // if its not empty and not in focus
-        textarea {
-            &:invalid:not(:focus):not(:placeholder-shown) {
-                border-bottom: 2px solid red
-            }
-        }
+        // textarea {
+        //     &:invalid:not(:focus):not(:placeholder-shown) {
+        //         border-bottom: 2px solid red
+        //     }
+        // }
 
         .image-preview {
             height: 50vh;

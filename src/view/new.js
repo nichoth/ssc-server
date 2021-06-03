@@ -63,7 +63,10 @@ function FilePicker (props) {
                 null
             }
 
-            <label for="image-input">Choose a picture</label>
+            ${!selectedFile ?
+                html`<label for="image-input">Choose a picture</label>` :
+                null
+            }
             <input type="file" name="image" id="image-input" placeholder=" "
                 accept="image/png, image/jpeg" onChange=${chooseFile}
                 required=${true}
