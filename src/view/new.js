@@ -37,13 +37,15 @@ function FilePicker (props) {
         setSelectedFile(null)
     }
 
-    function formChange (ev) {
-        var el = document.getElementById('new-post-form')
-        var _isValid = el.checkValidity()
-        if (_isValid !== isValid) setValid(_isValid)
+    function formChange () {
+        checkIsValid()
     }
 
-    function formInput (ev) {
+    function formInput () {
+        checkIsValid()
+    }
+
+    function checkIsValid () {
         var el = document.getElementById('new-post-form')
         var _isValid = el.checkValidity()
         if (_isValid !== isValid) setValid(_isValid)
