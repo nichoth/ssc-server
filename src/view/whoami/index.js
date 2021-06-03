@@ -46,11 +46,19 @@ function Default (props) {
     var { me } = props
 
     var [hasCopied, setHasCopied] = useState(false)
+    var [err, setErr] = useState(null)
 
     function copy (ev) {
         ev.preventDefault()
-        console.log('copy')
-        setHasCopied(true)
+        console.log('copy', me.secrets)
+
+        navigator.clipboard.writeText(JSON.stringify(me.secrets, null, 2))
+            .then(() => {
+                setHasCopied(true)
+            })
+            .catch (err => {
+                setErr(err)
+            })
     }
 
     return html`
@@ -63,6 +71,11 @@ function Default (props) {
                 html` Using <code>${me.source}</code> as an ID server.`
             }
         </p>
+
+        ${err ?
+            html`<p class="error">${err}</p>` :
+            null
+        }
 
         <div class="keys">
             <p>
