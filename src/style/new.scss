@@ -1,11 +1,16 @@
 .route.new-post {
     margin-bottom: 6rem;
 
+    .success {
+        margin-top: 1rem;
+        color: green;
+    }
+
     form {
         max-width: 40rem;
         margin: 0 auto;
 
-        // if its not empty and not in focus
+        // if its invalid, not empty, and not in focus
         // textarea {
         //     &:invalid:not(:focus):not(:placeholder-shown) {
         //         border-bottom: 2px solid red
@@ -28,6 +33,10 @@
             margin-bottom: 1rem;
             border: 1px solid;
             padding: 1rem;
+
+            p {
+                margin-top: 0;
+            }
 
             &.drag {
                 background-color: darken(lightgray, 50%);

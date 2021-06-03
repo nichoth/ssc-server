@@ -12,6 +12,8 @@ function New (props) {
 function FilePicker (props) {
     var [selectedFile, setSelectedFile] = useState(null)
     var [isValid, setValid] = useState(false)
+    var [err, setErr] = useState(null)
+    var [res, setRes] = useState(null)
     var { me, feed } = props
 
     useEffect(function didMount () {
@@ -53,8 +55,16 @@ function FilePicker (props) {
 
     return html`<form class="file-preview" id="new-post-form"
         onchange=${formChange} oninput=${formInput}
-        onsubmit="${submit.bind(null, me, feed)}"
+        onsubmit="${submit.bind(null, me, feed, setErr, setRes)}"
     >
+
+        ${err ?
+            html`<div class="error new-post-err">
+                ${err.toString()}
+            </div>` :
+            null
+        }
+
         <div class="file-inputs">
             ${selectedFile ?
                 html`<div class="image-preview">
@@ -64,7 +74,10 @@ function FilePicker (props) {
             }
 
             ${!selectedFile ?
-                html`<label for="image-input">Choose a picture</label>` :
+                html`
+                    <p>Drop pictures here</p>
+                    <label for="image-input">Choose a picture</label>
+                ` :
                 null
             }
             <input type="file" name="image" id="image-input" placeholder=" "
@@ -82,10 +95,18 @@ function FilePicker (props) {
             <button onClick=${nevermind}>Nevermind</button>
             <button type="submit" disabled=${!isValid}>Save</button>
         </div>
+
+        ${res ?
+            html`<div class="success">
+                Success. You created a post
+            </div>` :
+            null
+        }
+
     </form>`
 }
 
-function submit (me, feed, ev) {
+function submit (me, feed, setErr, setRes, ev) {
     ev.preventDefault()
     var fileList = ev.target.elements.image.files
     var file = fileList[0]
@@ -97,6 +118,14 @@ function submit (me, feed, ev) {
 
     reader.onloadend = () => {
         upload(me, reader.result, text, feed)
+            .then(res => {
+                console.log('**success**', res)
+                setRes(res)
+            })
+            .catch(err => {
+                console.log('errrrrrrr', err)
+                setErr(err)
+            });
     }
 
     // this gives us base64
@@ -123,7 +152,7 @@ function upload (me, file, text, feed) {
         msg: ssc.createMsg(keys, prev || null, content)
     })
 
-    fetch('/.netlify/functions/post-one-message', {
+    return fetch('/.netlify/functions/post-one-message', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -133,13 +162,7 @@ function upload (me, file, text, feed) {
             keys: keys,
             msg: ssc.createMsg(keys, prev || null, content)
         })
-    }).then(
-        response => response.json() // if the response is a JSON object
-    ).then(
-        success => console.log('**succes**', success) // Handle the success response object
-    ).catch(
-        error => console.log('error', error) // Handle the error response object
-    );
+    }).then(response => response.json())
 };
 
 module.exports = New
