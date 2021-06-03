@@ -1,4 +1,5 @@
 import { html } from 'htm/preact'
+var c = require('../../constants')
 
 function Save (props) {
     console.log('props', props)
@@ -15,7 +16,7 @@ function Save (props) {
     return html`<form onsubmit=${saveId}>
         <h2>Save this id to a server</h2>
         <p>This will create a backup of your identity on
-            <code> http://ssc-server.netlify.app/</code>
+            <code> ${c.url}</code>
         </p>
         <pre>${JSON.stringify(me.secrets, null, 2)}</pre>
         <!-- <button type="reset">cancel</button> -->
