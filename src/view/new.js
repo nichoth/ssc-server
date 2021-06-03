@@ -1,6 +1,7 @@
 import { html } from 'htm/preact'
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 var ssc = require('@nichoth/ssc')
+const dragDrop = require('drag-drop')
 
 function New (props) {
     return html`<div class="route new-post">
@@ -10,7 +11,19 @@ function New (props) {
 
 function FilePicker (props) {
     var [selectedFile, setSelectedFile] = useState(null)
+    var [isValid, setValid] = useState(false)
     var { me, feed } = props
+
+    useEffect(function didMount () {
+        dragDrop('.file-inputs', (files, pos, fileList, directories) => {
+            console.log('files', files)
+            document.getElementById('image-input').files = fileList
+            setSelectedFile(files[0])
+            // emit a 'change' event for form validation
+            var event = new Event('change');
+            document.getElementById('new-post-form').dispatchEvent(event);
+        })
+    }, [])
 
     function chooseFile (ev) {
         var file = ev.target.files[0]
@@ -24,28 +37,45 @@ function FilePicker (props) {
         setSelectedFile(null)
     }
 
-    return html`<form class="file-preview"
+    function formChange (ev) {
+        var el = document.getElementById('new-post-form')
+        var _isValid = el.checkValidity()
+        if (_isValid !== isValid) setValid(_isValid)
+    }
+
+    function formInput (ev) {
+        var el = document.getElementById('new-post-form')
+        var _isValid = el.checkValidity()
+        if (_isValid !== isValid) setValid(_isValid)
+    }
+
+    return html`<form class="file-preview" id="new-post-form"
+        onchange=${formChange} oninput=${formInput}
         onsubmit="${submit.bind(null, me, feed)}"
     >
-        ${selectedFile ?
-            html`<div class="image-preview">
-                <img src=${URL.createObjectURL(selectedFile)} />
-            </div>` :
-            null
-        }
-
         <div class="file-inputs">
-            <input type="file" name="image" id="image-input"
+            ${selectedFile ?
+                html`<div class="image-preview">
+                    <img src=${URL.createObjectURL(selectedFile)} />
+                </div>` :
+                null
+            }
+
+            <label for="image-input">Choose a picture</label>
+            <input type="file" name="image" id="image-input" placeholder=" "
                 accept="image/png, image/jpeg" onChange=${chooseFile}
                 required=${true}
             />
         </div>
 
-        <textarea id="text" required=${true} name="text"><//>
+        <label for="caption">caption</label>
+        <textarea id="text" required=${true} name="text" placeholder=" "
+            id="caption"
+        ><//>
 
         <div class="controls">
             <button onClick=${nevermind}>Nevermind</button>
-            <button type="submit">Save</button>
+            <button type="submit" disabled=${!isValid}>Save</button>
         </div>
     </form>`
 }
