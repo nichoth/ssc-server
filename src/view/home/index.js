@@ -6,8 +6,6 @@ function Home (props) {
     var { me, emit, feed } = props;
     console.log('props in home', props);
 
-    // var [feed, setFeed] = useState(null);
-
     // this should be in the router maybe
     useEffect(() => {
         fetch('/.netlify/functions/feed', {

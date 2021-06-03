@@ -64,13 +64,13 @@ function Default (props) {
     return html`
         <h2>Who are you?</h2>
 
-        <p>
+        <!-- <p>
             Source --
             ${me.source === null ?
                 ' Not linked to an id server.' :
                 html` Using <code>${me.source}</code> as an ID server.`
             }
-        </p>
+        </p> -->
 
         ${err ?
             html`<p class="error">${err}</p>` :
