@@ -17,6 +17,14 @@
             label {
                 margin-right: 1rem;
             }
+
+            &.save {
+                form {
+                    padding: 1rem;
+                    border: 2px solid black;
+                    border-radius: 7px;
+                }
+            }
     }
     // ------------ /whoami tab ----------------------
 

@@ -14,13 +14,11 @@ function Save (props) {
 
     return html`<form onsubmit=${saveId}>
         <h2>Save this id to a server</h2>
-        <p>This will create a backup of your identity on the given server</p>
+        <p>This will create a backup of your identity on
+            <code> http://ssc-server.netlify.app/</code>
+        </p>
         <pre>${JSON.stringify(me.secrets, null, 2)}</pre>
-        <div class="form-group">
-            <label for="url">URL</label>
-            <input type="text" name="url" id="url" required />
-        </div>
-        <button type="reset">cancel</button>
+        <!-- <button type="reset">cancel</button> -->
         <button type="submit">save</button>
     </form>`
 }
