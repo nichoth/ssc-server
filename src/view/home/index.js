@@ -36,8 +36,6 @@ function Home (props) {
     }, []);
 
     return html`<div class="home-route">
-        <p>the home route</p>
-
         <ul class="post-list">
             ${(feed && feed.map((post, i) => {
 
