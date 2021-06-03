@@ -25,6 +25,41 @@
                     border-radius: 7px;
                 }
             }
+            &.default {
+
+                button.copier {
+                    background-color: transparent;
+                    border: none;
+                    font-size: 1rem;
+
+                    .copied {
+                        position: relative;
+                        bottom: 22px;
+                        left: 30px;
+                    }
+
+                    &.has-copied {
+                        color: blue;
+                    }
+
+                    &:hover {
+                        opacity: 0.6;
+                    }
+                }
+
+                pre {
+                    background-color: black;
+                    color: white;
+                    padding: 2rem;
+                }
+
+                .keys {
+                    p {
+                        text-align: right;
+                        padding: 0 2rem;
+                    }
+                }
+            }
     }
     // ------------ /whoami tab ----------------------
 

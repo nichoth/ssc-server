@@ -1,5 +1,5 @@
 import { html } from 'htm/preact'
-// import { useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 // import 'preact/debug';
 // var evs = require('../EVENTS')
 // var Keys = require('../keys')
@@ -16,8 +16,10 @@ function Whoami (props) {
         return href === path ? 'active' : ''
     }
 
-    var splits = route.split('/')
+    var splits = route.split('/').filter(Boolean)
+    console.log('splits', splits)
     var endpoint = splits[splits.length - 1]
+    if (splits.length === 1) endpoint = 'default'
 
     return html`<div class="route whoami">
         <ul class="sub-nav">
@@ -43,6 +45,14 @@ module.exports = Whoami
 function Default (props) {
     var { me } = props
 
+    var [hasCopied, setHasCopied] = useState(false)
+
+    function copy (ev) {
+        ev.preventDefault()
+        console.log('copy')
+        setHasCopied(true)
+    }
+
     return html`
         <h2>Who are you?</h2>
 
@@ -54,7 +64,21 @@ function Default (props) {
             }
         </p>
 
-        <pre>${JSON.stringify(me, null, 2)}</pre>
+        <div class="keys">
+            <p>
+                <button onClick=${copy} title="copy"
+                    class="${'copier' + (hasCopied ? ' has-copied' : '')}"
+                >
+                    ${hasCopied ?
+                        html`<span class="copied">Copied</span>` :
+                        null
+                    }
+                    <i class="fa fa-clipboard" />
+                </button>
+            </p>
+
+            <pre>${JSON.stringify(me, null, 2)}</pre>
+        </div>
     `
 }
 
