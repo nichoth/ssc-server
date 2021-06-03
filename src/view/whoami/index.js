@@ -90,7 +90,7 @@ function Default (props) {
                 </button>
             </p>
 
-            <pre>${JSON.stringify(me, null, 2)}</pre>
+            <pre>${JSON.stringify(me.secrets, null, 2)}</pre>
         </div>
     `
 }
