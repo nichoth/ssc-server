@@ -13,7 +13,7 @@ function Save (props) {
         console.log(els.url)
     }
 
-    return (me && me.secrets ?
+    return (me && me.secrets) ?
         html`<form onsubmit=${saveId}>
             <h2>Save this id to a server</h2>
             <p>This will create a backup of your identity on
@@ -26,7 +26,7 @@ function Save (props) {
         html`<p>It looks like you need to <a href="/whoami/create">
             create an ID
         </a> first.</p>`
-    )
+    
 }
 
 module.exports = Save
