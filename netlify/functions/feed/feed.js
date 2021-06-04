@@ -23,6 +23,13 @@ exports.handler = function (ev, ctx, cb) {
 
     console.log('**author**', author)
 
+    if (!author) {
+        return cb(null, {
+            statusCode: 400,
+            body: 'Missing author'
+        })
+    }
+
 
     // if (ev.httpMethod !== 'GET') {
     //     return cb(null, {
@@ -63,7 +70,7 @@ exports.handler = function (ev, ctx, cb) {
                         if (!xtendedMsg.value.previous) {
                             xtendedMsg.value.previous = null
                         }
-                        console.log('******feed life', xtendedMsg)
+                        // console.log('******feed life', xtendedMsg)
 
                         return xtendedMsg
                     })

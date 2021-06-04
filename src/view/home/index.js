@@ -8,13 +8,15 @@ function Home (props) {
 
     // this should be in the router maybe
     useEffect(() => {
+        if (!me || !me.secrets) return
+
         fetch('/.netlify/functions/feed', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                author: '@' + me.secrets.public
+                author: me.secrets.id
             })
         })
             .then(res => {
@@ -32,6 +34,13 @@ function Home (props) {
                 console.log('errrr in home', err)
             })
     }, []);
+
+    if (!me.secrets) {
+        return html`<div class="home-route">
+            <p>It looks like you don't have an identity. Create one
+                <a href="/whoami/create"> here</a></p>
+        </div>`
+    }
 
     return html`<div class="home-route">
         <ul class="post-list">
