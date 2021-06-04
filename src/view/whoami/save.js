@@ -13,15 +13,20 @@ function Save (props) {
         console.log(els.url)
     }
 
-    return html`<form onsubmit=${saveId}>
-        <h2>Save this id to a server</h2>
-        <p>This will create a backup of your identity on
-            <code> ${c.url}</code>
-        </p>
-        <pre>${JSON.stringify(me.secrets, null, 2)}</pre>
-        <!-- <button type="reset">cancel</button> -->
-        <button type="submit">save</button>
-    </form>`
+    return (me && me.secrets ?
+        html`<form onsubmit=${saveId}>
+            <h2>Save this id to a server</h2>
+            <p>This will create a backup of your identity on
+                <code> ${c.url}</code>
+            </p>
+            <pre>${JSON.stringify(me.secrets, null, 2)}</pre>
+            <!-- <button type="reset">cancel</button> -->
+            <button type="submit">save</button>
+        </form>` :
+        html`<p>It looks like you need to <a href="/whoami/create">
+            create an ID
+        </a> first.</p>`
+    )
 }
 
 module.exports = Save
