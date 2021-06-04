@@ -106,7 +106,7 @@ exports.handler = function (ev, ctx, cb) {
     // to check if the merkle list matches up
     client.query(
         q.Get(
-            q.Match(q.Index('author'), '@' + keys.public)
+            q.Reverse( q.Match(q.Index('author'), '@' + keys.public) )
         )
     )
         .then(res => {
@@ -234,7 +234,7 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
 
-        console.log('**strigigygy**', stringify(msg, null, 2))
+        // console.log('**strigigygy**', stringify(msg, null, 2))
         console.log('msg in here*****', msg)
         var msgHash = ssc.getId(msg)
         console.log('**hash**', msgHash)

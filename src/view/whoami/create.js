@@ -1,11 +1,12 @@
 import { html } from 'htm/preact'
 var MY_URL = 'https://ssc-server.netlify.app'
 var Keys = require('../../keys')
+var evs = require('../../EVENTS')
 
 module.exports = Create
 
 function Create (props) {
-    // var { me } = props
+    var { emit } = props
     console.log('props create', props)
 
     function createLocalId (ev) {

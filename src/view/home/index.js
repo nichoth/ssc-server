@@ -25,7 +25,7 @@ function Home (props) {
                 console.log('json', json)
                 // setFeed(json.msgs)
                 var msgs = json.msgs
-                msgs.reverse()
+                // msgs.reverse()
                 emit(evs.feed.got, msgs)
             })
             .catch(err => {

@@ -1,4 +1,5 @@
 var evs = require('./EVENTS')
+var Keys = require('./keys')
 
 function subscribe (bus, state) {
 

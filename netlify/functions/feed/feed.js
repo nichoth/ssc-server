@@ -35,7 +35,7 @@ exports.handler = function (ev, ctx, cb) {
     client.query(
         q.Map(
             q.Paginate(
-                q.Match(q.Index('author'), author)
+                q.Reverse( q.Match(q.Index('author'), author) )
             ),
             q.Lambda( 'post', q.Get(q.Var('post')) )
         )

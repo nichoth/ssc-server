@@ -1,5 +1,6 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
+var evs = require('../EVENTS')
 var ssc = require('@nichoth/ssc')
 const dragDrop = require('drag-drop')
 
@@ -14,7 +15,35 @@ function FilePicker (props) {
     var [isValid, setValid] = useState(false)
     var [err, setErr] = useState(null)
     var [res, setRes] = useState(null)
-    var { me, feed } = props
+    var { me, feed, emit } = props
+
+    console.log('props', props)
+
+    useEffect(function didMount () {
+        fetch('/.netlify/functions/feed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                author: '@' + me.secrets.public
+            })
+        })
+            .then(res => {
+                console.log('res', res)
+                return res.json()
+            })
+            .then(json => {
+                console.log('json', json)
+                // setFeed(json.msgs)
+                var msgs = json.msgs
+                // msgs.reverse()
+                emit(evs.feed.got, msgs)
+            })
+            .catch(err => {
+                console.log('errrr in home', err)
+            })
+    }, [])
 
     useEffect(function didMount () {
         dragDrop('.file-inputs', (files, pos, fileList, directories) => {
@@ -137,7 +166,10 @@ function upload (me, file, text, feed) {
     var keys = me.secrets
     var content = { type: 'test', text: text }
 
-    var prev = feed ? feed[feed.length - 1] : null
+    console.log('feed', feed)
+
+    // the feed is in reverse order
+    var prev = feed ? feed[0] : null
     if (prev) {
         prev = clone(prev.value)
     }

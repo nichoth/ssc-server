@@ -1,6 +1,7 @@
 import { html } from 'htm/preact'
 var _getId = require('../../get-id')
 var MY_URL = 'https://ssc-server.netlify.app'
+var evs = require('../../EVENTS')
 
 function Import (props) {
     console.log('props', props)
