@@ -1,5 +1,4 @@
 let cloudinary = require("cloudinary").v2;
-// var createHash = require('crypto').createHash
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

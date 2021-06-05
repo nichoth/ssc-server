@@ -1,4 +1,5 @@
 import { html } from 'htm/preact'
+import { useState } from 'preact/hooks';
 var _getId = require('../../get-id')
 var MY_URL = 'https://ssc-server.netlify.app'
 var evs = require('../../EVENTS')
@@ -6,6 +7,7 @@ var evs = require('../../EVENTS')
 function Import (props) {
     console.log('props', props)
     var { me, emit } = props
+    var [hasPasted, setHasPasted] = useState(false)
 
     function getId (ev) {
         ev.preventDefault()
@@ -27,23 +29,24 @@ function Import (props) {
     function setPasteForm (ev) {
         ev.preventDefault()
         var _keys = ev.target.elements['key-info'].value
-        console.log('set paste form', _keys)
 
         try {
             var keys = JSON.parse(_keys)
         } catch (err) {
             setKeyErr(err)
         }
+
         // check the format of `keys`
         if (!keys.public || !keys.private || !keys.id || !keys.curve) {
             setKeyErr(new Error('Invalid key format'))
             return
         }
+
         emit(evs.keys.got, { source: null, secrets: keys })
+        setHasPasted(true)
     }
 
     return html`<div class="route whoami import">
-
         <h2>Import an ID</h2>
 
         <div class="id-sources">
@@ -73,25 +76,29 @@ function Import (props) {
                 </div>
             </form>
 
+            ${hasPasted ?
+                html`<p class="success">Success</p>
+                    <p>Keys pasted</p>` :
 
-            <div class="id-paste-form id-source local-source">
-                <h3>From a local source</h3>
-                <p>This should be JSON containing your keys</p>
-                <p>For example:</p>
-                <pre>
-                    ${JSON.stringify({
-                        "curve": "ed25519",
-                        "public": "123",
-                        "private": "abc",
-                        "id": "@123"
-                    }, null, 2)}
-                </pre>
+                html`<div class="id-paste-form id-source local-source">
+                    <h3>From a local source</h3>
+                    <p>This should be JSON containing your keys</p>
+                    <p>For example:</p>
+                    <pre>
+                        ${JSON.stringify({
+                            "curve": "ed25519",
+                            "public": "123",
+                            "private": "abc",
+                            "id": "@123"
+                        }, null, 2)}
+                    </pre>
 
-                <form onsubmit=${setPasteForm}>
-                    <textarea name="key-info" id="key-info"></textarea>
-                    <button type="submit">set keys</button>
-                </form>
-            </div>
+                    <form onsubmit=${setPasteForm}>
+                        <textarea name="key-info" id="key-info"></textarea>
+                        <button type="submit">set keys</button>
+                    </form>
+                </div>`
+            }
 
 
 

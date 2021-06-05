@@ -1,11 +1,12 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
-var evs = require('../EVENTS')
+import { generateFromString } from 'generate-avatar'
 var ssc = require('@nichoth/ssc')
+var evs = require('../EVENTS')
 
 
 function Shell (props) {
-    var { path, profile, emit } = props
+    var { path, profile, emit, me } = props
     var [isNaming, setNaming] = useState(false)
     var [isResolving, setResolving] = useState(false)
 
@@ -95,9 +96,16 @@ function Shell (props) {
         </form>`
     }
 
+    var avatarUrl = (me.avatar && me.avatar.url) ||
+        ('data:image/svg+xml;utf8,' + generateFromString(me.secrets.public))
+
     return html`<div class="shell">
         <ul class="nav-part">
             <li class="name">
+                <span class="my-avatar">
+                    <img src=${avatarUrl} />
+                </span>
+
                 ${isNaming ?
                     (html`<${NameEditor} ...${props} />`) :
                     html`

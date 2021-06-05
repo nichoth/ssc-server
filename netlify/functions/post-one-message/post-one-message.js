@@ -4,7 +4,7 @@ var faunadb = require('faunadb')
 var upload = require('./upload')
 var createHash = require('crypto').createHash
 var xtend = require('xtend')
-var stringify = require('json-stable-stringify')
+// var stringify = require('json-stable-stringify')
 
 let cloudinary = require("cloudinary").v2;
 
@@ -97,7 +97,7 @@ exports.handler = function (ev, ctx, cb) {
     var hash = createHash('sha256')
     hash.update(file)
     var _hash = hash.digest('base64')
-    console.log('******hash', hash)
+    console.log('******hash', hash, _hash)
     var slugifiedHash = encodeURIComponent('' + _hash)
 
 

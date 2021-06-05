@@ -6,7 +6,10 @@ const dragDrop = require('drag-drop')
 
 function New (props) {
     return html`<div class="route new-post">
-        <${FilePicker} selectedFile=${null} ...${props} />
+        ${(props.me && props.me.secrets) ?
+            html`<${FilePicker} selectedFile=${null} ...${props} />` :
+            html`<p><a href="/whoami/create">Create an ID</a> first</p>`
+        }
     </div>`
 }
 
@@ -20,6 +23,8 @@ function FilePicker (props) {
     console.log('props', props)
 
     useEffect(function didMount () {
+        if (!me || !me.secrets) return
+
         fetch('/.netlify/functions/feed', {
             method: 'POST',
             headers: {
@@ -45,6 +50,7 @@ function FilePicker (props) {
             })
     }, [])
 
+    // setup drag & drop
     useEffect(function didMount () {
         dragDrop('.file-inputs', (files, pos, fileList, directories) => {
             console.log('files', files)

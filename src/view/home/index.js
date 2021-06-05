@@ -1,5 +1,6 @@
 import { html } from 'htm/preact'
 import { useEffect } from 'preact/hooks';
+import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
 
 function Home (props) {
@@ -39,6 +40,15 @@ function Home (props) {
                 <a href="/whoami/create"> here</a></p>
         </div>`
     }
+
+
+
+
+    var postAvatar = ('data:image/svg+xml;utf8,' +
+            generateFromString(me.secrets.public))
+
+
+
 
     return html`<div class="home-route">
         <ul class="post-list">

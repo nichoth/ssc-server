@@ -10,7 +10,8 @@ function State (keys, profile) {
         route: observ('/'),
         me: struct({
             source: observ(null),
-            secrets: observ(keys)
+            secrets: observ(keys),
+            avatar: observ(null)
         }),
         profile: struct({
             userName: observ((profile && profile.userName) || null)
