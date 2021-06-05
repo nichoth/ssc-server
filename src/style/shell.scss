@@ -10,12 +10,20 @@
         height: 2rem;
         width: 2rem;
         margin-right: 1rem;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
 
         img {
             max-height: 100%;
             max-width: 100%;
             border-radius: 50%;
         }
+    }
+
+    #avatar-input {
+        display: none;
     }
 
     .edit-pencil {

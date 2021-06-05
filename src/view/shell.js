@@ -102,9 +102,14 @@ function Shell (props) {
     return html`<div class="shell">
         <ul class="nav-part">
             <li class="name">
-                <span class="my-avatar">
-                    <img src=${avatarUrl} />
-                </span>
+                <${EditableImg} url=${avatarUrl}
+                    title="set your avatar"
+                    onSelect=${ev => {
+                        ev.preventDefault()
+                        console.log('on select', ev)
+                        emit(evs.identity.setAvatar, ev)
+                    }}
+                />
 
                 ${isNaming ?
                     (html`<${NameEditor} ...${props} />`) :
@@ -135,5 +140,21 @@ function getName (profile) {
     return (profile && profile.userName) || 'Anonymous'
 }
 
-
 module.exports = Shell
+
+
+function EditableImg (props) {
+    var { url, onSelect, title } = props
+
+    return html`
+        <label for="avatar-input" class="my-avatar" id="avatar-label"
+            title=${title}
+        >
+            <img class="avatar" src="${url}" title="set avatar" />
+        </label>
+        <input type="file" id="avatar-input" name="avatar"
+            accept="image/png, image/jpeg"
+            onchange=${onSelect}
+        />
+    `
+}

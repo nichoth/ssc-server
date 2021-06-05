@@ -532,4 +532,14 @@ https://github.com/ssb-js/ssb-keys#boxcontent-recipients--boxed
 https://github.com/ssbc/ssb-db/search?p=2&q=private
 
 
+----------------------------------------------------
+
+## 6-5-2021
+
+Working on avatars
+
+[Does fauna supports Upserts?](https://forums.fauna.com/t/does-fauna-supports-upserts/208)
+
+Now need to fetch an avatar when the app loads
+
 

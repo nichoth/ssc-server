@@ -8,6 +8,28 @@ function subscribe (bus, state) {
         state.profile.userName.set(name)
     })
 
+    bus.on(evs.identity.setAvatar, ev => {
+        console.log('set avatar', ev)
+        var file = ev.target.files[0]
+        console.log('file', file)
+
+        const reader = new FileReader()
+
+        reader.onloadend = () => {
+            console.log('done reading file')
+            uploadAvatar(reader.result, state)
+                .then(res => {
+                    console.log('**success**', res)
+                })
+                .catch(err => {
+                    console.log('errrrrrrr', err)
+                })
+        }
+
+        // this gives us base64
+        reader.readAsDataURL(file)
+    })
+
     bus.on(evs.feed.got, msgs => {
         console.log('got feed', msgs)
         state.feed.set(msgs)
@@ -23,3 +45,31 @@ function subscribe (bus, state) {
 }
 
 module.exports = subscribe
+
+function uploadAvatar (file, state) {
+    var id = state().me.id
+    var keys = state().me.secrets
+
+    // need to get the hash
+
+    // var content = {
+    //     type: 'avatar',
+    //     about: id,
+    //     mentions: [hash]
+    // }
+
+    return fetch('/.netlify/functions/avatar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            file: file,
+            keys: { public: keys.public }
+        })
+    })
+        .then(response => response.json())
+        .then(json => {
+            console.log('**avatar res json**', json)
+        })
+}

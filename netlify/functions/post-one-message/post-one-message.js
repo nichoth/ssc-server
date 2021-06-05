@@ -228,6 +228,7 @@ exports.handler = function (ev, ctx, cb) {
 
     // return the new msg
     function writeMsg (_msg, hash) {
+        // we are creating the msg and hash server side here
         var msg = xtend(_msg, {
             content: xtend(_msg.content, {
                 mentions: [hash]
