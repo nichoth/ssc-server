@@ -8,6 +8,11 @@ function subscribe (bus, state) {
         state.profile.userName.set(name)
     })
 
+    bus.on(evs.identity.gotAvatar, ev => {
+        console.log('got avatar', ev)
+        state.me.avatar.set({ url: ev.avatarUrl })
+    })
+
     bus.on(evs.identity.setAvatar, ev => {
         console.log('set avatar', ev)
         var file = ev.target.files[0]

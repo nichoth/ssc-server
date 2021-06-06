@@ -24,8 +24,8 @@ subscribe(bus, state)
 // need to write a server side function
 
 
-
 // save the profile to localStorage when it changes
+// it gets set in the view functions i think
 state.profile(function onChange (profile) {
     console.log('***profile change', profile)
     Identity.save(profile)
@@ -72,5 +72,3 @@ function Connector ({ emit, state }) {
         <//>
     <//>`
 }
-
-console.log('wooo')

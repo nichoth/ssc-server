@@ -2,12 +2,63 @@ var faunadb = require('faunadb')
 // var createHash = require('crypto').createHash
 var upload = require('../upload')
 var getHash = require('../get-file-hash')
+let cloudinary = require("cloudinary").v2;
+
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // we're not doing an ssb style post in this case
 exports.handler = function (ev, ctx, cb) {
 
+    var q = faunadb.query
+    var client = new faunadb.Client({
+        secret: process.env.FAUNADB_SERVER_SECRET
+    })
+
     if (ev.httpMethod === 'GET') {
         // return the avatar
+        var aboutWho = ev.queryStringParameters.aboutWho
+        console.log('**about who**', aboutWho)
+
+
+
+        client.query(
+            q.Get( q.Match(q.Index('avatar-by-id'), aboutWho) )
+        )
+            .then(res => {
+                console.log('********avatar res***', res)
+
+                // need to make a URL from hash + cloudinary
+                var slugifiedHash = encodeURIComponent('' +
+                    res.data.avatarLink)
+                var slugslug = encodeURIComponent(slugifiedHash)
+                var avatarUrl = cloudinary.url(slugslug)      
+
+                return cb(null, {
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        ok: true,
+                        avatarUrl: avatarUrl
+                    })
+                })
+            })
+            .catch(err => {
+                console.log('errrrr in query', err)
+
+                return cb(null, {
+                    statusCode: 500,
+                    body: JSON.stringify({
+                        ok: false,
+                        err: err.toString()
+                    })
+                })
+            })
+
+
+        return
     }
 
     // -----------------------------------------------------
@@ -26,11 +77,6 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
     }
-
-    var q = faunadb.query
-    var client = new faunadb.Client({
-        secret: process.env.FAUNADB_SERVER_SECRET
-    })
 
     var hash = getHash(file)
 

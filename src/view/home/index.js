@@ -21,11 +21,10 @@ function Home (props) {
             })
         })
             .then(res => {
-                console.log('res', res)
                 return res.json()
             })
             .then(json => {
-                console.log('json', json)
+                console.log('feed json', json)
                 var msgs = json.msgs
                 emit(evs.feed.got, msgs)
             })

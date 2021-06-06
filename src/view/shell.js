@@ -1,5 +1,5 @@
 import { html } from 'htm/preact'
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 var ssc = require('@nichoth/ssc')
 var evs = require('../EVENTS')
@@ -9,6 +9,31 @@ function Shell (props) {
     var { path, profile, emit, me } = props
     var [isNaming, setNaming] = useState(false)
     var [isResolving, setResolving] = useState(false)
+
+
+
+    // component did mount
+    // get avatar
+    useEffect(() => {
+        if (!me || !me.secrets) return
+        var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString();
+
+        console.log('qs', qs)
+
+        fetch('/.netlify/functions/avatar' + '?' + qs)
+            .then(res => res.json())
+            .then(res => {
+                console.log('******got avatar in shell', res)
+                emit(evs.identity.gotAvatar, res)
+            })
+            .catch(err => {
+                console.log('oh no', err)
+            })
+    }, [])
+
+
+
+
 
     async function saveName (me, ev) {
         ev.preventDefault()
