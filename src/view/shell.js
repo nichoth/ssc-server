@@ -21,7 +21,12 @@ function Shell (props) {
         console.log('qs', qs)
 
         fetch('/.netlify/functions/avatar' + '?' + qs)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    res.text().then(t => console.log('aaaaa', t))
+                }
+                return res.json()
+            })
             .then(res => {
                 console.log('******got avatar in shell', res)
                 emit(evs.identity.gotAvatar, res)

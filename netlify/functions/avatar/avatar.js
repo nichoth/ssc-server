@@ -18,12 +18,12 @@ exports.handler = function (ev, ctx, cb) {
         secret: process.env.FAUNADB_SERVER_SECRET
     })
 
+    // -------------- GET ----------------------------------------------
+
     if (ev.httpMethod === 'GET') {
         // return the avatar
         var aboutWho = ev.queryStringParameters.aboutWho
         console.log('**about who**', aboutWho)
-
-
 
         client.query(
             q.Get( q.Match(q.Index('avatar-by-id'), aboutWho) )
@@ -35,7 +35,10 @@ exports.handler = function (ev, ctx, cb) {
                 var slugifiedHash = encodeURIComponent('' +
                     res.data.avatarLink)
                 var slugslug = encodeURIComponent(slugifiedHash)
+                // var avatarUrl = cloudinary.url(slugifiedHash)
                 var avatarUrl = cloudinary.url(slugslug)      
+
+                console.log('****** avatar url', avatarUrl)
 
                 return cb(null, {
                     statusCode: 200,
@@ -95,7 +98,7 @@ exports.handler = function (ev, ctx, cb) {
                         statusCode: 200,
                         body: JSON.stringify({
                             ok: true,
-                            message: res
+                            message: res.data
                         })
                     })
                 })
@@ -126,9 +129,15 @@ exports.handler = function (ev, ctx, cb) {
     function writeToDB () {
         return client.query(
             q.If(
-                q.Exists(q.Match(q.Index('avatar-by-id'), '@' + keys.public)), 
+                q.Exists(
+                    q.Select('ref', q.Get(
+                        q.Match(q.Index('avatar-by-id'), '@' + keys.public)
+                    ))
+                ), 
                 q.Replace(
-                    q.Match(q.Index('avatar-by-id'), '@' + keys.public),
+                    q.Select('ref', q.Get(
+                        q.Match(q.Index('avatar-by-id'), '@' + keys.public)
+                    )),
                     { data: { about: '@' + keys.public, avatarLink: hash } },
                 ),
                 q.Create(

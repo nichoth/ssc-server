@@ -6,10 +6,12 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-function upload (file, _hash) {
+function upload (file, hash) {
+    var slugifiedHash = encodeURIComponent('' + hash)
+
     return new Promise(function (resolve, reject) {
         cloudinary.uploader.upload(file, {
-            public_id: _hash,
+            public_id: slugifiedHash,
             overwrite: true
         }, function (err, res) {
             if (err) {

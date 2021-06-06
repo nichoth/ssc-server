@@ -52,7 +52,6 @@ function subscribe (bus, state) {
 module.exports = subscribe
 
 function uploadAvatar (file, state) {
-    var id = state().me.id
     var keys = state().me.secrets
 
     // need to get the hash
@@ -73,8 +72,20 @@ function uploadAvatar (file, state) {
             keys: { public: keys.public }
         })
     })
-        .then(response => response.json())
+        .then(response => {
+            // console.log('respspsps', response)
+            if (!response.ok) {
+                return response.text()
+                    .then(t => {
+                        console.log('not ok', t)
+                        console.log('blabla eerrrgg', t)
+                    })
+            }
+
+            return response.json()
+        })
         .then(json => {
             console.log('**avatar res json**', json)
+            console.log(json.message)
         })
 }
