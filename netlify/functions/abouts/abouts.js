@@ -132,7 +132,7 @@ exports.handler = async function (ev, ctx) {
                 }
             })
             .catch(err => {
-                console.log('errrr', err)
+                console.log('errrr in get abouts', err)
                 return {
                     statusCode: 500,
                     body: JSON.stringify({
