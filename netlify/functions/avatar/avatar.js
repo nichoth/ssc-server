@@ -35,7 +35,6 @@ exports.handler = function (ev, ctx, cb) {
                 var slugifiedHash = encodeURIComponent('' +
                     res.data.avatarLink)
                 var slugslug = encodeURIComponent(slugifiedHash)
-                // var avatarUrl = cloudinary.url(slugifiedHash)
                 var avatarUrl = cloudinary.url(slugslug)      
 
                 console.log('****** avatar url', avatarUrl)
