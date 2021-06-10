@@ -41,12 +41,9 @@ function Home (props) {
     }
 
 
-
-
-    var postAvatar = ('data:image/svg+xml;utf8,' +
-            generateFromString(me.secrets.public))
-
-
+    var postAvatar = (me.avatar && me.avatar.url) ?
+        me.avatar.url :
+        ('data:image/svg+xml;utf8,' + generateFromString(me.secrets.public))
 
 
     return html`<div class="home-route">
@@ -63,6 +60,9 @@ function Home (props) {
                     <a href="/${encodeURIComponent(post.key)}">
                         <img src="${url}" />
                     </a>
+                    <div class="inline-avatar">
+                        <img src="${postAvatar}" />
+                    </div>
                     <p>${writing}</p>
                 </li>`
             }))}
