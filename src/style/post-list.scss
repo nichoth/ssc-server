@@ -9,16 +9,16 @@
 
     .post {
 
-        &:hover {
-            background-color: lightgray;
-            filter: drop-shadow(2px 4px 6px black);
-        }
-
-        // a {
-        //     &:hover {
-        //         filter: drop-shadow(2px 4px 6px black);
-        //     }
+        // &:hover {
+        //     background-color: lightgray;
+        //     filter: drop-shadow(2px 4px 6px black);
         // }
+
+        a {
+            &:hover {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
 
         p {
             display: inline-block;

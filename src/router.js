@@ -48,6 +48,10 @@ function Router () {
         }
     })
 
+    router.addRoute('/:username', match => {
+
+    })
+
     return router
 }
 
