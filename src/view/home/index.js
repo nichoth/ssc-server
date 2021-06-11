@@ -57,7 +57,7 @@ function Home (props) {
                 console.log('post, i', post, i)
 
                 return html`<li class="post">
-                    <a href="/${encodeURIComponent(post.key)}">
+                    <a href="/post/${encodeURIComponent(post.key)}">
                         <img src="${url}" />
                     </a>
                     <div class="inline-avatar">

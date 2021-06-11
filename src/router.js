@@ -40,7 +40,7 @@ function Router () {
         }
     })
 
-    router.addRoute('/:key', match => {
+    router.addRoute('/post/:key', match => {
         // var { key } = match.params
 
         return {
