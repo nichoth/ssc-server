@@ -28,7 +28,6 @@ function SingleImage (props) {
     if (!post) return null
 
     return html`<div class="single-image-route">
-        <p>a single image</p>
         <div class="single-image-wrapper">
             <img src="${(post.mentionUrls[0]) || null}" />
             <p>${post.value.content.text}</p>
