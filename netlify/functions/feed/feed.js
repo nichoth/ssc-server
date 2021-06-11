@@ -70,7 +70,6 @@ exports.handler = function (ev, ctx, cb) {
                         if (!xtendedMsg.value.previous) {
                             xtendedMsg.value.previous = null
                         }
-                        // console.log('******feed life', xtendedMsg)
 
                         return xtendedMsg
                     })
@@ -79,13 +78,7 @@ exports.handler = function (ev, ctx, cb) {
         })
         .catch(err => {
             console.log('errrrrrrr in get posts', err)
-            return cb(null, {
-                statusCode: 500,
-                body: JSON.stringify({
-                    ok: false,
-                    error: new Error('query')
-                })
-            })
+            throw err
         })
 
 }
