@@ -74,6 +74,8 @@ function Shell (props) {
         console.log('goood prevvvv', prev)
         var msg = ssc.createMsg(keys, prev || null, msgContent)
 
+        // make the fetch call to set the name,
+        // then emit the event after success
         fetch('/.netlify/functions/set-name', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -64,22 +64,22 @@ test('publish one message', function (t) {
     // console.log('req body', reqBody)
 
     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
-            method: 'POST',
-            body:    JSON.stringify(reqBody),
-            headers: { 'Content-Type': 'application/json' },
-        })
+        method: 'POST',
+        body:    JSON.stringify(reqBody),
+        headers: { 'Content-Type': 'application/json' },
+    })
         .then(res => res.json())
         .then(json => {
             return json
         })
-            .then(function (res) {
-                // var { msg } = res
-                t.pass('got a response', res)
-                // t.equal(msg.value.signature, _msg.signature,
-                //     'should send back the right signature')
-                t.end()
-            })
-            .catch(err => t.error(err))
+        .then(function (res) {
+            // var { msg } = res
+            t.pass('got a response', res)
+            // t.equal(msg.value.signature, _msg.signature,
+            //     'should send back the right signature')
+            t.end()
+        })
+        .catch(err => t.error(err))
 })
 
 
@@ -117,3 +117,4 @@ test('all done', function (t) {
     ntl.kill()
     t.end()
 })
+

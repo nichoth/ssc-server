@@ -41,6 +41,7 @@ function Home (props) {
     }
 
 
+    // need to do this on a per-post basis
     var postAvatar = (me.avatar && me.avatar.url) ?
         me.avatar.url :
         ('data:image/svg+xml;utf8,' + generateFromString(me.secrets.public))

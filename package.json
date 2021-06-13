@@ -11,7 +11,6 @@
     "build-sass": "sass src/style/main.scss public/style.css",
     "watch-js": "watchify -t uglifyify --debug -p esmify src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
-    "lint": "eslint . --config .eslintrc",
     "test": "tape test/*.js | tap-spec"
   },
   "repository": {
@@ -28,10 +27,10 @@
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^0.0.12",
     "@nichoth/ssc": "^0.0.9",
+    "@nichoth/ssc-fauna": "^0.0.0",
     "cloudinary": "^1.25.1",
     "dotenv": "^8.6.0",
     "drag-drop": "^7.0.1",
-    "eslint-config-minlint": "^2.0.0",
     "faunadb": "^4.2.0",
     "generate-avatar": "^1.4.10",
     "htm": "^3.0.4",
@@ -46,6 +45,7 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "concurrently": "^6.1.0",
+    "eslint-config-minlint": "^2.0.0",
     "esmify": "^2.1.1",
     "sass": "^1.32.12",
     "tap-spec": "^5.0.0",

@@ -21,7 +21,25 @@ subscribe(bus, state)
 
 
 // TODO -- around here, make a request to get the profile from server
-// need to write a server side function
+
+// TODO -- get the following list
+// TODO -- need to handle the case where state.me is not set
+
+// we request the list of who you're following,
+// then you need to get the latest feeds for each person you're following
+// could do this client side
+// or could make a ss function called `getLatest` or something, which would
+// get the relevant pictures for this ID
+var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
+console.log('following qs', qs)
+
+fetch('/.netlify/functions/following' + '?' + qs)
+    .then(res => {
+        console.log('got following res', res)
+    })
+    .catch(err => {
+        console.log('err woe', err)
+    })
 
 
 // save the profile to localStorage when it changes
