@@ -44,7 +44,7 @@ fetch('/.netlify/functions/following' + '?' + qs)
 
 // save the profile to localStorage when it changes
 // it gets set in the view functions i think
-state.profile(function onChange (profile) {
+state.me.profile(function onChange (profile) {
     console.log('***profile change', profile)
     Identity.save(profile)
 })

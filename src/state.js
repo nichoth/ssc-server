@@ -11,11 +11,11 @@ function State (keys, profile) {
         me: struct({
             source: observ(null),
             secrets: observ(keys),
-            avatar: observ(null)
+            avatar: observ(null),
+            profile: struct({
+                userName: observ((profile && profile.userName) || null)
+            })
         }),
-        profile: struct({
-            userName: observ((profile && profile.userName) || null)
-        })
     })
 
     return state

@@ -1,13 +1,13 @@
 // var ssc = require('@nichoth/ssc')
 require('dotenv').config()
-var faunadb = require('faunadb')
+// var faunadb = require('faunadb')
 var follow = require('@nichoth/ssc-fauna/follow')
 // var xtend = require('xtend')
 
-var q = faunadb.query
-var client = new faunadb.Client({
-    secret: process.env.FAUNADB_SERVER_SECRET
-})
+// var q = faunadb.query
+// var client = new faunadb.Client({
+//     secret: process.env.FAUNADB_SERVER_SECRET
+// })
 
 let cloudinary = require("cloudinary").v2;
 
@@ -32,6 +32,7 @@ exports.handler = function (ev, ctx, cb) {
     console.log('get req')
     var author = ev.queryStringParameters.author
     
+    // who are you following?
     return follow.get(author)
         .then(res => {
             return cb(null, {

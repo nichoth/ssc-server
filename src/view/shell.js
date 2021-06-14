@@ -6,7 +6,8 @@ var evs = require('../EVENTS')
 
 
 function Shell (props) {
-    var { path, profile, emit, me } = props
+    var { path, emit, me } = props
+    var { profile } = me
     var [isNaming, setNaming] = useState(false)
     var [isResolving, setResolving] = useState(false)
 
@@ -114,7 +115,8 @@ function Shell (props) {
     }
 
     function NameEditor (props) {
-        var { me, profile } = props
+        var { me } = props
+        var { profile } = me
 
         return html`<form onreset=${stopNamingYourself}
             onsubmit=${saveName.bind(null, me)}
