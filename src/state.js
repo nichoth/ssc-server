@@ -11,6 +11,7 @@ function State (keys, profile) {
         me: struct({
             source: observ(null),
             secrets: observ(keys),
+            following: observ({}),
             avatar: observ(null),
             profile: struct({
                 userName: observ((profile && profile.userName) || null)

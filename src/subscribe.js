@@ -9,7 +9,7 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.identity.gotAvatar, ev => {
-        console.log('got avatar', ev)
+        // console.log('got avatar', ev)
         state.me.avatar.set({ url: ev.avatarUrl })
     })
 
@@ -46,6 +46,11 @@ function subscribe (bus, state) {
         Keys.save(secrets)
         state.me.secrets.set(secrets)
         state.me.source.set(source || null)
+    })
+
+    bus.on(evs.following.got, ev => {
+        console.log('**got following in here**', ev)
+        state.following.set(ev)
     })
 }
 

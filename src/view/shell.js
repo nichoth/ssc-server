@@ -29,7 +29,7 @@ function Shell (props) {
                 return res.json()
             })
             .then(res => {
-                console.log('******got avatar in shell', res)
+                // console.log('******got avatar in shell', res)
                 emit(evs.identity.gotAvatar, res)
             })
             .catch(err => {

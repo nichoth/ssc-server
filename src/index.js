@@ -20,7 +20,8 @@ subscribe(bus, state)
 
 
 
-// TODO -- around here, make a request to get the profile from server
+// TODO -- around here, make a request to get the profile from server,
+// and set the profile in state if it is different
 
 // TODO -- get the following list
 // TODO -- need to handle the case where state.me is not set
@@ -35,7 +36,10 @@ console.log('following qs', qs)
 
 fetch('/.netlify/functions/following' + '?' + qs)
     .then(res => res.json())
-    .then(json => console.log('**following response**', json))
+    .then(json => {
+        console.log('**following response**', json)
+        emit(evs.following.got, json)
+    })
     .catch(err => {
         console.log('err woe', err)
     })

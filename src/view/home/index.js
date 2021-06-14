@@ -61,12 +61,19 @@ function Home (props) {
 
                 console.log('post, i', post, i)
 
+                var linkUrl = (post.value.author === me.secrets.id ?
+                    '/' + me.profile.userName :
+                    '/' + following[post.value.author].userName
+                )
+
                 return html`<li class="post">
                     <a href="/post/${encodeURIComponent(post.key)}">
                         <img src="${url}" />
                     </a>
                     <div class="inline-avatar">
-                        <img src="${postAvatar}" />
+                        <a href="${linkUrl}">
+                            <img src="${postAvatar}" />
+                        </a>
                     </div>
                     <p>${writing}</p>
                 </li>`
