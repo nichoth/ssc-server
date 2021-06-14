@@ -1,13 +1,6 @@
 // var ssc = require('@nichoth/ssc')
 require('dotenv').config()
-// var faunadb = require('faunadb')
 var follow = require('@nichoth/ssc-fauna/follow')
-// var xtend = require('xtend')
-
-// var q = faunadb.query
-// var client = new faunadb.Client({
-//     secret: process.env.FAUNADB_SERVER_SECRET
-// })
 
 let cloudinary = require("cloudinary").v2;
 
@@ -41,6 +34,7 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
         .catch(err => {
+            console.log('aaaaaaa', err)
             return cb(null, {
                 statusCode: 500,
                 body: JSON.stringify({

@@ -34,9 +34,8 @@ var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
 console.log('following qs', qs)
 
 fetch('/.netlify/functions/following' + '?' + qs)
-    .then(res => {
-        console.log('got following res', res)
-    })
+    .then(res => res.json())
+    .then(json => console.log('**following response**', json))
     .catch(err => {
         console.log('err woe', err)
     })

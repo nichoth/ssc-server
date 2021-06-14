@@ -27,7 +27,7 @@
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^0.0.12",
     "@nichoth/ssc": "^0.0.9",
-    "@nichoth/ssc-fauna": "^0.0.0",
+    "@nichoth/ssc-fauna": "^0.0.2",
     "cloudinary": "^1.25.1",
     "dotenv": "^8.6.0",
     "drag-drop": "^7.0.1",
