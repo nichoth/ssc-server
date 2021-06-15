@@ -10,6 +10,12 @@ Trying this
 npm start
 ```
 
+## start a local server, with test data
+
+```
+npm run start-test
+```
+
 ----------------------------------------
 
 ## use `netlify-cli` to create a demo function, 'test'

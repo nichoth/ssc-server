@@ -8,10 +8,10 @@ function State (keys, profile) {
     var state = struct({
         feed: observ(null),
         route: observ('/'),
+        following: observ({}),
         me: struct({
             source: observ(null),
             secrets: observ(keys),
-            following: observ({}),
             avatar: observ(null),
             profile: struct({
                 userName: observ((profile && profile.userName) || null)

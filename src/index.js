@@ -4,6 +4,7 @@ import { render } from 'preact'
 var route = require('route-event')()
 var Bus = require('@nichoth/events')
 var raf = require('raf')
+var evs = require('./EVENTS')
 var Keys  = require('./keys')
 var Identity = require('./identity')
 var subscribe = require('./subscribe')
@@ -23,16 +24,32 @@ subscribe(bus, state)
 // TODO -- around here, make a request to get the profile from server,
 // and set the profile in state if it is different
 
-// TODO -- get the following list
 // TODO -- need to handle the case where state.me is not set
 
 // we request the list of who you're following,
 // then you need to get the latest feeds for each person you're following
-// could do this client side
-// or could make a ss function called `getLatest` or something, which would
-// get the relevant pictures for this ID
 var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
-console.log('following qs', qs)
+
+
+
+
+
+// here check the NODE_ENV
+// follow a 2nd person if it's `test`
+console.log('aaaa')
+if (process.env.NODE_ENV === 'test') {
+    console.log('bbbbbb')
+    console.log('test only')
+}
+
+console.log('here', process.env.FAUNADB_SERVER_SECRET)
+
+
+
+
+
+
+var emit = bus.emit.bind(bus)
 
 fetch('/.netlify/functions/following' + '?' + qs)
     .then(res => res.json())
@@ -56,8 +73,6 @@ route(function onRoute (path) {
     // we update the state here with the path
     // then the `connector` finds the view via the router
     state.route.set(path)
-
-    var emit = bus.emit.bind(bus)
 
     render(html`<${Connector} emit=${emit} state=${state} />`,
         document.getElementById('content'))
