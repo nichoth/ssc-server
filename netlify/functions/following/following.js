@@ -12,35 +12,59 @@ cloudinary.config({
 
 exports.handler = function (ev, ctx, cb) {
     // var req = JSON.parse(ev.body)
-    if (ev.httpMethod !== 'GET') {
+    if (ev.httpMethod !== 'GET' && ev.httpMethod !== 'POST') {
         return cb(null, {
             statusCode: 400,
             body: JSON.stringify({
                 ok: false,
-                message: 'should be a get request'
+                message: 'should be a get or post request'
             })
         })
     }
 
-    console.log('get req')
-    var author = ev.queryStringParameters.author
-    
-    // who are you following?
-    return follow.get(author)
-        .then(res => {
-            return cb(null, {
-                statusCode: 200,
-                body: JSON.stringify(res)
-            })
-        })
-        .catch(err => {
-            console.log('aaaaaaa', err)
-            return cb(null, {
-                statusCode: 500,
-                body: JSON.stringify({
-                    ok: false,
-                    message: err.toString()
+    if (ev.httpMethod === 'POST') {
+        console.log('**posting**')
+        var { author, keys, msg } = JSON.parse(ev.body)
+
+        console.log('aaaaaaaa herr', author, keys, msg)
+
+        follow.post(author, keys, msg)
+            .then(res => {
+                return cb(null, {
+                    statusCode: 200,
+                    body: JSON.stringify(res)
                 })
             })
-        })
+            .catch(err => {
+                console.log('****fflobbb', err)
+                return cb(null, {
+                    statusCode: 500,
+                    body: err.toString()
+                })
+            })
+    }
+    
+    if (ev.httpMethod === 'GET') {
+        console.log('**get req**')
+        var author = ev.queryStringParameters.author
+
+        // who are you following?
+        return follow.get(author)
+            .then(res => {
+                return cb(null, {
+                    statusCode: 200,
+                    body: JSON.stringify(res)
+                })
+            })
+            .catch(err => {
+                console.log('aaaaaaa', err)
+                return cb(null, {
+                    statusCode: 500,
+                    body: JSON.stringify({
+                        ok: false,
+                        message: err.toString()
+                    })
+                })
+            })
+    }
 }

@@ -12,6 +12,8 @@ var State = require('./state')
 var router = require('./router')()
 var Shell = require('./view/shell')
 
+var ssc = require('@nichoth/ssc')
+
 var bus = Bus({ memo: true })
 
 var keys = Keys.get() || null
@@ -21,27 +23,12 @@ subscribe(bus, state)
 
 
 
+
+
 // TODO -- around here, make a request to get the profile from server,
 // and set the profile in state if it is different
 
 // TODO -- need to handle the case where state.me is not set
-
-// we request the list of who you're following,
-// then you need to get the latest feeds for each person you're following
-var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
-
-
-
-
-
-// here check the NODE_ENV
-// follow a 2nd person if it's `test`
-console.log('aaaa')
-if (process.env.NODE_ENV === 'test') {
-    console.log('bbbbbb')
-    console.log('test only')
-}
-
 
 
 
@@ -49,6 +36,56 @@ if (process.env.NODE_ENV === 'test') {
 
 var emit = bus.emit.bind(bus)
 
+// here check the NODE_ENV
+// follow a 2nd person if it's `test`
+console.log('aaaa')
+if (process.env.NODE_ENV === 'test') {
+    console.log('bbbbbb', 'test only')
+    console.log('my id', state().me.secrets.id)
+    var userTwo = ssc.createKeys()
+    var myKeys = state().me.secrets
+    console.log('**my keys**', myKeys)
+    console.log('**user two**', userTwo)
+    var msgContent = {
+        type: 'follow',
+        contact: userTwo.id,
+        author: myKeys.id
+    }
+    var msg = ssc.createMsg(myKeys, null, msgContent)
+    // post a follow msg
+    // I should follow userTwo
+    fetch('/.netlify/functions/following', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            author: myKeys.id,
+            keys: { public: myKeys.public },
+            msg: msg
+        }) 
+    })
+        .then(res => {
+            if (!res.ok) return res.text()
+            return res.json()
+        })
+        .then(json => console.log('jsonnnnnnnnnn follow res', json))
+        .catch(err => {
+            console.log('oh noooooooooo', err)
+        })
+
+    // post a 'post' for userTwo
+
+    // set the userName for userTwo
+}
+
+
+
+
+
+// we request the list of who you're following,
+// then you need to get the latest feeds for each person you're following
+var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
 fetch('/.netlify/functions/following' + '?' + qs)
     .then(res => res.json())
     .then(json => {
@@ -58,6 +95,9 @@ fetch('/.netlify/functions/following' + '?' + qs)
     .catch(err => {
         console.log('err woe', err)
     })
+
+
+
 
 
 // save the profile to localStorage when it changes

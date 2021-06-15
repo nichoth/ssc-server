@@ -42,7 +42,7 @@ function Home (props) {
 
 
     // need to do this on a per-post basis
-    var postAvatar = (me.avatar && me.avatar.url) ?
+    var myAvatar = (me.avatar && me.avatar.url) ?
         me.avatar.url :
         ('data:image/svg+xml;utf8,' + generateFromString(me.secrets.public))
 
@@ -72,7 +72,7 @@ function Home (props) {
                     </a>
                     <div class="inline-avatar">
                         <a href="${linkUrl}">
-                            <img src="${postAvatar}" />
+                            <img src="${myAvatar}" />
                         </a>
                     </div>
                     <p>${writing}</p>

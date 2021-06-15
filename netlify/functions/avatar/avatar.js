@@ -29,7 +29,7 @@ exports.handler = function (ev, ctx, cb) {
             q.Get( q.Match(q.Index('avatar-by-id'), aboutWho) )
         )
             .then(res => {
-                console.log('********avatar res***', res)
+                // console.log('********avatar res***', res)
 
                 // need to make a URL from hash + cloudinary
                 var slugifiedHash = encodeURIComponent('' +
@@ -37,7 +37,7 @@ exports.handler = function (ev, ctx, cb) {
                 var slugslug = encodeURIComponent(slugifiedHash)
                 var avatarUrl = cloudinary.url(slugslug)      
 
-                console.log('****** avatar url', avatarUrl)
+                // console.log('****** avatar url', avatarUrl)
 
                 return cb(null, {
                     statusCode: 200,
@@ -48,7 +48,7 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
             .catch(err => {
-                console.log('errrrr in query', err)
+                console.log('errrrr in avatar query', err)
 
                 return cb(null, {
                     statusCode: 500,
