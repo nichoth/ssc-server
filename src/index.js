@@ -42,8 +42,6 @@ if (process.env.NODE_ENV === 'test') {
     console.log('test only')
 }
 
-console.log('here', process.env.FAUNADB_SERVER_SECRET)
-
 
 
 
