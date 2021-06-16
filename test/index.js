@@ -3,6 +3,7 @@ var fetch = require('node-fetch')
 var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
 var fs = require('fs')
+var createHash = require('crypto').createHash
 
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
 let base64Caracal = caracal.toString('base64')
@@ -34,14 +35,19 @@ test('setup', function (t) {
 
 // * create and sign msg client side
 test('publish one message', function (t) {
-    var content = { type: 'test', text: 'waaaa' }
-    keys = ssc.createKeys()
+    var hash = createHash('sha256')
+    hash.update(base64Caracal)
+    var _hash = hash.digest('base64')
+    // console.log('******hash', hash, _hash)
 
-    // console.log('**keys**', keys)
+    var content = { type: 'test', text: 'waaaa', mentions: [_hash] }
+    keys = ssc.createKeys()
 
     _msg = ssc.createMsg(keys, null, content)
 
-    console.log('**msg**', _msg)
+    console.log('***the first msg***', _msg)
+
+    // console.log('**msg**', _msg)
 
     // {
     //     previous: null,
@@ -74,7 +80,11 @@ test('publish one message', function (t) {
         })
         .then(function (res) {
             // var { msg } = res
+            // console.log('res', res)
             t.pass('got a response', res)
+            t.ok(res.res.mentionUrls, 'should have the image urls')
+            console.log('**the first msg in response**', res)
+            console.log('**the first msg in response again**', res.res.value.content)
             // t.equal(msg.value.signature, _msg.signature,
             //     'should send back the right signature')
             t.end()
@@ -84,12 +94,25 @@ test('publish one message', function (t) {
 
 
 test('publish a second message', function (t) {
+    var ___hash = createHash('sha256')
+    ___hash.update(base64Caracal)
+    var _hash = ___hash.digest('base64')
+
     var req2 = {
         keys: { public: keys.public },
         // in here we pass in the previous msg we created
         // createMsg(keys, prevMsg, content)
-        msg: ssc.createMsg(keys, _msg, { type: 'test2', text: 'ok' })
+        msg: ssc.createMsg(keys, _msg, {
+            type: 'test2',
+            text: 'ok',
+            mentions: [_hash]
+        }),
+        file: 'data:image/png;base64,' + base64Caracal
     }
+
+    // console.log('aaaaa what is the prev msg***', _msg)
+    console.log('***in here msg 2***', req2.msg)
+    console.log('***the key of prev***', ssc.getId(_msg))
 
     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
         method: 'post',
@@ -98,10 +121,16 @@ test('publish a second message', function (t) {
     })
         .then(res => res.json())
         .then(res => {
+            console.log('**res**', res)
             t.pass('got a response')
-            t.equal(res.msg.value.signature, req2.msg.signature,
-                'should send back right signature')
+            // t.equal(res.msg.value.signature, req2.msg.signature,
+            //     'should send back right signature')
+            // if (!res.ok) return res.text()
+            return res
+        })
+        .then(res => {
             t.end()
+            console.log('resresrersers', res)
         })
         .catch(err => {
             t.error(err)
@@ -110,7 +139,7 @@ test('publish a second message', function (t) {
 })
 
 test('get a feed', function (t) {
-
+    t.end()
 })
 
 test('all done', function (t) {

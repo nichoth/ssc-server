@@ -47,7 +47,7 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
-    console.log('aaaaaaaaaaaaaaaaa in the req', msg)
+    // console.log('aaaaaaaaaaaaaaaaa in the req', msg)
 
     var isValid
     try {
@@ -93,12 +93,19 @@ exports.handler = function (ev, ctx, cb) {
 
     // see https://github.com/ssb-js/ssb-validate/blob/main/index.js#L149
 
+    
 
+
+
+    // create the hash
     var hash = createHash('sha256')
     hash.update(file)
     var _hash = hash.digest('base64')
-    console.log('******hash', hash, _hash)
+    // console.log('******hash', hash, _hash)
     var slugifiedHash = encodeURIComponent('' + _hash)
+
+
+
 
 
 
@@ -110,19 +117,21 @@ exports.handler = function (ev, ctx, cb) {
         )
     )
         .then(res => {
-            console.log('res', res)
-            console.log('res.data.key', res.data.key)
-            console.log('msg.previous', msg.previous)
+            // console.log('res', res)
+            // console.log('res.data.key', res.data.key)
+            // console.log('msg.previous', msg.previous)
+
+            console.log('aaa res aaa', res)
 
             if (res.data.key !== msg.previous) {
-                console.log('mismatch!!!!!', res.data.key, msg.previous)
+                console.log('!!!!mismatch!!!!!', res.data.key, msg.previous)
                 console.log('**prev key**', res.data.key)
                 console.log('**msg.previous key**', msg.previous)
                 return cb(null, {
                     statusCode: 422,
                     body: JSON.stringify({
                         ok: false,
-                        error: new Error('mismatch previous')
+                        error: (new Error('mismatch previous')).toString()
                     })
                 })
             }
@@ -229,16 +238,19 @@ exports.handler = function (ev, ctx, cb) {
     // return the new msg
     function writeMsg (_msg, hash) {
         // we are creating the msg and hash server side here
-        var msg = xtend(_msg, {
-            content: xtend(_msg.content, {
-                mentions: [hash]
-            })
-        })
+        // var msg = xtend(_msg, {
+        //     content: xtend(_msg.content, {
+        //         mentions: [hash]
+        //     })
+        // })
+        var msg = _msg
+        console.log('in write msg***', msg)
+        console.log('the id in here***', ssc.getId(msg))
 
         // console.log('**strigigygy**', stringify(msg, null, 2))
-        console.log('msg in here*****', msg)
+        // console.log('msg in here*****', msg)
         var msgHash = ssc.getId(msg)
-        console.log('**hash**', msgHash)
+        // console.log('**hash**', msgHash)
 
 
         // we use the hash of the message *with* `mentions` array in it
