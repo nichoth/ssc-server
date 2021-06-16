@@ -46,6 +46,7 @@ if (process.env.NODE_ENV === 'test') {
     var myKeys = state().me.secrets
     console.log('**my keys**', myKeys)
     console.log('**user two**', userTwo)
+
     var msgContent = {
         type: 'follow',
         contact: userTwo.id,
@@ -69,7 +70,10 @@ if (process.env.NODE_ENV === 'test') {
             if (!res.ok) return res.text()
             return res.json()
         })
-        .then(json => console.log('jsonnnnnnnnnn follow res', json))
+        .then(json => {
+            getFollowing()
+            console.log('jsonnnnnnnnnn follow res', json)
+        })
         .catch(err => {
             console.log('oh noooooooooo', err)
         })
@@ -82,19 +86,20 @@ if (process.env.NODE_ENV === 'test') {
 
 
 
-
-// we request the list of who you're following,
-// then you need to get the latest feeds for each person you're following
-var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
-fetch('/.netlify/functions/following' + '?' + qs)
-    .then(res => res.json())
-    .then(json => {
-        console.log('**following response**', json)
-        emit(evs.following.got, json)
-    })
-    .catch(err => {
-        console.log('err woe', err)
-    })
+function getFollowing () {
+    // we request the list of who you're following,
+    // then you need to get the latest feeds for each person you're following
+    var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
+    fetch('/.netlify/functions/following' + '?' + qs)
+        .then(res => res.json())
+        .then(json => {
+            console.log('**following response**', json)
+            emit(evs.following.got, json)
+        })
+        .catch(err => {
+            console.log('err woe', err)
+        })
+}
 
 
 
