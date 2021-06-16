@@ -137,6 +137,7 @@ test('publish a second message', function (t) {
 })
 
 test('get a feed', function (t) {
+    console.log('todo')
     t.end()
 })
 
