@@ -121,7 +121,7 @@ exports.handler = function (ev, ctx, cb) {
             // console.log('res.data.key', res.data.key)
             // console.log('msg.previous', msg.previous)
 
-            console.log('aaa res aaa', res)
+            // console.log('aaa res aaa', res)
 
             if (res.data.key !== msg.previous) {
                 console.log('!!!!mismatch!!!!!', res.data.key, msg.previous)
@@ -183,7 +183,7 @@ exports.handler = function (ev, ctx, cb) {
                             // crop: "fill"
                         })      
 
-                        console.log('**imgUrl**', imgUrl)
+                        // console.log('**imgUrl**', imgUrl)
 
                         // here, we add the url for the photo
                         var _response = xtend(res[0].data, {
@@ -244,8 +244,8 @@ exports.handler = function (ev, ctx, cb) {
         //     })
         // })
         var msg = _msg
-        console.log('in write msg***', msg)
-        console.log('the id in here***', ssc.getId(msg))
+        // console.log('in write msg***', msg)
+        // console.log('the id in here***', ssc.getId(msg))
 
         // console.log('**strigigygy**', stringify(msg, null, 2))
         // console.log('msg in here*****', msg)
