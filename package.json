@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && concurrently --kill-others \"npm run watch-sass\" \"npm run watch-js\" \"netlify dev --port=8888\"",
+    "cypress": "cypress open",
     "start-test": "npm run build-test && concurrently --kill-others \"npm run watch-sass\" \"npm run watch-js-test\" \"netlify dev --port=8888\"",
     "build": "npm run copy && npm run build-js && npm run build-sass",
     "build-test": "npm run copy && npm run build-js-test && npm run build-sass",
@@ -49,6 +50,7 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "concurrently": "^6.1.0",
+    "cypress": "^7.5.0",
     "envify": "^4.1.0",
     "eslint-config-minlint": "^2.0.0",
     "esmify": "^2.1.1",
