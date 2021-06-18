@@ -53,3 +53,20 @@
 
 }
 
+.nav-part {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+
+    li {
+        &:hover {
+            border-bottom: 2px solid gray;
+        }
+
+        &.active {
+            border-bottom: 3px solid;
+        }
+    }
+}
