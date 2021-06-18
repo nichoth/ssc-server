@@ -77,6 +77,9 @@ if (process.env.NODE_ENV === 'test') {
             .then(json => {
                 getFollowing()
                 console.log('jsonnnnnnnnnn follow res', json)
+                // once you're following userTwo, check that their post
+                // shows up on the home page
+                // call get `relevantPosts` after posting
                 testPost()
             })
             .catch(err => {
@@ -84,14 +87,14 @@ if (process.env.NODE_ENV === 'test') {
             })
     }
 
-    var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
-
     function testPost () {
         // post a 'post' from userTwo
         var postMsg = ssc.createMsg(userTwo, null, {
             type: 'post',
             text: 'the post text content'
         })
+
+        var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
         fetch('/.netlify/functions/post-one-message', {
             method: 'POST',
