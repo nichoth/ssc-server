@@ -17,6 +17,9 @@ var ssc = require('@nichoth/ssc')
 var bus = Bus({ memo: true })
 
 var keys = Keys.get() || null
+
+bus.emit(evs.keys.got, keys)
+
 var profile = Identity.get() || null
 var state = State(keys, profile)
 subscribe(bus, state)
@@ -55,32 +58,61 @@ if (process.env.NODE_ENV === 'test') {
     var msg = ssc.createMsg(myKeys, null, msgContent)
     // post a follow msg
     // I should follow userTwo
-    fetch('/.netlify/functions/following', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            author: myKeys.id,
-            keys: { public: myKeys.public },
-            msg: msg
-        }) 
-    })
-        .then(res => {
-            if (!res.ok) return res.text()
-            return res.json()
+    window.testStuff = function testStuff () {
+        fetch('/.netlify/functions/following', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                author: myKeys.id,
+                keys: { public: myKeys.public },
+                msg: msg
+            }) 
         })
-        .then(json => {
-            getFollowing()
-            console.log('jsonnnnnnnnnn follow res', json)
-        })
-        .catch(err => {
-            console.log('oh noooooooooo', err)
+            .then(res => {
+                if (!res.ok) return res.text()
+                return res.json()
+            })
+            .then(json => {
+                getFollowing()
+                console.log('jsonnnnnnnnnn follow res', json)
+                testPost()
+            })
+            .catch(err => {
+                console.log('oh noooooooooo', err)
+            })
+    }
+
+    var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
+
+    function testPost () {
+        // post a 'post' from userTwo
+        var postMsg = ssc.createMsg(userTwo, null, {
+            type: 'post',
+            text: 'the post text content'
         })
 
-    // post a 'post' for userTwo
+        fetch('/.netlify/functions/post-one-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                msg: postMsg,
+                keys: userTwo,
+                file: file
+            }) 
+        })
+            .then(res => res.json())
+            .then(json => {
+                console.log('***post response json***', json)
+            })
+            .catch(err => {
+                console.log('aaaaarrgggg', err)
+            })
+    }
 
-    // set the userName for userTwo
 }
 
 
