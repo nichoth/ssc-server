@@ -55,9 +55,14 @@ if (process.env.NODE_ENV === 'test') {
         contact: userTwo.id,
         author: myKeys.id
     }
-    var msg = ssc.createMsg(myKeys, null, msgContent)
+
+    // call `getRelevantPosts` after following user 2 and
+    // posting to their feed
+
     // post a follow msg
     // I should follow userTwo
+    var msg = ssc.createMsg(myKeys, null, msgContent)
+
     window.testStuff = function testStuff () {
         fetch('/.netlify/functions/following', {
             method: 'POST',
@@ -81,6 +86,10 @@ if (process.env.NODE_ENV === 'test') {
                 // shows up on the home page
                 // call get `relevantPosts` after posting
                 testPost()
+                    .then(res => {
+                        console.log('done test posting', res)
+                        // now need to call `getRelevantPosts`
+                    })
             })
             .catch(err => {
                 console.log('oh noooooooooo', err)
@@ -96,7 +105,7 @@ if (process.env.NODE_ENV === 'test') {
 
         var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
-        fetch('/.netlify/functions/post-one-message', {
+        return fetch('/.netlify/functions/post-one-message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,6 +119,7 @@ if (process.env.NODE_ENV === 'test') {
             .then(res => res.json())
             .then(json => {
                 console.log('***post response json***', json)
+                return json
             })
             .catch(err => {
                 console.log('aaaaarrgggg', err)

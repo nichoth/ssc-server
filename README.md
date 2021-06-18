@@ -12,11 +12,21 @@ npm start
 
 ## start a local server, with test data
 
+This creates a function `window.testStuff` that will create a second user and some test data.
+
 ```
 npm run start-test
 ```
 
 ----------------------------------------
+
+## forks
+
+What happens if you fork your feed? This server doesn not allow you to fork your feed. I could imagine implementing something lik [forkdb](https://github.com/substack/forkdb), where there could be multiple 'heads' of a feed that you would then need to 'merge' into one. But for now the server will just reject any write with the wrong 'previous' message in the merkle-list. 
+
+-------------------------------------
+
+## the log
 
 ## use `netlify-cli` to create a demo function, 'test'
 
