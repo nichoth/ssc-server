@@ -47,6 +47,7 @@ if (process.env.NODE_ENV === 'test') {
     console.log('my id', state().me.secrets.id)
     var userTwo = ssc.createKeys()
     var myKeys = state().me.secrets
+    var me = state.me()
     console.log('**my keys**', myKeys)
     console.log('**user two**', userTwo)
 
@@ -87,8 +88,24 @@ if (process.env.NODE_ENV === 'test') {
                 // call get `relevantPosts` after posting
                 testPost()
                     .then(res => {
-                        console.log('done test posting', res)
+                        console.log('**done test posting**', res)
                         // now need to call `getRelevantPosts`
+
+                        var qs = new URLSearchParams({
+                            userId: me.secrets.id
+                        }).toString()
+
+                        fetch('/.netlify/functions/get-relevant-posts' +
+                            '?' + qs)
+                            .then(res => {
+                                return res.json()
+                            })
+                            .then(json => {
+                                console.log('got relevant posts', json)
+                            })
+                            .catch(err => {
+                                console.log('errrrrr', err)
+                            })
                     })
             })
             .catch(err => {
@@ -131,11 +148,22 @@ if (process.env.NODE_ENV === 'test') {
 
 
 
+
+
+function getPosts () {
+    return fetch('/.netlify/functions/get-relevant-posts')
+}
+
+
+
+
+
+
 function getFollowing () {
     // we request the list of who you're following,
     // then you need to get the latest feeds for each person you're following
     var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();
-    fetch('/.netlify/functions/following' + '?' + qs)
+    return fetch('/.netlify/functions/following' + '?' + qs)
         .then(res => res.json())
         .then(json => {
             console.log('**following response**', json)
