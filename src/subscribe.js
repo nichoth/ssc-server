@@ -49,7 +49,7 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.following.got, ev => {
-        console.log('**got following in here**', ev)
+        console.log('**got following in subscribe**', ev)
         state.following.set(ev)
     })
 }

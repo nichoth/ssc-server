@@ -11,6 +11,7 @@ var subscribe = require('./subscribe')
 var State = require('./state')
 var router = require('./router')()
 var Shell = require('./view/shell')
+var createHash = require('create-hash')
 
 var ssc = require('@nichoth/ssc')
 
@@ -61,9 +62,8 @@ if (process.env.NODE_ENV === 'test') {
     // posting to their feed
 
     // post a follow msg
-    // I should follow userTwo
+    // userOne should follow userTwo
     var msg = ssc.createMsg(myKeys, null, msgContent)
-
     window.testStuff = function testStuff () {
         fetch('/.netlify/functions/following', {
             method: 'POST',
@@ -82,7 +82,7 @@ if (process.env.NODE_ENV === 'test') {
             })
             .then(json => {
                 getFollowing()
-                console.log('jsonnnnnnnnnn follow res', json)
+                console.log('jsonnnnnnnnnn follow post res', json)
                 // once you're following userTwo, check that their post
                 // shows up on the home page
                 // call get `relevantPosts` after posting
@@ -101,7 +101,9 @@ if (process.env.NODE_ENV === 'test') {
                                 return res.json()
                             })
                             .then(json => {
-                                console.log('got relevant posts', json)
+                                // console.log('got relevant posts', json)
+                                console.log('got relevant posts', json.msg)
+                                emit(evs.feed.got, json.msg)
                             })
                             .catch(err => {
                                 console.log('errrrrr', err)
@@ -114,13 +116,19 @@ if (process.env.NODE_ENV === 'test') {
     }
 
     function testPost () {
+        // a smiling face
+        var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
+
+        var hash = createHash('sha256')
+        hash.update(file)
+        var _hash = hash.digest('base64')
+
         // post a 'post' from userTwo
         var postMsg = ssc.createMsg(userTwo, null, {
             type: 'post',
-            text: 'the post text content'
+            text: 'the post text content',
+            mentions: [_hash]
         })
-
-        var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
         return fetch('/.netlify/functions/post-one-message', {
             method: 'POST',

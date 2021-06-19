@@ -4,7 +4,7 @@ import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
 
 function Home (props) {
-    var { me, emit, feed } = props;
+    var { me, emit, feed, following } = props;
     console.log('props in home', props);
 
     // this should be in the router maybe
