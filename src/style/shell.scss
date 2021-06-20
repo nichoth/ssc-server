@@ -67,10 +67,8 @@
             }
         }
 
-        a {
-            &.active {
-                border-bottom: 3px solid;
-            }
+        &.active {
+            border-bottom: 3px solid;
         }
     }
 }
