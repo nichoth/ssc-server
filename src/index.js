@@ -11,8 +11,8 @@ var subscribe = require('./subscribe')
 var State = require('./state')
 var router = require('./router')()
 var Shell = require('./view/shell')
-// var createHash = require('create-hash')
-const sha256 = require('simple-sha256')
+var createHash = require('create-hash')
+// const sha256 = require('simple-sha256')
 
 
 var ssc = require('@nichoth/ssc')
@@ -97,7 +97,6 @@ if (process.env.NODE_ENV === 'test') {
                             userId: me.secrets.id
                         }).toString()
 
-                        // here we re-fetch the list of msgs
                         fetch('/.netlify/functions/get-relevant-posts' +
                             '?' + qs)
                             .then(res => {
@@ -122,10 +121,10 @@ if (process.env.NODE_ENV === 'test') {
         // a smiling face
         var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
-        var _hash = sha256.sync(file)
-        // var hash = createHash('sha256')
-        // hash.update(file)
-        // var _hash = hash.digest('base64')
+        // var _hash = sha256.sync(file)
+        var hash = createHash('sha256')
+        hash.update(file)
+        var _hash = hash.digest('base64')
 
         // post a 'post' from userTwo
         var postMsg = ssc.createMsg(userTwo, null, {

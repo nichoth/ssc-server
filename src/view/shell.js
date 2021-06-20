@@ -131,8 +131,8 @@ function Shell (props) {
     }
 
     var avatarUrl = (me.avatar && me.avatar.url) ||
-        ('data:image/svg+xml;utf8,' + generateFromString(me && me.secrets && 
-            me.secrets.public || '')
+        ('data:image/svg+xml;utf8,' + generateFromString((me && me.secrets && 
+            me.secrets.public) || '')
         )
 
     return html`<div class="shell">
