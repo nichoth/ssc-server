@@ -151,12 +151,17 @@ function Shell (props) {
                     (html`<${NameEditor} ...${props} />`) :
                     html`
                         <h1>${getName(profile)}</h1>
+
                         <!-- pencil emoji -->
-                        <button class="edit-pencil" onClick=${_nameYourself}
-                            title="edit"
-                        >
-                            ✏
-                        </button>
+                        ${me.secrets ?
+                            html`<button class="edit-pencil"
+                                onClick=${_nameYourself}
+                                title="edit"
+                            >
+                                ✏
+                            </button>` :
+                            null
+                        }
                     `
                 }
             </li>

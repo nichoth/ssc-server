@@ -11,7 +11,7 @@ var subscribe = require('./subscribe')
 var State = require('./state')
 var router = require('./router')()
 var Shell = require('./view/shell')
-var createHash = require('create-hash')
+// var createHash = require('create-hash')
 const sha256 = require('simple-sha256')
 
 
@@ -97,6 +97,7 @@ if (process.env.NODE_ENV === 'test') {
                             userId: me.secrets.id
                         }).toString()
 
+                        // here we re-fetch the list of msgs
                         fetch('/.netlify/functions/get-relevant-posts' +
                             '?' + qs)
                             .then(res => {

@@ -11,6 +11,7 @@ function Home (props) {
     useEffect(() => {
         if (!me || !me.secrets) return
 
+        // should call `get-relevant-posts`
         fetch('/.netlify/functions/feed', {
             method: 'POST',
             headers: {
