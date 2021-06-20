@@ -61,12 +61,16 @@
     position: relative;
 
     li {
-        &:hover {
-            border-bottom: 2px solid gray;
+        a {
+            &:hover {
+                border-bottom: 2px solid gray;
+            }
         }
 
-        &.active {
-            border-bottom: 3px solid;
+        a {
+            &.active {
+                border-bottom: 3px solid;
+            }
         }
     }
 }
