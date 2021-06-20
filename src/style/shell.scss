@@ -69,6 +69,9 @@
 
         &.active {
             border-bottom: 3px solid;
+            a {
+                border: none;
+            }
         }
     }
 }
