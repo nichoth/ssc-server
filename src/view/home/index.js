@@ -71,19 +71,13 @@ function Home (props) {
                 postAvatar = (postAvatar || 'data:image/svg+xml;utf8,' + 
                     generateFromString(''))
 
-                // console.log(post.value.author === me.secrets.id, 'aaaaaaaaaaa')
-                // console.log('post value author', post.value.author)
-                // console.log('me secrets id', me.secrets.id)
-                // console.log('props', props)
-
+                var userName = _.get(following, post.value.author +
+                    '.userName', '')
                 var linkUrl = (post.value.author === me.secrets.id ?
                     '/' + me.profile.userName :
-                    _.get(following, post.value.author + '.userName', null)
+                    userName ?  '/' + (userName) : null
                     // '/' + following[post.value.author].userName
                 )
-
-                // console.log('postAvatar', postAvatar)
-                // console.log('following', following)
 
                 return html`<li class="post">
                     <a href="/post/${encodeURIComponent(post.key)}">
