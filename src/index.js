@@ -54,18 +54,17 @@ if (process.env.NODE_ENV === 'test') {
     console.log('**my keys**', myKeys)
     console.log('**user two**', userTwo)
 
-    var msgContent = {
-        type: 'follow',
-        contact: userTwo.id,
-        author: myKeys.id
-    }
-
     // call `getRelevantPosts` after following user 2 and
     // posting to their feed
 
     // post a follow msg
     // userOne should follow userTwo
-    var msg = ssc.createMsg(myKeys, null, msgContent)
+    var msg = ssc.createMsg(myKeys, null, {
+        type: 'follow',
+        contact: userTwo.id,
+        author: myKeys.id
+    })
+
     window.testStuff = function testStuff () {
         fetch('/.netlify/functions/following', {
             method: 'POST',
@@ -171,6 +170,9 @@ function getPosts () {
 
 
 function getFollowing () {
+
+    // this should return a map of followed IDs => profile data
+
     // we request the list of who you're following,
     // then you need to get the latest feeds for each person you're following
     var qs = new URLSearchParams({ author: state().me.secrets.id }).toString();

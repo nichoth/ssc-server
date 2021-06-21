@@ -2,6 +2,9 @@ import { html } from 'htm/preact'
 import { useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
+var _ = {
+    get: require('lodash/get')
+}
 
 function Home (props) {
     var { me, emit, feed, following } = props;
@@ -59,10 +62,28 @@ function Home (props) {
 
                 console.log('post, i', post, i)
 
+                var postAvatar = (post.value.author === me.secrets.id ?
+                    myAvatar :
+                    _.get(following, post.value.author + '.avatar.url', null)
+                    // following[post.value.author].avatar.url
+                )
+
+                postAvatar = (postAvatar || 'data:image/svg+xml;utf8,' + 
+                    generateFromString(''))
+
+                // console.log(post.value.author === me.secrets.id, 'aaaaaaaaaaa')
+                // console.log('post value author', post.value.author)
+                // console.log('me secrets id', me.secrets.id)
+                // console.log('props', props)
+
                 var linkUrl = (post.value.author === me.secrets.id ?
                     '/' + me.profile.userName :
-                    '/' + following[post.value.author].userName
+                    _.get(following, post.value.author + '.userName', null)
+                    // '/' + following[post.value.author].userName
                 )
+
+                // console.log('postAvatar', postAvatar)
+                // console.log('following', following)
 
                 return html`<li class="post">
                     <a href="/post/${encodeURIComponent(post.key)}">
@@ -70,7 +91,7 @@ function Home (props) {
                     </a>
                     <div class="inline-avatar">
                         <a href="${linkUrl}">
-                            <img src="${myAvatar}" />
+                            <img src="${postAvatar}" />
                         </a>
                     </div>
                     <p>${writing}</p>
