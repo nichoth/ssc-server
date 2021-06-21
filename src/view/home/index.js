@@ -75,7 +75,7 @@ function Home (props) {
                     '.userName', '')
                 var linkUrl = (post.value.author === me.secrets.id ?
                     '/' + me.profile.userName :
-                    userName ?  '/' + (userName) : null
+                    (userName ?  ('/' + userName) : null)
                     // '/' + following[post.value.author].userName
                 )
 
