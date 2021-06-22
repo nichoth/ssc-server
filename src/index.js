@@ -32,7 +32,7 @@ subscribe(bus, state)
 
 
 // TODO -- around here, make a request to get the profile from server,
-// and set the profile in state if it is different
+// and set the profile in state/local-storage if it is different
 
 // TODO -- need to handle the case where state.me is not set
 
@@ -49,8 +49,8 @@ if (process.env.NODE_ENV === 'test') {
     console.log('bbbbbb', 'test only')
     console.log('my id', state().me.secrets.id)
     var userTwo = ssc.createKeys()
-    var myKeys = state().me.secrets
     var me = state.me()
+    var myKeys = me.secrets
     console.log('**my keys**', myKeys)
     console.log('**user two**', userTwo)
 
@@ -59,11 +59,70 @@ if (process.env.NODE_ENV === 'test') {
 
     // post a follow msg
     // userOne should follow userTwo
-    var msg = ssc.createMsg(myKeys, null, {
+    var followMsg = ssc.createMsg(myKeys, null, {
         type: 'follow',
         contact: userTwo.id,
         author: myKeys.id
     })
+
+
+
+
+
+    function setNameAvatar (name, avatar) {
+        var nameMsg = ssc.createMsg(userTwo, null, {
+            type: 'about',
+            about: userTwo.id,
+            name: 'fooo'
+        })
+
+        // set name
+        fetch('/.netlify/functions/abouts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                keys: { public: userTwo.public },
+                msg: nameMsg
+            }) 
+        })
+            .then(res => {
+                console.log('**set name res**', res)
+                setAvatar()
+            })
+
+        // fetch('setAvatar')
+        function setAvatar () {
+            // var avatarMsg = ssc.createMsg(userTwo, null, {
+            // })
+
+            fetch('/.netlify/functions/avatar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    keys: { public: userTwo.public },
+                    // base64 smiling cube
+                    file: 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7',
+                    // msg: avatarMsg
+                })
+            })
+                .then(res => {
+                    res.json()
+                        .then(json => conosle.log('**avatar res**', json))
+                    if (!res.ok) res.text().then(t => console.log('text', t))
+                })
+                .catch(err => {
+                    console.log('errr avatar', err)
+                })
+        }
+    }
+
+    window.setNameAvatar = setNameAvatar
+
+
+
+
 
     window.testStuff = function testStuff () {
         fetch('/.netlify/functions/following', {
@@ -74,7 +133,7 @@ if (process.env.NODE_ENV === 'test') {
             body: JSON.stringify({
                 author: myKeys.id,
                 keys: { public: myKeys.public },
-                msg: msg
+                msg: followMsg
             }) 
         })
             .then(res => {
@@ -156,21 +215,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 
-
-
-
-
-function getPosts () {
-    return fetch('/.netlify/functions/get-relevant-posts')
-}
-
-
-
-
-
-
 function getFollowing () {
-
     // this should return a map of followed IDs => profile data
 
     // we request the list of who you're following,

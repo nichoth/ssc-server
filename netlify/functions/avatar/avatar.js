@@ -102,7 +102,7 @@ exports.handler = function (ev, ctx, cb) {
                     })
                 })
                 .catch(err => {
-                    console.log('errr fauna', err)
+                    console.log('***errr fauna***', err)
                     return cb(null, {
                         statusCode: 500,
                         body: JSON.stringify({
@@ -129,9 +129,7 @@ exports.handler = function (ev, ctx, cb) {
         return client.query(
             q.If(
                 q.Exists(
-                    q.Select('ref', q.Get(
-                        q.Match(q.Index('avatar-by-id'), '@' + keys.public)
-                    ))
+                    q.Match(q.Index('avatar-by-id'), '@' + keys.public)
                 ), 
                 q.Replace(
                     q.Select('ref', q.Get(
