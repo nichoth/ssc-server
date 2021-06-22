@@ -54,8 +54,7 @@ if (process.env.NODE_ENV === 'test') {
     console.log('**my keys**', myKeys)
     console.log('**user two**', userTwo)
 
-    // call `getRelevantPosts` after following user 2 and
-    // posting to their feed
+    window.userTwo = userTwo
 
     // post a follow msg
     // userOne should follow userTwo
@@ -109,7 +108,7 @@ if (process.env.NODE_ENV === 'test') {
             })
                 .then(res => {
                     res.json()
-                        .then(json => conosle.log('**avatar res**', json))
+                        .then(json => console.log('**avatar res**', json))
                     if (!res.ok) res.text().then(t => console.log('text', t))
                 })
                 .catch(err => {
@@ -125,6 +124,7 @@ if (process.env.NODE_ENV === 'test') {
 
 
     window.testStuff = function testStuff () {
+        // follow the userTwo
         fetch('/.netlify/functions/following', {
             method: 'POST',
             headers: {

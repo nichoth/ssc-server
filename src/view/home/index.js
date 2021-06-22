@@ -2,9 +2,6 @@ import { html } from 'htm/preact'
 import { useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
-var _ = {
-    get: require('lodash/get')
-}
 
 function Home (props) {
     var { me, emit, feed, following } = props;
@@ -60,23 +57,39 @@ function Home (props) {
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
                 var url = post.mentionUrls[0]
 
-                console.log('post, i', post, i)
+                // console.log('post, i', post, i)
 
                 var postAvatar = (post.value.author === me.secrets.id ?
                     myAvatar :
-                    _.get(following, post.value.author + '.avatar.url', null)
+                    (following[post.value.author] &&
+                        following[post.value.author].avatarUrl)
+                    // _.get(following, post.value.author + '.avatarUrl', null)
                     // following[post.value.author].avatar.url
                 )
+
+                console.log('~~~post avatar~~~', postAvatar)
+                console.log('~~~aaaaaaaa~~~', post.value.author + '.avatarUrl')
+
+                var avaStuff = following[post.value.author]
+                console.log('~~~aaaaaaa~~~', avaStuff)
+                console.log('~~~bbbbb~~~', avaStuff && avaStuff.avatarUrl)
+                // var avatarUrl = 
+
+                if (postAvatar && (post.value.author !== me.secrets.id)) {
+                    console.log('aaaaaaa', post.value.author + '.avatarUrl')
+                    console.log('~~~post avatar****',
+                        post.value.author, postAvatar) 
+                }
+
 
                 postAvatar = (postAvatar || 'data:image/svg+xml;utf8,' + 
                     generateFromString(''))
 
-                var userName = _.get(following, post.value.author +
-                    '.userName', '')
+                var userName = following[post.value.author] &&
+                    following[post.value.author].userName
                 var linkUrl = (post.value.author === me.secrets.id ?
                     '/' + me.profile.userName :
                     (userName ?  ('/' + userName) : null)
-                    // '/' + following[post.value.author].userName
                 )
 
                 return html`<li class="post">

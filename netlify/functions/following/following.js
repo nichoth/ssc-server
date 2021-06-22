@@ -45,13 +45,14 @@ exports.handler = function (ev, ctx, cb) {
     }
     
     if (ev.httpMethod === 'GET') {
-        console.log('**get req**')
         var author = ev.queryStringParameters.author
+
+        console.log( '**get following**', author )
 
         // who are you following?
         return follow.get(author)
             .then(res => {
-                // console.log('**in here**', res)
+                console.log('**following response**', res)
                 return cb(null, {
                     statusCode: 200,
                     body: JSON.stringify(res)

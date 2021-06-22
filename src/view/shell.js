@@ -19,7 +19,7 @@ function Shell (props) {
         if (!me || !me.secrets) return
         var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString();
 
-        console.log('qs', qs)
+        // console.log('qs', qs)
 
         fetch('/.netlify/functions/avatar' + '?' + qs)
             .then(res => {
@@ -59,20 +59,20 @@ function Shell (props) {
 
         var keys = me.secrets
         var qs = new URLSearchParams({ author: me.secrets.id }).toString();
-        console.log('meeeee', me)
-        console.log('qsssss', qs)
+        // console.log('meeeee', me)
+        // console.log('qsssss', qs)
         var url = '/.netlify/functions/abouts' + '?' + qs
 
         try {
             var _prev = await fetch(url).then(res => res.json())
-            console.log('prevvvvv', _prev.msg)
+            // console.log('prevvvvv', _prev.msg)
         } catch (err) {
             console.log('about fetch errr', err)
         }
 
-        console.log('prevvviousss', _prev)
+        // console.log('prevvviousss', _prev)
         var prev = _prev && _prev.msg && _prev.msg.value || null
-        console.log('goood prevvvv', prev)
+        // console.log('goood prevvvv', prev)
         var msg = ssc.createMsg(keys, prev || null, msgContent)
 
         // make the fetch call to set the name,
@@ -87,7 +87,7 @@ function Shell (props) {
         })
             .then(res => res.json())
             .then(res => {
-                console.log('**set name res**', res)
+                // console.log('**set name res**', res)
                 setResolving(false)
                 setNaming(false)
                 emit(evs.identity.setName, res.value.content.name)
