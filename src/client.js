@@ -6,14 +6,13 @@ console.log('aaaa')
 module.exports = function Client () {
     var userKeys = ssc.createKeys()
 
-
     var client = {
         getRelevantPosts: function (userId) {
             var qs = new URLSearchParams({
                 userId: userId
             }).toString()
 
-            fetch('/.netlify/functions/get-relevant-posts' + '?' + qs)
+            return fetch('/.netlify/functions/get-relevant-posts' + '?' + qs)
                 .then(res => {
                     return res.json()
                 })
@@ -22,12 +21,12 @@ module.exports = function Client () {
         follow: function (myKeys) {
             var followMsg = ssc.createMsg(myKeys, null, {
                 type: 'follow',
-                contact: useeKeyswo.id,
+                contact: userKeys.id,
                 author: myKeys.id
             })
 
 
-            fetch('/.netlify/functions/following', {
+            return fetch('/.netlify/functions/following', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -48,6 +47,7 @@ module.exports = function Client () {
         },
 
         getFollowing: function (author) {
+            console.log('**author**', author)
             // this should return a map of followed IDs => profile data
 
             // we request the list of who you're following,
@@ -59,6 +59,10 @@ module.exports = function Client () {
 
             return fetch('/.netlify/functions/following' + '?' + qs)
                 .then(res => res.json())
+                .then(stuff => {
+                    console.log('**stuff**', stuff)
+                    return stuff
+                })
         },
 
         setNameAvatar: function (name) {

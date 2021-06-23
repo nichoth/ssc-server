@@ -54,8 +54,9 @@ if (process.env.NODE_ENV === 'test') {
     window.testStuff = function testStuff () {
         follow(myKeys)
             .then(json => {
-                getFollowing()
+                getFollowing(state().me.secrets.id)
                     .then(res => {
+                        console.log('**got following**', res)
                         emit(evs.following.got, res)
                     })
                     .catch(err => {

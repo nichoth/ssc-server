@@ -57,7 +57,7 @@ function Home (props) {
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
                 var url = post.mentionUrls[0]
 
-                console.log('post, i', post, i)
+                // console.log('post, i', post, i)
 
                 var postAvatar = (post.value.author === me.secrets.id ?
                     myAvatar :
@@ -67,12 +67,12 @@ function Home (props) {
                     // following[post.value.author].avatar.url
                 )
 
-                if (!postAvatar) {
-                    console.log('following', following)
-                    console.log('aaaaa not aaaaaaa', post)
-                    console.log('following person', following[post.value.author])
-                    // following person undefined
-                }
+                // if (!postAvatar) {
+                //     console.log('following', following)
+                //     console.log('aaaaa not aaaaaaa', post)
+                //     console.log('following person', following[post.value.author])
+                //     // following person undefined
+                // }
 
 
                 // if (postAvatar && (post.value.author !== me.secrets.id)) {
