@@ -72,6 +72,8 @@ module.exports = function Client () {
                 name: name || 'fooo'
             })
 
+            console.log('name msg', nameMsg)
+
             // set name
             return fetch('/.netlify/functions/abouts', {
                 method: 'POST',
@@ -85,18 +87,23 @@ module.exports = function Client () {
             })
                 .then(res => {
                     console.log('**set name res**', res)
-                    return setAvatar()
+                    // res.json().then
+                    if (!res.ok) {
+                        res.text().then(t => console.log('errr', t))
+                    }
+
+                    // base64 smiling cube
+                    var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
+                    setAvatar(file)
                 })
 
-            // fetch('setAvatar')
-            function setAvatar () {
+            function setAvatar (file) {
                 return fetch('/.netlify/functions/avatar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         keys: { public: userKeys.public },
-                        // base64 smiling cube
-                        file: 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7',
+                        file
                         // msg: avatarMsg
                     })
                 })
@@ -121,7 +128,7 @@ module.exports = function Client () {
 
         },
 
-        testPost: function testPost () {
+        testPost: function testPost (content) {
             // a smiling face
             var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
@@ -133,7 +140,7 @@ module.exports = function Client () {
             // post a 'post' from userTwo
             var postMsg = ssc.createMsg(userKeys, null, {
                 type: 'post',
-                text: 'the post text content',
+                text: content || 'the post text content',
                 mentions: [_hash]
             })
 

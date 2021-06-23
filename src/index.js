@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'test') {
 
     window.setNameAvatar = setNameAvatar
 
-    window.testStuff = function testStuff () {
+    window.testStuff = function testStuff (text) {
         follow(myKeys)
             .then(json => {
                 getFollowing(state().me.secrets.id)
