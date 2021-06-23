@@ -162,7 +162,7 @@ if (process.env.NODE_ENV === 'test') {
                             })
                             .then(json => {
                                 // console.log('got relevant posts', json)
-                                console.log('got relevant posts', json.msg)
+                                // console.log('got relevant posts', json.msg)
                                 emit(evs.feed.got, json.msg)
                             })
                             .catch(err => {

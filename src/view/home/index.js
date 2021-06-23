@@ -57,7 +57,7 @@ function Home (props) {
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
                 var url = post.mentionUrls[0]
 
-                // console.log('post, i', post, i)
+                console.log('post, i', post, i)
 
                 var postAvatar = (post.value.author === me.secrets.id ?
                     myAvatar :
@@ -67,23 +67,23 @@ function Home (props) {
                     // following[post.value.author].avatar.url
                 )
 
-                console.log('~~~post avatar~~~', postAvatar)
-                console.log('~~~aaaaaaaa~~~', post.value.author + '.avatarUrl')
-
-                var avaStuff = following[post.value.author]
-                console.log('~~~aaaaaaa~~~', avaStuff)
-                console.log('~~~bbbbb~~~', avaStuff && avaStuff.avatarUrl)
-                // var avatarUrl = 
-
-                if (postAvatar && (post.value.author !== me.secrets.id)) {
-                    console.log('aaaaaaa', post.value.author + '.avatarUrl')
-                    console.log('~~~post avatar****',
-                        post.value.author, postAvatar) 
+                if (!postAvatar) {
+                    console.log('following', following)
+                    console.log('aaaaa not aaaaaaa', post)
+                    console.log('following person', following[post.value.author])
+                    // following person undefined
                 }
 
 
+                // if (postAvatar && (post.value.author !== me.secrets.id)) {
+                //     console.log('aaaaaaa', post.value.author + '.avatarUrl')
+                //     console.log('~~~post avatar****',
+                //         post.value.author, postAvatar) 
+                // }
+
+
                 postAvatar = (postAvatar || 'data:image/svg+xml;utf8,' + 
-                    generateFromString(''))
+                    generateFromString(post.value.author))
 
                 var userName = following[post.value.author] &&
                     following[post.value.author].userName
