@@ -72,7 +72,7 @@ module.exports = function Client () {
                 name: name || 'fooo'
             })
 
-            console.log('name msg', nameMsg)
+            console.log('**name msg**', nameMsg)
 
             // set name
             return fetch('/.netlify/functions/abouts', {

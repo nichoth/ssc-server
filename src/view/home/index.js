@@ -67,11 +67,11 @@ function Home (props) {
                 postAvatar = (postAvatar || 'data:image/svg+xml;utf8,' + 
                     generateFromString(post.value.author))
 
-                var userName = (following[post.value.author] &&
-                    following[post.value.author].userName)
+                var name = (following[post.value.author] &&
+                    following[post.value.author].name)
                 var linkUrl = (post.value.author === me.secrets.id ?
                     '/' + me.profile.userName :
-                    (userName ?  ('/' + userName) : null)
+                    (name ?  ('/' + name) : null)
                 )
 
                 // console.log('**link url**', linkUrl, post, following)
