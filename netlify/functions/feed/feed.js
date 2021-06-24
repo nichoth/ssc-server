@@ -51,8 +51,8 @@ exports.handler = function (ev, ctx, cb) {
                 body: JSON.stringify({
                     ok: true,
                     msgs: (res.data || []).map(post => {
-                        var mentionUrls = post.data.value.content
-                            .mentions.map(mention => {
+                        var mentionUrls = ((post.data.value.content
+                            .mentions) || []).map(mention => {
 
                                 // slugify the hash twice
                                 // don't know why we need to do it twice
