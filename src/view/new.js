@@ -3,6 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 var evs = require('../EVENTS')
 var ssc = require('@nichoth/ssc')
 const dragDrop = require('drag-drop')
+var createHash = require('create-hash')
 
 function New (props) {
     return html`<div class="route new-post">
@@ -167,10 +168,17 @@ function submit (me, feed, setErr, setRes, ev) {
     reader.readAsDataURL(file)
 }
 
+function getHash (file) {
+    var hash = createHash('sha256')
+    hash.update(file)
+    return hash.digest('base64')
+}
+
 // This will upload the file after having read it
 function upload (me, file, text, feed) {
+    var hash = getHash(file)
     var keys = me.secrets
-    var content = { type: 'test', text: text }
+    var content = { type: 'test', text: text, mentions: [hash] }
 
     console.log('feed', feed)
 
@@ -180,15 +188,15 @@ function upload (me, file, text, feed) {
         prev = clone(prev.value)
     }
 
-    console.log('**prev**', prev)
-    if (prev) {
-        console.log('**prev id**', ssc.getId(prev))
-    }
+    // console.log('**prev**', prev)
+    // if (prev) {
+    //     console.log('**prev id**', ssc.getId(prev))
+    // }
 
-    console.log('**next**', {
-        keys: me.secrets,
-        msg: ssc.createMsg(keys, prev || null, content)
-    })
+    // console.log('**next**', {
+    //     keys: me.secrets,
+    //     msg: ssc.createMsg(keys, prev || null, content)
+    // })
 
     return fetch('/.netlify/functions/post-one-message', {
         method: 'POST',
