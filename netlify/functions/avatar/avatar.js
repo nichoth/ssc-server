@@ -50,6 +50,17 @@ exports.handler = function (ev, ctx, cb) {
             .catch(err => {
                 console.log('errrrr in avatar query', err)
 
+                // they don't have an avatar yet
+                if (err.toString().includes('instance not found')) {
+                    return cb(null, {
+                        statusCode: 200,
+                        body: JSON.stringify({
+                            ok: true,
+                            avatarUrl: ''
+                        })
+                    })
+                }
+
                 return cb(null, {
                     statusCode: 500,
                     body: JSON.stringify({
