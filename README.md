@@ -29,7 +29,7 @@ What happens if you fork your feed? This server doesn not allow you to fork your
 -------------------------------------
 
 ## the log
-Just nonsense below vvvvvvvvvvvvvherevvvvvvvvvvv
+Just nonsense below vvvvvvvvvvvvv here vvvvvvvvvvv
 
 ---------------------------------------------------------
 
