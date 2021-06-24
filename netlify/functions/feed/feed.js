@@ -23,21 +23,19 @@ exports.handler = function (ev, ctx, cb) {
 
     console.log('**author**', author)
 
+    if (ev.httpMethod !== 'GET') {
+        return cb(null, {
+            statusCode: 400,
+            body: 'You have to send a GET request'
+        })
+    }
+
     if (!author) {
         return cb(null, {
             statusCode: 400,
             body: 'Missing author'
         })
     }
-
-
-    // if (ev.httpMethod !== 'GET') {
-    //     return cb(null, {
-    //         statusCode: 400,
-    //         body: 'You have to send a GET request'
-    //     })
-    // }
-
 
     client.query(
         q.Map(
@@ -82,7 +80,7 @@ exports.handler = function (ev, ctx, cb) {
                 statusCode: 500,
                 body: JSON.stringify({
                     ok: false,
-                    error: new Error('query')
+                    error: new Error('query').toString()
                 })
             })
         })

@@ -26,6 +26,9 @@ function Home (props) {
             })
             .then(json => {
                 console.log('feed json', json)
+                if (!json.ok) {
+                    return console.log('noooot ok', json)
+                }
                 var msgs = json.msgs
                 emit(evs.feed.got, msgs)
             })

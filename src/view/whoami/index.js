@@ -17,7 +17,7 @@ function Whoami (props) {
     }
 
     var splits = route.split('/').filter(Boolean)
-    console.log('splits', splits)
+    // console.log('splits', splits)
     var endpoint = splits[splits.length - 1]
     if (splits.length === 1) endpoint = 'default'
 
