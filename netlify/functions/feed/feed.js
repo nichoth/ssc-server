@@ -50,7 +50,7 @@ exports.handler = function (ev, ctx, cb) {
                 statusCode: 200,
                 body: JSON.stringify({
                     ok: true,
-                    msgs: res.data.map(post => {
+                    msgs: (res.data || []).map(post => {
                         var mentionUrls = post.data.value.content
                             .mentions.map(mention => {
 
