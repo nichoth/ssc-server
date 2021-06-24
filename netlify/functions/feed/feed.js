@@ -80,7 +80,7 @@ exports.handler = function (ev, ctx, cb) {
                 statusCode: 500,
                 body: JSON.stringify({
                     ok: false,
-                    error: new Error('query').toString()
+                    error: err.toString()
                 })
             })
         })
