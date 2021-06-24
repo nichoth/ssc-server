@@ -22,6 +22,9 @@ function Home (props) {
             })
         })
             .then(res => {
+                if (!res.ok) {
+                    return res.text().then(t => console.log('errrro', t))
+                }
                 return res.json()
             })
             .then(json => {
