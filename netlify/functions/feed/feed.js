@@ -18,8 +18,7 @@ cloudinary.config({
 
 
 exports.handler = function (ev, ctx, cb) {
-    var req = JSON.parse(ev.body)
-    var { author } = req
+    var { author } = JSON.parse(ev.body)
 
     console.log('**author**', author)
 
