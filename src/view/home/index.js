@@ -2,6 +2,8 @@ import { html } from 'htm/preact'
 import { useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
+var Client = require('../../client')
+var { getFollowing, getRelevantPosts } = Client()
 
 function Home (props) {
     var { me, emit, feed, following } = props;
@@ -11,33 +13,56 @@ function Home (props) {
     useEffect(() => {
         if (!me || !me.secrets) return
 
-        // should call `get-relevant-posts`
-        fetch('/.netlify/functions/feed', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                author: me.secrets.id
-            })
-        })
+
+        getFollowing(me.secrets.id)
             .then(res => {
-                if (!res.ok) {
-                    return res.text().then(t => console.log('errrro', t))
-                }
-                return res.json()
-            })
-            .then(json => {
-                console.log('feed json', json)
-                if (!json.ok) {
-                    return console.log('noooot ok', json)
-                }
-                var msgs = json.msgs
-                emit(evs.feed.got, msgs)
+                // console.log('**got following**', res)
+                emit(evs.following.got, res)
             })
             .catch(err => {
-                console.log('errrr in home', err)
+                console.log('oh no following errrrr', err)
             })
+
+
+
+        getRelevantPosts(me.secrets.id)
+            .then(res => {
+                // console.log('**got relevant posts**', res)
+                emit(evs.feed.got, res.msg)
+            })
+            .catch(err => {
+                console.log('errrrrr', err)
+            })
+
+
+
+
+        // fetch('/.netlify/functions/feed', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         author: me.secrets.id
+        //     })
+        // })
+        //     .then(res => {
+        //         if (!res.ok) {
+        //             return res.text().then(t => console.log('errrro', t))
+        //         }
+        //         return res.json()
+        //     })
+        //     .then(json => {
+        //         console.log('feed json', json)
+        //         if (!json.ok) {
+        //             return console.log('noooot ok', json)
+        //         }
+        //         var msgs = json.msgs
+        //         emit(evs.feed.got, msgs)
+        //     })
+        //     .catch(err => {
+        //         console.log('errrr in home', err)
+        //     })
     }, []);
 
     if (!me.secrets) {

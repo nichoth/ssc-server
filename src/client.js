@@ -59,10 +59,6 @@ module.exports = function Client () {
 
             return fetch('/.netlify/functions/following' + '?' + qs)
                 .then(res => res.json())
-                .then(stuff => {
-                    console.log('**stuff**', stuff)
-                    return stuff
-                })
         },
 
         setNameAvatar: function (name) {

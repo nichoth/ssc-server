@@ -70,6 +70,7 @@ if (process.env.NODE_ENV === 'test') {
                 testPost()
                     .then(res => {
                         console.log('**test post res**', res)
+
                         getRelevantPosts(me.secrets.id)
                             .then(res => {
                                 // console.log('**got relevant posts**', res)

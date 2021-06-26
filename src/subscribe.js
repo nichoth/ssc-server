@@ -36,7 +36,6 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.feed.got, msgs => {
-        console.log('got feed', msgs)
         state.feed.set(msgs)
     })
 
