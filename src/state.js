@@ -9,7 +9,7 @@ function State (keys, profile) {
         // feed: observ(null),
         relevantPosts: observ(null),
         route: observ('/'),
-        following: observ({}),
+        following: observ(null),
         userFeeds: observ({}),
         profiles: observ({}),
         me: struct({

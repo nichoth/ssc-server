@@ -8,7 +8,7 @@ var { getProfileByName, getFeedByName, getFollowing } = Client()
 function createProfileView (username) {
 
     return function Profile (props) {
-        var { emit, me } = props
+        var { emit, me, following } = props
 
         // component did mount
         useEffect(() => {
@@ -23,6 +23,19 @@ function createProfileView (username) {
             });
 
             console.log('**found user**', user)
+
+            if (!following) {
+                getFollowing(me.secrets.id)
+                    .then(res => {
+                        // console.log('**got following**', res)
+                        emit(evs.following.got, res)
+
+                        // if still no user, fetch them specifically
+                    })
+                    .catch(err => {
+                        console.log('oh no following errrrr', err)
+                    })
+            }
 
             if (!user) {
                 console.log('not user -- get profile')
@@ -40,19 +53,6 @@ function createProfileView (username) {
                 //                 emit(evs.feed.got, { id: res.id, msgs: _res })
                 //             })
                 //     })
-
-
-
-
-
-                getFollowing(me.secrets.id)
-                    .then(res => {
-                        // console.log('**got following**', res)
-                        emit(evs.following.got, res)
-                    })
-                    .catch(err => {
-                        console.log('oh no following errrrr', err)
-                    })
             }
         }, [])
 
