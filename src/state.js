@@ -6,9 +6,12 @@ function State (keys, profile) {
     console.log('in state', profile)
 
     var state = struct({
-        feed: observ(null),
+        // feed: observ(null),
+        relevantPosts: observ(null),
         route: observ('/'),
         following: observ({}),
+        userFeeds: observ({}),
+        profiles: observ({}),
         me: struct({
             source: observ(null),
             secrets: observ(keys),

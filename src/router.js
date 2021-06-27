@@ -3,6 +3,7 @@ var Home = require('./view/home')
 var New = require('./view/new')
 var Whoami = require('./view/whoami')
 var SingleImage = require('./view/single-image')
+var createProfileView = require('./view/profile')
 
 var tabs = {
     save: require('./view/whoami/save'),
@@ -49,7 +50,10 @@ function Router () {
     })
 
     router.addRoute('/:username', match => {
-
+        var { username } = match.params
+        return {
+            view: createProfileView(username)
+        }
     })
 
     return router

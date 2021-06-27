@@ -124,6 +124,14 @@ module.exports = function Client () {
 
         },
 
+        getFeedByName: function getFeedByName (name, index) {
+
+        },
+
+        getProfileByName: function getProfileByName (name, index) {
+
+        },
+
         testPost: function testPost (content) {
             // a smiling face
             var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'

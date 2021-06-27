@@ -23,7 +23,7 @@ exports.handler = function (ev, ctx, cb) {
     if (ev.httpMethod === 'GET') {
         // return the avatar
         var aboutWho = ev.queryStringParameters.aboutWho
-        console.log('**about who**', aboutWho)
+        console.log('**avatar - about who**', aboutWho)
 
         client.query(
             q.Get( q.Match(q.Index('avatar-by-id'), aboutWho) )

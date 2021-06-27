@@ -1,11 +1,12 @@
 var evs = require('./EVENTS')
 var Keys = require('./keys')
+var xtend = require('xtend')
 
 function subscribe (bus, state) {
 
     bus.on(evs.identity.setName, name => {
-        console.log('set name event', name)
-        state.profile.userName.set(name)
+        console.log('set name event', state(), name)
+        state.me.profile.userName.set(name)
     })
 
     bus.on(evs.identity.gotAvatar, ev => {
@@ -35,8 +36,22 @@ function subscribe (bus, state) {
         reader.readAsDataURL(file)
     })
 
-    bus.on(evs.feed.got, msgs => {
-        state.feed.set(msgs)
+    bus.on(evs.feed.got, ({ userId, msgs }) => {
+        // state.feed.set(msgs)
+        var newState = {}
+        newState[userId] = msgs
+        state.userFeeds.set(xtend(state.userFeeds(), newState))
+    })
+
+    bus.on(evs.profile.got, ev => {
+        var { id } = ev
+        var newState = {}
+        newStat[id] = ev
+        state.profiles.set(xtend(state.profiles(), newState))
+    })
+
+    bus.on(evs.relevantPosts.got, msgs => {
+        state.relevantPosts.set(msgs)
     })
 
     bus.on(evs.keys.got, ev => {

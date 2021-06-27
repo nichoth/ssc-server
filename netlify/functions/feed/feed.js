@@ -17,6 +17,13 @@ cloudinary.config({
 });
 
 
+
+// TODO -- should use a GET request
+
+// TODO -- need to be able to get a feed by username. this uses public key
+
+
+
 exports.handler = function (ev, ctx, cb) {
     var { author } = JSON.parse(ev.body)
 
