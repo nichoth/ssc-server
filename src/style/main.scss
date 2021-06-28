@@ -1,8 +1,9 @@
 @use './whoami';
 @use './post-list';
-@use './single-image.scss';
+@use './single-image';
 @use './shell';
 @use './new';
+@use './profile';
 
 @keyframes spinner {
     to {transform: rotate(360deg);}

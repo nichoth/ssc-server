@@ -16,16 +16,8 @@ function createProfileView (username) {
             // search for the username
             // TODO -- should get all users with a matching name, not just
             // the first one
-            var user = Object.keys(props.following).find(key => {
-                var _user = props.following[key]
-                // console.log('_____user', _user)
-                return _user.name === username;
-            });
-
-            console.log('**found user**', user)
-
             if (!following) {
-                getFollowing(me.secrets.id)
+                return getFollowing(me.secrets.id)
                     .then(res => {
                         // console.log('**got following**', res)
                         emit(evs.following.got, res)
@@ -36,6 +28,14 @@ function createProfileView (username) {
                         console.log('oh no following errrrr', err)
                     })
             }
+
+            var user = Object.keys(props.following).find(key => {
+                var _user = props.following[key]
+                // console.log('_____user', _user)
+                return _user.name === username;
+            });
+
+            console.log('**found user**', following[user])
 
             if (!user) {
                 console.log('not user -- get profile')
@@ -56,8 +56,26 @@ function createProfileView (username) {
             }
         }, [])
 
+        if (!props.following) {
+            return html`<div class="profile">
+                the profile view -- ${username}
+            </div>`
+        }
+
+        var theUserKey = Object.keys(props.following).find(key => {
+            var _user = props.following[key]
+            // console.log('_____user', _user)
+            return _user.name === username;
+        });
+
+        var theUser = following[theUserKey]
+        console.log('**the user**', theUser)
+
         return html`<div class="profile">
-            the profile view -- ${username}
+            <div class="profile-avatar">
+                <img src=${theUser.avatarUrl} />
+            </div>
+            <p>${theUser.name}</p>
         </div>`
     }
 }
