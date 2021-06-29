@@ -13,9 +13,6 @@ function createProfileView (username) {
         // component did mount
         useEffect(() => {
             console.log('props', props)
-            // search for the username
-            // TODO -- should get all users with a matching name, not just
-            // the first one
             if (!following) {
                 return getFollowing(me.secrets.id)
                     .then(res => {
@@ -31,18 +28,22 @@ function createProfileView (username) {
 
             var user = Object.keys(props.following).find(key => {
                 var _user = props.following[key]
-                // console.log('_____user', _user)
                 return _user.name === username;
             });
 
             console.log('**found user**', following[user])
 
-            if (!user) {
+            // search for the username
+            // TODO -- should get all users with a matching name, not just
+            // the first one
+
+            // if we have the following but the user is not in it
+            if (!user && following) {
+                // fetch the user profile
                 console.log('not user -- get profile')
 
                 // the problem is that there's no guaranteed order for the
                 // index in different servers/DBs
-
 
                 // getProfileByName(username)
                 //     .then(res => {

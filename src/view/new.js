@@ -72,6 +72,7 @@ function FilePicker (props) {
     function nevermind (ev) {
         ev.preventDefault()
         document.getElementById('image-input').value = ''
+        document.getElementById('caption').value = ''
         setSelectedFile(null)
     }
 
@@ -123,7 +124,7 @@ function FilePicker (props) {
         </div>
 
         <label for="caption">caption</label>
-        <textarea id="text" required=${true} name="text" placeholder=" "
+        <textarea required=${true} name="text" placeholder=" "
             id="caption"
         ><//>
 
