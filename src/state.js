@@ -19,7 +19,7 @@ function State (keys, profile) {
             profile: struct({
                 userName: observ((profile && profile.userName) || null)
             })
-        }),
+        })
     })
 
     return state

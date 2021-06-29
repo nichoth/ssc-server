@@ -4,7 +4,7 @@ var createHash = require('create-hash')
 console.log('aaaa')
 
 module.exports = function Client () {
-    var userKeys = ssc.createKeys()
+    // var userKeys = ssc.createKeys()
 
     var client = {
         getRelevantPosts: function (userId) {
@@ -18,7 +18,7 @@ module.exports = function Client () {
                 })
         },
 
-        follow: function (myKeys) {
+        follow: function (myKeys, userKeys) {
             var followMsg = ssc.createMsg(myKeys, null, {
                 type: 'follow',
                 contact: userKeys.id,
@@ -61,7 +61,7 @@ module.exports = function Client () {
                 .then(res => res.json())
         },
 
-        setNameAvatar: function (name) {
+        setNameAvatar: function (name, userKeys) {
             var nameMsg = ssc.createMsg(userKeys, null, {
                 type: 'about',
                 about: userKeys.id,
@@ -93,7 +93,7 @@ module.exports = function Client () {
                     setAvatar(file)
                 })
 
-            function setAvatar (file) {
+            function setAvatar (file, userKeys) {
                 return fetch('/.netlify/functions/avatar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -132,7 +132,7 @@ module.exports = function Client () {
 
         },
 
-        testPost: function testPost (content) {
+        testPost: function testPost (content, userKeys) {
             // a smiling face
             var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
