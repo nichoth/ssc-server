@@ -25,18 +25,33 @@ exports.handler = function (ev, ctx, cb) {
 
     // http method is get
     var userId = ev.queryStringParameters.userId
-
-
-
-
     var foafs = ev.queryStringParameters.foafs
 
     if (foafs) {
-        getWithFoafs(userId)
+        console.log('!!!foafs!!!', foafs)
+        return getWithFoafs(userId)
             .then(res => {
                 return cb(null, {
                     statusCode: 200,
-                    body: JSON.stringify(res)
+                    body: JSON.stringify({
+                        ok: true,
+                        // here we need to map them so they have a URL for the
+                        // image
+                        msg: res.map(msg => {
+                            return xtend(msg, {
+                                mentionUrls: msg.value.content.mentions ?
+                                    msg.value.content.mentions.map(m => {
+                                        // slugify the hash twice
+                                        // don't know why we need to do it twice
+                                        var slugifiedHash = encodeURIComponent('' + m)
+                                        var slugslug = encodeURIComponent(
+                                            slugifiedHash)
+                                        return cloudinary.url(slugslug)      
+                                    }) :
+                                    []
+                            })
+                        })
+                    })
                 })
             })
             .catch(err => {
@@ -47,9 +62,6 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
     }
-
-
-
 
     console.log('user id', userId)
 

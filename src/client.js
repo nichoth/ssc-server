@@ -179,7 +179,7 @@ module.exports = function Client () {
             })
                 .then(res => res.json())
                 .then(json => {
-                    console.log('***post response json***', json)
+                    // console.log('***post response json***', json)
                     return json
                 })
                 .catch(err => {

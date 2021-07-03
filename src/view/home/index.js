@@ -25,7 +25,7 @@ function Home (props) {
 
         getPostsWithFoafs(me.secrets.id)
             .then(res => {
-                // console.log('**got relevant posts**', res)
+                console.log('**got foaf posts**', res)
                 emit(evs.relevantPosts.got, res.msg)
             })
             .catch(err => {
@@ -62,7 +62,7 @@ function Home (props) {
             ${(following && relevantPosts && relevantPosts.map((post) => {
                 var writing = post.value.content.text
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
-                var url = post.mentionUrls[0]
+                var url = (post.mentionUrls && post.mentionUrls[0])
 
                 var postAvatar = (post.value.author === me.secrets.id ?
                     myAvatar :

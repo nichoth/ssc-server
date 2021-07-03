@@ -66,6 +66,9 @@ if (process.env.NODE_ENV === 'test') {
 
     window.followUserOne = function () {
         follow(myKeys, userOneKeys)
+            .then(res => {
+                console.log('success follow user one', res)
+            })
             .catch(err => {
                 console.log('oh no', err)
             })
@@ -75,25 +78,15 @@ if (process.env.NODE_ENV === 'test') {
     window.followFoaf = function () {
         console.log('foafing')
 
-        // follow userOne
-        // follow(state().me.secrets, userOneKeys)
-
         // have userOne follow userTwo
         follow(userOneKeys, userTwoKeys)
-
-        // make a post by userTwo
-        // testPost('test post', userTwoKeys)
-
-
-        // call `getRelevantPosts`, should contain the userTwo post
-        // getRelevantPosts(state().me.secrets.id)
-        //     .then(res => {
-        //         console.log('got foaf relevants', res)
-        //     })
+            .then(res => {
+                console.log('success following foaf', res)
+            })
     }
 
     window.userOneName = function () {
-        console.log('user on keys', userOneKeys)
+        console.log('user one keys', userOneKeys)
         setNameAvatar('userOne', userOneKeys)
             .then(res => {
                 if (!res.ok) {
@@ -109,10 +102,7 @@ if (process.env.NODE_ENV === 'test') {
     window.userTwoName = function () {
         setNameAvatar('userTwo', userTwoKeys)
             .then(res => {
-                res.json()
-                    .then(res => {
-                        console.log('successs', res)
-                    })
+                console.log('success user two name', res)
             })
             .catch(err => {
                 console.log('errrrr', err)
@@ -121,13 +111,18 @@ if (process.env.NODE_ENV === 'test') {
 
     window.user2Post = function () {
         testPost('test content', userTwoKeys)
+            .then(res => {
+                console.log('posted user 2 msg', res)
+            })
     }
 
 
-    window.getFoafs = function () {
-        getPostsWithFoafs(state().me.secrets.id)
+    window.getFoafPosts = function () {
+        console.log('my id', state().me.secrets.id)
+        getPostsWithFoafs(state.me.secrets().id)
             .then(res => {
-                console.log('**got foafs**', res)
+                console.log('**got foaf posts**', res.msg)
+                // emit(evs.relevantPosts.got, res.msg)
             })
     }
 
@@ -172,6 +167,7 @@ if (process.env.NODE_ENV === 'test') {
 
 // save the profile to localStorage when it changes
 // it gets set in the view functions i think
+// should do this is the subscription
 state.me.profile(function onChange (profile) {
     console.log('***profile change', profile)
     Identity.save(profile)
