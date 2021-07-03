@@ -8,15 +8,14 @@ var evs = require('../EVENTS')
 function Shell (props) {
     var { path, emit, me } = props
     var { profile } = me
-    var [isNaming, setNaming] = useState(false)
-    var [isResolving, setResolving] = useState(false)
-
+    // var [isNaming, setNaming] = useState(false)
+    // var [isResolving, setResolving] = useState(false)
 
 
     // component did mount
     // get avatar
     useEffect(() => {
-        if (!me || !me.secrets) return
+        if (!me || !me.secrets || !me.secrets.id) return
         var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString();
 
         // console.log('qs', qs)
@@ -38,46 +37,38 @@ function Shell (props) {
     }, [])
 
 
-
-
-
-    async function saveName (me, ev) {
-        ev.preventDefault()
-        var name = ev.target.elements['user-name'].value
-        console.log('set name in here', name)
+    async function saveName (me, newName) {
+        // ev.preventDefault()
+        // var name = ev.target.elements['user-name'].value
+        console.log('set name in here', newName)
 
         var msgContent = {
             type: 'about',
             about: me.secrets.id,
-            name: name
+            name: newName
         }
 
         // should make the API call in here
         // and emit an event when you get a response
 
-        setResolving(true)
+        // setResolving(true)
 
         var keys = me.secrets
         var qs = new URLSearchParams({ author: me.secrets.id }).toString();
-        // console.log('meeeee', me)
-        // console.log('qsssss', qs)
         var url = '/.netlify/functions/abouts' + '?' + qs
 
         try {
             var _prev = await fetch(url).then(res => res.json())
-            // console.log('prevvvvv', _prev.msg)
         } catch (err) {
             console.log('about fetch errr', err)
         }
 
-        // console.log('prevvviousss', _prev)
         var prev = _prev && _prev.msg && _prev.msg.value || null
-        // console.log('goood prevvvv', prev)
         var msg = ssc.createMsg(keys, prev || null, msgContent)
 
         // make the fetch call to set the name,
         // then emit the event after success
-        fetch('/.netlify/functions/set-name', {
+        return fetch('/.netlify/functions/set-name', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -87,13 +78,13 @@ function Shell (props) {
         })
             .then(res => res.json())
             .then(res => {
-                // console.log('**set name res**', res)
-                setResolving(false)
-                setNaming(false)
+                // setResolving(false)
+                // setNaming(false)
                 emit(evs.identity.setName, res.value.content.name)
+                return res
             })
             .catch(err => {
-                setResolving(false)
+                // setResolving(false)
                 console.log('errrrr', err)
             })
     }
@@ -104,36 +95,38 @@ function Shell (props) {
         return baseHref === basePath ? 'active' : ''
     }
 
-    function _nameYourself (ev) {
-        ev.preventDefault()
-        setNaming(true)
-    }
+    // function _nameYourself (ev) {
+    //     ev.preventDefault()
+    //     setNaming(true)
+    // }
 
-    function stopNamingYourself (ev) {
-        ev.preventDefault()
-        setNaming(false)
-    }
+    // function stopNamingYourself (ev) {
+    //     ev.preventDefault()
+    //     setNaming(false)
+    // }
 
-    function NameEditor (props) {
-        var { me } = props
-        var { profile } = me
+    // function NameEditor (props) {
+    //     var { me } = props
+    //     var { profile } = me
 
-        return html`<form onreset=${stopNamingYourself}
-            onsubmit=${saveName.bind(null, me)}
-            class=${'name-editor' + (isResolving ? ' resolving' : '')}
-        >
-            <input name="user-name" id="user-name"
-                placeholder="${getName(profile)}"
-            />
-            <button type="reset">cancel</button>
-            <button type="submit">save</button>
-        </form>`
-    }
+    //     return html`<form onreset=${stopNamingYourself}
+    //         onsubmit=${saveName.bind(null, me)}
+    //         class=${'name-editor' + (isResolving ? ' resolving' : '')}
+    //     >
+    //         <input name="user-name" id="user-name"
+    //             placeholder="${getName(profile)}"
+    //         />
+    //         <button type="reset">cancel</button>
+    //         <button type="submit">save</button>
+    //     </form>`
+    // }
 
     var avatarUrl = (me.avatar && me.avatar.url) ||
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.secrets && 
             me.secrets.public) || '')
         )
+
+    console.log('secrets', me.secrets)
 
     return html`<div class="shell">
         <ul class="nav-part">
@@ -147,22 +140,11 @@ function Shell (props) {
                     }}
                 />
 
-                ${isNaming ?
-                    (html`<${NameEditor} ...${props} />`) :
-                    html`
-                        <h1>${getName(profile)}</h1>
+                ${me.secrets.id ? 
+                    html`<${EditableField} name="username" value=${getName(profile)}
+                        onSave=${saveName.bind(null, me)} />` :
 
-                        <!-- pencil emoji -->
-                        ${me.secrets ?
-                            html`<button class="edit-pencil"
-                                onClick=${_nameYourself}
-                                title="edit"
-                            >
-                                ✏
-                            </button>` :
-                            null
-                        }
-                    `
+                    'Anonymous'
                 }
             </li>
             <li class="${active('/')}"><a href="/">home</a></li>
@@ -178,7 +160,7 @@ function Shell (props) {
 
 
 function getName (profile) {
-    return (profile && profile.userName) || 'Anonymous'
+    return (profile && profile.userName) || null
 }
 
 module.exports = Shell
@@ -198,4 +180,64 @@ function EditableImg (props) {
             onchange=${onSelect}
         />
     `
+}
+
+function EditableField (props) {
+    var { value, onSave, name } = props
+    var [isEditing, setEditing] = useState(false)
+    var [isResolving, setResolving] = useState(false)
+
+    function _setEditing (ev) {
+        ev.preventDefault()
+        setEditing(true)
+    }
+
+    function stopEditing (ev) {
+        ev.preventDefault()
+        setEditing(false)
+    }
+
+    function _onSave (ev) {
+        ev.preventDefault()
+        var val = ev.target.elements[name].value
+        setResolving(true)
+        onSave(val)
+            .then(() => {
+                setResolving(false)
+            })
+            .catch(err => {
+                setResolving(false)
+                console.log('errrrrr', err)
+            })
+    }
+
+    return html`
+        ${isEditing ?
+            html`<form onreset=${stopEditing}
+                onsubmit=${_onSave}
+                class=${'editable-field' + (isResolving ? ' resolving' : '')}
+            >
+                <input name=${name} id=${name} placeholder="${value}" />
+                <button type="reset" disabled=${isResolving}>cancel</button>
+                <button type="submit" disabled=${isResolving}>save</button>
+            </form>` :
+
+            html`
+                <h1>${value}</h1>
+
+                <!-- pencil emoji -->
+                <button class="edit-pencil"
+                    onClick=${_setEditing}
+                    title="edit"
+                >
+                    ✏
+                </button>
+            `
+        }
+    `
+
+
+
+
+
 }

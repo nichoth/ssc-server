@@ -23,14 +23,16 @@ function Home (props) {
                 console.log('oh no following errrrr', err)
             })
 
-        getPostsWithFoafs(me.secrets.id)
-            .then(res => {
-                console.log('**got foaf posts**', res)
-                emit(evs.relevantPosts.got, res.msg)
-            })
-            .catch(err => {
-                console.log('errrrrr', err)
-            })
+        if (me.secrets.id) {
+            getPostsWithFoafs(me.secrets.id)
+                .then(res => {
+                    console.log('**got foaf posts**', res)
+                    emit(evs.relevantPosts.got, res.msg)
+                })
+                .catch(err => {
+                    console.log('errrrrr', err)
+                })
+        }
 
 
         // getRelevantPosts(me.secrets.id)
@@ -43,7 +45,7 @@ function Home (props) {
         //     })
     }, []);
 
-    if (!me.secrets) {
+    if (!me.secrets || !me.secrets.id) {
         return html`<div class="home-route">
             <p>It looks like you don't have an identity. Create one
                 <a href="/whoami/create"> here</a></p>
