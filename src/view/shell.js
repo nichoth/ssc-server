@@ -8,17 +8,12 @@ var evs = require('../EVENTS')
 function Shell (props) {
     var { path, emit, me } = props
     var { profile } = me
-    // var [isNaming, setNaming] = useState(false)
-    // var [isResolving, setResolving] = useState(false)
-
 
     // component did mount
     // get avatar
     useEffect(() => {
         if (!me || !me.secrets || !me.secrets.id) return
         var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString();
-
-        // console.log('qs', qs)
 
         fetch('/.netlify/functions/avatar' + '?' + qs)
             .then(res => {
@@ -38,8 +33,6 @@ function Shell (props) {
 
 
     async function saveName (me, newName) {
-        // ev.preventDefault()
-        // var name = ev.target.elements['user-name'].value
         console.log('set name in here', newName)
 
         var msgContent = {
@@ -47,11 +40,6 @@ function Shell (props) {
             about: me.secrets.id,
             name: newName
         }
-
-        // should make the API call in here
-        // and emit an event when you get a response
-
-        // setResolving(true)
 
         var keys = me.secrets
         var qs = new URLSearchParams({ author: me.secrets.id }).toString();
@@ -78,13 +66,11 @@ function Shell (props) {
         })
             .then(res => res.json())
             .then(res => {
-                // setResolving(false)
-                // setNaming(false)
+                console.log('**set name**', res)
                 emit(evs.identity.setName, res.value.content.name)
                 return res
             })
             .catch(err => {
-                // setResolving(false)
                 console.log('errrrr', err)
             })
     }
@@ -95,38 +81,10 @@ function Shell (props) {
         return baseHref === basePath ? 'active' : ''
     }
 
-    // function _nameYourself (ev) {
-    //     ev.preventDefault()
-    //     setNaming(true)
-    // }
-
-    // function stopNamingYourself (ev) {
-    //     ev.preventDefault()
-    //     setNaming(false)
-    // }
-
-    // function NameEditor (props) {
-    //     var { me } = props
-    //     var { profile } = me
-
-    //     return html`<form onreset=${stopNamingYourself}
-    //         onsubmit=${saveName.bind(null, me)}
-    //         class=${'name-editor' + (isResolving ? ' resolving' : '')}
-    //     >
-    //         <input name="user-name" id="user-name"
-    //             placeholder="${getName(profile)}"
-    //         />
-    //         <button type="reset">cancel</button>
-    //         <button type="submit">save</button>
-    //     </form>`
-    // }
-
     var avatarUrl = (me.avatar && me.avatar.url) ||
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.secrets && 
             me.secrets.public) || '')
         )
-
-    console.log('secrets', me.secrets)
 
     return html`<div class="shell">
         <ul class="nav-part">
@@ -140,7 +98,7 @@ function Shell (props) {
                     }}
                 />
 
-                ${me.secrets.id ? 
+                ${(me && me.secrets && me.secrets.id) ? 
                     html`<${EditableField} name="username" value=${getName(profile)}
                         onSave=${saveName.bind(null, me)} />` :
 
@@ -157,7 +115,6 @@ function Shell (props) {
         ${props.children}
     </div>`
 }
-
 
 function getName (profile) {
     return (profile && profile.userName) || null
@@ -211,33 +168,26 @@ function EditableField (props) {
             })
     }
 
+    if (isEditing) {
+        return html`<form onreset=${stopEditing}
+            onsubmit=${_onSave}
+            class=${'editable-field' + (isResolving ? ' resolving' : '')}
+        >
+            <input name=${name} id=${name} placeholder="${value}" />
+            <button type="reset" disabled=${isResolving}>cancel</button>
+            <button type="submit" disabled=${isResolving}>save</button>
+        </form>`;
+    }
+
     return html`
-        ${isEditing ?
-            html`<form onreset=${stopEditing}
-                onsubmit=${_onSave}
-                class=${'editable-field' + (isResolving ? ' resolving' : '')}
-            >
-                <input name=${name} id=${name} placeholder="${value}" />
-                <button type="reset" disabled=${isResolving}>cancel</button>
-                <button type="submit" disabled=${isResolving}>save</button>
-            </form>` :
+        <h1>${value}</h1>
 
-            html`
-                <h1>${value}</h1>
-
-                <!-- pencil emoji -->
-                <button class="edit-pencil"
-                    onClick=${_setEditing}
-                    title="edit"
-                >
-                    ✏
-                </button>
-            `
-        }
-    `
-
-
-
-
-
+        <!-- pencil emoji -->
+        <button class="edit-pencil"
+            onClick=${_setEditing}
+            title="edit"
+        >
+            ✏
+        </button>
+    `;
 }

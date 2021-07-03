@@ -9,7 +9,6 @@ function Home (props) {
     var { me, emit, relevantPosts, following } = props;
     console.log('props in home', props);
 
-    // this should be in the router maybe
     // component did mount
     useEffect(() => {
         if (!me || !me.secrets) return
@@ -33,16 +32,6 @@ function Home (props) {
                     console.log('errrrrr', err)
                 })
         }
-
-
-        // getRelevantPosts(me.secrets.id)
-        //     .then(res => {
-        //         // console.log('**got relevant posts**', res)
-        //         emit(evs.relevantPosts.got, res.msg)
-        //     })
-        //     .catch(err => {
-        //         console.log('errrrrr', err)
-        //     })
     }, []);
 
     if (!me.secrets || !me.secrets.id) {
