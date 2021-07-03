@@ -13,12 +13,12 @@ var router = require('./router')()
 var Shell = require('./view/shell')
 // var createHash = require('create-hash')
 // const sha256 = require('simple-sha256')
-var ssc = require('@nichoth/ssc')
+// var ssc = require('@nichoth/ssc')
 
 if (process.env.NODE_ENV === 'test') {
     var Client = require('./client')
     var { getFollowing, follow, setNameAvatar, testPost,
-        getRelevantPosts } = Client()
+        getRelevantPosts, getPostsWithFoafs } = Client()
 }
 
 var bus = Bus({ memo: true })
@@ -56,7 +56,7 @@ if (process.env.NODE_ENV === 'test') {
         "id": "@g+Aw6QpfN+hlXTUQUlXZ3z6d56se+I8JQiRrJo/nfIE=.ed25519"
     }
 
-    // post a msg where test user follows another user
+    // post a msg where user one follows another user
     window.foaf = function () {
         console.log('foafing')
 
@@ -73,13 +73,24 @@ if (process.env.NODE_ENV === 'test') {
         // have userOne follow userTwo
         follow(userOneKeys, userTwoKeys)
 
+
+
         // make a post by userTwo
         testPost('test post', userTwoKeys)
 
+
+
         // call `getRelevantPosts`, should contain the userTwo post
-        getRelevantPosts(state().me.secrets.id)
+        // getRelevantPosts(state().me.secrets.id)
+        //     .then(res => {
+        //         console.log('got foaf relevants', res)
+        //     })
+    }
+
+    window.getFoafs = function () {
+        getPostsWithFoafs(state().me.secrets.id)
             .then(res => {
-                console.log('got relevants', res)
+                console.log('got relevants with foafs', res)
             })
     }
 

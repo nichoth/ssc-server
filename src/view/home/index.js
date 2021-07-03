@@ -3,7 +3,7 @@ import { useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
 var Client = require('../../client')
-var { getFollowing, getRelevantPosts } = Client()
+var { getFollowing, getPostsWithFoafs } = Client()
 
 function Home (props) {
     var { me, emit, relevantPosts, following } = props;
@@ -22,7 +22,7 @@ function Home (props) {
                 console.log('oh no following errrrr', err)
             })
 
-        getRelevantPosts(me.secrets.id)
+        getPostsWithFoafs(me.secrets.id)
             .then(res => {
                 // console.log('**got relevant posts**', res)
                 emit(evs.relevantPosts.got, res.msg)
@@ -30,6 +30,16 @@ function Home (props) {
             .catch(err => {
                 console.log('errrrrr', err)
             })
+
+
+        // getRelevantPosts(me.secrets.id)
+        //     .then(res => {
+        //         // console.log('**got relevant posts**', res)
+        //         emit(evs.relevantPosts.got, res.msg)
+        //     })
+        //     .catch(err => {
+        //         console.log('errrrrr', err)
+        //     })
     }, []);
 
     if (!me.secrets) {
@@ -48,7 +58,7 @@ function Home (props) {
 
     return html`<div class="home-route">
         <ul class="post-list">
-            ${(relevantPosts && relevantPosts.map((post) => {
+            ${(following && relevantPosts && relevantPosts.map((post) => {
                 var writing = post.value.content.text
                 // var url = 'https://res.cloudinary.com/nichoth/image/upload/v1620969604/' + createURI(post.value.content.mentions[0]) + '.jpg'
                 var url = post.mentionUrls[0]

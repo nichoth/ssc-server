@@ -1,12 +1,22 @@
 var ssc = require('@nichoth/ssc')
 var createHash = require('create-hash')
 
-console.log('aaaa')
-
 module.exports = function Client () {
     // var userKeys = ssc.createKeys()
 
     var client = {
+        getPostsWithFoafs: function (userId) {
+            var qs = new URLSearchParams({
+                userId: userId,
+                foafs: true
+            }).toString()
+
+            return fetch('/.netlify/functions/get-relevant-posts' + '?' + qs)
+                .then(res => {
+                    return res.json()
+                })
+        },
+
         getRelevantPosts: function (userId) {
             var qs = new URLSearchParams({
                 userId: userId
@@ -47,7 +57,7 @@ module.exports = function Client () {
         },
 
         getFollowing: function (author) {
-            console.log('**author**', author)
+            // console.log('**author**', author)
             // this should return a map of followed IDs => profile data
 
             // we request the list of who you're following,
