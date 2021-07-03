@@ -161,6 +161,7 @@ function EditableField (props) {
         onSave(val)
             .then(() => {
                 setResolving(false)
+                setEditing(false)
             })
             .catch(err => {
                 setResolving(false)
