@@ -10,6 +10,7 @@ function Home (props) {
     console.log('props in home', props);
 
     // this should be in the router maybe
+    // component did mount
     useEffect(() => {
         if (!me || !me.secrets) return
 
