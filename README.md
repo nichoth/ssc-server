@@ -20,7 +20,7 @@ This creates a function `window.testStuff` that will create a second user and so
 npm run start-test
 ```
 
-## cypress test
+## cypress tests
 Run tests with the cypress GUI
 
 ```
