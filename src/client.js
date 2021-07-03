@@ -80,6 +80,9 @@ module.exports = function Client () {
 
             console.log('**name msg**', nameMsg)
 
+            console.log('**public**', userKeys)
+            console.log('**public**', userKeys.public)
+
             // set name
             return fetch('/.netlify/functions/abouts', {
                 method: 'POST',
@@ -93,14 +96,19 @@ module.exports = function Client () {
             })
                 .then(res => {
                     console.log('**set name res**', res)
-                    // res.json().then
                     if (!res.ok) {
-                        res.text().then(t => console.log('errr', t))
+                        return res.text().then(t => {
+                            console.log('oh no errr', t)
+                            return t
+                        })
                     }
 
                     // base64 smiling cube
                     var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
-                    setAvatar(file)
+                    return setAvatar(file, userKeys)
+                })
+                .catch(err => {
+                    console.log('aarrrrrr', err)
                 })
 
             function setAvatar (file, userKeys) {
@@ -122,7 +130,7 @@ module.exports = function Client () {
                                 })
                         }
 
-                        res.json().then(json => {
+                        return res.json().then(json => {
                             console.log('**avatar res**', json)
                             return json
                         })

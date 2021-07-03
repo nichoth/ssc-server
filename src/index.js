@@ -49,6 +49,7 @@ if (process.env.NODE_ENV === 'test') {
     var me = state.me()
     var myKeys = me.secrets
     console.log('**my keys**', myKeys)
+
     var userOneKeys = window.userOneKeys = {
         "curve": "ed25519",
         "public": "g+Aw6QpfN+hlXTUQUlXZ3z6d56se+I8JQiRrJo/nfIE=.ed25519",
@@ -56,28 +57,32 @@ if (process.env.NODE_ENV === 'test') {
         "id": "@g+Aw6QpfN+hlXTUQUlXZ3z6d56se+I8JQiRrJo/nfIE=.ed25519"
     }
 
-    // post a msg where user one follows another user
-    window.foaf = function () {
+    var userTwoKeys = window.userTwoKeys = {
+        "curve": "ed25519",
+        "public": "u0MOa3J2abucXDHblubJh48kDuGpU2ZhuPA9ioNp/OY=.ed25519",
+        "private": "kuZuJORTMJuZzJKqHX1qbr4AGvPTbYfgx1/JV90lw3a7Qw5rcnZpu5xcMduW5smHjyQO4alTZmG48D2Kg2n85g==.ed25519",
+        "id": "@u0MOa3J2abucXDHblubJh48kDuGpU2ZhuPA9ioNp/OY=.ed25519"
+    }
+
+    window.followUserOne = function () {
+        follow(myKeys, userOneKeys)
+            .catch(err => {
+                console.log('oh no', err)
+            })
+    }
+
+    // post a msg where userOne follows another user
+    window.followFoaf = function () {
         console.log('foafing')
 
-        var userTwoKeys = {
-            "curve": "ed25519",
-            "public": "u0MOa3J2abucXDHblubJh48kDuGpU2ZhuPA9ioNp/OY=.ed25519",
-            "private": "kuZuJORTMJuZzJKqHX1qbr4AGvPTbYfgx1/JV90lw3a7Qw5rcnZpu5xcMduW5smHjyQO4alTZmG48D2Kg2n85g==.ed25519",
-            "id": "@u0MOa3J2abucXDHblubJh48kDuGpU2ZhuPA9ioNp/OY=.ed25519"
-        }
-
         // follow userOne
-        follow(state().me.secrets, userOneKeys)
+        // follow(state().me.secrets, userOneKeys)
 
         // have userOne follow userTwo
         follow(userOneKeys, userTwoKeys)
 
-
-
         // make a post by userTwo
-        testPost('test post', userTwoKeys)
-
+        // testPost('test post', userTwoKeys)
 
 
         // call `getRelevantPosts`, should contain the userTwo post
@@ -87,10 +92,42 @@ if (process.env.NODE_ENV === 'test') {
         //     })
     }
 
+    window.userOneName = function () {
+        console.log('user on keys', userOneKeys)
+        setNameAvatar('userOne', userOneKeys)
+            .then(res => {
+                if (!res.ok) {
+                    return res.text().then(t => console.log('tttt', t))
+                }
+                console.log('success', res)
+            })
+            .catch(err => {
+                console.log('errrrr', err)
+            })
+    }
+
+    window.userTwoName = function () {
+        setNameAvatar('userTwo', userTwoKeys)
+            .then(res => {
+                res.json()
+                    .then(res => {
+                        console.log('successs', res)
+                    })
+            })
+            .catch(err => {
+                console.log('errrrr', err)
+            })
+    }
+
+    window.user2Post = function () {
+        testPost('test content', userTwoKeys)
+    }
+
+
     window.getFoafs = function () {
         getPostsWithFoafs(state().me.secrets.id)
             .then(res => {
-                console.log('got relevants with foafs', res)
+                console.log('**got foafs**', res)
             })
     }
 

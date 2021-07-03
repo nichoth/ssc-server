@@ -1,5 +1,7 @@
 require('dotenv').config()
-var getRelevantPosts = require('@nichoth/ssc-fauna/relevant-posts').get
+var relevant = require('@nichoth/ssc-fauna/relevant-posts')
+var getRelevantPosts = relevant.get
+var getWithFoafs = relevant.getWithFoafs
 var xtend = require('xtend')
 
 let cloudinary = require("cloudinary").v2;
@@ -23,6 +25,31 @@ exports.handler = function (ev, ctx, cb) {
 
     // http method is get
     var userId = ev.queryStringParameters.userId
+
+
+
+
+    var foafs = ev.queryStringParameters.foafs
+
+    if (foafs) {
+        getWithFoafs(userId)
+            .then(res => {
+                return cb(null, {
+                    statusCode: 200,
+                    body: JSON.stringify(res)
+                })
+            })
+            .catch(err => {
+                console.log('rrrrrrrr', err)
+                return cb(null, {
+                    statusCode: 500,
+                    body: err.toString()
+                })
+            })
+    }
+
+
+
 
     console.log('user id', userId)
 

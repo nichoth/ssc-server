@@ -3,7 +3,7 @@ import { useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
 var Client = require('../../client')
-var { getFollowing, getPostsWithFoafs } = Client()
+var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
     var { me, emit, relevantPosts, following } = props;

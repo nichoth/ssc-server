@@ -23,10 +23,10 @@ exports.handler = function (ev, ctx, cb) {
     }
 
     if (ev.httpMethod === 'POST') {
-        console.log('**posting**')
+        // console.log('**posting**')
         var { author, keys, msg } = JSON.parse(ev.body)
 
-        console.log('aaaaaaaa herr', author, keys, msg)
+        // console.log('aaaaaaaa herr', author, keys, msg)
 
         follow.post(author, keys, msg)
             .then(res => {
