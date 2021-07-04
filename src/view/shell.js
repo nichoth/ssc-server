@@ -99,8 +99,11 @@ function Shell (props) {
                 />
 
                 ${(me && me.secrets && me.secrets.id) ? 
-                    html`<${EditableField} name="username" value=${getName(profile)}
-                        onSave=${saveName.bind(null, me)} />` :
+                    html`<${EditableField} name="username"
+                        class="name-editor"
+                        value=${getName(profile)}
+                        onSave=${saveName.bind(null, me)}
+                    />` :
 
                     'Anonymous'
                 }
@@ -169,10 +172,14 @@ function EditableField (props) {
             })
     }
 
+    var _class = 'editable-field' +
+        (isResolving ? ' resolving' : '') +
+        (props.class ? (' ' + props.class) : '')
+
     if (isEditing) {
         return html`<form onreset=${stopEditing}
             onsubmit=${_onSave}
-            class=${'editable-field' + (isResolving ? ' resolving' : '')}
+            class=${_class}
         >
             <input name=${name} id=${name} placeholder="${value}" />
             <button type="reset" disabled=${isResolving}>cancel</button>
