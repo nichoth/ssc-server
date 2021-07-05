@@ -192,6 +192,7 @@ function Connector ({ emit, state }) {
         })
     })
 
+    var { setRoute } = route
     var match = router.match(_state.route)
     console.log('match', match)
     if (!match) console.log('not match')
@@ -200,12 +201,17 @@ function Connector ({ emit, state }) {
     var routeView = route ? route.view : null
     var subView = route ? route.subView : null
 
-    return html`<${Shell} emit=${emit} ...${_state} path=${_state.route}>
+    return html`<${Shell} setRoute=${setRoute} emit=${emit} ...${_state}
+        path=${_state.route}
+    >
         <${routeView} emit=${emit} ...${_state} params=${params}
+            setRoute=${setRoute}
             path=${_state.route}
         >
             ${subView ?
-                html`<${subView} emit=${emit} ...${_state} />` :
+                html`<${subView} emit=${emit} ...${_state}
+                    setRoute=${setRoute}
+                />` :
                 null
             }
         <//>

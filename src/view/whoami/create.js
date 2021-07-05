@@ -6,7 +6,7 @@ var evs = require('../../EVENTS')
 module.exports = Create
 
 function Create (props) {
-    var { emit } = props
+    var { emit, setRoute } = props
     console.log('props create', props)
 
     function createLocalId (ev) {
@@ -14,6 +14,7 @@ function Create (props) {
         var keys = Keys.create()
         console.log('create local id', keys)
         emit(evs.keys.got, { source: null, secrets: keys })
+        setRoute('/whoami')
     }
 
     function submitCreationToServer (ev) {
