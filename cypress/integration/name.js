@@ -16,8 +16,9 @@ describe('create a new identity', () => {
         cy.get('.id-source:first button[type=submit]')
             .click()
 
+        // should be back at the whoami route
         cy.url().should('eq', URL + '/whoami')
 
-        // should be back at the home route or something
+        cy.get('.whoami pre').should('exist')
     })
 })

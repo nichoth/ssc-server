@@ -178,12 +178,17 @@ route(function onRoute (path) {
     // then the `connector` finds the view via the router
     state.route.set(path)
 
-    render(html`<${Connector} emit=${emit} state=${state} />`,
-        document.getElementById('content'))
+    console.log('**magic**', route)
+    var { setRoute } = route
+    console.log('**magic set route**', setRoute)
+
+    render(html`<${Connector} emit=${emit} state=${state}
+        setRoute=${setRoute}
+    />`, document.getElementById('content'))
 })
 
 // connect preact state with observ state
-function Connector ({ emit, state }) {
+function Connector ({ emit, state, setRoute }) {
     const [_state, setState] = useState(state())
 
     state(function onChange (newState) {
@@ -192,7 +197,6 @@ function Connector ({ emit, state }) {
         })
     })
 
-    var { setRoute } = route
     var match = router.match(_state.route)
     console.log('match', match)
     if (!match) console.log('not match')
