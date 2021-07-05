@@ -56,7 +56,6 @@ function subscribe (bus, state) {
 
     bus.on(evs.keys.got, ev => {
         var { secrets, source } = ev
-        console.log('key bus', secrets)
         Keys.save(secrets)
         state.me.secrets.set(secrets)
         state.me.source.set(source || null)

@@ -98,15 +98,11 @@ function Shell (props) {
                     }}
                 />
 
-                ${(me && me.secrets && me.secrets.id) ? 
-                    html`<${EditableField} name="username"
-                        class="name-editor"
-                        value=${getName(profile)}
-                        onSave=${saveName.bind(null, me)}
-                    />` :
-
-                    'Anonymous'
-                }
+                <${EditableField} name="username"
+                    class="name-editor"
+                    value=${getName(profile) || 'Anonymous'}
+                    onSave=${saveName.bind(null, me)}
+                />
             </li>
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
