@@ -4,7 +4,6 @@ import { generateFromString } from 'generate-avatar'
 var ssc = require('@nichoth/ssc')
 var evs = require('../EVENTS')
 
-
 function Shell (props) {
     var { path, emit, me } = props
     var { profile } = me

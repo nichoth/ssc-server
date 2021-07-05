@@ -177,10 +177,7 @@ route(function onRoute (path) {
     // we update the state here with the path
     // then the `connector` finds the view via the router
     state.route.set(path)
-
-    console.log('**magic**', route)
     var { setRoute } = route
-    console.log('**magic set route**', setRoute)
 
     render(html`<${Connector} emit=${emit} state=${state}
         setRoute=${setRoute}

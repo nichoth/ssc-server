@@ -8,7 +8,7 @@ var createHash = require('create-hash')
 function New (props) {
     return html`<div class="route new-post">
         ${(props.me && props.me.secrets) ?
-            html`<${FilePicker} selectedFile=${null} ...${props} />` :
+            html`<${FilePicker} ...${props} />` :
             html`<p><a href="/whoami/create">Create an ID</a> first</p>`
         }
     </div>`
@@ -19,12 +19,15 @@ function FilePicker (props) {
     var [isValid, setValid] = useState(false)
     var [err, setErr] = useState(null)
     var [res, setRes] = useState(null)
-    var { me, feed, emit } = props
+    var { me, emit } = props
+    var feed = props.userFeeds[me.secrets.id]
 
-    console.log('props', props)
+    console.log('props in new', props)
 
     useEffect(function didMount () {
         if (!me || !me.secrets) return
+
+        if (props.userFeeds[me.secrets.id]) return
 
         fetch('/.netlify/functions/feed', {
             method: 'POST',
@@ -36,15 +39,14 @@ function FilePicker (props) {
             })
         })
             .then(res => {
-                console.log('res', res)
                 return res.json()
             })
             .then(json => {
-                console.log('json', json)
+                console.log('**json in new**', json)
                 // setFeed(json.msgs)
                 var msgs = json.msgs
                 // msgs.reverse()
-                emit(evs.feed.got, msgs)
+                emit(evs.feed.got, { userId: me.secrets.id, msgs })
             })
             .catch(err => {
                 console.log('errrr in home', err)
@@ -77,10 +79,12 @@ function FilePicker (props) {
     }
 
     function formChange () {
+        console.log('change')
         checkIsValid()
     }
 
     function formInput () {
+        console.log('input')
         checkIsValid()
     }
 
@@ -107,19 +111,15 @@ function FilePicker (props) {
                 html`<div class="image-preview">
                     <img src=${URL.createObjectURL(selectedFile)} />
                 </div>` :
-                null
-            }
-
-            ${!selectedFile ?
                 html`
                     <p>Drop pictures here</p>
                     <label for="image-input">Choose a picture</label>
-                ` :
-                null
+                `
             }
+
             <input type="file" name="image" id="image-input" placeholder=" "
-                accept="image/png, image/jpeg" onChange=${chooseFile}
-                required=${true}
+                accept="image/*;capture=camera" onChange=${chooseFile}
+                required=${true} capture="true"
             />
         </div>
 
