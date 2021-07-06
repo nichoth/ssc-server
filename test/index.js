@@ -65,7 +65,6 @@ test('publish one message', function (t) {
     var reqBody = {
         keys: { public: keys.public },
         msg: _msg,
-        // @TODO
         file: base64Caracal
     }
 
@@ -77,28 +76,28 @@ test('publish one message', function (t) {
         headers: { 'Content-Type': 'application/json' },
     })
         .then(res => res.json())
-        .then(json => {
-            return json
-        })
         .then(function (res) {
-            // var { msg } = res
-            // console.log('res', res)
+            var msg = res.res
+            console.log('**res**', res)
             t.pass('got a response', res)
             t.ok(res.res.mentionUrls, 'should have the image urls')
             // console.log('**the first msg in response**', res)
             // console.log('**the first msg in response again**', res.res.value.content)
-            // t.equal(msg.value.signature, _msg.signature,
-            //     'should send back the right signature')
+            t.equal(msg.value.signature, _msg.signature,
+                'should send back the right signature')
             t.end()
         })
-        .catch(err => t.error(err))
+        .catch(err => {
+            console.log('errrrr', err)
+            t.error(err)
+        })
 })
 
 
 test('publish a second message', function (t) {
-    // var ___hash = createHash('sha256')
-    // ___hash.update(base64Caracal)
-    // var _hash = ___hash.digest('base64')
+    var ___hash = createHash('sha256')
+    ___hash.update(base64Caracal)
+    var _hash = ___hash.digest('base64')
 
     var req2 = {
         keys: { public: keys.public },
@@ -106,15 +105,11 @@ test('publish a second message', function (t) {
         // createMsg(keys, prevMsg, content)
         msg: ssc.createMsg(keys, _msg, {
             type: 'test2',
-            text: 'ok'
-            // mentions: [_hash]
+            text: 'ok',
+            mentions: [_hash]
         }),
         file: base64Caracal
     }
-
-    // console.log('aaaaa what is the prev msg***', _msg)
-    // console.log('***in here msg 2***', req2.msg)
-    // console.log('***the key of prev***', ssc.getId(_msg))
 
     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
         method: 'post',

@@ -122,7 +122,8 @@ function FilePicker (props) {
             <input type="file" name="image" id="image-input" placeholder=" "
                 accept="image/png,image/jpeg,image/jpg;capture=camera"
                 onChange=${chooseFile}
-                required=${true} capture="true"
+                required=${true}
+                capture="true"
             />
         </div>
 
