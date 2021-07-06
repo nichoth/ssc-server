@@ -77,8 +77,8 @@ test('publish one message', function (t) {
     })
         .then(res => res.json())
         .then(function (res) {
-            var msg = res.res
-            console.log('**res**', res)
+            var { msg } = res
+            // console.log('**res**', res)
             t.pass('got a response', res)
             t.ok(msg.mentionUrls, 'should have the image urls')
             // console.log('**the first msg in response**', res)

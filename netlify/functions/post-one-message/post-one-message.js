@@ -192,7 +192,7 @@ exports.handler = function (ev, ctx, cb) {
                             statusCode: 200,
                             body: JSON.stringify({
                                 ok: true,
-                                res: _response
+                                msg: _response
                             })
                         })
                     })
