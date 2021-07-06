@@ -24,6 +24,8 @@ function FilePicker (props) {
 
     console.log('props in new', props)
 
+    // get your feed if you don't have it yet, b/c we need
+    // the most recent post to make a new one
     useEffect(function didMount () {
         if (!me || !me.secrets) return
 
@@ -118,7 +120,8 @@ function FilePicker (props) {
             }
 
             <input type="file" name="image" id="image-input" placeholder=" "
-                accept="image/*;capture=camera" onChange=${chooseFile}
+                accept="image/png,image/jpeg,image/jpg;capture=camera"
+                onChange=${chooseFile}
                 required=${true} capture="true"
             />
         </div>
