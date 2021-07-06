@@ -154,6 +154,21 @@ module.exports = function Client () {
 
         },
 
+        post: function post (keys, msg, file) {
+            return fetch(base + '/.netlify/functions/post-one-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    msg: msg,
+                    keys: keys,
+                    file: file
+                }) 
+            })
+                .then(res => res.json())
+        },
+
         testPost: function testPost (content, userKeys) {
             // a smiling face
             var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
@@ -182,10 +197,6 @@ module.exports = function Client () {
                 }) 
             })
                 .then(res => res.json())
-                .then(json => {
-                    // console.log('***post response json***', json)
-                    return json
-                })
                 .catch(err => {
                     console.log('aaaaarrgggg', err)
                 })

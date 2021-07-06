@@ -4,10 +4,12 @@ var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 var createHash = require('crypto').createHash
-
-
 var Client = require('../src/client')
-var { follow } = Client()
+
+    // var { getFollowing, follow, setNameAvatar, testPost,
+    //     getRelevantPosts, getPostsWithFoafs } = Client()
+
+var { follow, getPostsWithFoafs } = Client()
 
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
 let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
@@ -15,6 +17,7 @@ let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
 var ntl
 var keys = ssc.createKeys()
 var userOneKeys = ssc.createKeys()
+var userTwoKeys = ssc.createKeys()
 var _msg
 
 test('setup', function (t) {
@@ -145,11 +148,26 @@ test('follow a user', function (t) {
         })
 })
 
-test('foaf messages', function (t) {
-    t.end()
+test('foaf follow', function (t) {
+    follow(userOneKeys, userTwoKeys)
+        .then(res => {
+            t.equal(res.value.content.type, 'follow',
+                'userOne should follow userTwo')
+            t.end()
+        })
 })
 
-test('get a feed', function (t) {
+test('get foaf messages', t => {
+    // need to do a post by userTwo
+
+    getPostsWithFoafs(keys.id)
+        .then(res => {
+            console.log('**got foaf posts**', res)
+            t.end()
+        })
+})
+
+test('get relevant posts', function (t) {
     console.log('todo')
     t.end()
 })
