@@ -1,8 +1,11 @@
+require('isomorphic-fetch')
 var ssc = require('@nichoth/ssc')
 var createHash = require('create-hash')
 
+var baseUrl = 'http://localhost:8888'
+var base = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
+
 module.exports = function Client () {
-    // var userKeys = ssc.createKeys()
 
     var client = {
         getPostsWithFoafs: function (userId) {
@@ -11,7 +14,10 @@ module.exports = function Client () {
                 foafs: true
             }).toString()
 
-            return fetch('/.netlify/functions/get-relevant-posts' + '?' + qs)
+            var url = (base + '/.netlify/functions/get-relevant-posts' +
+                '?' + qs)
+
+            return fetch(url)
                 .then(res => {
                     return res.json()
                 })
@@ -22,7 +28,8 @@ module.exports = function Client () {
                 userId: userId
             }).toString()
 
-            return fetch('/.netlify/functions/get-relevant-posts' + '?' + qs)
+            return fetch(base + '/.netlify/functions/get-relevant-posts' +
+                '?' + qs)
                 .then(res => {
                     return res.json()
                 })
@@ -36,7 +43,7 @@ module.exports = function Client () {
             })
 
 
-            return fetch('/.netlify/functions/following', {
+            return fetch(base + '/.netlify/functions/following', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -51,9 +58,6 @@ module.exports = function Client () {
                     if (!res.ok) return res.text()
                     return res.json()
                 })
-                .catch(err => {
-                    console.log('oh noooooooooo', err)
-                })
         },
 
         getFollowing: function (author) {
@@ -67,7 +71,7 @@ module.exports = function Client () {
                 // author: state().me.secrets.id
             }).toString();
 
-            return fetch('/.netlify/functions/following' + '?' + qs)
+            return fetch(base + '/.netlify/functions/following' + '?' + qs)
                 .then(res => res.json())
         },
 
@@ -84,7 +88,7 @@ module.exports = function Client () {
             console.log('**public**', userKeys.public)
 
             // set name
-            return fetch('/.netlify/functions/abouts', {
+            return fetch(base + '/.netlify/functions/abouts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -112,7 +116,7 @@ module.exports = function Client () {
                 })
 
             function setAvatar (file, userKeys) {
-                return fetch('/.netlify/functions/avatar', {
+                return fetch(base + '/.netlify/functions/avatar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -166,7 +170,7 @@ module.exports = function Client () {
                 mentions: [_hash]
             })
 
-            return fetch('/.netlify/functions/post-one-message', {
+            return fetch(base + '/.netlify/functions/post-one-message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

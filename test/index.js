@@ -1,15 +1,20 @@
+require('isomorphic-fetch')
 var test = require('tape')
-var fetch = require('node-fetch')
 var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 var createHash = require('crypto').createHash
 
+
+var Client = require('../src/client')
+var { follow } = Client()
+
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
 let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
 
 var ntl
-var keys
+var keys = ssc.createKeys()
+var userOneKeys = ssc.createKeys()
 var _msg
 
 test('setup', function (t) {
@@ -45,7 +50,6 @@ test('publish one message', function (t) {
         text: 'waaaa',
         mentions: [_hash]
     }
-    keys = ssc.createKeys()
 
     _msg = ssc.createMsg(keys, null, content)
 
@@ -123,6 +127,26 @@ test('publish a second message', function (t) {
             t.error(err)
             t.end()
         })
+})
+
+test('follow a user', function (t) {
+    follow(keys, userOneKeys)
+        .then(res => {
+            t.equal(res.value.content.type, 'follow',
+                'should post a follow message')
+            t.equal(res.value.content.contact, userOneKeys.id,
+                'should follow the right user ID')
+            t.end()
+        })
+        .catch(err => {
+            console.log('oh no', err)
+            t.error(err)
+            t.end()
+        })
+})
+
+test('foaf messages', function (t) {
+    t.end()
 })
 
 test('get a feed', function (t) {
