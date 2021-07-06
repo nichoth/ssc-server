@@ -35,7 +35,7 @@ cloudinary.config({
 
 exports.handler = function (ev, ctx, cb) {
     try {
-        var { keys, msg, file/*, slugifiedHash*/ } = JSON.parse(ev.body)
+        var { keys, msg, file } = JSON.parse(ev.body)
     } catch (err) {
         return cb(null, {
             statusCode: 422,
@@ -46,8 +46,6 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
     }
-
-    // console.log('aaaaaaaaaaaaaaaaa in the req', msg)
 
     var isValid
     try {
@@ -156,7 +154,7 @@ exports.handler = function (ev, ctx, cb) {
                         statusCode: 200,
                         body: JSON.stringify({
                             ok: true,
-                            res: _response
+                            msg: _response
                         })
                     })
                 })

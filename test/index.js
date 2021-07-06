@@ -80,7 +80,7 @@ test('publish one message', function (t) {
             var msg = res.res
             console.log('**res**', res)
             t.pass('got a response', res)
-            t.ok(res.res.mentionUrls, 'should have the image urls')
+            t.ok(msg.mentionUrls, 'should have the image urls')
             // console.log('**the first msg in response**', res)
             // console.log('**the first msg in response again**', res.res.value.content)
             t.equal(msg.value.signature, _msg.signature,
