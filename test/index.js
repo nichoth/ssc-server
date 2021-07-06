@@ -68,8 +68,6 @@ test('publish one message', function (t) {
         file: base64Caracal
     }
 
-    // console.log('req body', reqBody)
-
     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
         method: 'POST',
         body:    JSON.stringify(reqBody),
@@ -78,11 +76,8 @@ test('publish one message', function (t) {
         .then(res => res.json())
         .then(function (res) {
             var { msg } = res
-            // console.log('**res**', res)
             t.pass('got a response', res)
             t.ok(msg.mentionUrls, 'should have the image urls')
-            // console.log('**the first msg in response**', res)
-            // console.log('**the first msg in response again**', res.res.value.content)
             t.equal(msg.value.signature, _msg.signature,
                 'should send back the right signature')
             t.end()
@@ -118,14 +113,13 @@ test('publish a second message', function (t) {
     })
         .then(res => res.json())
         .then(res => {
-            // console.log('**res**', res)
             t.pass('got a response')
-            // t.equal(res.msg.value.signature, req2.msg.signature,
-            //     'should send back right signature')
-            // if (!res.ok) return res.text()
+            t.equal(res.msg.data.value.signature, req2.msg.signature,
+                'should send back right signature')
             t.end()
         })
         .catch(err => {
+            console.log('errrrrr', err)
             t.error(err)
             t.end()
         })
