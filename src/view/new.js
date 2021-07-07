@@ -193,16 +193,6 @@ function upload (me, file, text, feed) {
         prev = clone(prev.value)
     }
 
-    // console.log('**prev**', prev)
-    // if (prev) {
-    //     console.log('**prev id**', ssc.getId(prev))
-    // }
-
-    // console.log('**next**', {
-    //     keys: me.secrets,
-    //     msg: ssc.createMsg(keys, prev || null, content)
-    // })
-
     return fetch('/.netlify/functions/post-one-message', {
         method: 'POST',
         headers: {
@@ -210,7 +200,7 @@ function upload (me, file, text, feed) {
         },
         body: JSON.stringify({
             file: file, // This is your file object
-            keys: keys,
+            keys: { public: keys.public },
             msg: ssc.createMsg(keys, prev || null, content)
         })
     }).then(response => response.json())
