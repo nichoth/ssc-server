@@ -205,7 +205,7 @@ test('get foaf messages', t => {
                     // console.log('**got foaf posts**', JSON.stringify(res, null, 2))
                     // author should be userTwo
                     var post = res.msg.find(msg => {
-                        return msg.value.autho === userTwoKeys.author
+                        return msg.value.author === userTwoKeys.id
                     })
                     t.ok(post, 'should return a post by user two')
                     t.end()
