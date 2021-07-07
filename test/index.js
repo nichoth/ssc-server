@@ -9,7 +9,7 @@ var Client = require('../src/client')
     // var { getFollowing, follow, setNameAvatar, testPost,
     //     getRelevantPosts, getPostsWithFoafs } = Client()
 
-var { follow, getPostsWithFoafs } = Client()
+var { follow, getPostsWithFoafs, post } = Client()
 
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
 let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
@@ -19,6 +19,15 @@ var keys = ssc.createKeys()
 var userOneKeys = ssc.createKeys()
 var userTwoKeys = ssc.createKeys()
 var _msg
+
+var hash = createHash('sha256')
+hash.update(base64Caracal)
+var fileHash = hash.digest('base64')
+
+var client = Client()
+
+// console.log('user one', userOneKeys.id)
+// console.log('user two', userTwoKeys.id)
 
 test('setup', function (t) {
     ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
@@ -41,17 +50,36 @@ test('setup', function (t) {
     })
 })
 
+
+test('client.post', t => {
+    var content = {
+        type: 'test',
+        text: 'test post content',
+        mentions: [fileHash]
+    }
+
+    // use a temporary user, so it doesn't effect the merkle dag of others
+    var tempKeys = ssc.createKeys()
+    var msg = ssc.createMsg(tempKeys, null, content)
+    client.post(tempKeys, msg, base64Caracal)
+        .then(res => {
+            t.equal(res.msg.value.signature, msg.signature,
+                'should return the right signature')
+            t.end()
+        })
+        .catch(err => {
+            t.error(err)
+            t.end()
+        })
+})
+
+
 // * create and sign msg client side
 test('publish one message', function (t) {
-    var hash = createHash('sha256')
-    hash.update(base64Caracal)
-    var _hash = hash.digest('base64')
-    // console.log('******hash', hash, _hash)
-
     var content = {
         type: 'test',
         text: 'waaaa',
-        mentions: [_hash]
+        mentions: [fileHash]
     }
 
     _msg = ssc.createMsg(keys, null, content)
@@ -97,10 +125,6 @@ test('publish one message', function (t) {
 
 
 test('publish a second message', function (t) {
-    var ___hash = createHash('sha256')
-    ___hash.update(base64Caracal)
-    var _hash = ___hash.digest('base64')
-
     var req2 = {
         keys: { public: keys.public },
         // in here we pass in the previous msg we created
@@ -108,7 +132,7 @@ test('publish a second message', function (t) {
         msg: ssc.createMsg(keys, _msg, {
             type: 'test2',
             text: 'ok',
-            mentions: [_hash]
+            mentions: [fileHash]
         }),
         file: base64Caracal
     }
@@ -155,16 +179,44 @@ test('foaf follow', function (t) {
                 'userOne should follow userTwo')
             t.end()
         })
+        .catch(err => {
+            console.log('errr', err)
+            t.error(err)
+            t.end()
+        })
 })
 
 test('get foaf messages', t => {
     // need to do a post by userTwo
+    // test file -- smiling face
+    var msg = ssc.createMsg(userTwoKeys, null, {
+        type: 'test',
+        text: 'a post from user 2',
+        mentions: [fileHash]
+    })
 
-    getPostsWithFoafs(keys.id)
-        .then(res => {
-            console.log('**got foaf posts**', res)
+    post({ public: userTwoKeys.public }, msg, base64Caracal)
+        .then(() => {
+            // console.log('**res to foaf puplish**', res)
+
+            // then get the posts; pass in your id
+            getPostsWithFoafs(keys.id)
+                .then(res => {
+                    // console.log('**got foaf posts**', JSON.stringify(res, null, 2))
+                    // author should be userTwo
+                    var post = res.msg.find(msg => {
+                        return msg.value.autho === userTwoKeys.author
+                    })
+                    t.ok(post, 'should return a post by user two')
+                    t.end()
+                })
+        })
+        .catch(err => {
+            console.log('errrrr', err)
+            t.error(err)
             t.end()
         })
+
 })
 
 test('get relevant posts', function (t) {

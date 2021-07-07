@@ -62,6 +62,8 @@ exports.handler = function (ev, ctx, cb) {
     }
 
     if (!msg || !isValid) {
+        console.log('**msg**', msg)
+        console.log('**isValid**', isValid)
         // is invalid
         // 422 (Unprocessable Entity)
         return cb(null, {
