@@ -1,3 +1,11 @@
+var Client = require('../../src/client')
+var client = Client()
+
+var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
+
+var hash = createHash('sha256')
+hash.update(file)
+var fileHash = hash.digest('base64')
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -23,3 +31,17 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+var URL = 'http://localhost:8888'
+
+Cypress.Commands.add('createId', () => {
+        cy.visit(URL + '/whoami/create')
+
+        // kind of wonky way of selecting the 'create an id' button
+        cy.get('.id-source:first button[type=submit]')
+            .click()
+})
+
+Cypress.Commands.add('followFoafs', () => {
+
+})

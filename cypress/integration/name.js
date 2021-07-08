@@ -11,6 +11,7 @@ describe('/whoami/create', () => {
     it('should let you create an id', () => {
         cy.visit(URL + '/whoami/create')
 
+        // kind of wonky way of selecting the 'create an id' button
         cy.get('.id-source:first button[type=submit]')
             .click()
     })
@@ -34,3 +35,5 @@ describe('the name field', () => {
         cy.get('li.name h1').contains('Anonymous')
     })
 })
+
+

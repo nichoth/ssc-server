@@ -24,21 +24,30 @@ describe('foafs on the home page', () => {
             client.follow(tempKeysTwo, tempKeysThree)
                 .then(() => {
                     console.log('everyone is followed')
+                    doPosting()
                 })
         })
 
-    // then make some posts bu userThree
-    // post: function post (keys, msg, file) {
-    var msg = ssc.createMsg(tempKeysThree, null, {
-        type: 'test',
-        text: 'test post content',
-        mentions: [fileHash]
-    })
+    function doPosting () {
+        // // then make some posts bu userThree
+        // // post: function post (keys, msg, file) {
+        var msg = ssc.createMsg(tempKeysThree, null, {
+            type: 'test',
+            text: 'test post content',
+            mentions: [fileHash]
+        })
 
-    client.post(tempKeysThree, msg, file)
+        client.post(tempKeysThree, msg, file)
+    }
 
-    // then visit the home page & get the posts
+    // // then visit the home page & get the posts
+
+
     it('should have foaf messages', () => {
+        cy.createId()
+        cy.followFoafs()
         cy.visit(URL)
     })
+
+
 })

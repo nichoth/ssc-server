@@ -15,7 +15,7 @@
     "watch-js": "watchify -t envify -t uglifyify --debug -p esmify src/index.js -o public/bundle.js",
     "watch-js-test": "watchify -t [ envify --NODE_ENV test ] -t uglifyify --debug -p esmify src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
-    "cypress-test": "concurrently --kill-others \"npm run start-test\" \"cypress open\"",
+    "cypress-test": "NODE_ENV=test concurrently --kill-others \"npm run start-test\" \"cypress open\"",
     "test": "NODE_ENV=test tape test/*.js | tap-spec"
   },
   "repository": {
