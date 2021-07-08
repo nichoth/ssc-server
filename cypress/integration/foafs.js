@@ -14,39 +14,53 @@ hash.update(file)
 var fileHash = hash.digest('base64')
 
 describe('foafs on the home page', () => {
-    var tempKeys = ssc.createKeys()
-    var tempKeysTwo = ssc.createKeys()
-    var tempKeysThree = ssc.createKeys()
+    // var tempKeys = ssc.createKeys()
+    // var tempKeysTwo = ssc.createKeys()
+    // var tempKeysThree = ssc.createKeys()
 
     // first follow some people
-    client.follow(tempKeys, tempKeysTwo)
-        .then(() => {
-            client.follow(tempKeysTwo, tempKeysThree)
-                .then(() => {
-                    console.log('everyone is followed')
-                    doPosting()
-                })
-        })
+    // client.follow(tempKeys, tempKeysTwo)
+    //     .then(() => {
+    //         client.follow(tempKeysTwo, tempKeysThree)
+    //             .then(() => {
+    //                 console.log('everyone is followed')
+    //                 // doPosting()
+    //             })
+    //     })
 
-    function doPosting () {
-        // // then make some posts bu userThree
-        // // post: function post (keys, msg, file) {
-        var msg = ssc.createMsg(tempKeysThree, null, {
-            type: 'test',
-            text: 'test post content',
-            mentions: [fileHash]
-        })
+    // function doPosting () {
+    //     // // then make some posts bu userThree
+    //     // // post: function post (keys, msg, file) {
+    //     var msg = ssc.createMsg(tempKeysThree, null, {
+    //         type: 'test',
+    //         text: 'test post content',
+    //         mentions: [fileHash]
+    //     })
 
-        client.post(tempKeysThree, msg, file)
-    }
+    //     client.post(tempKeysThree, msg, file)
+    // }
 
     // // then visit the home page & get the posts
 
 
     it('should have foaf messages', () => {
         cy.createId()
-        cy.followFoafs()
+        cy.foafPost()
+        cy.get('.whoami pre').then($pre => {
+            const txt = $pre.text()
+            var myKeys = JSON.parse(txt)
+            // this actually works
+            console.log('got json', myKeys)
+
+            return cy.followFoafs(myKeys)
+        })
+
+        cy.foafPost()
+
         cy.visit(URL)
+
+        cy.get('.post-list .post:first p')
+            .should('have.text', 'test post content')
     })
 
 

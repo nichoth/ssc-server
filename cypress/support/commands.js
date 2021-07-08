@@ -1,11 +1,18 @@
 var Client = require('../../src/client')
 var client = Client()
+var createHash = require('create-hash')
+var ssc = require('@nichoth/ssc')
 
 var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
 var hash = createHash('sha256')
 hash.update(file)
 var fileHash = hash.digest('base64')
+
+// var tempKeys = ssc.createKeys()
+var tempKeysTwo = ssc.createKeys()
+var tempKeysThree = ssc.createKeys()
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -42,6 +49,28 @@ Cypress.Commands.add('createId', () => {
             .click()
 })
 
-Cypress.Commands.add('followFoafs', () => {
+Cypress.Commands.add('followFoafs', (myKeys) => {
+    return client.follow(myKeys, tempKeysTwo)
+        .then(() => {
+            return client.follow(tempKeysTwo, tempKeysThree)
+                .then(() => {
+                    console.log('everyone is followed')
+                })
+        })
+})
 
+Cypress.Commands.add('foafPost', () => {
+    var msg = ssc.createMsg(tempKeysThree, null, {
+        type: 'test',
+        text: 'test post content',
+        mentions: [fileHash]
+    })
+    console.log('start posting', msg)
+
+    // post: function post (keys, msg, file) {
+    return client.post(tempKeysThree, msg, file)
+        .then(res => {
+            console.log('done posting', res)
+            return res
+        })
 })
