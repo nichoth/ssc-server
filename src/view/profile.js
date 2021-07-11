@@ -75,23 +75,27 @@ function createProfileView (username) {
         if (props.following) {
             var theUserKey = Object.keys(props.following).find(key => {
                 var _user = props.following[key]
-                // console.log('_____user', _user)
                 return (_user || {}).name === username;
             });
         }
 
         var theUser = theUserKey === me.id ?
-            me :
+            {
+                name: me.profile.userName,
+                id: me.secrets.id,
+                avatar: true,
+                avatarUrl: (me.avatar || {}).url
+            } :
             following[theUserKey];
 
         console.log('**the user**', theUser)
 
         return html`<div class="profile">
-            <h1>${theUser.profile.userName}</h1>
+            <h1>${theUser.name}</h1>
 
             <div class="profile-avatar">
                 <img src=${theUser && theUser.avatar ?
-                    theUser.avatar.url :
+                    theUser.avatarUrl :
                     null}
                 />
             </div>
