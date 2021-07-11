@@ -88,7 +88,10 @@ function createProfileView (username) {
 
         return html`<div class="profile">
             <div class="profile-avatar">
-                <img src=${theUser.avatarUrl} />
+                <img src=${theUser && theUser.avatar ?
+                    theUser.avatar.url :
+                    null}
+                />
             </div>
             <p>${theUser.name}</p>
         </div>`
