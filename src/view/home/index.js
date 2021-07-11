@@ -82,9 +82,12 @@ function Home (props) {
                         <img src="${url}" />
                     </a>
                     <div class="inline-avatar">
-                        <a href="${linkUrl}">
-                            <img src="${postAvatar}" />
-                        </a>
+                        ${linkUrl ?
+                            html`<a href="${linkUrl}">
+                                <img src="${postAvatar}" />
+                            </a>` :
+                            html`<img src=${postAvatar} />`
+                        }
                     </div>
                     <div class="content">
                         <a href="${linkUrl}">${name || 'Anonymous'}</a>
