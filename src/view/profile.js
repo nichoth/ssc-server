@@ -87,6 +87,8 @@ function createProfileView (username) {
         console.log('**the user**', theUser)
 
         return html`<div class="profile">
+            <h1>${theUser.profile.userName}</h1>
+
             <div class="profile-avatar">
                 <img src=${theUser && theUser.avatar ?
                     theUser.avatar.url :
