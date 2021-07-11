@@ -8,13 +8,19 @@
     grid-auto-rows: 70vh;
 
     .post {
+        a {
+            &:hover {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
 
         .content {
             margin-left: 1rem;
             display: inline-block;
 
-            a {
+            .user-name {
                 border-bottom: 1px solid black;
+                display: block;
             }
 
             p {
@@ -39,11 +45,11 @@
             height: 2rem;
             display: inline-block;
 
-            a {
-                &:hover {
-                    filter: drop-shadow(2px 4px 6px black);
-                }
-            }
+            // a {
+            //     &:hover {
+            //         filter: drop-shadow(2px 4px 6px black);
+            //     }
+            // }
 
             img {
                 border: 2px solid gray;

@@ -90,7 +90,14 @@ function Home (props) {
                         }
                     </div>
                     <div class="content">
-                        <a href="${linkUrl}">${name || 'Anonymous'}</a>
+                        ${linkUrl ?
+                            html`<a class="user-name" href="${linkUrl}">
+                                ${name || 'Anonymous'}
+                            </a>` :
+                            html`<span class="user-name">
+                                ${name || 'Anonymous'}
+                            </span>`
+                        }
                         <p>${writing}</p>
                     </div>
                 </li>`
