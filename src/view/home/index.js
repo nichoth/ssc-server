@@ -81,7 +81,10 @@ function Home (props) {
                             <img src="${postAvatar}" />
                         </a>
                     </div>
-                    <p>${writing}</p>
+                    <div class="content">
+                        <a href="${linkUrl}">${name}</a>
+                        <p>${writing}</p>
+                    </div>
                 </li>`
             }))}
         </ul>
