@@ -19,17 +19,6 @@
             }
         }
 
-        // &:hover {
-        //     background-color: lightgray;
-        //     filter: drop-shadow(2px 4px 6px black);
-        // }
-
-        a {
-            &:hover {
-                filter: drop-shadow(2px 4px 6px black);
-            }
-        }
-
         p {
             margin: 0;
             padding: 0 1rem;
@@ -45,6 +34,12 @@
             width: 2rem;
             height: 2rem;
             display: inline-block;
+
+            a {
+                &:hover {
+                    filter: drop-shadow(2px 4px 6px black);
+                }
+            }
 
             img {
                 border: 2px solid gray;

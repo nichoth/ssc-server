@@ -65,8 +65,13 @@ function Home (props) {
                 postAvatar = (postAvatar || 'data:image/svg+xml;utf8,' + 
                     generateFromString(post.value.author))
 
-                var name = (following[post.value.author] &&
-                    following[post.value.author].name)
+                var name = post.value.author === me.secrets.id ?
+                    me.profile.userName :
+                    (following[post.value.author] &&
+                        following[post.value.author].name)
+
+                // var name = (following[post.value.author] &&
+                //     following[post.value.author].name)
                 var linkUrl = (post.value.author === me.secrets.id ?
                     '/' + me.profile.userName :
                     (name ?  ('/' + name) : null)
@@ -82,7 +87,7 @@ function Home (props) {
                         </a>
                     </div>
                     <div class="content">
-                        <a href="${linkUrl}">${name}</a>
+                        <a href="${linkUrl}">${name || 'Anonymous'}</a>
                         <p>${writing}</p>
                     </div>
                 </li>`
