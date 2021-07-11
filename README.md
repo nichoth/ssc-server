@@ -4,30 +4,57 @@
 
 [https://ssc-server.netlify.app/](https://ssc-server.netlify.app/)
 
-Trying this
-
 ## start a local server
-
 ```
 npm start
 ```
 
 ## start a local server, with test data
-
-This creates a function `window.testStuff` that will create a second user and some test data.
-
 ```
-npm run start-test
+$ npm run start-test
 ```
+
+This creates some functions on `window`
+
+`window.testStuff` -- will create a second user and some test data
+
+* `window.userOneKeys`
+* `window.userTwoKeys`
+
 
 ## cypress tests
 Run tests with the cypress GUI
 
 ```
-npm run cypress-test
+$ npm run cypress-test
 ```
 
-----------------------------------------
+## test
+Start some tests in a node environment
+
+```
+$ npm test
+```
+
+--------------------------------------------------------------
+
+
+The plan for now is just to make something that works for basic crud as stuff
+
+
+----------------------------------------------------------------
+
+There are no invite codes because we want to follow anyone/everyone. 
+
+Another way to do it is to treat the server as a peer, & decide who they are following.
+
+On the server, could keep a list of who you are following. That lets you revoke access also.
+
+An invite system + REST would mean that we verify that a write request is from our list of allowed users before writing it to the DB.
+
+Then replication requests would happen periodically since this is not using websockets.
+
+----------------------------------------------------------------
 
 ## forks
 

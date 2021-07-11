@@ -29,7 +29,7 @@ function Create (props) {
     return html`<div class="route whoami create">
 
         <div class="id-sources">
-            <div class="id-source">
+            <div class="id-source create-id">
                 <h2>Create a local identity</h2>
                 <p>This will destroy your current ID</p>
                 <button onclick=${reset}>cancel</button>

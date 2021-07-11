@@ -44,8 +44,8 @@ var URL = 'http://localhost:8888'
 Cypress.Commands.add('createId', () => {
         cy.visit(URL + '/whoami/create')
 
-        // kind of wonky way of selecting the 'create an id' button
-        cy.get('.id-source:first button[type=submit]')
+        // click the 'create id' button
+        cy.get('.id-source.create-id button[type=submit]')
             .click()
 })
 

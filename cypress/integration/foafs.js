@@ -50,6 +50,9 @@ describe('foafs on the home page', () => {
             const txt = $pre.text()
             var myKeys = JSON.parse(txt)
             // this actually works
+
+            // should be able to pass this from the front end
+
             console.log('got json', myKeys)
 
             return cy.followFoafs(myKeys)
