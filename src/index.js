@@ -50,6 +50,10 @@ if (process.env.NODE_ENV === 'test') {
     var myKeys = me.secrets
     console.log('**my keys**', myKeys)
 
+    // TODO
+    // do a foaf follow. This means you follow userOne, userOne
+    // follows userTwo, and userTwo creates a post
+
     var userOneKeys = window.userOneKeys = {
         "curve": "ed25519",
         "public": "g+Aw6QpfN+hlXTUQUlXZ3z6d56se+I8JQiRrJo/nfIE=.ed25519",

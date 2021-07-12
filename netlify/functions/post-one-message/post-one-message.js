@@ -117,12 +117,6 @@ exports.handler = function (ev, ctx, cb) {
         )
     )
         .then(res => {
-            // console.log('res', res)
-            // console.log('res.data.key', res.data.key)
-            // console.log('msg.previous', msg.previous)
-
-            // console.log('aaa res aaa', res)
-
             if (res.data.key !== msg.previous) {
                 console.log('!!!!mismatch!!!!!', res.data.key, msg.previous)
                 console.log('**prev key**', res.data.key)
