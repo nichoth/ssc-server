@@ -4,6 +4,7 @@ import { useEffect } from 'preact/hooks';
 var evs = require('../EVENTS')
 var Client = require('../client')
 var { getProfileByName, getFeedByName, getFollowing } = Client()
+var FollowIcon = require('./follow-btn')
 
 
 // TODO -- need to fix the routing so it is the same everywhere.
@@ -66,12 +67,6 @@ function createProfileView (username) {
             }
         }, [])
 
-        // if (!props.following) {
-        //     return html`<div class="profile">
-        //         the profile view -- ${username}
-        //     </div>`
-        // }
-
         if (props.following) {
             var theUserKey = Object.keys(props.following).find(key => {
                 var _user = props.following[key]
@@ -91,6 +86,8 @@ function createProfileView (username) {
         console.log('**the user**', theUser)
 
         return html`<div class="profile">
+            <${FollowIcon} author=${theUserKey} me=${me}
+                following=${following} />
             <h1>${theUser.name}</h1>
 
             <div class="profile-avatar">
@@ -99,7 +96,6 @@ function createProfileView (username) {
                     null}
                 />
             </div>
-            <p>${theUser.name}</p>
         </div>`
     }
 }

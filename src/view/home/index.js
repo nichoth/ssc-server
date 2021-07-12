@@ -3,6 +3,7 @@ import { useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 var evs = require('../../EVENTS')
 var Client = require('../../client')
+var FollowIcon = require('../follow-btn')
 var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
@@ -61,7 +62,6 @@ function Home (props) {
                     (following[post.value.author] &&
                         following[post.value.author].avatarUrl)
                 )
-
                 postAvatar = (postAvatar || 'data:image/svg+xml;utf8,' + 
                     generateFromString(post.value.author))
 
@@ -70,8 +70,6 @@ function Home (props) {
                     (following[post.value.author] &&
                         following[post.value.author].name)
 
-                // var name = (following[post.value.author] &&
-                //     following[post.value.author].name)
                 var linkUrl = (post.value.author === me.secrets.id ?
                     '/' + me.profile.userName :
                     (name ?  ('/' + name) : null)
@@ -108,7 +106,8 @@ function Home (props) {
 
                         <div class="icons">
                             <div class="follow-icon">
-                                <${FollowIcon} post=${post} me=${me}
+                                <${FollowIcon} me=${me}
+                                    author=${post.value.author}
                                     following=${following}
                                 />
                             </div>
@@ -118,25 +117,6 @@ function Home (props) {
             }))}
         </ul>
     </div>`;
-}
-
-function FollowIcon ({ post, me, following }) {
-    if (post.value.author === me.secrets.id) return null
-
-    var name = (following[post.value.author] &&
-        following[post.value.author].name)
-
-    if (!name) return null
-
-    function follow (userId, ev) {
-        console.log('follow', userId, ev)
-        ev.preventDefault()
-    }
-
-    return html`<button class="follow-btn"
-        title="Follow ${name}"
-        onClick=${follow.bind(null, post.value.author)}
-    >*</button>`
 }
 
 module.exports = Home;
