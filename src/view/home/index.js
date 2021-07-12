@@ -34,11 +34,6 @@ function Home (props) {
         }
     }, []);
 
-    function follow (userId, ev) {
-        console.log('follow', userId, ev)
-        ev.preventDefault()
-    }
-
     if (!me.secrets || !me.secrets.id) {
         return html`<div class="home-route">
             <p>It looks like you don't have an identity. Create one
@@ -113,12 +108,9 @@ function Home (props) {
 
                         <div class="icons">
                             <div class="follow-icon">
-                                ${name ?
-                                    html`<button class="follow-btn"
-                                        onClick=${follow.bind(null, post.value.author)}
-                                    >*</button>` :
-                                    null
-                                }
+                                <${FollowIcon} post=${post} me=${me}
+                                    following=${following}
+                                />
                             </div>
                         </div>
                     </div>
@@ -126,6 +118,24 @@ function Home (props) {
             }))}
         </ul>
     </div>`;
+}
+
+function FollowIcon ({ post, me, following }) {
+    var name = post.value.author === me.secrets.id ?
+        me.profile.userName :
+        (following[post.value.author] &&
+            following[post.value.author].name)
+
+    if (!name) return null
+
+    function follow (userId, ev) {
+        console.log('follow', userId, ev)
+        ev.preventDefault()
+    }
+
+    return html`<button class="follow-btn"
+        onClick=${follow.bind(null, post.value.author)}
+    >*</button>`
 }
 
 module.exports = Home;
