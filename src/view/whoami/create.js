@@ -14,6 +14,11 @@ function Create (props) {
         var keys = Keys.create()
         console.log('create local id', keys)
         emit(evs.keys.got, { source: null, secrets: keys })
+
+        // set this here for the cypress tests
+        if (process.env.NODE_ENV === 'test') {
+            window.myKeys = keys
+        }
         setRoute('/whoami')
     }
 

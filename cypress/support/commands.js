@@ -13,6 +13,9 @@ var fileHash = hash.digest('base64')
 var tempKeysTwo = ssc.createKeys()
 var tempKeysThree = ssc.createKeys()
 
+// mine, tempTwo, tempThree
+
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite

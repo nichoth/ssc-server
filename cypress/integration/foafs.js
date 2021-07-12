@@ -1,17 +1,16 @@
-var URL = 'http://localhost:8888'
-var ssc = require('@nichoth/ssc')
-var createHash = require('crypto').createHash
-var Client = require('../../src/client')
+// var ssc = require('@nichoth/ssc')
+// var createHash = require('crypto').createHash
+// var Client = require('../../src/client')
 var URL = 'http://localhost:8888'
 
-var client = Client()
+// var client = Client()
 
 // a smiling face
-var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
+// var file = 'data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7'
 
-var hash = createHash('sha256')
-hash.update(file)
-var fileHash = hash.digest('base64')
+// var hash = createHash('sha256')
+// hash.update(file)
+// var fileHash = hash.digest('base64')
 
 describe('foafs on the home page', () => {
     // var tempKeys = ssc.createKeys()
@@ -45,18 +44,25 @@ describe('foafs on the home page', () => {
 
     it('should have foaf messages', () => {
         cy.createId()
-        cy.foafPost()
-        cy.get('.whoami pre').then($pre => {
-            const txt = $pre.text()
-            var myKeys = JSON.parse(txt)
-            // this actually works
 
-            // should be able to pass this from the front end
+        cy.window()
+            .then(win => {
+                var myKeys = win.myKeys
+                return cy.followFoafs(myKeys)
+            })
 
-            console.log('got json', myKeys)
 
-            return cy.followFoafs(myKeys)
-        })
+        // cy.get('.whoami pre').then($pre => {
+        //     // this actually works
+        //     const txt = $pre.text()
+        //     var myKeys = JSON.parse(txt)
+
+        //     // should be able to pass this from the front end
+
+        //     console.log('got json', myKeys)
+
+        //     return cy.followFoafs(myKeys)
+        // })
 
         cy.foafPost()
 
@@ -65,6 +71,5 @@ describe('foafs on the home page', () => {
         cy.get('.post-list .post:first p')
             .should('have.text', 'test post content')
     })
-
 
 })

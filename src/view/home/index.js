@@ -25,7 +25,7 @@ function Home (props) {
         if (me.secrets.id) {
             getPostsWithFoafs(me.secrets.id)
                 .then(res => {
-                    console.log('**got foaf posts**', res)
+                    // console.log('**got foaf posts**', res)
                     emit(evs.relevantPosts.got, res.msg)
                 })
                 .catch(err => {
