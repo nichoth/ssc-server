@@ -121,10 +121,10 @@ function Home (props) {
 }
 
 function FollowIcon ({ post, me, following }) {
-    var name = post.value.author === me.secrets.id ?
-        me.profile.userName :
-        (following[post.value.author] &&
-            following[post.value.author].name)
+    if (post.value.author === me.secrets.id) return null
+
+    var name = (following[post.value.author] &&
+        following[post.value.author].name)
 
     if (!name) return null
 
@@ -134,6 +134,7 @@ function FollowIcon ({ post, me, following }) {
     }
 
     return html`<button class="follow-btn"
+        title="Follow ${name}"
         onClick=${follow.bind(null, post.value.author)}
     >*</button>`
 }

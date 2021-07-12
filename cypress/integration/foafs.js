@@ -24,6 +24,7 @@ describe('foafs on the home page', () => {
         //     return cy.followFoafs(myKeys)
         // })
 
+
         cy.foafPost()
 
         cy.visit(URL)
