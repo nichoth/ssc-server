@@ -8,15 +8,33 @@
     grid-auto-rows: 70vh;
 
     .post {
+
         a {
             &:hover {
                 filter: drop-shadow(2px 4px 6px black);
             }
         }
 
+        .post-metadata {
+            display: flex;
+
+            .icons {
+                button {
+                    font-family: initial;
+                    font-size: 3rem;
+                    padding: 0;
+                    background: none;
+                    border: none;
+                }
+                display: inline-block;
+                margin-left: 1rem;
+            }
+        }
+
         .content {
             margin-left: 1rem;
             display: inline-block;
+            flex-grow: 1;
 
             .user-name {
                 border-bottom: 1px solid black;
@@ -33,7 +51,7 @@
             margin: 0;
             padding: 0 1rem;
             margin-top: 0.5rem;
-            max-height: 20%;
+            // max-height: 20%;
             // ellipsis stuff
             white-space: nowrap;
             overflow: hidden;

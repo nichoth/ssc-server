@@ -34,6 +34,11 @@ function Home (props) {
         }
     }, []);
 
+    function follow (userId, ev) {
+        console.log('follow', userId, ev)
+        ev.preventDefault()
+    }
+
     if (!me.secrets || !me.secrets.id) {
         return html`<div class="home-route">
             <p>It looks like you don't have an identity. Create one
@@ -78,27 +83,41 @@ function Home (props) {
                 )
 
                 return html`<li class="post">
-                    <a href="/post/${encodeURIComponent(post.key)}">
+                    <a href="/post/${encodeURIComponent(post.key)}"
+                        class="post-image"
+                    >
                         <img src="${url}" />
                     </a>
-                    <div class="inline-avatar">
-                        ${linkUrl ?
-                            html`<a href="${linkUrl}">
-                                <img src="${postAvatar}" />
-                            </a>` :
-                            html`<img src=${postAvatar} />`
-                        }
-                    </div>
-                    <div class="content">
-                        ${linkUrl ?
-                            html`<a class="user-name" href="${linkUrl}">
-                                ${name || 'Anonymous'}
-                            </a>` :
-                            html`<span class="user-name">
-                                ${name || 'Anonymous'}
-                            </span>`
-                        }
-                        <p>${writing}</p>
+
+                    <div class="post-metadata">
+                        <div class="inline-avatar">
+                            ${linkUrl ?
+                                html`<a href="${linkUrl}">
+                                    <img src="${postAvatar}" />
+                                </a>` :
+                                html`<img src=${postAvatar} />`
+                            }
+                        </div>
+
+                        <div class="content">
+                            ${linkUrl ?
+                                html`<a class="user-name" href="${linkUrl}">
+                                    ${name || 'Anonymous'}
+                                </a>` :
+                                html`<span class="user-name">
+                                    ${name || 'Anonymous'}
+                                </span>`
+                            }
+                            <p>${writing}</p>
+                        </div>
+
+                        <div class="icons">
+                            <div class="follow-icon">
+                                <button class="follow-btn"
+                                    onClick=${follow.bind(null, post.value.author)}
+                                >*</button>
+                            </div>
+                        </div>
                     </div>
                 </li>`
             }))}
