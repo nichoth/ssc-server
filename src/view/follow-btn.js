@@ -33,7 +33,8 @@ function FollowIcon ({ author, name, /*post,*/ me, following }) {
 
     return html`<button
         class="follow-btn ${isFollowing ? ' is-following' : ''}"
-        title=${isFollowing ? 'stop following' : 'Follow ' + name}
+        title=${isFollowing ? 'stop following' : 'Follow ' +
+            (name || 'Anonymous')}
         onClick=${isFollowing ?
             unFollow.bind(null, author) :
             follow.bind(null, author)
