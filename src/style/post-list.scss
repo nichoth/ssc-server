@@ -25,6 +25,9 @@
                     padding: 0;
                     background: none;
                     border: none;
+                    &:hover {
+                        color: blue;
+                    }
                 }
                 display: inline-block;
                 margin-left: 1rem;

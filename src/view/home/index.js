@@ -113,9 +113,12 @@ function Home (props) {
 
                         <div class="icons">
                             <div class="follow-icon">
-                                <button class="follow-btn"
-                                    onClick=${follow.bind(null, post.value.author)}
-                                >*</button>
+                                ${name ?
+                                    html`<button class="follow-btn"
+                                        onClick=${follow.bind(null, post.value.author)}
+                                    >*</button>` :
+                                    null
+                                }
                             </div>
                         </div>
                     </div>
