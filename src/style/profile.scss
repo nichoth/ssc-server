@@ -1,12 +1,17 @@
 .profile {
     h1 {
-        display: block;
+        display: inline-block;
         margin-bottom: 2rem;
+    }
+
+    .icons {
+        margin-right: 0.5rem;
+        position: relative;
+        top: 1rem;
     }
 }
 
 .profile-avatar {
-    display: inline-block;
     width: 50%;
     max-width: 20rem;
 

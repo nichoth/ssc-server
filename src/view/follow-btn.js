@@ -1,8 +1,9 @@
 import { html } from 'htm/preact'
 
 function FollowIcon ({ author, name, /*post,*/ me, following }) {
+    // for the initial app state, when we haven't fetched everything yet
     if (!author || !following) return null
-    // if (post && (post.value.author === me.secrets.id)) return null
+    // can't follow yourself
     if (author && (author === me.secrets.id)) return null
 
     // var name = (following[post.value.author] &&

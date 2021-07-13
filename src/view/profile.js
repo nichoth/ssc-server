@@ -86,8 +86,11 @@ function createProfileView (username) {
         console.log('**the user**', theUser)
 
         return html`<div class="profile">
-            <${FollowIcon} author=${theUserKey} me=${me}
-                following=${following} />
+            <div class="icons">
+                <${FollowIcon} author=${theUserKey} me=${me}
+                    following=${following} />
+            </div>
+
             <h1>${theUser.name}</h1>
 
             <div class="profile-avatar">

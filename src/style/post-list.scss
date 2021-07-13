@@ -18,27 +18,27 @@
         .post-metadata {
             display: flex;
 
-            .icons {
-                .follow-btn {
-                    font-family: initial;
-                    font-size: 3rem;
-                    padding: 0;
-                    background: none;
-                    border: none;
-                    &:hover {
-                        color: blue;
-                    }
+            // .icons {
+            //     .follow-btn {
+            //         font-family: initial;
+            //         font-size: 3rem;
+            //         padding: 0;
+            //         background: none;
+            //         border: none;
+            //         &:hover {
+            //             color: blue;
+            //         }
 
-                    &.is-following {
-                        color: blue;
-                        &:hover {
-                            color: cyan;
-                        }
-                    }
-                }
-                display: inline-block;
-                margin-left: 1rem;
-            }
+            //         &.is-following {
+            //             color: blue;
+            //             &:hover {
+            //                 color: cyan;
+            //             }
+            //         }
+            //     }
+            //     display: inline-block;
+            //     margin-left: 1rem;
+            // }
         }
 
         .content {
