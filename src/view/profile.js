@@ -114,6 +114,12 @@ function createProfileView (username) {
                     null}
                 />
             </div>
+
+            <ul class="profile-posts post-list">
+                ${(props.userFeeds[username] || []).map(post => {
+                    return html`<pre>${JSON.stringify(post, null, 2)}</pre>`
+                })}
+            </ul>
         </div>`
     }
 }
