@@ -32,8 +32,6 @@ function createProfileView (username) {
                     })
             }
 
-            console.log('meeeeeee', me)
-
             var userKey = (username === me.profile.userName ?
                 me.secrets.id :
                 Object.keys(props.following).find(key => {
@@ -50,7 +48,7 @@ function createProfileView (username) {
             // if we have the following but the user is not in it
             if (!userKey && following) {
                 // fetch the user profile
-                console.log('not user -- get profile')
+                console.log('***not user -- get profile***')
 
                 // the problem is that there's no guaranteed order for the
                 // index in different servers/DBs
@@ -65,6 +63,17 @@ function createProfileView (username) {
                 //             })
                 //     })
             }
+
+            console.log('gettttt', username)
+            getFeedByName(username)
+                .then(res => {
+                    res.json().then(json => {
+                        console.log('got feed by name', json)
+                    })
+                })
+                .catch(err => {
+                    console.log('errrrrr', err)
+                })
         }, [])
 
         if (props.following) {

@@ -146,12 +146,12 @@ module.exports = function Client () {
 
         },
 
-        getFeedByName: function getFeedByName (name, index) {
+        getFeedByName: function getFeedByName (name) {
+            var qs = new URLSearchParams({
+                username: name
+            }).toString();
 
-        },
-
-        getProfileByName: function getProfileByName (name, index) {
-
+            return fetch(base + '/.netlify/functions/feed-by-name' + '?' + qs)
         },
 
         post: function post (keys, msg, file) {

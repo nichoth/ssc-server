@@ -1,13 +1,8 @@
-// var faunadb = require('faunadb')
 var ssc = require('@nichoth/ssc')
 var abouts = require('@nichoth/ssc-fauna/abouts')
 
 // return the most recent 'about' msg
 exports.handler = async function (ev, ctx) {
-    // var q = faunadb.query
-    // var client = new faunadb.Client({
-    //     secret: process.env.FAUNADB_SERVER_SECRET
-    // })
     var lastAboutMsg = null
 
     if (ev.httpMethod === 'GET') {

@@ -1,13 +1,5 @@
-// var ssc = require('@nichoth/ssc')
 require('dotenv').config()
-var faunadb = require('faunadb')
-// var xtend = require('xtend')
-
-var q = faunadb.query
-var client = new faunadb.Client({
-    secret: process.env.FAUNADB_SERVER_SECRET
-})
-
+var { getByName } = require('@nichoth/ssc-fauna/feed')
 let cloudinary = require("cloudinary").v2;
 
 cloudinary.config({ 
@@ -27,9 +19,20 @@ exports.handler = function (ev, ctx, cb) {
 
     var username = ev.queryStringParameters.username
 
-    // get the user ID for the username
-    // then get the feed for that user ID
+    console.log('***username', username)
 
-
+    getByName(username)
+        .then(res => {
+            return cb(null, {
+                statusCode: 200,
+                body: JSON.stringify(res)
+            })
+        })
+        .catch(err => {
+            return cb(null, {
+                statusCode: 500,
+                body: err.toString()
+            })
+        })
 }
 
