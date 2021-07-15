@@ -1,6 +1,7 @@
 var evs = require('./EVENTS')
 var Keys = require('./keys')
 var xtend = require('xtend')
+const { StartsWith } = require('faunadb')
 
 function subscribe (bus, state) {
 
@@ -64,6 +65,13 @@ function subscribe (bus, state) {
     bus.on(evs.following.got, ev => {
         console.log('**got following in subscribe**', ev)
         state.following.set(ev)
+    })
+
+    bus.on(evs.userFeed.got, ev => {
+        var { name, feed } = ev
+        var feeds = state.userFeeds()
+        feeds[name] = feed
+        state.userFeeds.set(feeds)
     })
 }
 

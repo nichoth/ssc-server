@@ -16,9 +16,11 @@ function createProfileView (username) {
     return function Profile (props) {
         var { emit, me, following } = props
 
+        console.log('profile props', props)
+
         // component did mount
         useEffect(() => {
-            console.log('props', props)
+            console.log('**did mount**', props)
             if (!following) {
                 return getFollowing(me.secrets.id)
                     .then(res => {
@@ -64,16 +66,20 @@ function createProfileView (username) {
                 //     })
             }
 
-            console.log('gettttt', username)
-            getFeedByName(username)
-                .then(res => {
-                    res.json().then(json => {
-                        console.log('got feed by name', json)
+            if (!props.userFeeds[username]) {
+                console.log('gettttt', username)
+                getFeedByName(username)
+                    .then(res => {
+                        console.log('got feed by name', res)
+                        emit(evs.userFeed.got, {
+                            name: username,
+                            feed: res
+                        })
                     })
-                })
-                .catch(err => {
-                    console.log('errrrrr', err)
-                })
+                    .catch(err => {
+                        console.log('errrrrr', err)
+                    })
+            }
         }, [])
 
         if (props.following) {

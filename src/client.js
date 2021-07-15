@@ -152,6 +152,7 @@ module.exports = function Client () {
             }).toString();
 
             return fetch(base + '/.netlify/functions/feed-by-name' + '?' + qs)
+                .then(res => res.json())
         },
 
         post: function post (keys, msg, file) {

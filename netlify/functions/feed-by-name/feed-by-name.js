@@ -19,8 +19,6 @@ exports.handler = function (ev, ctx, cb) {
 
     var username = ev.queryStringParameters.username
 
-    console.log('***username', username)
-
     getByName(username)
         .then(res => {
             return cb(null, {
