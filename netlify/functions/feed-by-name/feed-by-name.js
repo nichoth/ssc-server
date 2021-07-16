@@ -1,6 +1,7 @@
 require('dotenv').config()
 var { getByName } = require('@nichoth/ssc-fauna/feed')
 let cloudinary = require("cloudinary").v2;
+var xtend = require('xtend')
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -23,7 +24,26 @@ exports.handler = function (ev, ctx, cb) {
         .then(res => {
             return cb(null, {
                 statusCode: 200,
-                body: JSON.stringify(res)
+                body: JSON.stringify(res.map(post => {
+                    var mentionUrls = ((post.value.content.mentions) || [])
+                        .map(mention => {
+                            // slugify the hash twice
+                            // don't know why we need to do it twice
+                            var slugifiedHash = encodeURIComponent('' + mention)
+                            var slugslug = encodeURIComponent(slugifiedHash)
+                            return cloudinary.url(slugslug)      
+                        })
+
+                    var xtendedMsg = xtend(post, {
+                        mentionUrls: mentionUrls
+                    })
+
+                    if (!xtendedMsg.value.previous) {
+                        xtendedMsg.value.previous = null
+                    }
+
+                    return xtendedMsg
+                }))
             })
         })
         .catch(err => {

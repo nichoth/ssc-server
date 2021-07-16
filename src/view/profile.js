@@ -115,9 +115,24 @@ function createProfileView (username) {
                 />
             </div>
 
+            <hr />
+
             <ul class="profile-posts post-list">
                 ${(props.userFeeds[username] || []).map(post => {
-                    return html`<pre>${JSON.stringify(post, null, 2)}</pre>`
+                    var url = (post.mentionUrls && post.mentionUrls[0])
+                    var writing = post.value.content.text
+                    console.log('post here', post)
+
+                    return html`<li class="post">
+                        <a href="/post/${encodeURIComponent(post.key)}"
+                            class="post-image"
+                        >
+                            <img src="${url}" />
+                        </a>
+                        <div class="content">
+                            <p>${writing}</p>
+                        </div>
+                    </li>`
                 })}
             </ul>
         </div>`
