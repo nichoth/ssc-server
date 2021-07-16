@@ -121,7 +121,7 @@ function createProfileView (username) {
                 ${(props.userFeeds[username] || []).map(post => {
                     var url = (post.mentionUrls && post.mentionUrls[0])
                     var writing = post.value.content.text
-                    console.log('post here', post)
+                    // console.log('post here', post)
 
                     return html`<li class="post">
                         <a href="/post/${encodeURIComponent(post.key)}"

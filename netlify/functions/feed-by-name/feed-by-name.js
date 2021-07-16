@@ -20,8 +20,11 @@ exports.handler = function (ev, ctx, cb) {
 
     var username = ev.queryStringParameters.username
 
+    console.log('**username**', username)
+
     getByName(username)
         .then(res => {
+            console.log('**res**', res)
             return cb(null, {
                 statusCode: 200,
                 body: JSON.stringify(res.map(post => {
