@@ -32,7 +32,7 @@
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^0.0.12",
     "@nichoth/ssc": "^0.0.10",
-    "@nichoth/ssc-fauna": "^0.0.29",
+    "@nichoth/ssc-fauna": "^0.0.30",
     "cloudinary": "^1.25.1",
     "create-hash": "^1.2.0",
     "dotenv": "^8.6.0",
