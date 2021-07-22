@@ -1,3 +1,4 @@
+require('dotenv').config()
 require('isomorphic-fetch')
 var test = require('tape')
 var { spawn } = require('child_process')
@@ -5,6 +6,7 @@ var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 var createHash = require('crypto').createHash
 var Client = require('../src/client')
+var base = 'http://localhost:8888'
 
     // var { getFollowing, follow, setNameAvatar, testPost,
     //     getRelevantPosts, getPostsWithFoafs } = Client()
@@ -13,6 +15,8 @@ var { follow, getPostsWithFoafs, post } = Client()
 
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
 let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
+
+// we are using temp keys only throughout this test file
 
 var ntl
 var keys = ssc.createKeys()
@@ -48,6 +52,32 @@ test('setup', function (t) {
     ntl.on('close', (code) => {
         console.log(`child process exited with code ${code}`)
     })
+})
+
+
+test('follow me', t => {
+    fetch(base + '/.netlify/functions/follow-me', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: keys.id,
+            password: process.env.TEST_PW
+        })
+    })
+        .then(res => {
+            res.json().then(json => {
+                t.equal(json.type, 'follow', 'should return the message')
+                t.equal(json.contact, keys.id, 'should return the right id')
+                t.end()
+            })
+        })
+        .catch(err => {
+            console.log('errrrrrr', err)
+            e.error(err)
+            t.end()
+        })
 })
 
 
@@ -228,4 +258,3 @@ test('all done', function (t) {
     ntl.kill()
     t.end()
 })
-

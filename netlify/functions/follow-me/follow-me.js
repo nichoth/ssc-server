@@ -1,10 +1,11 @@
 require('dotenv').config()
+var faunadb = require('faunadb')
 var pwds = require('../passwords.json')
-var hash = require('../../../hash')
+var bcrypt = require('bcrypt')
+var q = faunadb.query
 
 exports.handler = function (ev, ctx, cb) {
-    console.log('file', file)
-
+    // check that method is POST
     if (ev.httpMethod !== 'POST') {
         return cb(null, {
             statusCode: 400,
@@ -12,21 +13,23 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
-    // check that method is POST
+    var req = JSON.parse(ev.body)
+    // console.log('got req', req)
+
+    var { password, user } = req
+    var client = new faunadb.Client({
+        secret: process.env.FAUNADB_SERVER_SECRET
+    })
 
     // check that savedPw === hash(req.pw)
     //    need a hash function from cli
+    var ok = pwds.reduce((acc, pwdHash) => {
+        // return true if any of them match
+        return (acc || bcrypt.compare(password, pwdHash))
+    }, false)
 
     // if equal, write a follow msg to the DB
     //   { type: 'follow', contact: userId }
-
-    var req = JSON.parse(ev.body)
-    console.log('got req', req)
-
-    var { password, user } = req
-
-    var ok = pwds[hash(password)]
-
     if (ok) {
         // in here, write to DB
         return client.query(
@@ -38,6 +41,15 @@ exports.handler = function (ev, ctx, cb) {
                 return cb(null, {
                     statusCode: 200,
                     body: JSON.stringify(res.data)
+                })
+            })
+            .catch(err => {
+                // in here, handle the case where it is an existing user
+                // (we are already following them)
+                console.log('errrrr', err)
+                return cb(null, {
+                    statusCode: 500,
+                    body: err.toString()
                 })
             })
     }
