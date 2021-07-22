@@ -81,6 +81,34 @@ test('follow me', t => {
 })
 
 
+test('follow the same user again', t => {
+    fetch(base + '/.netlify/functions/follow-me', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: keys.id,
+            password: process.env.TEST_PW
+        })
+    })
+        .then(res => {
+            t.equal(res.ok, false, 'should get an error response')
+            if (!res.ok) {
+                res.text().then(text => {
+                    t.ok(text.includes('instance not unique'),
+                        'should return the right error')
+                    t.end()
+                })
+            }
+        })
+        .catch(err => {
+            t.error(err)
+            t.end()
+        })
+})
+
+
 test('client.post', t => {
     var content = {
         type: 'test',

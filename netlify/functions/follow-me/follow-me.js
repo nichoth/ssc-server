@@ -46,7 +46,7 @@ exports.handler = function (ev, ctx, cb) {
             .catch(err => {
                 // in here, handle the case where it is an existing user
                 // (we are already following them)
-                console.log('errrrr', err)
+                // console.log('errrrr', err)
                 return cb(null, {
                     statusCode: 500,
                     body: err.toString()
