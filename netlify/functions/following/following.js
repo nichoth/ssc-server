@@ -25,8 +25,6 @@ exports.handler = function (ev, ctx, cb) {
         // console.log('**posting**')
         var { author, keys, msg } = JSON.parse(ev.body)
 
-        // console.log('aaaaaaaa herr', author, keys, msg)
-
         follow.post(author, keys, msg)
             .then(res => {
                 return cb(null, {
