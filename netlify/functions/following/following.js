@@ -1,7 +1,6 @@
 // var ssc = require('@nichoth/ssc')
 require('dotenv').config()
 var follow = require('@nichoth/ssc-fauna/follow')
-
 let cloudinary = require("cloudinary").v2;
 
 cloudinary.config({ 
