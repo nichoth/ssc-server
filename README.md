@@ -39,7 +39,7 @@ $ npm test
 --------------------------------------------------------------
 
 
-The plan for now is just to make something that works for basic crud as stuff
+The plan for now is just to make something that works for basic crud and stuff
 
 
 ----------------------------------------------------------------

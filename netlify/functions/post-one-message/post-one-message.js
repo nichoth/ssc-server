@@ -82,14 +82,9 @@ exports.handler = function (ev, ctx, cb) {
 
 
 
-    // **TODO**
-    // check that the keys.id is on the `allowed` list -- the list of
-    // people that the server is following
 
 
 
-
-    // ------------------ start doing things ---------------------
 
 
 
@@ -102,7 +97,27 @@ exports.handler = function (ev, ctx, cb) {
 
     
 
+    // **TODO**
+    // check that the keys.id is on the `allowed` list -- the list of
+    // people that the server is following
+    client.query(
+        q.Get( q.Match(q.Index('server-following-who'), '@' + keys.public) )
+    )
+        .then(res => {
+            // post the stuff
+        })
+        .catch(err => {
+            // we are not following them
+            return cb(null, {
+                statusCode: 401,
+                body: err.toString()
+            })
+        })
 
+
+
+
+    // ------------------ start doing things ---------------------
 
     // create the hash
     var hash = createHash('sha256')

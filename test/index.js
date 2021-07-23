@@ -136,8 +136,6 @@ test('publish one message', function (t) {
 
     _msg = ssc.createMsg(keys, null, content)
 
-    // console.log('***the first msg***', _msg)
-
     // {
     //     previous: null,
     //     sequence: 1,
@@ -268,7 +266,6 @@ test('get foaf messages', t => {
             t.error(err)
             t.end()
         })
-
 })
 
 test('get relevant posts', function (t) {
