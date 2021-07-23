@@ -9,6 +9,26 @@
 npm start
 ```
 
+## add invite passwords
+You need to edit `/netlify/functions/passwords.json`, and add the hashed version of a password; the plaintext version is kept secret. You can use the script `/hash.js` to hash a password --
+
+```
+$ ./hash.js myPassword
+$2b$10$G8uSW1rs3JZS2YGjJLRbeekjmPwCWf0dQ6L37rFjCEIIKNvVyF97u
+```
+
+or
+
+```
+$ echo "myPassword" | ./hash.js | pbcopy
+```
+
+----------------------------
+
+The invite passwords are used with the `/follow-me` endpoint. You send a POST request like `{ user: userId, password }`. After doing that the server will save your posts to a DB.
+
+---------------------------------
+
 ## start a local server, with test data
 ```
 $ npm run start-test
