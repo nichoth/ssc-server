@@ -82,6 +82,13 @@ exports.handler = function (ev, ctx, cb) {
 
 
 
+    // **TODO**
+    // check that the keys.id is on the `allowed` list -- the list of
+    // people that the server is following
+
+
+
+
     // ------------------ start doing things ---------------------
 
 
@@ -134,7 +141,6 @@ exports.handler = function (ev, ctx, cb) {
             return msgAndFile(msg, file, slugifiedHash, _hash)
                 .then(res => {
                     // make the url here for the image
-                    // var imgHash = res[0].value.content.mentions[0]
                     var slugslug = encodeURIComponent(slugifiedHash)
                     var imgUrl = cloudinary.url(slugslug, {
                         // width: 100,

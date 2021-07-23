@@ -14,15 +14,18 @@ exports.handler = function (ev, ctx, cb) {
     }
 
     var req = JSON.parse(ev.body)
-    // console.log('got req', req)
 
     var { password, user } = req
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
     })
 
+
+    // in real life this would need to be a DB operation so that
+    // you can delete a password after it has been used once
+
+
     // check that savedPw === hash(req.pw)
-    //    need a hash function from cli
     var ok = pwds.reduce((acc, pwdHash) => {
         // return true if any of them match
         return (acc || bcrypt.compare(password, pwdHash))

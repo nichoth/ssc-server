@@ -8,9 +8,6 @@ var createHash = require('crypto').createHash
 var Client = require('../src/client')
 var base = 'http://localhost:8888'
 
-    // var { getFollowing, follow, setNameAvatar, testPost,
-    //     getRelevantPosts, getPostsWithFoafs } = Client()
-
 var { follow, getPostsWithFoafs, post } = Client()
 
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
@@ -29,9 +26,6 @@ hash.update(base64Caracal)
 var fileHash = hash.digest('base64')
 
 var client = Client()
-
-// console.log('user one', userOneKeys.id)
-// console.log('user two', userTwoKeys.id)
 
 test('setup', function (t) {
     ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
@@ -116,7 +110,7 @@ test('client.post', t => {
         mentions: [fileHash]
     }
 
-    // use a temporary user, so it doesn't effect the merkle dag of others
+    // use a temporary user, so it doesn't affect the merkle dag of others
     var tempKeys = ssc.createKeys()
     var msg = ssc.createMsg(tempKeys, null, content)
     client.post(tempKeys, msg, base64Caracal)
