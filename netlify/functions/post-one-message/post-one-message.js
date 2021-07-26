@@ -138,7 +138,7 @@ exports.handler = function (ev, ctx, cb) {
 
         // get an existing feed
         // to check if the merkle list matches up
-        client.query(
+        return client.query(
             q.Get(
                 q.Reverse( q.Match(q.Index('author'), '@' + keys.public) )
             )

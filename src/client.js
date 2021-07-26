@@ -167,7 +167,10 @@ module.exports = function Client () {
                     file: file
                 }) 
             })
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) return res.text()
+                    return res.json()
+                })
         },
 
         testPost: function testPost (content, userKeys) {

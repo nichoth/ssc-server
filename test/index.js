@@ -50,6 +50,8 @@ test('setup', function (t) {
 
 
 test('follow me', t => {
+    t.plan(3)
+
     fetch(base + '/.netlify/functions/follow-me', {
         method: 'POST',
         headers: {
@@ -64,13 +66,32 @@ test('follow me', t => {
             res.json().then(json => {
                 t.equal(json.type, 'follow', 'should return the message')
                 t.equal(json.contact, keys.id, 'should return the right id')
-                t.end()
             })
         })
         .catch(err => {
             console.log('errrrrrr', err)
             e.error(err)
-            t.end()
+        })
+
+    fetch(base + '/.netlify/functions/follow-me', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: userTwoKeys.id,
+            password: process.env.TEST_PW
+        })
+    })
+        .then(res => {
+            res.json().then(json => {
+                t.equal(json.contact, userTwoKeys.id,
+                    'should follow user two')
+            })
+        })
+        .catch(err => {
+            console.log('errrrrrr', err)
+            e.error(err)
         })
 })
 
@@ -88,13 +109,11 @@ test('follow the same user again', t => {
     })
         .then(res => {
             t.equal(res.ok, false, 'should get an error response')
-            if (!res.ok) {
-                res.text().then(text => {
-                    t.ok(text.includes('instance not unique'),
-                        'should return the right error')
-                    t.end()
-                })
-            }
+            res.text().then(text => {
+                t.ok(text.includes('instance not unique'),
+                    'should return the right error')
+                t.end()
+            })
         })
         .catch(err => {
             t.error(err)
@@ -120,13 +139,19 @@ test('create an invitation as a user', function (t) {
         .then(res => res.json())
         .then(res => {
             console.log('****create invitation res****', res)
-            t.ok(res.code, 'returns an invitation code')
+            t.ok(res.code, 'should return an invitation code')
             t.end()
         })
         .catch(err => {
             t.error(err, 'should not have an error')
             t.end()
         })
+})
+
+
+test('redeem an invitation', function (t) {
+    console.log('todo -- redeem invitation')
+    t.end()
 })
 
 
@@ -138,15 +163,16 @@ test('client.post', t => {
     }
 
     // use a temporary user, so it doesn't affect the merkle dag of others
-    var tempKeys = ssc.createKeys()
-    var msg = ssc.createMsg(tempKeys, null, content)
-    client.post(tempKeys, msg, base64Caracal)
+    // var tempKeys = ssc.createKeys()
+    _msg = ssc.createMsg(keys, null, content)
+    client.post(keys, _msg, base64Caracal)
         .then(res => {
-            t.equal(res.msg.value.signature, msg.signature,
+            t.equal(res.msg.value.signature, _msg.signature,
                 'should return the right signature')
             t.end()
         })
         .catch(err => {
+            console.log('errrrrr', err)
             t.error(err)
             t.end()
         })
@@ -154,51 +180,51 @@ test('client.post', t => {
 
 
 // * create and sign msg client side
-test('publish one message', function (t) {
-    var content = {
-        type: 'test',
-        text: 'waaaa',
-        mentions: [fileHash]
-    }
+// test('publish one message', function (t) {
+//     var content = {
+//         type: 'test',
+//         text: 'waaaa',
+//         mentions: [fileHash]
+//     }
 
-    _msg = ssc.createMsg(keys, null, content)
+//     _msg = ssc.createMsg(keys, null, content)
 
-    // {
-    //     previous: null,
-    //     sequence: 1,
-    //     author: '@x+KEmL4JmIKzK0eqR8vXLPUKSa87udWm+Enw2bsEiuU=.ed25519',
-    //     timestamp: NaN,
-    //     hash: 'sha256',
-    //     content: { type: 'test', text: 'waaaa' },
-    // eslint-disable-next-line
-    //     signature: 'RQXRrMUMqRlANeSBrfZ1AVerC9xGJxEGscx1MZrJUqAVylwVfi5i5r1msyZzqi7FuDf7DYr3OOHrTIO2P6ufDQ==.sig.ed25519'
-    //   }
+//     // {
+//     //     previous: null,
+//     //     sequence: 1,
+//     //     author: '@x+KEmL4JmIKzK0eqR8vXLPUKSa87udWm+Enw2bsEiuU=.ed25519',
+//     //     timestamp: NaN,
+//     //     hash: 'sha256',
+//     //     content: { type: 'test', text: 'waaaa' },
+//     // eslint-disable-next-line
+//     //     signature: 'RQXRrMUMqRlANeSBrfZ1AVerC9xGJxEGscx1MZrJUqAVylwVfi5i5r1msyZzqi7FuDf7DYr3OOHrTIO2P6ufDQ==.sig.ed25519'
+//     //   }
 
-    var reqBody = {
-        keys: { public: keys.public },
-        msg: _msg,
-        file: base64Caracal
-    }
+//     var reqBody = {
+//         keys: { public: keys.public },
+//         msg: _msg,
+//         file: base64Caracal
+//     }
 
-    fetch('http://localhost:8888/.netlify/functions/post-one-message', {
-        method: 'POST',
-        body:    JSON.stringify(reqBody),
-        headers: { 'Content-Type': 'application/json' },
-    })
-        .then(res => res.json())
-        .then(function (res) {
-            var { msg } = res
-            t.pass('got a response', res)
-            t.ok(msg.mentionUrls, 'should have the image urls')
-            t.equal(msg.value.signature, _msg.signature,
-                'should send back the right signature')
-            t.end()
-        })
-        .catch(err => {
-            console.log('errrrr', err)
-            t.error(err)
-        })
-})
+//     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
+//         method: 'POST',
+//         body:    JSON.stringify(reqBody),
+//         headers: { 'Content-Type': 'application/json' },
+//     })
+//         .then(res => res.json())
+//         .then(function (res) {
+//             var { msg } = res
+//             t.pass('got a response', res)
+//             t.ok(msg.mentionUrls, 'should have the image urls')
+//             t.equal(msg.value.signature, _msg.signature,
+//                 'should send back the right signature')
+//             t.end()
+//         })
+//         .catch(err => {
+//             console.log('errrrr', err)
+//             t.error(err)
+//         })
+// })
 
 
 test('publish a second message', function (t) {
@@ -284,6 +310,8 @@ test('get foaf messages', t => {
                     var post = res.msg.find(msg => {
                         return msg.value.author === userTwoKeys.id
                     })
+                    console.log('aaaaaaa', res.msg)
+                    console.log('bbbbbbbb', userTwoKeys.id)
                     t.ok(post, 'should return a post by user two')
                     t.end()
                 })
