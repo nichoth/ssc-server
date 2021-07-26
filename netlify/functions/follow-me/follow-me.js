@@ -57,7 +57,9 @@ exports.handler = function (ev, ctx, cb) {
             })
     } else {
         // they don't have the 'master' password, so check the DB invitations
+
         // TODO -- in here, do the DB lookup for the `code`
+
     }
 
 

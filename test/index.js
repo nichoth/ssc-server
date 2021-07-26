@@ -13,13 +13,16 @@ var { follow, getPostsWithFoafs, post } = Client()
 var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
 let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
 
-// we are using temp keys only throughout this test file
+
+
 
 var ntl
 var keys = ssc.createKeys()
 var userOneKeys = ssc.createKeys()
 var userTwoKeys = ssc.createKeys()
 var _msg
+
+
 
 var hash = createHash('sha256')
 hash.update(base64Caracal)
