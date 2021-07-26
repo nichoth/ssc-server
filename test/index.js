@@ -103,6 +103,33 @@ test('follow the same user again', t => {
 })
 
 
+test('create an invitation as a user', function (t) {
+    fetch(base + '/.netlify/functions/create-invitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            publicKey: keys.public,
+            msg: ssc.createMsg(keys, null, {
+                type: 'invitation',
+                from: keys.id
+            })
+        })
+    })
+        .then(res => res.json())
+        .then(res => {
+            console.log('****create invitation res****', res)
+            t.ok(res.code, 'returns an invitation code')
+            t.end()
+        })
+        .catch(err => {
+            t.error(err, 'should not have an error')
+            t.end()
+        })
+})
+
+
 test('client.post', t => {
     var content = {
         type: 'test',

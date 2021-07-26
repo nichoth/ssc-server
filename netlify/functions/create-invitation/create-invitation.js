@@ -35,7 +35,7 @@ exports.handler = function (ev, ctx, cb) {
         console.log('errrrr', err)
         return cb(null, {
             statusCode: 400,
-            body: new Error('Invalid message').toString()
+            body: err.toString()
         })
     }
 
@@ -55,11 +55,9 @@ exports.handler = function (ev, ctx, cb) {
         q.Get(
             q.Match(q.Index('server-following-who'), msg.author)
         )
-    ).then(who => {
+    ).then(() => {
         // we are following them, so create the invitation
-        console.log('whooooooooooooo*******', who)
-
-        // we are just using 10 bytes because 10 seems like a nice number
+        // using 10 bytes because 10 seems like a nice number
         var code = crypto.randomBytes(10).toString('hex')
 
         client.query(
@@ -71,8 +69,8 @@ exports.handler = function (ev, ctx, cb) {
                 return cb(null, {
                     statusCode: 200,
                     body: JSON.stringify({
-                        status: 'ok',
-                        invitationCode: code
+                        ok: true,
+                        code: code
                     })
                 })
             })
