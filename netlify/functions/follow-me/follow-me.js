@@ -15,7 +15,7 @@ exports.handler = function (ev, ctx, cb) {
 
     var req = JSON.parse(ev.body)
 
-    var { password, user } = req
+    var { password, user, code } = req
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
     })
@@ -26,7 +26,7 @@ exports.handler = function (ev, ctx, cb) {
 
 
     // check that savedPw === hash(req.pw)
-    var ok = pwds.reduce((acc, pwdHash) => {
+    var ok = password && pwds.reduce((acc, pwdHash) => {
         // return true if any of them match
         return (acc || bcrypt.compare(password, pwdHash))
     }, false)
@@ -55,7 +55,19 @@ exports.handler = function (ev, ctx, cb) {
                     body: err.toString()
                 })
             })
+    } else {
+        // they don't have the 'master' password, so check the DB invitations
+        // TODO -- in here, do the DB lookup for the `code`
     }
+
+
+
+
+
+
+
+
+
 
     return cb(null, {
         statusCode: 401,

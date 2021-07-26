@@ -149,7 +149,7 @@ test('create an invitation as a user', function (t) {
         })
 })
 
-test("create an invitation from someone w're not following", t => {
+test("create an invitation from someone we're not following", t => {
     var failureKeys = ssc.createKeys()
 
     fetch(base + '/.netlify/functions/create-invitation', {
@@ -166,7 +166,7 @@ test("create an invitation from someone w're not following", t => {
         })
     })
         .then(res => {
-            t.notOk(res.ok, 'should have a falsy ok status')
+            t.notOk(res.ok, 'should have a falsy status')
             t.equal(res.status, 401, 'should have the error code 401')
             t.end()
         })

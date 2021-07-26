@@ -35,6 +35,7 @@ module.exports = function Client () {
                 })
         },
 
+        // TODO need to send a password
         follow: function (myKeys, userKeys) {
             var followMsg = ssc.createMsg(myKeys, null, {
                 type: 'follow',
