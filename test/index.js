@@ -73,6 +73,8 @@ test('follow me', t => {
             e.error(err)
         })
 
+    // we follow userTwo here also just because the later tests depend on it
+    // (the foaf test)
     fetch(base + '/.netlify/functions/follow-me', {
         method: 'POST',
         headers: {
