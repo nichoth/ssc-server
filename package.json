@@ -59,6 +59,7 @@
     "envify": "^4.1.0",
     "eslint-config-minlint": "^2.0.0",
     "esmify": "^2.1.1",
+    "netlify-cli": "^5.2.6",
     "sass": "^1.32.12",
     "tap-spec": "^5.0.0",
     "tape": "^5.2.2",
