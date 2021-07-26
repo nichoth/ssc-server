@@ -83,9 +83,9 @@ exports.handler = function (ev, ctx, cb) {
     })
     .catch(err => {
         // you are not following them, so don't create an invitation
-        console.log('oh invitation narrr', err)
+        // console.log('oh no invitation narrr', err)
         return cb(null, {
-            statusCode: 400,
+            statusCode: 401,
             body: err.toString()
         })
     })

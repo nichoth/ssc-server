@@ -92,8 +92,7 @@ test('follow me', t => {
             })
         })
         .catch(err => {
-            console.log('errrrrrr', err)
-            e.error(err)
+            t.error(err)
         })
 })
 
@@ -150,6 +149,35 @@ test('create an invitation as a user', function (t) {
         })
 })
 
+test("create an invitation from someone w're not following", t => {
+    var failureKeys = ssc.createKeys()
+
+    fetch(base + '/.netlify/functions/create-invitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            publicKey: failureKeys.public,
+            msg: ssc.createMsg(failureKeys, null, {
+                type: 'invitation',
+                from: failureKeys.id
+            })
+        })
+    })
+        .then(res => {
+            t.notOk(res.ok, 'should have a falsy ok status')
+            t.equal(res.status, 401, 'should have the error code 401')
+            t.end()
+        })
+        .catch(err => {
+            console.log('errrrr', err)
+            t.error(err, 'should not return an error')
+            t.end()
+        })
+
+})
+
 
 test('redeem an invitation', function (t) {
     console.log('todo -- redeem invitation')
@@ -179,54 +207,6 @@ test('client.post', t => {
             t.end()
         })
 })
-
-
-// * create and sign msg client side
-// test('publish one message', function (t) {
-//     var content = {
-//         type: 'test',
-//         text: 'waaaa',
-//         mentions: [fileHash]
-//     }
-
-//     _msg = ssc.createMsg(keys, null, content)
-
-//     // {
-//     //     previous: null,
-//     //     sequence: 1,
-//     //     author: '@x+KEmL4JmIKzK0eqR8vXLPUKSa87udWm+Enw2bsEiuU=.ed25519',
-//     //     timestamp: NaN,
-//     //     hash: 'sha256',
-//     //     content: { type: 'test', text: 'waaaa' },
-//     // eslint-disable-next-line
-//     //     signature: 'RQXRrMUMqRlANeSBrfZ1AVerC9xGJxEGscx1MZrJUqAVylwVfi5i5r1msyZzqi7FuDf7DYr3OOHrTIO2P6ufDQ==.sig.ed25519'
-//     //   }
-
-//     var reqBody = {
-//         keys: { public: keys.public },
-//         msg: _msg,
-//         file: base64Caracal
-//     }
-
-//     fetch('http://localhost:8888/.netlify/functions/post-one-message', {
-//         method: 'POST',
-//         body:    JSON.stringify(reqBody),
-//         headers: { 'Content-Type': 'application/json' },
-//     })
-//         .then(res => res.json())
-//         .then(function (res) {
-//             var { msg } = res
-//             t.pass('got a response', res)
-//             t.ok(msg.mentionUrls, 'should have the image urls')
-//             t.equal(msg.value.signature, _msg.signature,
-//                 'should send back the right signature')
-//             t.end()
-//         })
-//         .catch(err => {
-//             console.log('errrrr', err)
-//             t.error(err)
-//         })
-// })
 
 
 test('publish a second message', function (t) {
@@ -312,8 +292,6 @@ test('get foaf messages', t => {
                     var post = res.msg.find(msg => {
                         return msg.value.author === userTwoKeys.id
                     })
-                    console.log('aaaaaaa', res.msg)
-                    console.log('bbbbbbbb', userTwoKeys.id)
                     t.ok(post, 'should return a post by user two')
                     t.end()
                 })
