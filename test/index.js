@@ -6,6 +6,7 @@ var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 var createHash = require('crypto').createHash
 var Client = require('../src/client')
+var client = Client()
 var base = 'http://localhost:8888'
 
 var { follow, getPostsWithFoafs, post } = Client()
@@ -27,7 +28,6 @@ var hash = createHash('sha256')
 hash.update(base64Caracal)
 var fileHash = hash.digest('base64')
 
-var client = Client()
 
 test('setup', function (t) {
     ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])

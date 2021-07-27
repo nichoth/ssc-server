@@ -7,6 +7,7 @@ cloudinary.config({
 });
 
 function upload (file, _hash) {
+    console.log('**start upload**', _hash)
     return new Promise(function (resolve, reject) {
         cloudinary.uploader.upload(file, {
             public_id: _hash,
@@ -16,6 +17,7 @@ function upload (file, _hash) {
                 return reject(err)
             }
 
+            console.log('**done uploading**', res)
             resolve(res)
         })
     })

@@ -93,18 +93,17 @@ exports.handler = function (ev, ctx, cb) {
 
     
 
-    // **TODO**
     // check that the keys.id is on the `allowed` list -- the list of
     // people that the server is following
     client.query(
         q.Get( q.Match(q.Index('server-following-who'), '@' + keys.public) )
     )
         .then((_res) => {
-            console.log('aaaaaaaaaaaaaaaa', _res)
+            // console.log('zzzzzzzzzz', _res)
             // post the stuff
             return doTheThings()
                 .then(res => {
-                    console.log('**things done***', res)
+                    // console.log('**things done***', res)
 
                     cb(null, {
                         statusCode: 200,
@@ -197,6 +196,7 @@ exports.handler = function (ev, ctx, cb) {
                     // console.log('**in err**', slugifiedHash, _hash)
                     return msgAndFile(msg, file, slugifiedHash, _hash)
                         .then(res => {  
+                            console.log('**got msg and file**')
                             var slugslug = encodeURIComponent(slugifiedHash)
 
                             // we slugify twice
@@ -243,10 +243,15 @@ exports.handler = function (ev, ctx, cb) {
 
 
     function msgAndFile (msg, file, slug, hash) {
+        // console.log('**in msg and file**')
         return Promise.all([
             writeMsg(msg, hash),
             upload(file, slug)
         ])
+            .then(arr => {
+                // console.log('**done with everything**', arr)
+                return arr
+            })
             .catch((err) => {
                 console.log('errrrrr', err)
                 revert(msg, file, slug)
@@ -274,6 +279,10 @@ exports.handler = function (ev, ctx, cb) {
                 data: { value: msg, key: msgHash }
             })
         )
+            .then(res => {
+                // console.log('**done writing msg**', res)
+                return res
+            })
     }
 }
 
