@@ -634,4 +634,6 @@ Where:
 `resource_type` is the type of file to upload. Valid values: `image`, `raw`, `video`, and `auto` to automatically detect the file type.
 For example, to upload an image file to the Cloudinary 'demo' account, send an HTTPS POST request to the following URL:
 
+```
 https://api.cloudinary.com/v1_1/demo/image/upload
+```

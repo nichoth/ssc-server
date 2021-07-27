@@ -198,7 +198,7 @@ test('client.post', t => {
     _msg = ssc.createMsg(keys, null, content)
     client.post(keys, _msg, base64Caracal)
         .then(res => {
-            console.log('ressssssssss', res)
+            // console.log('ressssssssss', res)
             t.equal(res.msg.value.signature, _msg.signature,
                 'should return the right signature')
             t.end()
