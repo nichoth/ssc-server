@@ -20,7 +20,6 @@ var ntl
 var keys = ssc.createKeys()
 var userOneKeys = ssc.createKeys()
 var userTwoKeys = ssc.createKeys()
-var _msg
 
 
 
@@ -188,6 +187,7 @@ test('redeem an invitation', function (t) {
 })
 
 
+var _msg
 test('client.post', t => {
     var content = {
         type: 'test',
@@ -195,11 +195,10 @@ test('client.post', t => {
         mentions: [fileHash]
     }
 
-    // use a temporary user, so it doesn't affect the merkle dag of others
-    // var tempKeys = ssc.createKeys()
     _msg = ssc.createMsg(keys, null, content)
     client.post(keys, _msg, base64Caracal)
         .then(res => {
+            console.log('ressssssssss', res)
             t.equal(res.msg.value.signature, _msg.signature,
                 'should return the right signature')
             t.end()

@@ -84,10 +84,6 @@ exports.handler = function (ev, ctx, cb) {
 
 
 
-
-
-
-
     var q = faunadb.query
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
@@ -103,10 +99,13 @@ exports.handler = function (ev, ctx, cb) {
     client.query(
         q.Get( q.Match(q.Index('server-following-who'), '@' + keys.public) )
     )
-        .then(() => {
+        .then((_res) => {
+            console.log('aaaaaaaaaaaaaaaa', _res)
             // post the stuff
             return doTheThings()
                 .then(res => {
+                    console.log('**things done***', res)
+
                     cb(null, {
                         statusCode: 200,
                         body: JSON.stringify({
@@ -148,6 +147,7 @@ exports.handler = function (ev, ctx, cb) {
                     console.log('!!!!mismatch!!!!!', res.data.key, msg.previous)
                     console.log('**prev key**', res.data.key)
                     console.log('**msg.previous key**', msg.previous)
+
                     return cb(null, {
                         statusCode: 422,
                         body: JSON.stringify({
@@ -192,6 +192,7 @@ exports.handler = function (ev, ctx, cb) {
             })
             .catch(err => {
                 if (err.name === 'NotFound') {
+                    console.log('**not found**')
                     // write the msg b/c the feed is new
                     // console.log('**in err**', slugifiedHash, _hash)
                     return msgAndFile(msg, file, slugifiedHash, _hash)
