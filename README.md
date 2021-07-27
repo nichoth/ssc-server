@@ -618,3 +618,20 @@ Working on avatars
 Now need to fetch an avatar when the app loads
 
 
+-----------------------------------------------------------
+
+## cloudinary
+
+### upload from the browser
+
+if you wish to upload files with a direct call to the API from within your own custom code you can send an HTTPS POST request to the following Cloudinary URL:
+
+https://api.cloudinary.com/v1_1/<cloud name>/<resource_type>/upload
+
+Where:
+
+`cloud name` is the name of your Cloudinary account.
+`resource_type` is the type of file to upload. Valid values: `image`, `raw`, `video`, and `auto` to automatically detect the file type.
+For example, to upload an image file to the Cloudinary 'demo' account, send an HTTPS POST request to the following URL:
+
+https://api.cloudinary.com/v1_1/demo/image/upload
