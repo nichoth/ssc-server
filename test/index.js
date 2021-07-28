@@ -201,8 +201,18 @@ test('redeem an invitation', function (t) {
             // })
         })
     })
+        .then(res => {
+            res.json().then(json => {
+                console.log('redeemed invitation', json)
+                t.ok(json, 'should redeem the invitation')
+                t.end()
+            })
+        })
+        .catch(err => {
+            t.error(err, 'should not return error')
+            t.end()
+        })
 
-    t.end()
 })
 
 

@@ -23,7 +23,7 @@ exports.handler = function (ev, ctx, cb) {
 
     var isValid
     try {
-        isValid = ssc.verify({ public: publicKey, signature, code })
+        isValid = ssc.verify({ public: publicKey }, signature, code)
     } catch(err) {
         console.log('errrrr', err)
         return cb(null, {
@@ -71,7 +71,6 @@ exports.handler = function (ev, ctx, cb) {
                     body: new Error('Invalid invitation').toString()
                 })
             }
-
             return cb(null, {
                 statusCode: 500,
                 body: err.toString()
