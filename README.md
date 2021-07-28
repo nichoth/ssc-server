@@ -29,6 +29,24 @@ The invite passwords are used with the `/follow-me` endpoint. You send a POST re
 
 ---------------------------------
 
+## invitations
+It's like a country club -- you need to be invited by a member.
+
+Existing members can call `/.netlify/functions/create-invitation` with a body like:
+```js
+{
+  publicKey: keys.public,
+  msg: ssc.createMsg(keys, null, {
+      type: 'invitation',
+      from: keys.id
+  })
+}
+```
+
+
+----------------------------------------------------------------
+
+
 ## start a local server, with test data
 ```
 $ npm run start-test

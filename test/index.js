@@ -15,13 +15,10 @@ var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
 let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
 
 
-
-
 var ntl
 var keys = ssc.createKeys()
 var userOneKeys = ssc.createKeys()
 var userTwoKeys = ssc.createKeys()
-
 
 
 var hash = createHash('sha256')
@@ -183,9 +180,8 @@ test("create an invitation from someone we're not following", t => {
 
 
 test('redeem an invitation', function (t) {
-    console.log('todo -- redeem invitation')
-
     var redeemer = ssc.createKeys()
+    var signature = ssc.sign(redeemer, code)
 
     fetch(base + '/.netlify/functions/redeem-invitation', {
         method: 'POST',
@@ -194,11 +190,8 @@ test('redeem an invitation', function (t) {
         },
         body: JSON.stringify({
             publicKey: redeemer.public,
-            code: code
-            // msg: ssc.createMsg(redeemer, null, {
-            //     type: 'invitation',
-            //     from: failureKeys.id
-            // })
+            code: code,
+            signature: signature
         })
     })
         .then(res => {

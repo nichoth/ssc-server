@@ -50,7 +50,7 @@ exports.handler = function (ev, ctx, cb) {
     // atomic transaction?
     client.query(
         q.Delete(
-            Select(
+            q.Select(
                 ["ref"],
                 q.Get(
                     q.Match( q.Index('invitation-by-code'), code )
@@ -65,6 +65,8 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
         .catch(err => {
+            console.log('errrrrrrrr', err)
+
             if (err.name === 'NotFound') {
                 return cb(null, {
                     statusCode: 400,

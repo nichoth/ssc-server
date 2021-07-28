@@ -191,7 +191,7 @@ exports.handler = function (ev, ctx, cb) {
             })
             .catch(err => {
                 if (err.name === 'NotFound') {
-                    console.log('**not found**')
+                    // console.log('**not found**')
                     // write the msg b/c the feed is new
                     // console.log('**in err**', slugifiedHash, _hash)
                     return msgAndFile(msg, file, slugifiedHash, _hash)
