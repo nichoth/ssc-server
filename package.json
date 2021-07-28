@@ -31,7 +31,7 @@
   "dependencies": {
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^0.0.12",
-    "@nichoth/ssc": "^0.0.10",
+    "@nichoth/ssc": "^0.0.16",
     "@nichoth/ssc-fauna": "^0.0.30",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.25.1",

@@ -62,7 +62,7 @@ exports.handler = function (ev, ctx, cb) {
 
         client.query(
             q.Create(q.Collection('invitations'), {
-                data: { type: 'invitation', code: code }
+                data: { type: 'invitation', code: code, from: msg.author }
             })
         )
             .then(() => {

@@ -124,7 +124,7 @@ test('follow the same user again', t => {
         })
 })
 
-
+var code
 test('create an invitation as a user', function (t) {
     fetch(base + '/.netlify/functions/create-invitation', {
         method: 'POST',
@@ -142,6 +142,7 @@ test('create an invitation as a user', function (t) {
         .then(res => res.json())
         .then(res => {
             console.log('****create invitation res****', res)
+            code = res.code
             t.ok(res.code, 'should return an invitation code')
             t.end()
         })
@@ -168,7 +169,7 @@ test("create an invitation from someone we're not following", t => {
         })
     })
         .then(res => {
-            t.notOk(res.ok, 'should have a falsy status')
+            t.notOk(res.ok, 'should have a "not ok" status')
             t.equal(res.status, 401, 'should have the error code 401')
             t.end()
         })
@@ -183,6 +184,24 @@ test("create an invitation from someone we're not following", t => {
 
 test('redeem an invitation', function (t) {
     console.log('todo -- redeem invitation')
+
+    var redeemer = ssc.createKeys()
+
+    fetch(base + '/.netlify/functions/redeem-invitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            publicKey: redeemer.public,
+            code: code
+            // msg: ssc.createMsg(redeemer, null, {
+            //     type: 'invitation',
+            //     from: failureKeys.id
+            // })
+        })
+    })
+
     t.end()
 })
 
