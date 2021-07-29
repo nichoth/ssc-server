@@ -178,9 +178,9 @@ test("create an invitation from someone we're not following", t => {
 
 })
 
-
+var redeemer
 test('redeem an invitation', function (t) {
-    var redeemer = ssc.createKeys()
+    redeemer = ssc.createKeys()
     var signature = ssc.sign(redeemer, code)
 
     fetch(base + '/.netlify/functions/redeem-invitation', {
@@ -208,6 +208,69 @@ test('redeem an invitation', function (t) {
             t.end()
         })
 
+})
+
+
+test('someone youre already following redeems an invitation', t => {
+    // first create a new invitation
+    fetch(base + '/.netlify/functions/create-invitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            publicKey: keys.public,
+            msg: ssc.createMsg(keys, null, {
+                type: 'invitation',
+                from: keys.id
+            })
+        })
+    })
+        .then(res => res.json())
+        .then(res => {
+            var code = res.code
+            redeem(code)
+        })
+        .catch(err => {
+            console.log('oh no', err)
+            t.error(err, 'should not have an error')
+            t.end()
+        })
+
+    function redeem (code) {
+        // then redeem it with the same person
+        var signature = ssc.sign(redeemer, code)
+        fetch(base + '/.netlify/functions/redeem-invitation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                publicKey: redeemer.public,
+                code: code,
+                signature: signature
+            })
+        })
+            .then(res => {
+                t.equal(res.status, 400, 'should have 400 status code')
+                
+                if (!res.ok) {
+                    res.text().then(text => {
+                        t.equal('Already following', text,
+                            'should send back the right error')
+                        t.end()
+                    })
+                } else {
+                    t.fail('should send a not ok response')
+                    t.end()
+                }
+            })
+            .catch(err => {
+                console.log('**red again err***', err)
+                t.error(err)
+                t.end()
+            })
+    }
 })
 
 

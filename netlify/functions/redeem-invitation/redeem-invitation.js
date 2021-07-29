@@ -78,6 +78,12 @@ exports.handler = function (ev, ctx, cb) {
 
     )
         .then(res => {
+            if (res === 'already following') {
+                return cb(null, {
+                    statusCode: 400,
+                    body: 'Already following'
+                })
+            }
             return cb(null, {
                 statusCode: 200,
                 body: JSON.stringify(res.data ? res.data : res)
