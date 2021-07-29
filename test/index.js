@@ -198,6 +198,8 @@ test('redeem an invitation', function (t) {
             res.json().then(json => {
                 console.log('redeemed invitation', json)
                 t.ok(json, 'should redeem the invitation')
+                t.equal(json.contact, redeemer.id,
+                    'should return a correct messsage')
                 t.end()
             })
         })

@@ -49,19 +49,29 @@ exports.handler = function (ev, ctx, cb) {
     // can you del the invitation code, and also follow the user in one
     // atomic transaction?
     client.query(
-        q.Delete(
-            q.Select(
-                ["ref"],
-                q.Get(
-                    q.Match( q.Index('invitation-by-code'), code )
+
+        // in here use a `q.Do` statement
+        // you can just list what to do
+        // q.Do( q.Delete(...), q.Create(...) )
+
+        q.Do(
+            q.Delete(
+                q.Select(
+                    ["ref"],
+                    q.Get(
+                        q.Match( q.Index('invitation-by-code'), code )
+                    )
                 )
-            )
+            ),
+            q.Create(q.Collection('server-following'), {
+                data: { type: 'follow', contact: ('@' + publicKey) }
+            })
         )
     )
         .then(res => {
             return cb(null, {
                 statusCode: 200,
-                body: JSON.stringify(res)
+                body: JSON.stringify(res.data)
             })
         })
         .catch(err => {
