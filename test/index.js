@@ -266,7 +266,7 @@ test('someone youre already following redeems an invitation', t => {
                 }
             })
             .catch(err => {
-                console.log('**red again err***', err)
+                console.log('**redeem again err***', err)
                 t.error(err)
                 t.end()
             })

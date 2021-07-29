@@ -9,6 +9,18 @@
 npm start
 ```
 
+## run a test
+
+```
+$ NODE_ENV=test npx tape test/index.js | npx tap-spec
+```
+
+## run all tests
+
+```
+$ npm test
+```
+
 ## add invite passwords
 You need to edit `/netlify/functions/passwords.json`, and add the hashed version of a password; the plaintext version is kept secret. You can use the script `/hash.js` to hash a password --
 
