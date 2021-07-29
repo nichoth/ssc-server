@@ -50,28 +50,37 @@ exports.handler = function (ev, ctx, cb) {
     // atomic transaction?
     client.query(
 
-        // in here use a `q.Do` statement
-        // you can just list what to do
-        // q.Do( q.Delete(...), q.Create(...) )
-
-        q.Do(
-            q.Delete(
-                q.Select(
-                    ["ref"],
-                    q.Get(
-                        q.Match( q.Index('invitation-by-code'), code )
-                    )
-                )
+        q.If(
+            // check if we are already following them
+            q.Exists(
+                q.Match(q.Index('server-following-who'), '@' + publicKey)
             ),
-            q.Create(q.Collection('server-following'), {
-                data: { type: 'follow', contact: ('@' + publicKey) }
-            })
+
+            // we are already following them, do nothing
+            'already following',
+
+            // we're not following them yet, so follow them
+            q.Do(
+                q.Delete(
+                    q.Select(
+                        ["ref"],
+                        q.Get(
+                            q.Match( q.Index('invitation-by-code'), code )
+                        )
+                    )
+                ),
+                q.Create(q.Collection('server-following'), {
+                    data: { type: 'follow', contact: ('@' + publicKey) }
+                })
+            )
+
         )
+
     )
         .then(res => {
             return cb(null, {
                 statusCode: 200,
-                body: JSON.stringify(res.data)
+                body: JSON.stringify(res.data ? res.data : res)
             })
         })
         .catch(err => {
@@ -83,6 +92,7 @@ exports.handler = function (ev, ctx, cb) {
                     body: new Error('Invalid invitation').toString()
                 })
             }
+
             return cb(null, {
                 statusCode: 500,
                 body: err.toString()

@@ -196,7 +196,7 @@ exports.handler = function (ev, ctx, cb) {
                     // console.log('**in err**', slugifiedHash, _hash)
                     return msgAndFile(msg, file, slugifiedHash, _hash)
                         .then(res => {  
-                            console.log('**got msg and file**')
+                            // console.log('**got msg and file**')
                             var slugslug = encodeURIComponent(slugifiedHash)
 
                             // we slugify twice
