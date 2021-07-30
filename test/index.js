@@ -210,7 +210,7 @@ test('redeem an invitation', function (t) {
 
 })
 
-
+var _code
 test('someone youre already following redeems an invitation', t => {
     // first create a new invitation
     fetch(base + '/.netlify/functions/create-invitation', {
@@ -228,8 +228,7 @@ test('someone youre already following redeems an invitation', t => {
     })
         .then(res => res.json())
         .then(res => {
-            var code = res.code
-            redeem(code)
+            redeem(res.code)
         })
         .catch(err => {
             console.log('oh no', err)
@@ -239,6 +238,8 @@ test('someone youre already following redeems an invitation', t => {
 
     function redeem (code) {
         // then redeem it with the same person
+        _code = code // set this for the next test
+        // use the same id as the last test
         var signature = ssc.sign(redeemer, code)
         fetch(base + '/.netlify/functions/redeem-invitation', {
             method: 'POST',
@@ -261,7 +262,7 @@ test('someone youre already following redeems an invitation', t => {
                         t.end()
                     })
                 } else {
-                    t.fail('should send a not ok response')
+                    t.fail('should send a "not ok" response')
                     t.end()
                 }
             })
@@ -271,6 +272,43 @@ test('someone youre already following redeems an invitation', t => {
                 t.end()
             })
     }
+})
+
+
+test('use that code with a new person after it failed on someone else', t => {
+    var newPerson = ssc.createKeys()
+    var signature = ssc.sign(newPerson, _code)
+
+    fetch(base + '/.netlify/functions/redeem-invitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            publicKey: newPerson.public,
+            code: _code,
+            signature: signature
+        })
+    })
+        .then(res => {
+            if (!res.ok) {
+                res.text().then(t => console.log('texttttt', t))
+                return t.end()
+            }
+
+            res.json().then(json => {
+                t.ok(json, 'should redeem the invitation')
+                t.equal(json.contact, newPerson.id,
+                    'should return a correct messsage')
+                t.end()
+            })
+        })
+        .catch(err => {
+            console.log('errrr', err)
+            t.error(err, 'should not return error')
+            t.end()
+        })
+
 })
 
 

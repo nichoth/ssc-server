@@ -57,7 +57,7 @@ exports.handler = function (ev, ctx, cb) {
             ),
 
             // we are already following them, do nothing
-            'already following',
+            'Already following',
 
             // we're not following them yet, so follow them
             q.Do(
@@ -78,7 +78,8 @@ exports.handler = function (ev, ctx, cb) {
 
     )
         .then(res => {
-            if (res === 'already following') {
+            if (res === 'Already following') {
+                console.log('***aaaaaaa***', res)
                 return cb(null, {
                     statusCode: 400,
                     body: 'Already following'
@@ -90,7 +91,9 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
         .catch(err => {
-            console.log('errrrrrrrr', err)
+            console.log('****errrrrrrrr', err)
+            
+            consonle.log('err name***', err.name)
 
             if (err.name === 'NotFound') {
                 return cb(null, {
