@@ -210,6 +210,63 @@ test('redeem an invitation', function (t) {
 
 })
 
+
+test('redeem an invitation with a bad code', function (t) {
+    // first create an invitation code
+    var url = base + '/.netlify/functions/create-invitation'
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            publicKey: keys.public,
+            msg: ssc.createMsg(keys, null, {
+                type: 'invitation',
+                from: keys.id
+            })
+        })
+    })
+        .then(res => res.json())
+        .then(json => {
+            var { code } = json
+            // then call 'redeem' with a different code
+            var newPerson = ssc.createKeys()
+            var signature = ssc.sign(newPerson, code + 'bad')
+            fetch(base + '/.netlify/functions/redeem-invitation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    publicKey: newPerson.public,
+                    code: code + 'bad',
+                    signature: signature
+                })
+            })
+                .then(res => {
+                    t.equal(res.status, 400, 'should have 400 status code')
+                    res.text().then(text => {
+                        t.ok(text.includes('Invalid invitation'),
+                            'should return the right error')
+                        t.end()
+                    })
+                })
+                .catch(err => {
+                    console.log('in here errr', err)
+                    t.end()
+                })
+        })
+})
+
+test('redeem an invitation with a bad signature', t => {
+    // first create an invitation code
+    // then try redeeming it with a bad signature
+    console.log('TODO')
+    t.end()
+})
+
+
 var _code
 test('someone youre already following redeems an invitation', t => {
     // first create a new invitation

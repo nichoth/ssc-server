@@ -91,10 +91,6 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
         .catch(err => {
-            console.log('****errrrrrrrr', err)
-            
-            consonle.log('err name***', err.name)
-
             if (err.name === 'NotFound') {
                 return cb(null, {
                     statusCode: 400,
