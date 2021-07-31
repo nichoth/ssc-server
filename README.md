@@ -9,10 +9,10 @@
 npm start
 ```
 
-## run a test
+## run one test
 
 ```
-$ NODE_ENV=test npx tape test/index.js | npx tap-spec
+$ NODE_ENV=test npx tape test/follow/index.js | npx tap-spec
 ```
 
 ## run all tests
