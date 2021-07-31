@@ -1,5 +1,6 @@
-var base = 'http://localhost:8888'
 var ssc = require('@nichoth/ssc')
+require('isomorphic-fetch')
+var base = 'http://localhost:8888'
 
 // var keys = ssc.createKeys()
 // // var userOneKeys = ssc.createKeys()
@@ -22,6 +23,10 @@ module.exports = function followTests (test, ks) {
             })
         })
             .then(res => {
+                if (!res.ok) {
+                    console.log('**not ok**')
+                    res.text().then(t => console.log('ttt', t))
+                }
                 res.json().then(json => {
                     t.equal(json.type, 'follow', 'should return the message')
                     t.equal(json.contact, keys.id, 'should return the right id')
@@ -29,7 +34,7 @@ module.exports = function followTests (test, ks) {
             })
             .catch(err => {
                 console.log('errrrrrr', err)
-                e.error(err)
+                t.error(err)
             })
 
         // we follow userTwo here also just because the later tests depend on it
@@ -222,8 +227,60 @@ module.exports = function followTests (test, ks) {
     test('redeem an invitation with a bad signature', t => {
         // first create an invitation code
         // then try redeeming it with a bad signature
-        console.log('TODO')
-        t.end()
+
+        var url = base + '/.netlify/functions/create-invitation'
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                publicKey: keys.public,
+                msg: ssc.createMsg(keys, null, {
+                    type: 'invitation',
+                    from: keys.id
+                })
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                var { code } = res
+                var newPerson = ssc.createKeys()
+                var signature = ssc.sign(newPerson, code)
+
+                fetch(base + '/.netlify/functions/redeem-invitation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        publicKey: newPerson.public,
+                        code: code,
+                        signature: 'bad' + signature
+                    })
+                })
+                    .then(res => {
+                        if (!res.ok) {
+                            t.pass('should have an error response')
+                            res.text().then(text => {
+                                t.ok(text.includes('Invalid message'),
+                                    'should return a good error message')
+                                t.end()
+                            })
+                        } else {
+                            console.log('res.status', res.status)
+                            res.json().then(json => console.log('**json**', json))
+                            t.fail('should have an error response')
+                            t.end()
+                        }
+                    })
+                    .catch(err => {
+                        console.log('oh no', err)
+                        t.error(err)
+                        t.end()
+                    })
+            })
+
     })
 
 
@@ -309,8 +366,10 @@ module.exports = function followTests (test, ks) {
         })
             .then(res => {
                 if (!res.ok) {
-                    res.text().then(t => console.log('texttttt', t))
-                    return t.end()
+                    return res.text().then(t => {
+                        console.log('texttttt', t)
+                        t.end()
+                    })
                 }
 
                 res.json().then(json => {

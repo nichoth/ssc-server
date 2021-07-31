@@ -79,7 +79,6 @@ exports.handler = function (ev, ctx, cb) {
     )
         .then(res => {
             if (res === 'Already following') {
-                console.log('***aaaaaaa***', res)
                 return cb(null, {
                     statusCode: 400,
                     body: 'Already following'

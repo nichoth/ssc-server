@@ -1,7 +1,8 @@
+require('dotenv').config()
 var test = require('tape')
 var { spawn } = require('child_process')
-
 var followTests = require('./follow')
+var ssc = require('@nichoth/ssc')
 
 var keys = ssc.createKeys()
 var userOneKeys = ssc.createKeys()
@@ -30,4 +31,5 @@ test('setup', function (t) {
 
 test('follow tests', t => {
     followTests(t.test, { keys, userOneKeys, userTwoKeys })
+    t.end()
 })
