@@ -8,6 +8,8 @@ function Shell (props) {
     var { path, emit, me } = props
     var { profile } = me
 
+    console.log('props in shell', props)
+
     // component did mount
     // get avatar
     useEffect(() => {
@@ -104,7 +106,7 @@ function Shell (props) {
             </li>
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
-            <li class="${active('/create-invitation')}">
+            <li class="${active('/create-invitation')} create-inv">
                 <a href="/create-invitation">create an invitation</a>
             </li>
             <li class="${active('/whoami')}">

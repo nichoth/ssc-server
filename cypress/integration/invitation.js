@@ -1,11 +1,19 @@
 require('dotenv').config()
-const client = require("../../src/client")
+const client = require("../../src/client")()
 
 var URL = 'http://localhost:8888'
 
 describe('create an invitation', () => {
+    it('doesnt show the invitation nav if you dont have an id', () => {
+        cy.visit(URL)
 
-    it('', () => {
+        cy.get('.nav-part').should('exist')
+            .then(() => {
+                return cy.get('.create-inv').should('not.exist');
+            })
+    })
+
+    it('shows invitation nav if the server is following you', () => {
         cy.createId()
 
         cy.window()
@@ -13,14 +21,33 @@ describe('create an invitation', () => {
                 console.log('window', window)
                 var myKeys = win.myKeys
                 console.log('ma keys', myKeys)
+                console.log('test pw', Cypress.env('TEST_PW'))
 
-                console.log('test pw', process.env.TEST_PW)
+                return client.followMe(myKeys, Cypress.env('TEST_PW'))
+            })
+            .then(() => {
+                // server is now following you,
+                // so create an invitation
 
-                return client.followMe(myKeys, process.env.TEST_PW)
+                cy.visit(URL)
 
-                // return cy.followFoafs(myKeys)
+                cy.get('.create-inv').should('exist');
+
+                // return fetch(URL + '/.netlify/functions/create-invitation', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         publicKey: keys.public,
+                //         msg: ssc.createMsg(keys, null, {
+                //             type: 'invitation',
+                //             from: keys.id
+                //         })
+                //     })
+                // })
+                //     .then(res => res.json())
             })
 
-        cy.visit(URL)
     })
 })

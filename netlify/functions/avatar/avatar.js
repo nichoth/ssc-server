@@ -48,10 +48,11 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
             .catch(err => {
-                // console.log('errrrr in avatar query', err)
+                // console.log('****errrrr in avatar query', err)
 
                 // they don't have an avatar yet
                 if (err.toString().includes('instance not found')) {
+                    console.log('***includes****', err)
                     return cb(null, {
                         statusCode: 200,
                         body: JSON.stringify({
@@ -69,7 +70,6 @@ exports.handler = function (ev, ctx, cb) {
                     })
                 })
             })
-
 
         return
     }

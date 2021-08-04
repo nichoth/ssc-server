@@ -31,6 +31,7 @@ exports.handler = function (ev, ctx, cb) {
         console.log('!!!foafs!!!', foafs)
         return getWithFoafs(userId)
             .then(res => {
+                // console.log('******res****', res)
                 return cb(null, {
                     statusCode: 200,
                     body: JSON.stringify({
@@ -55,7 +56,7 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
             .catch(err => {
-                console.log('rrrrrrrr', err)
+                console.log('oh no rrrrrrrr', err)
                 return cb(null, {
                     statusCode: 500,
                     body: err.toString()
