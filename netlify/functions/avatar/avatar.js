@@ -23,7 +23,7 @@ exports.handler = function (ev, ctx, cb) {
     if (ev.httpMethod === 'GET') {
         // return the avatar
         var aboutWho = ev.queryStringParameters.aboutWho
-        console.log('**avatar - about who**', aboutWho)
+        // console.log('**avatar - about who**', aboutWho)
 
         client.query(
             q.Get( q.Match(q.Index('avatar-by-id'), aboutWho) )
@@ -48,7 +48,7 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
             .catch(err => {
-                console.log('errrrr in avatar query', err)
+                // console.log('errrrr in avatar query', err)
 
                 // they don't have an avatar yet
                 if (err.toString().includes('instance not found')) {
