@@ -20,8 +20,6 @@ exports.handler = function (ev, ctx, cb) {
         secret: process.env.FAUNADB_SERVER_SECRET
     })
 
-
-
     // check that savedPw === hash(req.pw)
     var ok = password && pwds.reduce((acc, pwdHash) => {
         // return true if any of them match
@@ -46,7 +44,9 @@ exports.handler = function (ev, ctx, cb) {
             .catch(err => {
                 // in here, handle the case where it is an existing user
                 // (we are already following them)
+                // should return a success in that case
                 // console.log('errrrr', err)
+                console.log('eeerrrppppp', err)
                 return cb(null, {
                     statusCode: 500,
                     body: err.toString()

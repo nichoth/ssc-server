@@ -1,4 +1,4 @@
-require('dotenv').config()
+// require('dotenv').config()
 var Client = require('../../src/client')
 var client = Client()
 var createHash = require('create-hash')
@@ -54,10 +54,10 @@ Cypress.Commands.add('createId', () => {
 })
 
 Cypress.Commands.add('followFoafs', (myKeys) => {
-    console.log('envvvvvvvvv', process.env.TEST_PW)
-    client.followMe(myKeys, process.env.TEST_PW)
-        .then(() => client.followMe(tempKeysTwo))
-        .then(() => client.followMe(tempKeysThree))
+    console.log('envvvvvvvvv', Cypress.env('TEST_PW'))
+    return client.followMe(myKeys, Cypress.env('TEST_PW'))
+        .then(() => client.followMe(tempKeysTwo, Cypress.env('TEST_PW')))
+        .then(() => client.followMe(tempKeysThree, Cypress.env('TEST_PW')))
         .then(() => {
             return client.follow(myKeys, tempKeysTwo)
                 .then(() => {
@@ -71,8 +71,8 @@ Cypress.Commands.add('followFoafs', (myKeys) => {
 })
 
 Cypress.Commands.add('serverFollow', (keys) => {
-    console.log('envvvvvvvvv', process.env.TEST_PW)
-    return client.followMe(keys, process.env.TEST_PW)
+    console.log('envvvvvvvvv', Cypress.env('TEST_PW'))
+    return client.followMe(keys, Cypress.env('TEST_PW'))
 })
 
 Cypress.Commands.add('foafPost', () => {

@@ -12,12 +12,21 @@ describe('foafs on the home page', () => {
                 var myKeys = win.myKeys
                 console.log('ma keys', myKeys)
 
-                cy.serverFollow(myKeys)
-
-                cy.serverFollow()
+                // cy.serverFollow(myKeys)
 
                 return cy.followFoafs(myKeys)
+
+                // return cy.followFoafs(myKeys)
             })
+            .then(() => {
+                cy.foafPost()
+
+                cy.visit(URL)
+
+                cy.get('.post-list .post:first p')
+                    .should('have.text', 'test post content')
+            })
+
 
 
         // cy.get('.whoami pre').then($pre => {
@@ -37,12 +46,6 @@ describe('foafs on the home page', () => {
         // need to have the server follow all the users
 
 
-        cy.foafPost()
-
-        cy.visit(URL)
-
-        cy.get('.post-list .post:first p')
-            .should('have.text', 'test post content')
     })
 
 })
