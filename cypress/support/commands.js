@@ -59,6 +59,7 @@ Cypress.Commands.add('followFoafs', (myKeys) => {
         .then(() => client.followMe(tempKeysTwo, Cypress.env('TEST_PW')))
         .then(() => client.followMe(tempKeysThree, Cypress.env('TEST_PW')))
         .then(() => {
+            // now make user1 follow user2 follow user3
             return client.follow(myKeys, tempKeysTwo)
                 .then(() => {
                     return client.follow(tempKeysTwo, tempKeysThree)
@@ -78,7 +79,7 @@ Cypress.Commands.add('serverFollow', (keys) => {
 Cypress.Commands.add('foafPost', () => {
     var msg = ssc.createMsg(tempKeysThree, null, {
         type: 'test',
-        text: 'test post content',
+        text: 'foaf test',
         mentions: [fileHash]
     })
     console.log('start posting', msg)

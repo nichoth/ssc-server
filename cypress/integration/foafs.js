@@ -2,7 +2,7 @@ var URL = 'http://localhost:8888'
 
 describe('foafs on the home page', () => {
 
-    it('the home view', () => {
+    it('should show foaf posts', () => {
         cy.createId()
 
         cy.window()
@@ -18,7 +18,7 @@ describe('foafs on the home page', () => {
                 cy.visit(URL)
 
                 cy.get('.post-list .post:first p')
-                    .should('have.text', 'test post content')
+                    .should('have.text', 'foaf test')
             })
     })
 
