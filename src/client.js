@@ -205,6 +205,22 @@ module.exports = function Client () {
                 .catch(err => {
                     console.log('aaaaarrgggg', err)
                 })
+        },
+
+        followMe: function (keys, password) {
+            return fetch(base + '/.netlify/functions/follow-me', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user: keys.id,
+                    password: password
+                })
+            })
+                .then(res => {
+                    return res.json()
+                })
         }
     }
 

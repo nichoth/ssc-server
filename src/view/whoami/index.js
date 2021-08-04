@@ -10,8 +10,8 @@ import { useState } from 'preact/hooks';
 
 function Whoami (props) {
     var { route } = props
-    console.log('props in here', props)
-    console.log('rrrrrroute', route)
+    // console.log('props in here', props)
+    // console.log('rrrrrroute', route)
 
     function isActive (href, path) {
         return href === path ? 'active' : ''

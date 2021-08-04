@@ -3,7 +3,7 @@ var struct = require('observ-struct')
 
 function State (keys, profile) {
 
-    console.log('in state', profile)
+    // console.log('in state', profile)
 
     var state = struct({
         // feed: observ(null),

@@ -18,14 +18,14 @@ exports.handler = function (ev, ctx, cb) {
     var req = JSON.parse(ev.body)
     var { publicKey, msg } = req
 
-    // check that the message is valid, that is really came from
+    // check that the message is valid, that it really came from
     // who it says it did
 
-    // msg needs `signature` field
+    // `msg` needs `signature` field
     // could be like {
         // previous: null
         // author: "@abc",
-        // content: { type: 'create-invite' },
+        // content: { type: 'invitation', from: '@abc' },
         // signature: 123
     // }
     var isValid

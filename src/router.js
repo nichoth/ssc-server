@@ -4,6 +4,7 @@ var New = require('./view/new')
 var Whoami = require('./view/whoami')
 var SingleImage = require('./view/single-image')
 var createProfileView = require('./view/profile')
+var CreateInvitation = require('./view/create-invitation')
 
 var tabs = {
     save: require('./view/whoami/save'),
@@ -42,10 +43,14 @@ function Router () {
     })
 
     router.addRoute('/post/:key', match => {
-        // var { key } = match.params
-
         return {
             view: SingleImage
+        }
+    })
+
+    router.addRoute('/create-invitation', () => {
+        return {
+            view : CreateInvitation
         }
     })
 

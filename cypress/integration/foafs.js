@@ -5,9 +5,17 @@ describe('foafs on the home page', () => {
     it('should have foaf messages', () => {
         cy.createId()
 
+
         cy.window()
             .then(win => {
+                console.log('window', window)
                 var myKeys = win.myKeys
+                console.log('ma keys', myKeys)
+
+                cy.serverFollow(myKeys)
+
+                cy.serverFollow()
+
                 return cy.followFoafs(myKeys)
             })
 
@@ -23,6 +31,10 @@ describe('foafs on the home page', () => {
 
         //     return cy.followFoafs(myKeys)
         // })
+
+
+
+        // need to have the server follow all the users
 
 
         cy.foafPost()

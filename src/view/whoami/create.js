@@ -6,7 +6,6 @@ var evs = require('../../EVENTS')
 module.exports = Create
 
 function Create (props) {
-    console.log('**props create', props)
     var { emit, setRoute } = props
 
     function createLocalId (ev) {

@@ -45,10 +45,10 @@ var emit = bus.emit.bind(bus)
 console.log('aaaa')
 if (process.env.NODE_ENV === 'test') {
     console.log('bbbbbb', 'test only')
-    console.log('my id', state().me.secrets.id)
+    // console.log('my id', state().me.secrets.id)
     var me = state.me()
     var myKeys = me.secrets
-    console.log('**my keys**', myKeys)
+    // console.log('**my keys**', myKeys)
 
     // TODO
     // do a foaf follow. This means you follow userOne, userOne
@@ -80,7 +80,7 @@ if (process.env.NODE_ENV === 'test') {
 
     // post a msg where userOne follows another user
     window.followFoaf = function () {
-        console.log('foafing')
+        // console.log('foafing')
 
         // have userOne follow userTwo
         follow(userOneKeys, userTwoKeys)
@@ -90,13 +90,13 @@ if (process.env.NODE_ENV === 'test') {
     }
 
     window.userOneName = function () {
-        console.log('user one keys', userOneKeys)
+        // console.log('user one keys', userOneKeys)
         setNameAvatar('userOne', userOneKeys)
             .then(res => {
                 if (!res.ok) {
                     return res.text().then(t => console.log('tttt', t))
                 }
-                console.log('success', res)
+                // console.log('success', res)
             })
             .catch(err => {
                 console.log('errrrr', err)
@@ -106,7 +106,7 @@ if (process.env.NODE_ENV === 'test') {
     window.userTwoName = function () {
         setNameAvatar('userTwo', userTwoKeys)
             .then(res => {
-                console.log('success user two name', res)
+                // console.log('success user two name', res)
             })
             .catch(err => {
                 console.log('errrrr', err)
@@ -116,13 +116,13 @@ if (process.env.NODE_ENV === 'test') {
     window.user2Post = function () {
         testPost('test content', userTwoKeys)
             .then(res => {
-                console.log('posted user 2 msg', res)
+                // console.log('posted user 2 msg', res)
             })
     }
 
 
     window.getFoafPosts = function () {
-        console.log('my id', state().me.secrets.id)
+        // console.log('my id', state().me.secrets.id)
         getPostsWithFoafs(state.me.secrets().id)
             .then(res => {
                 console.log('**got foaf posts**', res.msg)
@@ -199,7 +199,7 @@ function Connector ({ emit, state, setRoute }) {
     })
 
     var match = router.match(_state.route)
-    console.log('match', match)
+    // console.log('match', match)
     if (!match) console.log('not match')
     var { params } = match
     var route = match ? match.action(match) : null

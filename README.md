@@ -55,6 +55,53 @@ Existing members can call `/.netlify/functions/create-invitation` with a body li
 }
 ```
 
+## ~~~the algorithm~~~
+### invitations
+It's like a country club. You need to be invited by someone who is already a member.
+
+### create an invitation
+Send a message like this:
+
+```js
+body: JSON.stringify({
+    publicKey: keys.public,
+    msg: ssc.createMsg(keys, null, {
+        type: 'invitation',
+        from: keys.id
+    })
+})
+```
+
+Get back:
+```js
+{ code: '123' }
+```
+
+Then the person you are inviting needs to send a message like this:
+```js
+var redeemer = ssc.createKeys()
+var signature = ssc.sign(redeemer, code)
+
+body: JSON.stringify({
+    publicKey: redeemer.public,
+    code: code,
+    signature: signature
+})
+```
+
+Visit this URL to send such a message: `/invitation?code=abc`
+
+### foafs
+When the app starts, you call `/.netlify/get-relevant-posts` with a
+query parameter of `foafs=true`
+
+```js
+var foafs = ev.queryStringParameters.foafs
+if (foafs) {
+  // return posts with foafs
+}
+```
+
 
 ----------------------------------------------------------------
 

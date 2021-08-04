@@ -21,9 +21,6 @@ exports.handler = function (ev, ctx, cb) {
     })
 
 
-    // in real life this would need to be a DB operation so that
-    // you can delete a password after it has been used once
-
 
     // check that savedPw === hash(req.pw)
     var ok = password && pwds.reduce((acc, pwdHash) => {

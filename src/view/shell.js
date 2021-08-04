@@ -22,7 +22,6 @@ function Shell (props) {
                 return res.json()
             })
             .then(res => {
-                // console.log('******got avatar in shell', res)
                 emit(evs.identity.gotAvatar, res)
             })
             .catch(err => {
@@ -105,7 +104,12 @@ function Shell (props) {
             </li>
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
-            <li class="${active('/whoami')}"><a href="/whoami">whoami</a></li>
+            <li class="${active('/create-invitation')}">
+                <a href="/create-invitation">create an invitation</a>
+            </li>
+            <li class="${active('/whoami')}">
+                <a href="/whoami">whoami</a>
+            </li>
         </ul>
 
         <hr />
