@@ -46,8 +46,6 @@ function Import (props) {
         setHasPasted(true)
     }
 
-    console.log('meeeeeeeeee', me)
-
     return html`<div class="route whoami import">
         <h2>Import an ID</h2>
 
