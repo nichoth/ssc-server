@@ -35,7 +35,10 @@ function Create (props) {
         <div class="id-sources">
             <div class="id-source create-id">
                 <h2>Create a local identity</h2>
-                <p>This will destroy your current ID</p>
+                ${(props.me.secrets && props.me.secrets.id) ?
+                    html`<p>This will destroy your current ID</p>` :
+                    null
+                } 
                 <button type="submit" onClick=${createLocalId}>Create</button>
             </div>
 
