@@ -18,7 +18,7 @@ function Create (props) {
         if (process.env.NODE_ENV === 'test') {
             window.myKeys = keys
         }
-        setRoute('/whoami')
+        setRoute('/invitation')
     }
 
     function submitCreationToServer (ev) {

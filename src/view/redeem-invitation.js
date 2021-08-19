@@ -12,7 +12,7 @@ function RedeemInvitation (props) {
     }
 
     return html`<div class="redeem-invitation-route">
-        do an invitation
+        <p>You need an invitation to use this server</p>
 
         <form class="redeem" onSubmit=${redeem}>
             <button type="submit">redeem an invitation</button>

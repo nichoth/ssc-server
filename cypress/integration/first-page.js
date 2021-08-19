@@ -12,6 +12,11 @@ describe('the first page you see, without an account', () => {
 
     it('should create a local id', () => {
         cy.get('.create-id button').click()
-        cy.url().should('equal', URL + '/whoami')
+        cy.url().should('equal', URL + '/invitation')
+    })
+
+    it('should ask you for an invitation', () => {
+        cy.get('.redeem-invitation-route p')
+            .should('have.text', 'You need an invitation to use this server')
     })
 })

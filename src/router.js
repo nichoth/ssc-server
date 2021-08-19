@@ -55,7 +55,7 @@ function Router () {
         }
     })
 
-    router.addRoute('/redeem-invitation', () => {
+    router.addRoute('/invitation', () => {
         return {
             view: RedeemInvitation
         }
