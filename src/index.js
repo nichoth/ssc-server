@@ -54,11 +54,14 @@ route(function onRoute (path) {
 
     // check this synchronously for now,
     // change it later if necessary
-    if (!state.me.secrets().id) {
+    if (!state.me.secrets().id && path !== '/hello') {
         console.log('!!!not id!!!')
         // if you don't have an id, then go to a login screen
         return route.setRoute('/hello')
     }
+
+    // if you have an ID, but the server is not following you,
+    // show an invitation route
 
     state.route.set(path)
 })
@@ -100,6 +103,13 @@ function Connector ({ emit, state, setRoute }) {
 
     //     </div>`
     // }
+
+    if (match.route === '/hello' || match.route === '/invitation') {
+        // don't show the `shell` component in this case
+        return html`<${routeView} setRoute=${setRoute} emit=${emit}
+            ...${_state} path=${_state.route}
+        />`
+    }
 
     return html`<${Shell} setRoute=${setRoute} emit=${emit} ...${_state}
         path=${_state.route}

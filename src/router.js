@@ -52,7 +52,7 @@ function Router () {
 
     router.addRoute('/create-invitation', () => {
         return {
-            view : CreateInvitation
+            view: CreateInvitation
         }
     })
 
@@ -63,7 +63,9 @@ function Router () {
     })
 
     router.addRoute('/hello', () => {
-        return { view: Hello }
+        return {
+            view: Hello
+        }
     })
 
     router.addRoute('/:username', match => {

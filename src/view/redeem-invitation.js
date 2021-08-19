@@ -1,5 +1,5 @@
 import { html } from 'htm/preact'
-// import { useEffect, useState } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 
 function RedeemInvitation (props) {
     // var { params } = props
@@ -7,8 +7,18 @@ function RedeemInvitation (props) {
 
     console.log('redeem invitation props', props)
 
+    useEffect(() => {
+        document.body.classList.add('invitation')
+        
+        // returned function will be called on component unmount 
+        return () => {
+            document.body.classList.remove('invitation')
+        }
+    }, [])
+
     function redeem (ev) {
         ev.preventDefault()
+        console.log('redeem an invitation', ev)
     }
 
     return html`<div class="redeem-invitation-route">

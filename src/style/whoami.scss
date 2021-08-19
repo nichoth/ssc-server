@@ -83,24 +83,6 @@
         margin: 2rem 0;
     }
 
-    .id-sources {
-        display: grid;
-        gap: 1rem;
-        grid-template-rows: auto;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    }
-
-    .id-source {
-        border: 1px solid black;
-        padding: 2rem;
-        display: inline-block;
-        margin-bottom: 2rem;
-
-        &.local-source {
-            width: 85%;
-        }
-    }
-
     .id-paste-form {
         #key-info {
             display: block;
@@ -115,5 +97,23 @@
         .current-name {
             margin-right: 1rem;
         }
+    }
+}
+
+.id-sources {
+    display: grid;
+    gap: 1rem;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.id-source {
+    border: 1px solid black;
+    padding: 2rem;
+    display: inline-block;
+    margin-bottom: 2rem;
+
+    &.local-source {
+        width: 85%;
     }
 }
