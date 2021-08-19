@@ -45,10 +45,6 @@
     }
 
     li.name {
-        position: absolute;
-        left: 0;
-        top: -0.5rem;
-
         .name-editor.resolving {
             // TODO -- change this so the style makes more sense
             border-bottom: 4px solid gray;
@@ -59,10 +55,11 @@
 
 .nav-part {
     list-style: none;
-    padding: 0;
+    padding: 0 2rem;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     position: relative;
+    align-items: center;
 
     li {
         a {

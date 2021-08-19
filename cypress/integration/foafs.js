@@ -9,7 +9,6 @@ describe('foafs on the home page', () => {
             .then(win => {
                 var myKeys = win.myKeys
                 console.log('ma keys', myKeys)
-
                 return cy.followFoafs(myKeys)
             })
             .then(() => {
