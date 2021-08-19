@@ -14,13 +14,13 @@ var Shell = require('./view/shell')
 
 var bus = Bus({ memo: true })
 
-
 // @TODO -- should use server to store the user name
 var profile = Identity.get() || null
 var keys = Keys.get() || null
 bus.emit(evs.keys.got, keys)
 var state = State(keys, profile)
 subscribe(bus, state)
+
 
 if (process.env.NODE_ENV === 'test') {
     require('./test-stuff')(state)
@@ -45,13 +45,18 @@ state.me.profile(function onChange (profile) {
 route(function onRoute (path) {
     // we update the state here with the path
     // then the `connector` finds the view via the router
+
+    // do you have an ID?
+    // does the server follow you?
+    // if not go to /login
+
+    console.log('***on route', path)
+
     state.route.set(path)
 })
 
-var { setRoute } = route
-
 render(html`<${Connector} emit=${emit} state=${state}
-    setRoute=${setRoute}
+    setRoute=${route.setRoute}
 />`, document.getElementById('content'))
 
 
@@ -72,6 +77,17 @@ function Connector ({ emit, state, setRoute }) {
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
     var subView = route ? route.subView : null
+
+    // var { serverFollowing } = _state
+
+    // do you have an ID?
+    // does the server follow you?
+    // if not:
+    // if (!serverFollowing) {
+    //     return html`<div class="login">
+
+    //     </div>`
+    // }
 
     return html`<${Shell} setRoute=${setRoute} emit=${emit} ...${_state}
         path=${_state.route}

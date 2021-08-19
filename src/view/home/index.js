@@ -36,8 +36,9 @@ function Home (props) {
 
     if (!me.secrets || !me.secrets.id) {
         return html`<div class="home-route">
-            <p>It looks like you don't have an identity. Create one
-                <a href="/whoami/create"> here</a></p>
+            <p class="need-id">It looks like you don't have an identity.
+                Create one <a href="/whoami/create"> here</a>
+            </p>
         </div>`
     }
 

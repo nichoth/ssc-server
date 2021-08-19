@@ -36,7 +36,6 @@ function Create (props) {
             <div class="id-source create-id">
                 <h2>Create a local identity</h2>
                 <p>This will destroy your current ID</p>
-                <button onclick=${reset}>cancel</button>
                 <button type="submit" onClick=${createLocalId}>Create</button>
             </div>
 

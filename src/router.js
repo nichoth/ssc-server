@@ -5,6 +5,7 @@ var Whoami = require('./view/whoami')
 var SingleImage = require('./view/single-image')
 var createProfileView = require('./view/profile')
 var CreateInvitation = require('./view/create-invitation')
+var RedeemInvitation = require('./view/redeem-invitation')
 
 var tabs = {
     save: require('./view/whoami/save'),
@@ -51,6 +52,12 @@ function Router () {
     router.addRoute('/create-invitation', () => {
         return {
             view : CreateInvitation
+        }
+    })
+
+    router.addRoute('/redeem-invitation', () => {
+        return {
+            view: RedeemInvitation
         }
     })
 
