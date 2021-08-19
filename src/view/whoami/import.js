@@ -46,6 +46,8 @@ function Import (props) {
         setHasPasted(true)
     }
 
+    console.log('meeeeeeeeee', me)
+
     return html`<div class="route whoami import">
         <h2>Import an ID</h2>
 
@@ -55,7 +57,7 @@ function Import (props) {
                 <div class="id-source">
                     <h3>Use <code>${MY_URL}</code> as an ID server</h3>
 
-                    ${!me.source ?
+                    ${(me.secrets && me.secrets.id) ?
                         html`<p>This will get rid of your local ID</p>` :
                         null
                     }

@@ -8,7 +8,7 @@ function State (keys, profile) {
     var state = struct({
         // feed: observ(null),
         relevantPosts: observ(null),
-        route: observ('/'),
+        route: observ(''),
         following: observ(null),
         userFeeds: observ({}),
         profiles: observ({}),

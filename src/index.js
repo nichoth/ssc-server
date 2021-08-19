@@ -72,7 +72,11 @@ function Connector ({ emit, state, setRoute }) {
     })
 
     var match = router.match(_state.route)
-    if (!match) console.log('not match')
+    console.log('match', match)
+    if (!match) {
+        console.log('not match')
+        return null
+    }
     var { params } = match
     var route = match ? match.action(match) : null
     var routeView = route ? route.view : null
