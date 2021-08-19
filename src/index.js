@@ -52,6 +52,14 @@ route(function onRoute (path) {
 
     console.log('***on route', path)
 
+    // check this synchronously for now,
+    // change it later if necessary
+    if (!state.me.secrets().id) {
+        console.log('!!!not id!!!')
+        // if you don't have an id, then go to a login screen
+        return route.setRoute('/hello')
+    }
+
     state.route.set(path)
 })
 
