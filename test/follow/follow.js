@@ -37,8 +37,8 @@ module.exports = function followTests (test, ks) {
                 t.error(err)
             })
 
-        // we follow userTwo here also just because the later tests depend on it
-        // (the foaf test)
+        // we follow userTwo here also just because the later tests depend on
+        // it (the foaf test)
         fetch(base + '/.netlify/functions/follow-me', {
             method: 'POST',
             headers: {

@@ -3,6 +3,10 @@ var faunadb = require('faunadb')
 // var ssc = require('@nichoth/ssc')
 var q = faunadb.query
 
+
+// is this server following person X?
+
+
 exports.handler = function (ev, ctx, cb) {
     // check that method is GET
     if (ev.httpMethod !== 'GET') {

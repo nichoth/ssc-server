@@ -60,6 +60,8 @@ exports.handler = function (ev, ctx, cb) {
         // using 10 bytes because 10 seems like a nice number
         var code = crypto.randomBytes(10).toString('hex')
 
+        // should probably hash the code before writing it to the database
+
         client.query(
             q.Create(q.Collection('invitations'), {
                 data: { type: 'invitation', code: code, from: msg.author }

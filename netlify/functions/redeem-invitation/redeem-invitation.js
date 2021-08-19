@@ -62,6 +62,7 @@ exports.handler = function (ev, ctx, cb) {
             // we're not following them yet, so follow them
             q.Do(
                 q.Delete(
+                    // delete the invitation since it was used once now
                     q.Select(
                         ["ref"],
                         q.Get(

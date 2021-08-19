@@ -3,7 +3,7 @@ const client = require("../../src/client")()
 
 var URL = 'http://localhost:8888'
 
-describe('create an invitation', () => {
+describe('invitation route', () => {
     it('doesnt show the invitation nav if you dont have an id', () => {
         cy.visit(URL)
 
@@ -33,21 +33,29 @@ describe('create an invitation', () => {
 
                 cy.get('.create-inv').should('exist');
 
-                // return fetch(URL + '/.netlify/functions/create-invitation', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify({
-                //         publicKey: keys.public,
-                //         msg: ssc.createMsg(keys, null, {
-                //             type: 'invitation',
-                //             from: keys.id
-                //         })
-                //     })
-                // })
-                //     .then(res => res.json())
             })
 
+    })
+
+    it('lets you create an invitation', () => {
+
+        cy.get('.create-inv').click()
+
+
+
+        // return fetch(URL + '/.netlify/functions/create-invitation', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         publicKey: keys.public,
+        //         msg: ssc.createMsg(keys, null, {
+        //             type: 'invitation',
+        //             from: keys.id
+        //         })
+        //     })
+        // })
+        //     .then(res => res.json())
     })
 })

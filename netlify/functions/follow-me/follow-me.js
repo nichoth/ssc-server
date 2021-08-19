@@ -61,13 +61,6 @@ exports.handler = function (ev, ctx, cb) {
 
 
 
-
-
-
-
-
-
-
     return cb(null, {
         statusCode: 401,
         body: (new Error('Invalid password')).toString()

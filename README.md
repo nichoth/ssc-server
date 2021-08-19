@@ -714,3 +714,16 @@ For example, to upload an image file to the Cloudinary 'demo' account, send an H
 ```
 https://api.cloudinary.com/v1_1/demo/image/upload
 ```
+
+
+-------------------------------------------
+
+## 8-18-2021
+
+### invitations
+
+Should not load the UI for invitations if you are not being followed by the 
+server.
+
+
+

@@ -8,7 +8,6 @@ var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
     var { me, emit, relevantPosts, following } = props;
-    console.log('props in home', props);
 
     // component did mount
     useEffect(() => {
