@@ -4,6 +4,8 @@
 @use './shell';
 @use './new';
 @use './profile';
+@use './hello';
+@use "../../node_modules/@nichoth/forms/src/style/text-input";
 
 @keyframes spinner {
     to {transform: rotate(360deg);}

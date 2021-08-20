@@ -1,0 +1,15 @@
+.redeem {
+    > div {
+        margin-top: 1rem;
+    }
+
+    label {
+        display: block;
+    }
+
+    input {
+        width: 100%;
+        max-width: 40rem;
+        padding: 1rem;
+    }
+}

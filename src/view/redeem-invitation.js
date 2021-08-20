@@ -1,12 +1,8 @@
 import { html } from 'htm/preact'
 import { useEffect } from 'preact/hooks';
+var TextInput = require('@nichoth/forms/src/text-input')
 
 function RedeemInvitation (props) {
-    // var { params } = props
-    // var { key } = params
-
-    console.log('redeem invitation props', props)
-
     useEffect(() => {
         document.body.classList.add('invitation')
         
@@ -25,7 +21,16 @@ function RedeemInvitation (props) {
         <p>You need an invitation to use this server</p>
 
         <form class="redeem" onSubmit=${redeem}>
-            <button type="submit">redeem an invitation</button>
+            <!-- <label for="invitation-code">Invitation code</label>
+            <input type="text" class="invitation-code" id="invitation-code"
+                name="invitation-code"
+            /> -->
+            <${TextInput} name="invitation-code" displayName="Invitation code"
+                required=${true}
+            />
+            <div>
+                <button type="submit">redeem an invitation</button>
+            </div>
         </form>
     </div>`
 }
