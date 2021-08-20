@@ -1,6 +1,7 @@
 import { html } from 'htm/preact'
 import { useEffect } from 'preact/hooks';
 var TextInput = require('@nichoth/forms/src/text-input')
+var Button = require('@nichoth/forms/src/button')
 
 function RedeemInvitation (props) {
     useEffect(() => {
@@ -29,7 +30,7 @@ function RedeemInvitation (props) {
                 required=${true}
             />
             <div>
-                <button type="submit">redeem an invitation</button>
+                <${Button} type="submit">redeem the invitation</${Button}>
             </div>
         </form>
     </div>`
