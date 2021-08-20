@@ -1,10 +1,9 @@
 require('dotenv').config()
 var faunadb = require('faunadb')
 var ssc = require('@nichoth/ssc')
-// var pwds = require('../passwords.json')
-// var bcrypt = require('bcrypt')
+var bcrypt = require('bcrypt')
 var q = faunadb.query
-// var crypto = require('crypto')
+var pwds = require('../passwords.json')
 
 exports.handler = function (ev, ctx, cb) {
     // check that method is POST
@@ -18,7 +17,7 @@ exports.handler = function (ev, ctx, cb) {
     var req = JSON.parse(ev.body)
     var { publicKey, code, signature } = req
 
-    // check that the message is valid, that is really came from
+    // check that the message is valid, that it really came from
     // who it says it did
 
     var isValid
@@ -39,9 +38,39 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
+
+    // first check if it is one of the saved 'master' passwords
+    var ok = code && pwds.reduce((acc, pwdHash) => {
+        // return true if any of them match
+        return (acc || bcrypt.compare(code, pwdHash))
+    }, false)
+
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
     })
+
+    // it *is* one of the saved passwords, so follow this person
+    if (ok) {
+        return client.query(
+            q.Create(q.Collection('server-following'), {
+                data: { type: 'follow', contact: ('@' + publicKey) }
+            })
+        )
+            .then(res => {
+                cb(null, {
+                    statusCode: 200,
+                    body: JSON.stringify(res.data || res)
+                })
+            })
+            .catch(err => {
+                cb(null, {
+                    statusCode: 500,
+                    body: err.toString()
+                })
+            })
+    }
+
+
 
     // find the random code from the message, if it exists, then follow
     // the user
