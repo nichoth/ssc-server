@@ -22,14 +22,14 @@ exports.handler = function (ev, ctx, cb) {
 
     if (ev.httpMethod === 'GET') {
         // return the avatar
-        var aboutWho = ev.queryStringParameters.aboutWho
-        // console.log('**avatar - about who**', aboutWho)
+        var { aboutWho } = ev.queryStringParameters
+        console.log('**avatar - about who**', aboutWho)
 
         client.query(
             q.Get( q.Match(q.Index('avatar-by-id'), aboutWho) )
         )
             .then(res => {
-                // console.log('********avatar res***', res)
+                console.log('********avatar res***', res)
 
                 // need to make a URL from hash + cloudinary
                 var slugifiedHash = encodeURIComponent('' +
@@ -48,11 +48,11 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
             .catch(err => {
-                // console.log('****errrrr in avatar query', err)
+                console.log('****errrrr in avatar query', err.toString())
 
                 // they don't have an avatar yet
                 if (err.toString().includes('instance not found')) {
-                    console.log('***includes****', err)
+                    // console.log('***includes****', err)
                     return cb(null, {
                         statusCode: 200,
                         body: JSON.stringify({

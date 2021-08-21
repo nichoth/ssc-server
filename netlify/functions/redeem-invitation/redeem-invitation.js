@@ -48,9 +48,6 @@ exports.handler = function (ev, ctx, cb) {
         .then(ok => {
             if (ok) {
                 follow()
-                console.log('****pwds', pwds)
-                console.log('**code***', code)
-                console.log('**it is ok***', ok)
             } else {
                 checkCodes()
             }
@@ -66,7 +63,6 @@ exports.handler = function (ev, ctx, cb) {
     })
 
     function follow () {
-        console.log('****this is a saved password****', publicKey)
         var doc = {
             data: { type: 'follow', contact: ('@' + publicKey) }
         }
