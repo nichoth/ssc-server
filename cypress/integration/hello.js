@@ -12,14 +12,20 @@ describe('When you dont have an identity', () => {
     })
 
     it ('should take you to the invitation screen', () => {
+        cy.url().should('equal', URL + '/invitation')
         cy.get('.redeem-invitation-route').should('exist')
         cy.contains('need an invitation')
         cy.get('.redeem button').should('exist')
     })
 
-    it('should redeem an invitation', () => {
-        // console.log('bbbbbbb', Cypress.env('TEST_PW'))
-        cy.get('.redeem input').type(Cypress.env('TEST_PW'))
+    it('should show an error if the invitation is bad', () => {
+        cy.get('.redeem input').type('foooooo')
         cy.get('.redeem button').click()
     })
+
+    // it('should redeem an invitation', () => {
+    //     // console.log('bbbbbbb', Cypress.env('TEST_PW'))
+    //     cy.get('.redeem input').clear().type(Cypress.env('TEST_PW'))
+    //     cy.get('.redeem button').click()
+    // })
 })

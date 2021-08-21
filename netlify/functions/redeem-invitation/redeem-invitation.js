@@ -38,23 +38,41 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
+    var comparisons = pwds.map(pwd => bcrypt.compare(code, pwd))
+    Promise.all(comparisons)
+        .then(res => {
+            return (code && res.reduce((acc, comparison) => {
+                return (acc || comparison)
+            }, false))
+        })
+        .then(ok => {
+            if (ok) {
+                follow()
+                console.log('****pwds', pwds)
+                console.log('**code***', code)
+                console.log('**it is ok***', ok)
+            } else {
+                checkCodes()
+            }
+        })
+        .catch(err => {
+            console.log('aaaaaaaaaa', err)
+        })
 
-    // first check if it is one of the saved 'master' passwords
-    var ok = code && pwds.reduce((acc, pwdHash) => {
-        // return true if any of them match
-        return (acc || bcrypt.compare(code, pwdHash))
-    }, false)
+    // console.log('**it is ok***', ok.then(aaa => console.log('aaaaa', aaa)))
 
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
     })
 
-    // it *is* one of the saved passwords, so follow this person
-    if (ok) {
+    function follow () {
+        console.log('****this is a saved password****', publicKey)
+        var doc = {
+            data: { type: 'follow', contact: ('@' + publicKey) }
+        }
+
         return client.query(
-            q.Create(q.Collection('server-following'), {
-                data: { type: 'follow', contact: ('@' + publicKey) }
-            })
+            q.Create(q.Collection('server-following'), doc)
         )
             .then(res => {
                 cb(null, {
@@ -63,75 +81,74 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
             .catch(err => {
+                console.log('aaaaargggg', err)
                 cb(null, {
                     statusCode: 500,
                     body: err.toString()
                 })
             })
+
     }
 
+    function checkCodes () {
+        // its not a saved password, so query the DB, to check if it is
+        // a user-created invitation
+        return client.query(
 
-
-    // find the random code from the message, if it exists, then follow
-    // the user
-
-    // can you del the invitation code, and also follow the user in one
-    // atomic transaction?
-    client.query(
-
-        q.If(
-            // check if we are already following them
-            q.Exists(
-                q.Match(q.Index('server-following-who'), '@' + publicKey)
-            ),
-
-            // we are already following them, do nothing
-            'Already following',
-
-            // we're not following them yet, so follow them
-            q.Do(
-                q.Delete(
-                    // delete the invitation since it was used once now
-                    q.Select(
-                        ["ref"],
-                        q.Get(
-                            q.Match( q.Index('invitation-by-code'), code )
-                        )
-                    )
+            q.If(
+                // check if we are already following them
+                q.Exists(
+                    q.Match(q.Index('server-following-who'), '@' + publicKey)
                 ),
-                q.Create(q.Collection('server-following'), {
-                    data: { type: 'follow', contact: ('@' + publicKey) }
-                })
+
+                // we are already following them, do nothing
+                'Already following',
+
+                // we're not following them yet, so follow them
+                q.Do(
+                    q.Delete(
+                        // delete the invitation since it was used once now
+                        q.Select(
+                            ["ref"],
+                            q.Get(
+                                q.Match( q.Index('invitation-by-code'), code )
+                            )
+                        )
+                    ),
+                    q.Create(q.Collection('server-following'), {
+                        data: { type: 'follow', contact: ('@' + publicKey) }
+                    })
+                )
+
             )
 
         )
-
-    )
-        .then(res => {
-            if (res === 'Already following') {
+            .then(res => {
+                if (res === 'Already following') {
+                    return cb(null, {
+                        statusCode: 400,
+                        body: 'Already following'
+                    })
+                }
                 return cb(null, {
-                    statusCode: 400,
-                    body: 'Already following'
+                    statusCode: 200,
+                    body: JSON.stringify(res.data ? res.data : res)
                 })
-            }
-            return cb(null, {
-                statusCode: 200,
-                body: JSON.stringify(res.data ? res.data : res)
             })
-        })
-        .catch(err => {
-            if (err.name === 'NotFound') {
-                return cb(null, {
-                    statusCode: 400,
-                    body: new Error('Invalid invitation').toString()
-                })
-            }
+            .catch(err => {
+                if (err.name === 'NotFound') {
+                    return cb(null, {
+                        statusCode: 400,
+                        body: new Error('Invalid invitation').toString()
+                    })
+                }
 
-            return cb(null, {
-                statusCode: 500,
-                body: err.toString()
+                return cb(null, {
+                    statusCode: 500,
+                    body: err.toString()
+                })
             })
-        })
+
+    }
+
 }
-
-
