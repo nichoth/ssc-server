@@ -15,6 +15,7 @@ function RedeemInvitation (props) {
     }, [])
 
     var [errText, setErrText] = useState(null)
+    var [resolving, setResolving] = useState(null)
 
     function redeem (ev) {
         ev.preventDefault()
@@ -22,6 +23,7 @@ function RedeemInvitation (props) {
         var code = ev.target.elements['invitation-code'].value
         console.log('**redeem this code**', code)
 
+        setResolving(true)
         fetch('/.netlify/functions/redeem-invitation', {
             method: 'POST',
             headers: {
@@ -40,6 +42,7 @@ function RedeemInvitation (props) {
                         setErrText(t)
                     })
                 }
+                setResolving(false)
                 return res.json()
             })
             .then(res => {
@@ -48,7 +51,10 @@ function RedeemInvitation (props) {
                     props.setRoute('/')
                 }
             })
-            .catch(err => console.log('errrrr', err))
+            .catch(err => {
+                setResolving(false)
+                console.log('errrrr', err)
+            })
 
         // call the server endpoint
     }
@@ -69,7 +75,9 @@ function RedeemInvitation (props) {
                 required=${true}
             />
             <div>
-                <${Button} type="submit">redeem the invitation</${Button}>
+                <${Button} type="submit" isSpinning=${true}>
+                    redeem the invitation
+                </${Button}>
             </div>
         </form>
     </div>`

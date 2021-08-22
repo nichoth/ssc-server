@@ -50,21 +50,6 @@ button {
     &:hover {
         cursor: pointer;
     }
-
-    &.spinning:before {
-        content: "";
-        background: transparent;
-        box-sizing: border-box;
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        margin-top: -10px;
-        margin-left: -10px;
-        border-radius: 50%;
-        border-top: 2px solid white;
-        border-right: 2px solid transparent;
-        animation: spinner 0.6s linear infinite;
-    }
 }
 
 // this is here b/c it's in two routes -- the home and profile views
