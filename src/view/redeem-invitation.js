@@ -75,7 +75,7 @@ function RedeemInvitation (props) {
                 required=${true}
             />
             <div>
-                <${Button} type="submit" isSpinning=${true}>
+                <${Button} type="submit" isSpinning=${resolving}>
                     redeem the invitation
                 </${Button}>
             </div>
