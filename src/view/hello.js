@@ -21,7 +21,6 @@ function Hello (props) {
         }
 
         setRoute('/invitation')
-
     }
 
     useEffect(() => {

@@ -1,11 +1,10 @@
 import { html } from 'htm/preact'
-// import { useEffect, useState } from 'preact/hooks';
+var ssc = require('@nichoth/ssc')
+import { useState } from 'preact/hooks';
 
 function CreateInvitation (props) {
     // var { params } = props
     // var { key } = params
-
-    console.log('create invitation props', props)
 
     // dont really need to check if we are followed in here, because
     // the link to this route only shows if you are followed,
@@ -17,13 +16,51 @@ function CreateInvitation (props) {
     //   this app is served from a certain domain, we could consider
     //   that domain to be the source of truth
 
+    var { me } = props
+
+    var [invitation, setInv] = useState(null)
+
     function createInv (ev) {
         ev.preventDefault()
-        fetch()
+        var msg = ssc.createMsg(me.secrets, null, {
+            type: 'invitation',
+            from: me.secrets.id
+        })
+
+        console.log('msgggggggg', msg)
+
+        // TODO
+        fetch('/.netlify/functions/create-invitation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            // var { publicKey, msg } = req
+            body: JSON.stringify({
+                publicKey: me.secrets.public,
+                msg: msg
+            })
+        })
+            .then(res => {
+                if (!res.ok) {
+                    res.text().then(t => {
+                        console.log('errrrrrr')
+                        return t
+                    })
+                }
+                return res.json()
+            })
+            .then(res => {
+                setInv(res)
+            })
+    }
+
+    if (invitation) {
+        return html`<div class="create-invitation-route">
+            <p>Invitation code: <code>${invitation.code}</code></p>
+        </div>`
     }
 
     return html`<div class="create-invitation-route">
-        invite someone
+        <p>invite someone</p>
 
         <form class="invitation" onSubmit=${createInv}>
             <button type="submit">create an invitation</button>

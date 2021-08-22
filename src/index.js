@@ -22,6 +22,7 @@ var state = State(keys, profile)
 subscribe(bus, state)
 
 
+console.log('env.blaaaaa', process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'test') {
     require('./test-stuff')(state)
 }
@@ -83,7 +84,6 @@ function Connector ({ emit, state, setRoute }) {
     })
 
     var match = router.match(_state.route)
-    console.log('match', match)
     if (!match) {
         console.log('not match')
         return null
