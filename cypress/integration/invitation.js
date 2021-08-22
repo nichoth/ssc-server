@@ -2,26 +2,17 @@ require('dotenv').config()
 // const client = require("../../src/client")()
 var URL = 'http://localhost:8888'
 
-
-
-// testing 'create an invitation'
-
 describe('create an invitation', () => {
-
     var keys
+
     it('should show an error if your public key is not followed', () => {
         cy.createId()
         cy.window()
             .then(win => {
-                // var myKeys = keys = win.myKeys
                 keys = win.myKeys
-                // console.log('ma keys', myKeys)
-                // console.log('test pw', Cypress.env('TEST_PW'))
                 cy.visit(URL + '/create-invitation')
                 cy.get('.invitation button').click()
                 cy.get('p.error').should('exist')
-                // return client.followMe(myKeys, Cypress.env('TEST_PW'))
-                // return cy.serverFollow(myKeys)
             })
         
     })
