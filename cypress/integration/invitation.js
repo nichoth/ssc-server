@@ -10,14 +10,6 @@ describe('create an invitation', () => {
         cy.visit(URL + '/create-invitation')
         cy.get('.invitation button').click()
         cy.get('p.error').should('exist')
-        // cy.window()
-        //     .then(win => {
-        //         // keys = win.myKeys
-        //         cy.visit(URL + '/create-invitation')
-        //         cy.get('.invitation button').click()
-        //         cy.get('p.error').should('exist')
-        //     })
-        
     })
 
     it('should create an invitation now that youre followed', () => {
