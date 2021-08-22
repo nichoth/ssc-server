@@ -19,6 +19,7 @@ function CreateInvitation (props) {
     var { me } = props
 
     var [invitation, setInv] = useState(null)
+    var [invErr, setErr] = useState(null)
 
     function createInv (ev) {
         ev.preventDefault()
@@ -29,7 +30,6 @@ function CreateInvitation (props) {
 
         console.log('msgggggggg', msg)
 
-        // TODO
         fetch('/.netlify/functions/create-invitation', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -43,19 +43,26 @@ function CreateInvitation (props) {
                 if (!res.ok) {
                     res.text().then(t => {
                         console.log('errrrrrr')
-                        return t
+                        setErr(t)
                     })
+                    return
                 }
                 return res.json()
             })
             .then(res => {
-                setInv(res)
+                if (res) setInv(res)
             })
     }
 
     if (invitation) {
         return html`<div class="create-invitation-route">
             <p>Invitation code: <code>${invitation.code}</code></p>
+        </div>`
+    }
+
+    if (invErr) {
+        return html`<div class="create-invitation-route">
+            <p class="error">${invErr}</p>
         </div>`
     }
 

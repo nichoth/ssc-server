@@ -1,5 +1,5 @@
 require('dotenv').config()
-const client = require("../../src/client")()
+// const client = require("../../src/client")()
 var URL = 'http://localhost:8888'
 
 
@@ -7,24 +7,34 @@ var URL = 'http://localhost:8888'
 // testing 'create an invitation'
 
 describe('create an invitation', () => {
-    it('should let you create an invitiation if you are a member', () => {
 
+    var keys
+    it('should show an error if your public key is not followed', () => {
         cy.createId()
-
-        console.log(Cypress.env('TEST_PW'))
-        console.log('process env', process.env.NODE_ENV)
         cy.window()
             .then(win => {
-                var myKeys = win.myKeys
-                console.log('ma keys', myKeys)
-                console.log('test pw', Cypress.env('TEST_PW'))
+                // var myKeys = keys = win.myKeys
+                keys = win.myKeys
+                // console.log('ma keys', myKeys)
+                // console.log('test pw', Cypress.env('TEST_PW'))
+                cy.visit(URL + '/create-invitation')
+                cy.get('.invitation button').click()
+                cy.get('p.error').should('exist')
                 // return client.followMe(myKeys, Cypress.env('TEST_PW'))
-                return cy.serverFollow(myKeys)
+                // return cy.serverFollow(myKeys)
             })
+        
+    })
 
+    it('should create an invitation now that youre followed', () => {
+        // cy.createId()
+        cy.createId()
+        cy.serverFollow(keys)
         cy.visit(URL + '/')
         cy.get('.create-inv a').click()
         cy.get('.invitation button').click()
+        cy.visit(URL + '/')
+        cy.get('.nav-part').should('exist')
     }) 
 })
 

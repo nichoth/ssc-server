@@ -221,6 +221,32 @@ module.exports = function Client () {
                 .then(res => {
                     return res.json()
                 })
+        },
+
+        createInvitation: function (keys) {
+            var msg = ssc.createMsg(keys, null, {
+                type: 'invitation',
+                from: keys.id
+            })
+
+            return fetch('/.netlify/functions/create-invitation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    publicKey: keys.public,
+                    msg: msg
+                })
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        res.text().then(t => {
+                            console.log('errrrrrr')
+                            throw new Error(t);
+                        })
+                    }
+
+                    return res.json()
+                })
         }
     }
 
