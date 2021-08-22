@@ -27,7 +27,6 @@ describe('create an invitation', () => {
     })
 
     it('should create an invitation now that youre followed', () => {
-        // cy.createId()
         cy.createId()
         cy.serverFollow(keys)
         cy.visit(URL + '/')
