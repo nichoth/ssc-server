@@ -22,11 +22,11 @@ describe('create an invitation', () => {
         cy.window()
             .then(win => {
                 var keys = win.myKeys
+                cy.serverFollow(keys)
                 cy.visit(URL + '/create-invitation')
                 cy.get('.invitation button').click()
-                cy.serverFollow(keys)
-                cy.visit(URL + '/')
-                cy.get('.nav-part').should('exist')
+                // cy.visit(URL + '/')
+                // cy.get('.nav-part').should('exist')
             })
     }) 
 })
