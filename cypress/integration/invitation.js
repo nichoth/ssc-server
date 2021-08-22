@@ -3,13 +3,13 @@ require('dotenv').config()
 var URL = 'http://localhost:8888'
 
 describe('create an invitation', () => {
-    var keys
+    // var keys
 
     it('should show an error if your public key is not followed', () => {
         cy.createId()
         cy.window()
             .then(win => {
-                keys = win.myKeys
+                // keys = win.myKeys
                 cy.visit(URL + '/create-invitation')
                 cy.get('.invitation button').click()
                 cy.get('p.error').should('exist')
@@ -19,12 +19,15 @@ describe('create an invitation', () => {
 
     it('should create an invitation now that youre followed', () => {
         cy.createId()
-        cy.serverFollow(keys)
-        cy.visit(URL + '/')
-        cy.get('.create-inv a').click()
-        cy.get('.invitation button').click()
-        cy.visit(URL + '/')
-        cy.get('.nav-part').should('exist')
+        cy.window()
+            .then(win => {
+                var keys = win.myKeys
+                cy.visit(URL + '/create-invitation')
+                cy.get('.invitation button').click()
+                cy.serverFollow(keys)
+                cy.visit(URL + '/')
+                cy.get('.nav-part').should('exist')
+            })
     }) 
 })
 
