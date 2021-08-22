@@ -7,13 +7,16 @@ describe('create an invitation', () => {
 
     it('should show an error if your public key is not followed', () => {
         cy.createId()
-        cy.window()
-            .then(win => {
-                // keys = win.myKeys
-                cy.visit(URL + '/create-invitation')
-                cy.get('.invitation button').click()
-                cy.get('p.error').should('exist')
-            })
+        cy.visit(URL + '/create-invitation')
+        cy.get('.invitation button').click()
+        cy.get('p.error').should('exist')
+        // cy.window()
+        //     .then(win => {
+        //         // keys = win.myKeys
+        //         cy.visit(URL + '/create-invitation')
+        //         cy.get('.invitation button').click()
+        //         cy.get('p.error').should('exist')
+        //     })
         
     })
 

@@ -10,7 +10,7 @@ function testStuff (state) {
     var me = state.me()
     var myKeys = me.secrets
 
-    console.log('**my keys**', myKeys)
+    // console.log('**my keys**', myKeys)
 
     var userOneKeys = window.userOneKeys = {
         "curve": "ed25519",
