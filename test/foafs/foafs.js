@@ -82,27 +82,6 @@ module.exports = function foafTests (test, ks) {
                 t.error(err)
                 t.end()
             })
-
-        // post({ public: userTwoKeys.public }, msg, base64Caracal)
-        //     .then(() => {
-        //         // console.log('**res to foaf puplish**', res)
-
-        //         return getPostsWithFoafs(keys.id)
-        //     })
-        //     .then((res) => {
-        //         // console.log('**got foaf posts**', JSON.stringify(res, null, 2))
-        //         // author should be userTwo
-        //         var post = res.msg.find(msg => {
-        //             return msg.value.author === userTwoKeys.id
-        //         })
-        //         t.ok(post, 'should return a post by user two')
-        //         t.end()
-        //     })
-        //     .catch(err => {
-        //         console.log('errrrr', err)
-        //         t.error(err)
-        //         t.end()
-        //     })
     })
 
 }
