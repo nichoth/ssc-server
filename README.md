@@ -11,9 +11,11 @@ npm start
 
 ## run one test
 
+The `post` test:
 ```
-$ NODE_ENV=test npx tape test/follow/index.js | npx tap-spec
+NODE_ENV=test node test/post/ | tap-spec
 ```
+
 
 ## run all tests
 

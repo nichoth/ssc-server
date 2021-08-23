@@ -38,19 +38,13 @@ module.exports = function postTests (test) {
         followMe(keys)
             .then(() => {
                 var msg = ssc.createMsg(keys, null, content)
-
-                client.post(keys, msg, base64Caracal)
-                    .then(res => {
-                        t.pass('should get an ok response')
-                        t.equal(res.msg.value.author, keys.id, 'should have' +
-                            ' the right msg author')
-                        t.end()
-                    })
-                    .catch(err => {
-                        console.log('errrrr', err)
-                        t.fail('error')
-                        t.end()
-                    })
+                return client.post(keys, msg, base64Caracal)
+            })
+            .then(res => {
+                t.pass('should get an ok response')
+                t.equal(res.msg.value.author, keys.id, 'should have' +
+                    ' the right msg author')
+                t.end()
             })
             .catch(err => {
                 console.log('errrrrrr', err)
