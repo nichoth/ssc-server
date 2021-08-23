@@ -41,23 +41,6 @@ test('posts', t => {
 })
 
 
-// test('a post from someone the server is not following', t => {
-//     t.end()
-//     var keys = ssc.createKeys()
-//     var content = { type: 'test', text: 'foo', mentions: [fileHash] }
-//     var msg = ssc.createMsg(keys, null, content)
-//     client.post(keys, msg, base64Caracal)
-//         .then(res => {
-//             console.log('resssss', res)
-//             t.fail('should not get an ok response')
-//         })
-//         .catch(err => {
-//             t.pass('should get an error response')
-//             console.log('errrrrr', err)
-//         })
-// })
-
-
 var _msg
 test('client.post', t => {
     var content = {
