@@ -1,7 +1,7 @@
 require('dotenv').config()
 require('isomorphic-fetch')
 var test = require('tape')
-var { spawn } = require('child_process')
+// var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 var createHash = require('crypto').createHash
@@ -23,31 +23,34 @@ var hash = createHash('sha256')
 hash.update(base64Caracal)
 var fileHash = hash.digest('base64')
 
-
+var ntl
 test('setup', function (t) {
-    ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
-
-    ntl.stdout.on('data', function (d) {
-        if (d.toString().includes('Server now ready')) {
-            t.end()
-        }
+    require('./setup')(t.test, (netlify) => {
+        ntl = netlify
     })
-
-    ntl.stdout.pipe(process.stdout)
-    ntl.stderr.pipe(process.stderr)
-
-    ntl.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`)
-    })
-
-    ntl.on('close', (code) => {
-        console.log(`child process exited with code ${code}`)
-    })
+    t.end()
 })
 
 
 test('following', t => {
     require('./follow/follow')(t.test, { keys, userOneKeys, userTwoKeys})
+})
+
+
+test('a post from someone the server is not following', t => {
+    t.end()
+    var keys = ssc.createKeys()
+    var content = { type: 'test', text: 'foo', mentions: [fileHash] }
+    var msg = ssc.createMsg()
+    client.post(keys, msg, base64Caracal)
+        .then(res => {
+            console.log('resssss', res)
+            t.fail('should not get an ok response')
+        })
+        .catch(err => {
+            t.pass('should get an error response')
+            console.log('errrrrr', err)
+        })
 })
 
 
@@ -62,7 +65,6 @@ test('client.post', t => {
     _msg = ssc.createMsg(keys, null, content)
     client.post(keys, _msg, base64Caracal)
         .then(res => {
-            // console.log('ressssssssss', res)
             t.equal(res.msg.value.signature, _msg.signature,
                 'should return the right signature')
             t.end()
