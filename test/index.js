@@ -41,7 +41,11 @@ test('posts', t => {
 })
 
 test('foafs', t => {
-    require('./foafs/foafs')(t.test)
+    var keys = ssc.createKeys()
+    var userOneKeys = ssc.createKeys()
+    var userTwoKeys = ssc.createKeys()
+    var ks = { keys, userOneKeys, userTwoKeys }
+    require('./foafs/foafs')(t.test, ks)
 })
 
 test('get relevant posts', function (t) {
