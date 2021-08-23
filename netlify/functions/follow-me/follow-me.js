@@ -15,7 +15,7 @@ exports.handler = function (ev, ctx, cb) {
 
     var req = JSON.parse(ev.body)
 
-    var { password, user, code } = req
+    var { password, user } = req
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
     })
@@ -56,10 +56,9 @@ exports.handler = function (ev, ctx, cb) {
         // they don't have the 'master' password, so check the DB invitations
 
         // TODO -- in here, do the DB lookup for the `code`
+        console.log('****hhhhhhhhh***')
 
     }
-
-
 
     return cb(null, {
         statusCode: 401,

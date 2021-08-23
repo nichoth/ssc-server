@@ -9,7 +9,7 @@ var base = 'http://localhost:8888'
 module.exports = function followTests (test, ks) {
     var { keys, userTwoKeys } = ks
 
-    test('follow me', t => {
+    test('the server follows a person', t => {
         t.plan(3)
 
         fetch(base + '/.netlify/functions/follow-me', {

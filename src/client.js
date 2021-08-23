@@ -1,3 +1,4 @@
+require('dotenv').config()
 require('isomorphic-fetch')
 var ssc = require('@nichoth/ssc')
 var createHash = require('create-hash')
@@ -8,6 +9,32 @@ var base = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
 module.exports = function Client () {
 
     var client = {
+        followMe: function followMe (keys, password) {
+            console.log('**test pw**', process.env.TEST_PW)
+            return fetch(base + '/.netlify/functions/follow-me', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user: keys.id,
+                    password: (password || process.env.TEST_PW)
+                })
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        console.log('**not ok**')
+                        return Promise.reject(res.text())
+                    }
+
+                    console.log('****okok', res)
+                    return res.json()
+                })
+                .catch(err => {
+                    console.log('err in herere', err)
+                })
+        },
+
         getPostsWithFoafs: function (userId) {
             var qs = new URLSearchParams({
                 userId: userId,
@@ -19,6 +46,9 @@ module.exports = function Client () {
 
             return fetch(url)
                 .then(res => {
+                    if (!res.ok) {
+                        return Promise.reject(res.text())
+                    }
                     return res.json()
                 })
         },
@@ -31,6 +61,9 @@ module.exports = function Client () {
             return fetch(base + '/.netlify/functions/get-relevant-posts' +
                 '?' + qs)
                 .then(res => {
+                    if (!res.ok) {
+                        return Promise.reject(res.text())
+                    }
                     return res.json()
                 })
         },
@@ -56,7 +89,9 @@ module.exports = function Client () {
                 }) 
             })
                 .then(res => {
-                    if (!res.ok) return res.text()
+                    if (!res.ok) {
+                        return Promise.reject(res.text())
+                    }
                     return res.json()
                 })
         },

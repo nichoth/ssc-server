@@ -115,6 +115,7 @@ exports.handler = function (ev, ctx, cb) {
                 })
         })
         .catch(err => {
+            console.log('**not following****', err)
             // we are not following them
             return cb(null, {
                 statusCode: 401,
