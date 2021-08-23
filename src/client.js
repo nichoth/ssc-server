@@ -169,8 +169,13 @@ module.exports = function Client () {
                 }) 
             })
                 .then(res => {
-                    if (!res.ok) return res.text()
-                    return res.json()
+                    if (!res.ok) {
+                        return res.text().then(t => {
+                            return Promise.reject(new Error(t))
+                        })
+                    } else {
+                        return res.json()
+                    }
                 })
         },
 

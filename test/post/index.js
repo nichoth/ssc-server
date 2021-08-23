@@ -10,8 +10,8 @@ test('setup', t => {
 })
 
 test('post tests', t => {
-    t.end()
     require('./post')(t.test)
+    t.end()
 })
 
 test('all done', function (t) {
