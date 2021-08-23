@@ -31,14 +31,16 @@ module.exports = function postTests (test) {
             })
     })
 
+    var msgOne
+    var keys
     test('a post from someone you are following', t => {
-        var keys = ssc.createKeys()
+        keys = ssc.createKeys()
         var content = { type: 'test', text: 'foo', mentions: [fileHash] }
 
         followMe(keys)
             .then(() => {
-                var msg = ssc.createMsg(keys, null, content)
-                return client.post(keys, msg, base64Caracal)
+                var _msg = msgOne = ssc.createMsg(keys, null, content)
+                return client.post(keys, _msg, base64Caracal)
             })
             .then(res => {
                 t.pass('should get an ok response')
@@ -50,6 +52,26 @@ module.exports = function postTests (test) {
                 console.log('errrrrrr', err)
                 t.fail('error')
                 t.end()
+            })
+    })
+
+    test('post a second message', t => {
+        var msg2 = ssc.createMsg(keys, msgOne, {
+            type: 'test2',
+            text: 'ok',
+            mentions: [fileHash]
+        })
+
+        client.post(keys, msg2, base64Caracal)
+            .then(res => {
+                t.pass('should get an ok response')
+                t.equal(res.msg.value.author, keys.id, 'should have' +
+                    ' the right msg author')
+                t.end()
+            })
+            .catch(err => {
+                console.log('errrrr', err)
+                t.fail('error')
             })
     })
 }

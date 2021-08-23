@@ -101,7 +101,7 @@ exports.handler = function (ev, ctx, cb) {
         .then((_res) => {
             // console.log('zzzzzzzzzz', _res)
             // post the stuff
-            return doTheThings()
+            doTheThings()
                 .then(res => {
                     // console.log('**things done***', res)
 
@@ -172,14 +172,6 @@ exports.handler = function (ev, ctx, cb) {
                         })
 
                         return _response
-
-                        // return cb(null, {
-                        //     statusCode: 200,
-                        //     body: JSON.stringify({
-                        //         ok: true,
-                        //         msg: _response
-                        //     })
-                        // })
                     })
                     .catch(err => cb(null, {
                         statusCode: 500,
@@ -206,10 +198,8 @@ exports.handler = function (ev, ctx, cb) {
                                 // crop: "fill"
                             })      
 
-                            // console.log('**imgUrl**', imgUrl)
-
                             // here, we add the url for the photo
-                            var _response = xtend(res[0].data, {
+                            var _response = xtend(res[0].data || res[0], {
                                 mentionUrls: [imgUrl]
                             })
 
@@ -245,7 +235,9 @@ exports.handler = function (ev, ctx, cb) {
     function msgAndFile (msg, file, slug, hash) {
         // console.log('**in msg and file**')
         return Promise.all([
-            writeMsg(msg, hash),
+            writeMsg(msg, hash).then(res => {
+                return res.data ? res.data : res
+            }),
             upload(file, slug)
         ])
             .then(arr => {
