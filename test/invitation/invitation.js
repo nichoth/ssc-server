@@ -4,6 +4,13 @@ var ssc = require('@nichoth/ssc')
 var Client = require('../../src/client')
 var client = Client()
 
+var blockedKeys = {
+  'curve': 'ed25519',
+  'public': 'B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519',
+  'private': 'OpwS91tI7yXkilysrjGgnyGHm//AaxjsNnVVDYJuaAIHuC1AQgfuNOWuixwzRYl+V92/BjDDvZOGoy2jPQHntw==.ed25519',
+  'id': '@B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519'
+}
+
 module.exports = function invitationTests (test) {
     var keys = ssc.createKeys()
     var userOneKeys = ssc.createKeys()
@@ -46,6 +53,20 @@ module.exports = function invitationTests (test) {
             .catch(err => {
                 t.pass('should get an error response')
                 t.ok(err.includes('Invalid invitation'),
+                    'should return the right error message')
+                t.end()
+            })
+    })
+
+    test('try to use an invitation with a blocked id', t => {
+        client.redeemInvitation(blockedKeys, code)
+            .then(() => {
+                t.fail('should not succeed in being invited')
+                t.end()
+            })
+            .catch(err => {
+                t.pass('should fail if your on the block list')
+                t.ok(err.includes('banished'),
                     'should return the right error message')
                 t.end()
             })

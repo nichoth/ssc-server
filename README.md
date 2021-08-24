@@ -16,14 +16,27 @@ The `post` test:
 NODE_ENV=test node test/post/ | tap-spec
 ```
 
-
 ## run all tests
 
 ```
 $ npm test
 ```
 
-## add invite passwords
+## util
+
+Create some keys and print them to stdout
+```
+$ ./util.js keys
+
+{
+  "curve": "ed25519",
+  "public": "B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519",
+  "private": "OpwS91tI7yXkilysrjGgnyGHm//AaxjsNnVVDYJuaAIHuC1AQgfuNOWuixwzRYl+V92/BjDDvZOGoy2jPQHntw==.ed25519",
+  "id": "@B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519"
+}
+```
+
+## add invitation passwords
 You need to edit `/netlify/functions/passwords.json`, and add the hashed version of a password; the plaintext version is kept secret. You can use the script `/hash.js` to hash a password --
 
 ```

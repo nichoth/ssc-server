@@ -4,6 +4,7 @@ var ssc = require('@nichoth/ssc')
 var bcrypt = require('bcrypt')
 var q = faunadb.query
 var pwds = require('../passwords.json')
+var blocks = require('../block.json')
 
 exports.handler = function (ev, ctx, cb) {
     // check that method is POST
@@ -16,6 +17,17 @@ exports.handler = function (ev, ctx, cb) {
 
     var req = JSON.parse(ev.body)
     var { publicKey, code, signature } = req
+
+    var isBlocked = blocks.reduce((acc, val) => {
+        return (acc || (val === '@' + publicKey))
+    }, false)
+
+    if (isBlocked) {
+        return cb(null, {
+            statusCode: 401,
+            body: 'This id has been banished'
+        })
+    }
 
     // check that the message is valid, that it really came from
     // who it says it did
