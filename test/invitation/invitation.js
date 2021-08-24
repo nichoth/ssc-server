@@ -62,7 +62,7 @@ module.exports = function invitationTests (test) {
             })
     })
 
-    test('use the invitation', t => {
+    test('use a good invitation', t => {
         client.redeemInvitation(userOneKeys, code)
             .then(res => {
                 t.pass('should redeem the invitation')
