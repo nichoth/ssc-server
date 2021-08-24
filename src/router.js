@@ -56,9 +56,17 @@ function Router () {
         }
     })
 
-    router.addRoute('/invitation', () => {
+    router.addRoute('/invitation*', (match) => {
+        var { splats } = match
+        var qs = splats[0]
+        const urlSearchParams = new URLSearchParams(qs)
+        const params = Object.fromEntries(urlSearchParams.entries())
+        var { code } = params
+
+        console.log('params', params)
+
         return {
-            view: RedeemInvitation
+            view: RedeemInvitation(code)
         }
     })
 

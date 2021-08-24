@@ -30,7 +30,7 @@
   "homepage": "https://github.com/nichoth/ssc-server#readme",
   "dependencies": {
     "@nichoth/events": "^1.1.2",
-    "@nichoth/forms": "^0.0.20",
+    "@nichoth/forms": "^0.0.25",
     "@nichoth/ssc": "^0.0.17",
     "@nichoth/ssc-fauna": "^0.0.31",
     "bcrypt": "^5.0.1",

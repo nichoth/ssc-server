@@ -5,11 +5,11 @@ var test = require('tape')
 var ssc = require('@nichoth/ssc')
 var fs = require('fs')
 var createHash = require('crypto').createHash
-var Client = require('../src/client')
+// var Client = require('../src/client')
 // var client = Client()
 // var base = 'http://localhost:8888'
 
-var { follow, getPostsWithFoafs, post } = Client()
+// var { follow, getPostsWithFoafs, post } = Client()
 
 var ntl
 var keys = ssc.createKeys()

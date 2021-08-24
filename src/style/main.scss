@@ -5,8 +5,8 @@
 @use './new';
 @use './profile';
 @use './hello';
-@use "../../node_modules/@nichoth/forms/src/style/text-input";
-@use "../../node_modules/@nichoth/forms/src/style/button";
+@use "../../node_modules/@nichoth/forms/style/text-input";
+@use "../../node_modules/@nichoth/forms/style/button";
 
 @keyframes spinner {
     to {transform: rotate(360deg);}
