@@ -26,9 +26,6 @@ function createRedeption (code) {
 
             setResolving(true)
 
-            // @TODO -- here we need to create a user ID if they don't have
-            //   one already
-
             fetch('/.netlify/functions/redeem-invitation', {
                 method: 'POST',
                 headers: {

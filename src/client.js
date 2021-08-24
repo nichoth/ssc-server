@@ -4,14 +4,14 @@ var ssc = require('@nichoth/ssc')
 var createHash = require('create-hash')
 
 var baseUrl = 'http://localhost:8888'
-var base = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
+var BASE = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
 
 module.exports = function Client () {
 
     var client = {
         followMe: function followMe (keys, password) {
             console.log('**test pw**', process.env.TEST_PW)
-            return fetch(base + '/.netlify/functions/follow-me', {
+            return fetch(BASE + '/.netlify/functions/follow-me', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ module.exports = function Client () {
                 foafs: true
             }).toString()
 
-            var url = (base + '/.netlify/functions/get-relevant-posts' +
+            var url = (BASE + '/.netlify/functions/get-relevant-posts' +
                 '?' + qs)
 
             return fetch(url)
@@ -58,7 +58,7 @@ module.exports = function Client () {
                 userId: userId
             }).toString()
 
-            return fetch(base + '/.netlify/functions/get-relevant-posts' +
+            return fetch(BASE + '/.netlify/functions/get-relevant-posts' +
                 '?' + qs)
                 .then(res => {
                     if (!res.ok) {
@@ -77,7 +77,7 @@ module.exports = function Client () {
             })
 
 
-            return fetch(base + '/.netlify/functions/following', {
+            return fetch(BASE + '/.netlify/functions/following', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -107,7 +107,7 @@ module.exports = function Client () {
                 // author: state().me.secrets.id
             }).toString();
 
-            return fetch(base + '/.netlify/functions/following' + '?' + qs)
+            return fetch(BASE + '/.netlify/functions/following' + '?' + qs)
                 .then(res => res.json())
         },
 
@@ -124,7 +124,7 @@ module.exports = function Client () {
             console.log('**public**', userKeys.public)
 
             // set name
-            return fetch(base + '/.netlify/functions/abouts', {
+            return fetch(BASE + '/.netlify/functions/abouts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -152,7 +152,7 @@ module.exports = function Client () {
                 })
 
             function setAvatar (file, userKeys) {
-                return fetch(base + '/.netlify/functions/avatar', {
+                return fetch(BASE + '/.netlify/functions/avatar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -187,12 +187,12 @@ module.exports = function Client () {
                 username: name
             }).toString();
 
-            return fetch(base + '/.netlify/functions/feed-by-name' + '?' + qs)
+            return fetch(BASE + '/.netlify/functions/feed-by-name' + '?' + qs)
                 .then(res => res.json())
         },
 
         post: function post (keys, msg, file) {
-            return fetch(base + '/.netlify/functions/post-one-message', {
+            return fetch(BASE + '/.netlify/functions/post-one-message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -230,7 +230,7 @@ module.exports = function Client () {
                 mentions: [_hash]
             })
 
-            return fetch(base + '/.netlify/functions/post-one-message', {
+            return fetch(BASE + '/.netlify/functions/post-one-message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -248,7 +248,7 @@ module.exports = function Client () {
         },
 
         followMe: function (keys, password) {
-            return fetch(base + '/.netlify/functions/follow-me', {
+            return fetch(BASE + '/.netlify/functions/follow-me', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -269,7 +269,7 @@ module.exports = function Client () {
                 from: keys.id
             })
 
-            return fetch(base + '/.netlify/functions/create-invitation', {
+            return fetch(BASE + '/.netlify/functions/create-invitation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -287,8 +287,30 @@ module.exports = function Client () {
 
                     return res.json()
                 })
+        },
+
+        redeemInvitation: function redeemInvitation (keys, code) {
+            return fetch(BASE + '/.netlify/functions/redeem-invitation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    publicKey: keys.public,
+                    code: code,
+                    signature: ssc.sign(keys, code)
+                })
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        return res.text().then(t => Promise.reject(t))
+                    }
+                    return res.json()
+                })
         }
+
     }
+
 
     return client
 }
