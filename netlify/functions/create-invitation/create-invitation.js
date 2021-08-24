@@ -32,7 +32,6 @@ exports.handler = function (ev, ctx, cb) {
     try {
         isValid = ssc.verifyObj(publicKey, null, msg)
     } catch(err) {
-        console.log('errrrr', err)
         return cb(null, {
             statusCode: 400,
             body: err.toString()

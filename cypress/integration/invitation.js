@@ -1,9 +1,7 @@
 require('dotenv').config()
-// const client = require("../../src/client")()
 var URL = 'http://localhost:8888'
 
 describe('create an invitation', () => {
-    // var keys
 
     it('should show an error if your public key is not followed', () => {
         cy.createId()
@@ -20,8 +18,6 @@ describe('create an invitation', () => {
                 cy.serverFollow(keys)
                 cy.visit(URL + '/create-invitation')
                 cy.get('.invitation button').click()
-                // cy.visit(URL + '/')
-                // cy.get('.nav-part').should('exist')
             })
     }) 
 })

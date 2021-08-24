@@ -269,7 +269,7 @@ module.exports = function Client () {
                 from: keys.id
             })
 
-            return fetch('/.netlify/functions/create-invitation', {
+            return fetch(base + '/.netlify/functions/create-invitation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -279,9 +279,9 @@ module.exports = function Client () {
             })
                 .then(res => {
                     if (!res.ok) {
-                        res.text().then(t => {
+                        return res.text().then(t => {
                             console.log('errrrrrr')
-                            throw new Error(t);
+                            return Promise.reject(t)
                         })
                     }
 

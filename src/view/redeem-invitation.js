@@ -6,8 +6,6 @@ var ssc = require('@nichoth/ssc')
 
 function createRedeption (code) {
 
-    console.log('creating', code)
-
     return function RedeemInvitation (props) {
         useEffect(() => {
             document.body.classList.add('invitation')
@@ -23,11 +21,14 @@ function createRedeption (code) {
 
         function redeem (ev) {
             ev.preventDefault()
-            // console.log('redeem an invitation', ev)
             var code = ev.target.elements['invitation-code'].value
             console.log('**redeem this code**', code)
 
             setResolving(true)
+
+            // @TODO -- here we need to create a user ID if they don't have
+            //   one already
+
             fetch('/.netlify/functions/redeem-invitation', {
                 method: 'POST',
                 headers: {
@@ -59,8 +60,6 @@ function createRedeption (code) {
                     setResolving(false)
                     console.log('errrrr', err)
                 })
-
-            // call the server endpoint
         }
 
         if (errText) {
