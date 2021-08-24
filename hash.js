@@ -19,6 +19,7 @@ if (require.main === module) {
         createHash(pw)
             .then(h => process.stdout.end(h))
     } else {
+        // in this case read from a pipe
         process.stdin.on('data', function (d) {
             createHash(d.toString().trim())
                 .then(h => process.stdout.end(h))
