@@ -47,6 +47,10 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
+    // need to check that the message has a mention for the given image
+    var hasMentions = (msg.content.mentions &&
+        Array.isArray(msg.content.mentions))
+
     var isValid
     try {
         isValid = ssc.verifyObj(keys, null, msg)
@@ -61,27 +65,18 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
-    if (!msg || !isValid) {
-        console.log('**msg**', msg)
-        console.log('**isValid**', isValid)
+    if (!msg || !hasMentions || !isValid) {
+        // console.log('**msg**', msg)
+        // console.log('**isValid**', isValid)
+        // console.log('has mentions', hasMentions)
+        // console.log('msg', msg)
         // is invalid
         // 422 (Unprocessable Entity)
         return cb(null, {
             statusCode: 422,
-            body: JSON.stringify({
-                ok: false,
-                error: 'invalid message',
-                message: msg
-            })
+            body: 'invalid message'
         })
     }
-
-
-
-    // need to check that the message has a mention for the given image
-
-
-
 
 
     var q = faunadb.query
@@ -115,7 +110,7 @@ exports.handler = function (ev, ctx, cb) {
                 })
         })
         .catch(err => {
-            console.log('**not following****', err)
+            // console.log('**not following****', err)
             // we are not following them
             return cb(null, {
                 statusCode: 401,

@@ -55,6 +55,25 @@ module.exports = function postTests (test) {
             })
     })
 
+    test('try posting a message with no mentions array', t => {
+        content = { type: 'test', text: 'bar' }
+        // ( keys, prev, content )
+        var msg = ssc.createMsg(keys, msgOne, content)
+        client.post(keys, msg, base64Caracal)
+            .then(res => {
+                console.log('resssssssssss', res)
+                t.fail('should not get an `ok` response')
+                t.end()
+            })
+            .catch(err => {
+                console.log('errrrrrr', err)
+                t.pass('Should get an error response')
+                t.ok(err.toString().includes('invalid message'),
+                    'should have the right error message')
+                t.end()
+            })
+    })
+
     test('post a second message', t => {
         var msg2 = ssc.createMsg(keys, msgOne, {
             type: 'test2',
@@ -70,8 +89,8 @@ module.exports = function postTests (test) {
                 t.end()
             })
             .catch(err => {
-                console.log('errrrr', err)
                 t.fail('error')
+                t.end()
             })
     })
 }
