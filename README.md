@@ -22,6 +22,21 @@ NODE_ENV=test node test/post/ | tap-spec
 $ npm test
 ```
 
+## configure things
+
+### Add passwords that can be used to make the server follow you
+Edit `/netlify/functions/passwords.json`. The value in this file should be a
+password that has been hashed with `bcrypt`. See `/hash.js` for a node CLI that
+will hash a string.
+
+### block a user ID from posting
+Edit `/netlify/functions/block.json`. This is a JSON array of public keys
+(IDs) that the server should block.
+
+Being on the block list means you can't do anything on this server.
+
+------------------------------------------
+
 ## util
 
 Create some keys and print them to stdout
@@ -35,6 +50,11 @@ $ ./util.js keys
   "id": "@B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519"
 }
 ```
+
+I'm using those keys in the `test/invitation/` file to test blocked users
+incidentally.
+
+------------------------------------------------
 
 ## add invitation passwords
 You need to edit `/netlify/functions/passwords.json`, and add the hashed version of a password; the plaintext version is kept secret. You can use the script `/hash.js` to hash a password --
@@ -59,23 +79,8 @@ The invite passwords are used with the `/follow-me` endpoint. You send a POST re
 ## invitations
 It's like a country club -- you need to be invited by a member.
 
-Existing members can call `/.netlify/functions/create-invitation` with a body like:
-```js
-{
-  publicKey: keys.public,
-  msg: ssc.createMsg(keys, null, {
-      type: 'invitation',
-      from: keys.id
-  })
-}
-```
-
-## ~~~the algorithm~~~
-### invitations
-It's like a country club. You need to be invited by someone who is already a member.
-
 ### create an invitation
-Send a message like this:
+Call `/.netlify/functions/create-invitation`. Send a message like this:
 
 ```js
 body: JSON.stringify({
@@ -86,6 +91,8 @@ body: JSON.stringify({
     })
 })
 ```
+The server will check it's DB to make sure that the given id is being followed
+by the server.
 
 Get back:
 ```js
