@@ -42,6 +42,10 @@ function Home (props) {
         </div>`
     }
 
+    function onFollow (userId) {
+        console.log('****follow this person', userId)
+    }
+
     var myAvatar = (me.avatar && me.avatar.url) ?
         me.avatar.url :
         ('data:image/svg+xml;utf8,' +
@@ -109,6 +113,7 @@ function Home (props) {
                                 <${FollowIcon} me=${me}
                                     author=${post.value.author}
                                     following=${following}
+                                    onFollow=${onFollow}
                                 />
                             </div>
                         </div>

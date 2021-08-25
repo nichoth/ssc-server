@@ -1,6 +1,7 @@
 import { html } from 'htm/preact'
 
-function FollowIcon ({ author, name, /*post,*/ me, following }) {
+function FollowIcon (props) {
+    var { author, name, me, following } = props
     // for the initial app state, when we haven't fetched everything yet
     if (!author || !following) return null
     // can't follow yourself
@@ -21,8 +22,8 @@ function FollowIcon ({ author, name, /*post,*/ me, following }) {
     
 
     function follow (userId, ev) {
-        console.log('**follow**', userId, ev)
         ev.preventDefault()
+        props.onFollow(userId)
     }
 
     function unFollow (userId, ev) {
