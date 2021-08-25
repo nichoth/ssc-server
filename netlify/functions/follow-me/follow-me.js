@@ -46,7 +46,7 @@ exports.handler = function (ev, ctx, cb) {
                 // (we are already following them)
                 // should return a success in that case
                 // console.log('errrrr', err)
-                console.log('eeerrrppppp', err)
+                // console.log('eeerrrppppp', err)
                 return cb(null, {
                     statusCode: 500,
                     body: err.toString()

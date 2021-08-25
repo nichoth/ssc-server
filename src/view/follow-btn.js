@@ -14,7 +14,7 @@ function FollowIcon ({ author, name, /*post,*/ me, following }) {
     // consider
     // are you already following this person? show a blue button if so
     //  on hover -- turns cyan color, title is 'stop following x'
-    // if they are a foaf show a black button
+    // if they are a foaf (we are not following), show a black button
     //  hover is blue
     //  on click you want to show a resolving state as we wait for the
     //  response. Then on success show a solid blue button like above

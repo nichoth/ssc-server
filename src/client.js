@@ -76,7 +76,6 @@ module.exports = function Client () {
                 author: myKeys.id
             })
 
-
             return fetch(BASE + '/.netlify/functions/following', {
                 method: 'POST',
                 headers: {

@@ -1,6 +1,7 @@
 var ssc = require('@nichoth/ssc')
 require('isomorphic-fetch')
 var base = 'http://localhost:8888'
+var client = require('../../src/client')()
 
 // var keys = ssc.createKeys()
 // // var userOneKeys = ssc.createKeys()
@@ -25,10 +26,10 @@ module.exports = function followTests (test, ks) {
             .then(res => {
                 if (!res.ok) {
                     console.log('**not ok**')
-                    res.text().then(t => console.log('ttt', t))
+                    res.text().then(text => console.log('ttt', text))
                 }
                 res.json().then(json => {
-                    t.equal(json.type, 'follow', 'should return the message')
+                    t.equal(json.type, 'follow', 'should follow the person')
                     t.equal(json.contact, keys.id, 'should return the right id')
                 })
             })
@@ -57,6 +58,26 @@ module.exports = function followTests (test, ks) {
             })
             .catch(err => {
                 t.error(err)
+            })
+    })
+
+
+    test('userOne follows a person', t => {
+        client.follow(keys, userTwoKeys)
+            .then(res => {
+                t.pass('got a response')
+                t.equal(res.value.content.type, 'follow',
+                    'should return the right msg type')
+                t.equal(res.value.content.author, keys.id,
+                    'should have the rihgt msg author')
+                t.equal(res.value.content.contact, userTwoKeys.id,
+                    'should have the right follow target')
+                t.end()
+            })
+            .catch((err) => {
+                console.log('errrrr', err)
+                t.fail('should not return error')
+                t.end()
             })
     })
 
@@ -103,7 +124,6 @@ module.exports = function followTests (test, ks) {
         })
             .then(res => res.json())
             .then(res => {
-                console.log('****create invitation res****', res)
                 code = res.code
                 t.ok(res.code, 'should return an invitation code')
                 t.end()
@@ -161,7 +181,7 @@ module.exports = function followTests (test, ks) {
         })
             .then(res => {
                 res.json().then(json => {
-                    console.log('redeemed invitation', json)
+                    // console.log('redeemed invitation', json)
                     t.ok(json, 'should redeem the invitation')
                     t.equal(json.contact, redeemer.id,
                         'should return a correct messsage')
