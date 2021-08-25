@@ -88,7 +88,7 @@ module.exports = function postTests (test) {
                     ' the right msg author')
                 t.end()
             })
-            .catch(err => {
+            .catch(() => {
                 t.fail('error')
                 t.end()
             })
