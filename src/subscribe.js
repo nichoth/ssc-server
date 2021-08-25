@@ -1,9 +1,29 @@
 var evs = require('./EVENTS')
 var Keys = require('./keys')
 var xtend = require('xtend')
-const { StartsWith } = require('faunadb')
+var client = require('./client')()
 
 function subscribe (bus, state) {
+
+    bus.on(evs.following.start, userId => {
+        // in here, need to call the server with the follow req,
+        // server needs to responsd with the profile for this user
+        // and set state with the new following list
+        // and set state with the new post list
+        console.log('following event', userId)
+        client.follow(state.me.secrets(), { id: userId })
+            .then(res => {
+                console.log('started following', res)
+                // state following list is like
+                // { userId: {userData} }
+                var newState = {}
+                newState[userId] = res
+                state.following.set(xtend(state.following(), newState))
+            })
+            .catch(err => {
+                console.log('errrrrr', err)
+            })
+    })
 
     bus.on(evs.identity.setName, name => {
         console.log('set name event', state(), name)

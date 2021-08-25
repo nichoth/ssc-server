@@ -34,7 +34,7 @@ function FollowIcon (props) {
     var isFollowing = following[author]
 
     return html`<button
-        class="follow-btn ${isFollowing ? ' is-following' : ''}"
+        class="follow-btn${isFollowing ? ' is-following' : ''}"
         title=${isFollowing ? 'stop following' : 'Follow ' +
             (name || 'Anonymous')}
         onClick=${isFollowing ?

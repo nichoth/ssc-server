@@ -47,7 +47,7 @@ module.exports = function Client () {
             return fetch(url)
                 .then(res => {
                     if (!res.ok) {
-                        return Promise.reject(res.text())
+                        return res.text().then(text => Promise.reject(text))
                     }
                     return res.json()
                 })

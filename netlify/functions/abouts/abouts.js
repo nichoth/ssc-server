@@ -11,7 +11,6 @@ exports.handler = async function (ev, ctx) {
 
         return abouts.get(author)
             .then(res => {
-                // console.log('got res in test', res)
                 return {
                     statusCode: 200,
                     body: JSON.stringify(res)

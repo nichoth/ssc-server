@@ -44,6 +44,7 @@ function Home (props) {
 
     function onFollow (userId) {
         console.log('****follow this person', userId)
+        emit(evs.following.start, userId)
     }
 
     var myAvatar = (me.avatar && me.avatar.url) ?
