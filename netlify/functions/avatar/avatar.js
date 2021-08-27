@@ -12,11 +12,11 @@ cloudinary.config({
 
 // we're not doing an ssb style post in this case
 exports.handler = function (ev, ctx, cb) {
-
     var q = faunadb.query
     var client = new faunadb.Client({
         secret: process.env.FAUNADB_SERVER_SECRET
     })
+
 
     // -------------- GET ----------------------------------------------
 

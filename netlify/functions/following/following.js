@@ -25,6 +25,7 @@ exports.handler = function (ev, ctx, cb) {
         var { author, keys, msg } = JSON.parse(ev.body)
 
         // should return the profile of the followed person
+
         follow.post(author, keys, msg)
             .then(res => {
                 return cb(null, {

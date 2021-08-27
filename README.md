@@ -737,5 +737,3 @@ For example, to upload an image file to the Cloudinary 'demo' account, send an H
 https://api.cloudinary.com/v1_1/demo/image/upload
 ```
 
-
--------------------------------------------
