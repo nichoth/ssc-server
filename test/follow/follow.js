@@ -77,11 +77,13 @@ module.exports = function followTests (test, ks) {
         function followThem () {
             return client.follow(keys, userTwoKeys)
                 .then(res => {
-                    console.log('resssss in here', res)
                     t.pass('got a response')
-                    t.equal(res.value.content.name, 'userTwo')
-                    t.equal(res.value.content.type, 'profile')
-                    t.equal(res.value.content.about, userTwoKeys.id)
+                    t.equal(res.value.content.name, 'userTwo',
+                        'should return the profile after follow')
+                    t.equal(res.value.content.type, 'profile',
+                        'should return the profile after follow')
+                    t.equal(res.value.content.about, userTwoKeys.id,
+                        'should return the profile after follow')
                     t.end()
                 })
                 .catch((err) => {
