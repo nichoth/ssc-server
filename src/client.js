@@ -2,6 +2,9 @@ require('dotenv').config()
 require('isomorphic-fetch')
 var ssc = require('@nichoth/ssc')
 var createHash = require('create-hash')
+// var _follow = require('@nichoth/ssc-fauna/follow')
+// var _profile = require('@nichoth/ssc-fauna/profile')
+const xtend = require('xtend')
 
 var baseUrl = 'http://localhost:8888'
 var BASE = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
@@ -68,7 +71,6 @@ module.exports = function Client () {
                 })
         },
 
-        // TODO need to send a password
         follow: function (myKeys, userKeys) {
             var followMsg = ssc.createMsg(myKeys, null, {
                 type: 'follow',
@@ -88,12 +90,70 @@ module.exports = function Client () {
                 }) 
             })
                 .then(res => {
-                    if (!res.ok) {
-                        return Promise.reject(res.text())
-                    }
                     return res.json()
                 })
+                .catch(err => {
+                    console.log('ohhh nooo', err)
+                    throw err
+                })
         },
+
+        setProfile: function (keys, file, data) {
+            file = file || null
+            if (!data.name && !file) {
+                throw new Error('need a name or an avatar')
+            }
+
+            var msgContent = xtend(data, {
+                type: 'profile',
+                about: keys.id
+            })
+            // @TODO -- get the previous message before posting a new one
+            var msg = ssc.createMsg(keys, null, msgContent)
+
+            return fetch(BASE + '/.netlify/functions/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    keys: { public: keys.public },
+                    msg: msg
+                }) 
+            })
+                .then(res => {
+                    return res.json()
+                })
+                .catch(err => {
+                    console.log('ohhh nooo', err)
+                    throw err
+                })
+        },
+
+        // TODO need to send a password
+        // follow: function (myKeys, userKeys) {
+        //     var followMsg = ssc.createMsg(myKeys, null, {
+        //         type: 'follow',
+        //         contact: userKeys.id,
+        //         author: myKeys.id
+        //     })
+
+        //     return fetch(BASE + '/.netlify/functions/following', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             author: myKeys.id,
+        //             keys: { public: myKeys.public },
+        //             msg: followMsg
+        //         }) 
+        //     })
+        //         .then(res => {
+        //             if (!res.ok) {
+        //                 return Promise.reject(res.text())
+        //             }
+        //             return res.json()
+        //         })
+        // },
 
         getFollowing: function (author) {
             // console.log('**author**', author)

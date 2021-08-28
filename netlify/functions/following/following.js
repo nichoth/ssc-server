@@ -26,7 +26,7 @@ exports.handler = function (ev, ctx, cb) {
 
         // should return the profile of the followed person
 
-        follow.post(author, keys, msg)
+        follow.post(keys, msg)
             .then(res => {
                 return cb(null, {
                     statusCode: 200,

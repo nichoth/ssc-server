@@ -63,22 +63,34 @@ module.exports = function followTests (test, ks) {
 
 
     test('userOne follows a person', t => {
-        client.follow(keys, userTwoKeys)
-            .then(res => {
-                t.pass('got a response')
-                t.equal(res.value.content.type, 'follow',
-                    'should return the right msg type')
-                t.equal(res.value.content.author, keys.id,
-                    'should have the rihgt msg author')
-                t.equal(res.value.content.contact, userTwoKeys.id,
-                    'should have the right follow target')
-                t.end()
+        // first create a profile for userTwo
+        // (keys, file, data)
+        client.setProfile(userTwoKeys, null, { name: 'userTwo' })
+            .then(() => {
+                return followThem()
             })
-            .catch((err) => {
-                console.log('errrrr', err)
-                t.fail('should not return error')
-                t.end()
+            .catch(err => {
+                t.fail('got an error')
+                console.log('errrrrrr', err)
             })
+
+        function followThem () {
+            return client.follow(keys, userTwoKeys)
+                .then(res => {
+                    console.log('resssss in here', res)
+                    t.pass('got a response')
+                    t.equal(res.value.content.name, 'userTwo')
+                    t.equal(res.value.content.type, 'profile')
+                    t.equal(res.value.content.about, userTwoKeys.id)
+                    t.end()
+                })
+                .catch((err) => {
+                    console.log('errrrr', err)
+                    t.fail('should not return error')
+                    t.end()
+                })
+        }
+
     })
 
 

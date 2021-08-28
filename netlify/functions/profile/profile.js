@@ -1,5 +1,6 @@
 var ssc = require('@nichoth/ssc')
-var abouts = require('@nichoth/ssc-fauna/abouts')
+// var abouts = require('@nichoth/ssc-fauna/abouts')
+var profile = require('@nichoth/ssc-fauna/profile')
 
 // return the most recent 'about' msg
 exports.handler = async function (ev, ctx) {
@@ -9,7 +10,7 @@ exports.handler = async function (ev, ctx) {
 
     if (ev.httpMethod === 'GET') {
         // return the head of the about messages
-        var author = ev.queryStringParameters.author
+        // var author = ev.queryStringParameters.author
     }
 
     // ------------ /GET --------------------------------
@@ -17,7 +18,7 @@ exports.handler = async function (ev, ctx) {
     // ------------------------ POST --------------------------
     if (ev.httpMethod === "POST") {
         try {
-            var { keys, msg } = JSON.parse(ev.body)
+            var { keys, msg, file } = JSON.parse(ev.body)
         } catch (err) {
             console.log('invalid json', err)
             return {
@@ -56,8 +57,14 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
-
-        return abouts.post(keys, msg)
+        // profile.post(keys.id, null, msg)
+        return profile.post(keys.id, file || null, msg)
+            .then(res => {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(res)
+                }
+            })
 
         // ------------------------ /POST --------------------------
     }
