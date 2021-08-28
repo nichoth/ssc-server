@@ -26,7 +26,7 @@ module.exports = function followTests (test, ks) {
             .then(res => {
                 if (!res.ok) {
                     console.log('**not ok**')
-                    res.text().then(text => console.log('ttt', text))
+                    res.text().then(text => console.log('text', text))
                 }
                 res.json().then(json => {
                     t.equal(json.type, 'follow', 'should follow the person')
@@ -388,6 +388,7 @@ module.exports = function followTests (test, ks) {
                 if (!res.ok) {
                     return res.text().then(t => {
                         console.log('texttttt', t)
+                        t.fail('should not fail invitation')
                         t.end()
                     })
                 }
