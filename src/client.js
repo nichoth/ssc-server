@@ -2,12 +2,12 @@ require('dotenv').config()
 require('isomorphic-fetch')
 var ssc = require('@nichoth/ssc')
 var createHash = require('create-hash')
-// var _follow = require('@nichoth/ssc-fauna/follow')
-// var _profile = require('@nichoth/ssc-fauna/profile')
 const xtend = require('xtend')
 
 var baseUrl = 'http://localhost:8888'
 var BASE = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
+
+// this is a client-side file that calls our API
 
 module.exports = function Client () {
 
@@ -90,11 +90,42 @@ module.exports = function Client () {
                 }) 
             })
                 .then(res => {
+                    if (!res.ok) {
+                        return res.text().then(text => {
+                            return Promise.reject(text)
+                        })
+                    }
                     return res.json()
                 })
                 .catch(err => {
                     console.log('ohhh nooo', err)
                     throw err
+                })
+        },
+
+        unfollow: function (keys, unfollowKeys) {
+            var unfollowMsg = ssc.createMsg(keys, null, {
+                type: 'unfollow',
+                contact: unfollowKeys.id,
+                author: keys.id
+            })
+
+            fetch(BASE + '/.netlify/functions/unfollow', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    keys: { public: keys.public },
+                    msg: unfollowMsg
+                }) 
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        return res.text().then(text => {
+                            return Promise.reject(text)
+                        })
+                    }
+
+                    return res.json()
                 })
         },
 
@@ -127,33 +158,6 @@ module.exports = function Client () {
                     throw err
                 })
         },
-
-        // TODO need to send a password
-        // follow: function (myKeys, userKeys) {
-        //     var followMsg = ssc.createMsg(myKeys, null, {
-        //         type: 'follow',
-        //         contact: userKeys.id,
-        //         author: myKeys.id
-        //     })
-
-        //     return fetch(BASE + '/.netlify/functions/following', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             author: myKeys.id,
-        //             keys: { public: myKeys.public },
-        //             msg: followMsg
-        //         }) 
-        //     })
-        //         .then(res => {
-        //             if (!res.ok) {
-        //                 return Promise.reject(res.text())
-        //             }
-        //             return res.json()
-        //         })
-        // },
 
         getFollowing: function (author) {
             // console.log('**author**', author)

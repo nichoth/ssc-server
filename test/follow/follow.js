@@ -3,10 +3,6 @@ require('isomorphic-fetch')
 var base = 'http://localhost:8888'
 var client = require('../../src/client')()
 
-// var keys = ssc.createKeys()
-// // var userOneKeys = ssc.createKeys()
-// var userTwoKeys = ssc.createKeys()
-
 module.exports = function followTests (test, ks) {
     var { keys, userTwoKeys } = ks
 
