@@ -57,9 +57,6 @@ function Home (props) {
         ('data:image/svg+xml;utf8,' +
             generateFromString(me.secrets.public || ''))
 
-    // need to have a user-name link instead of just `me`
-    // keep a list of authors in memory? map of author -> avatar
-
     return html`<div class="home-route">
         <ul class="post-list">
             ${(following && relevantPosts && relevantPosts.map((post) => {

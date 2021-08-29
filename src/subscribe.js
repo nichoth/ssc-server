@@ -5,6 +5,8 @@ var client = require('./client')()
 
 function subscribe (bus, state) {
 
+    console.log('client', client)
+
     bus.on(evs.following.stop, userId => {
         console.log('**unfollow event**', userId)
         client.unfollow(state.me.secrets(), { id: userId })

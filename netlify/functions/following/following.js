@@ -22,7 +22,7 @@ exports.handler = function (ev, ctx, cb) {
     }
 
     if (ev.httpMethod === 'POST') {
-        var { author, keys, msg } = JSON.parse(ev.body)
+        var { keys, msg } = JSON.parse(ev.body)
 
         // should return the profile of the followed person
 
@@ -35,7 +35,7 @@ exports.handler = function (ev, ctx, cb) {
             })
             .catch(err => {
                 console.log('****fflobbb', err)
-                console.log('*********', author, '**', keys, '**', msg)
+                console.log('*********', keys, '**', msg)
                 return cb(null, {
                     statusCode: 500,
                     body: err.toString()

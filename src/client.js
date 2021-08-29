@@ -84,7 +84,6 @@ module.exports = function Client () {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    author: myKeys.id,
                     keys: { public: myKeys.public },
                     msg: followMsg
                 }) 
@@ -114,7 +113,7 @@ module.exports = function Client () {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    keys: { public: keys.public },
+                    keys: { public: keys.public, id: keys.id },
                     msg: unfollowMsg
                 }) 
             })

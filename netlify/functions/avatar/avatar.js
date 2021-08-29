@@ -25,7 +25,7 @@ exports.handler = function (ev, ctx, cb) {
         var { aboutWho } = ev.queryStringParameters
         console.log('**avatar - about who**', aboutWho)
 
-        client.query(
+        return client.query(
             q.Get( q.Match(q.Index('avatar-by-id'), aboutWho) )
         )
             .then(res => {

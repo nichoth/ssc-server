@@ -13,6 +13,8 @@ exports.handler = function (ev, ctx, cb) {
 
     var { keys, msg } = JSON.parse(ev.body)
 
+    console.log('**** keys, msg ****', keys, msg)
+
     var isValid
     try {
         isValid = ssc.verifyObj(keys, null, msg)
@@ -30,10 +32,9 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
-
     // validation is ok
     // now do the thing
-    unfollow(keys, msg)
+    unfollow.post(keys, msg)
         .then(res => {
             console.log('unfollow res', res)
             return cb(null, {
@@ -42,7 +43,7 @@ exports.handler = function (ev, ctx, cb) {
             })
         })
         .catch(err => {
-            console.log('errr in unfollow', err)
+            console.log('**errr in unfollow**', err)
             return cb(null, {
                 statusCode: 500,
                 body: err.toString()

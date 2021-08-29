@@ -20,7 +20,6 @@ function Shell (props) {
             .then(res => {
                 if (!res.ok) {
                     return res.text().then(t => {
-                        console.log('tttttt', t)
                         console.log('aaaaa', t)
                     })
                 }
