@@ -34,7 +34,12 @@ describe('foafs on the home page', () => {
 
     it('should let you unfollow people', () => {
         cy.get('.post-list .post').first().within(() => {
+            cy.get('.follow-btn').click()
+        })
+
+        cy.get('.post-list .post').first().within(() => {
             cy.get('.follow-btn')
+                .should('not.have.class', 'is-following')
         })
     })
 })

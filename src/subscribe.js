@@ -5,6 +5,20 @@ var client = require('./client')()
 
 function subscribe (bus, state) {
 
+    bus.on(evs.following.stop, userId => {
+        console.log('**unfollow event**', userId)
+        client.unfollow(state.me.secrets(), { id: userId })
+            .then(res => {
+                console.log('stopped following', res)
+                var newState = state.following()
+                delete newState[userId]
+                state.following.set(newState)
+            })
+            .catch(err => {
+                console.log('errr', err)
+            })
+    })
+
     bus.on(evs.following.start, userId => {
         // in here, need to call the server with the follow req,
         // server needs to responsd with the profile for this user

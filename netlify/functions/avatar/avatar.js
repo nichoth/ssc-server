@@ -70,13 +70,12 @@ exports.handler = function (ev, ctx, cb) {
                     })
                 })
             })
-
-        return
     }
 
     // -----------------------------------------------------
 
     // method === 'POST'
+    console.log('method in avatar', ev.httpMethod)
 
     try {
         var { keys, file } = JSON.parse(ev.body)

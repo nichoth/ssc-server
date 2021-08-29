@@ -110,7 +110,7 @@ module.exports = function Client () {
                 author: keys.id
             })
 
-            fetch(BASE + '/.netlify/functions/unfollow', {
+            return fetch(BASE + '/.netlify/functions/unfollow', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

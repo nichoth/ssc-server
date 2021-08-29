@@ -19,7 +19,10 @@ function Shell (props) {
         fetch('/.netlify/functions/avatar' + '?' + qs)
             .then(res => {
                 if (!res.ok) {
-                    return res.text().then(t => console.log('aaaaa', t))
+                    return res.text().then(t => {
+                        console.log('tttttt', t)
+                        console.log('aaaaa', t)
+                    })
                 }
                 return res.json()
             })

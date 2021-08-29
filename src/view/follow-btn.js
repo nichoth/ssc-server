@@ -29,6 +29,7 @@ function FollowIcon (props) {
     function unFollow (userId, ev) {
         console.log('**unfollow**', userId)
         ev.preventDefault()
+        props.onUnfollow(userId)
     }
 
     var isFollowing = following[author]

@@ -47,6 +47,11 @@ function Home (props) {
         emit(evs.following.start, userId)
     }
 
+    function onUnfollow (userId) {
+        console.log('**unfollow them**', userId)
+        emit(evs.following.stop, userId)
+    }
+
     var myAvatar = (me.avatar && me.avatar.url) ?
         me.avatar.url :
         ('data:image/svg+xml;utf8,' +
@@ -115,6 +120,7 @@ function Home (props) {
                                     author=${post.value.author}
                                     following=${following}
                                     onFollow=${onFollow}
+                                    onUnfollow=${onUnfollow}
                                 />
                             </div>
                         </div>
