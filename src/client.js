@@ -135,18 +135,19 @@ module.exports = function Client () {
                 throw new Error('need a name or an avatar')
             }
 
-            var msgContent = xtend(data, {
+            var msg = ssc.createMsg(keys, null, xtend(data, {
                 type: 'profile',
-                about: keys.id
-            })
+                about: keys.id,
+            }))
+
             // @TODO -- get the previous message before posting a new one
-            var msg = ssc.createMsg(keys, null, msgContent)
 
             return fetch(BASE + '/.netlify/functions/profile', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     keys: { public: keys.public },
+                    file: file,
                     msg: msg
                 }) 
             })

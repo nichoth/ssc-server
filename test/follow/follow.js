@@ -202,7 +202,6 @@ module.exports = function followTests (test, ks) {
                 t.error(err, 'should not return error')
                 t.end()
             })
-
     })
 
 

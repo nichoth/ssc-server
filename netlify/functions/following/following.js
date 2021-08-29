@@ -35,6 +35,7 @@ exports.handler = function (ev, ctx, cb) {
             })
             .catch(err => {
                 console.log('****fflobbb', err)
+                console.log('*********', author, '**', keys, '**', msg)
                 return cb(null, {
                     statusCode: 500,
                     body: err.toString()

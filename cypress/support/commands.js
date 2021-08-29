@@ -54,19 +54,32 @@ Cypress.Commands.add('createId', () => {
 })
 
 Cypress.Commands.add('followFoafs', (myKeys) => {
+
     console.log('envvvvvvvvv', Cypress.env('TEST_PW'))
+
     return client.followMe(myKeys, Cypress.env('TEST_PW'))
         .then(() => client.followMe(tempKeysTwo, Cypress.env('TEST_PW')))
         .then(() => client.followMe(tempKeysThree, Cypress.env('TEST_PW')))
         .then(() => {
-            // now make user1 follow user2 follow user3
-            return client.follow(myKeys, tempKeysTwo)
+
+            // must create a profile for each user before following them
+            return Promise.all([
+                client.setProfile(myKeys, null, { name: 'a' }),
+                client.setProfile(tempKeysTwo, null, { name: 'b' }),
+                client.setProfile(tempKeysThree, null, { name: 'c' })
+            ])
                 .then(() => {
-                    return client.follow(tempKeysTwo, tempKeysThree)
+                    // now make user1 follow user2 follow user3
+                    return client.follow(myKeys, tempKeysTwo)
                         .then(() => {
-                            console.log('everyone is followed')
+                            return client.follow(tempKeysTwo, tempKeysThree)
+                                .then(() => {
+                                    console.log('everyone is followed')
+                                })
                         })
                 })
+
+
         })
 
 })

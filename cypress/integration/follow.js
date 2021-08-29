@@ -31,11 +31,8 @@ describe('foafs on the home page', () => {
                 .should('have.class', 'is-following')
         })
     })
-})
 
-describe('followed people', () => {
     it('should let you unfollow people', () => {
-        cy.visit(URL)
         cy.get('.post-list .post').first().within(() => {
             cy.get('.follow-btn')
         })
