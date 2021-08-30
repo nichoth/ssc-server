@@ -4,7 +4,6 @@ var faunadb = require('faunadb')
 var upload = require('./upload')
 var createHash = require('crypto').createHash
 var xtend = require('xtend')
-// var stringify = require('json-stable-stringify')
 
 let cloudinary = require("cloudinary").v2;
 
@@ -94,7 +93,7 @@ exports.handler = function (ev, ctx, cb) {
         q.Get( q.Match(q.Index('server-following-who'), '@' + keys.public) )
     )
         .then((_res) => {
-            // console.log('zzzzzzzzzz', _res)
+            console.log('zzzzzzzzzz', _res)
             // post the stuff
             doTheThings()
                 .then(res => {
