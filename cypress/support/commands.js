@@ -13,6 +13,7 @@ var fileHash = hash.digest('base64')
 // var tempKeys = ssc.createKeys()
 var tempKeysTwo = ssc.createKeys()
 var tempKeysThree = ssc.createKeys()
+var tempKeysFour = ssc.createKeys()
 
 // mine, tempTwo, tempThree
 
@@ -79,9 +80,29 @@ Cypress.Commands.add('followFoafs', (myKeys) => {
                         })
                 })
 
-
         })
 
+})
+
+Cypress.Commands.add('followfoafoaf', myKeys => {
+    return client.follow(tempKeysThree, tempKeysFour)
+        .then(() => {
+            console.log('foafoaf is followed')
+        })
+})
+
+Cypress.Commands.add('foafoafPost', () => {
+    var msg = ssc.createMsg(tempKeysFour, null, {
+        type: 'test',
+        text: 'foafoaf test',
+        mentions: [fileHash]
+    })
+
+    return client.post(tempKeysFour, msg, file)
+        .then(res => {
+            console.log('foafoaf is posted', res)
+            return res
+        })
 })
 
 Cypress.Commands.add('serverFollow', (keys) => {

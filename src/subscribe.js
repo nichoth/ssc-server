@@ -2,10 +2,9 @@ var evs = require('./EVENTS')
 var Keys = require('./keys')
 var xtend = require('xtend')
 var client = require('./client')()
+var { getPostsWithFoafs } = client
 
 function subscribe (bus, state) {
-
-    console.log('client', client)
 
     bus.on(evs.following.stop, userId => {
         console.log('**unfollow event**', userId)
@@ -29,6 +28,19 @@ function subscribe (bus, state) {
         console.log('following event', userId)
         client.follow(state.me.secrets(), { id: userId })
             .then(res => {
+
+                // in here, request the messages since your foaf range
+                // is larger now
+                getPostsWithFoafs(state.me.secrets().id)
+                    .then(res => {
+                        console.log('got relevant posts', res)
+                        state.relevantPosts.set(res.msg)
+                    })
+                    .catch(err => {
+                        console.log('errrrrr', err)
+                    })
+
+
                 console.log('started following', res)
                 // state following list is like
                 // { userId: {userData} }
