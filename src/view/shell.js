@@ -8,7 +8,7 @@ function Shell (props) {
     var { path, emit, me } = props
     var { profile } = me
 
-    console.log('props in shell', props)
+    // console.log('props in shell', props)
 
     // component did mount
     // get avatar

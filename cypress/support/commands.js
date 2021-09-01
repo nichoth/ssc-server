@@ -61,13 +61,15 @@ Cypress.Commands.add('followFoafs', (myKeys) => {
     return client.followMe(myKeys, Cypress.env('TEST_PW'))
         .then(() => client.followMe(tempKeysTwo, Cypress.env('TEST_PW')))
         .then(() => client.followMe(tempKeysThree, Cypress.env('TEST_PW')))
+        .then(() => client.followMe(tempKeysFour, Cypress.env('TEST_PW')))
         .then(() => {
 
             // must create a profile for each user before following them
             return Promise.all([
                 client.setProfile(myKeys, null, { name: 'a' }),
                 client.setProfile(tempKeysTwo, null, { name: 'b' }),
-                client.setProfile(tempKeysThree, null, { name: 'c' })
+                client.setProfile(tempKeysThree, null, { name: 'c' }),
+                client.setProfile(tempKeysFour, null, { name: 'd' })
             ])
                 .then(() => {
                     // now make user1 follow user2 follow user3
@@ -84,7 +86,7 @@ Cypress.Commands.add('followFoafs', (myKeys) => {
 
 })
 
-Cypress.Commands.add('followfoafoaf', myKeys => {
+Cypress.Commands.add('followFoafoaf', () => {
     return client.follow(tempKeysThree, tempKeysFour)
         .then(() => {
             console.log('foafoaf is followed')
@@ -116,12 +118,12 @@ Cypress.Commands.add('foafPost', () => {
         text: 'foaf test',
         mentions: [fileHash]
     })
-    console.log('start posting', msg)
+    // console.log('start posting', msg)
 
     // post: function post (keys, msg, file) {
     return client.post(tempKeysThree, msg, file)
         .then(res => {
-            console.log('done posting', res)
+            // console.log('done posting', res)
             return res
         })
 })

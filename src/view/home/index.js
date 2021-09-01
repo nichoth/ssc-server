@@ -7,7 +7,7 @@ var FollowIcon = require('../follow-btn')
 var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
-    var { me, emit, relevantPosts, following } = props;
+    var { me, emit, relevantPosts, following } = props
 
     // component did mount
     useEffect(() => {
@@ -43,12 +43,11 @@ function Home (props) {
     }
 
     function onFollow (userId) {
-        console.log('****follow this person', userId)
         emit(evs.following.start, userId)
     }
 
     function onUnfollow (userId) {
-        console.log('**unfollow them**', userId)
+        // console.log('**unfollow them**', userId)
         emit(evs.following.stop, userId)
     }
 

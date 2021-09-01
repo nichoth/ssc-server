@@ -171,7 +171,12 @@ module.exports = function Client () {
             }).toString();
 
             return fetch(BASE + '/.netlify/functions/following' + '?' + qs)
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) {
+                        return res.text()
+                    }
+                    return res.json()
+                })
         },
 
         setNameAvatar: function (name, userKeys) {

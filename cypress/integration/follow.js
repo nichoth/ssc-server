@@ -39,6 +39,18 @@ describe('foafs on the home page', () => {
         // now that we are following the foaf,
         // need to check the list to make sure the foafoaf is there
 
+        cy.followFoafoaf()
+            .then(() => cy.window())
+            .then(win => {
+                var bus = win.bus
+                cy.foafoafPost().then((res) => {
+                    console.log('foafoaf post', res)
+                    bus.emit('relvantPosts.got', [res.msg])
+                    // cy.get('.post-list .post').contains('foafoaf')
+                })
+            })
+
+
     })
 
     it('should let you unfollow people', () => {

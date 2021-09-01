@@ -22,9 +22,9 @@ var state = State(keys, profile)
 subscribe(bus, state)
 
 
-// console.log('env.blaaaaa', process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'test') {
     require('./test-stuff')(state)
+    window.bus = bus
 }
 
 

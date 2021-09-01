@@ -6,12 +6,27 @@ var { getPostsWithFoafs } = client
 
 function subscribe (bus, state) {
 
+    // bus.on('*', ev => {
+    //     // console.log('***star***', ev)
+    // })
+
     bus.on(evs.following.stop, userId => {
-        console.log('**unfollow event**', userId)
+        // console.log('**unfollow event**', userId)
         client.unfollow(state.me.secrets(), { id: userId })
             .then(res => {
-                console.log('stopped following', res)
-                var newState = state.following()
+
+                // console.log('**unfollow res**', res, userId)
+
+                // need to re-request the posts
+                getPostsWithFoafs(state.me.secrets().id)
+                    .then(res => {
+                        // console.log('**got relevants', res)
+                        state.relevantPosts.set(res.msg)
+                    })
+
+                // console.log('***stopped following', res)
+                var newState = xtend(state.following())
+                console.log('**new state unfollowing***', newState)
                 delete newState[userId]
                 state.following.set(newState)
             })
@@ -25,7 +40,6 @@ function subscribe (bus, state) {
         // server needs to responsd with the profile for this user
         // and set state with the new following list
         // and set state with the new post list
-        console.log('following event', userId)
         client.follow(state.me.secrets(), { id: userId })
             .then(res => {
 
@@ -33,7 +47,7 @@ function subscribe (bus, state) {
                 // is larger now
                 getPostsWithFoafs(state.me.secrets().id)
                     .then(res => {
-                        console.log('got relevant posts', res)
+                        // console.log('***got relevant posts', res)
                         state.relevantPosts.set(res.msg)
                     })
                     .catch(err => {
@@ -41,12 +55,15 @@ function subscribe (bus, state) {
                     })
 
 
-                console.log('started following', res)
+                // console.log('***started following', res)
                 // state following list is like
                 // { userId: {userData} }
                 var newState = {}
-                newState[userId] = res
-                state.following.set(xtend(state.following(), newState))
+                newState[userId] = res.value.content
+                var _state = xtend(state.following(), newState)
+                console.log('**content**', res.value.content)
+                console.log('___state', _state)
+                state.following.set(_state)
             })
             .catch(err => {
                 console.log('errrrrr', err)
@@ -54,7 +71,7 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.identity.setName, name => {
-        console.log('set name event', state(), name)
+        // console.log('set name event', state(), name)
         state.me.profile.userName.set(name)
     })
 
@@ -74,7 +91,7 @@ function subscribe (bus, state) {
             console.log('done reading file')
             uploadAvatar(reader.result, state)
                 .then(res => {
-                    console.log('**success**', res)
+                    // console.log('**success**', res)
                 })
                 .catch(err => {
                     console.log('errrrrrrr', err)
@@ -95,7 +112,7 @@ function subscribe (bus, state) {
     bus.on(evs.profile.got, ev => {
         var { id } = ev
         var newState = {}
-        newStat[id] = ev
+        newState[id] = ev
         state.profiles.set(xtend(state.profiles(), newState))
     })
 
@@ -111,7 +128,7 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.following.got, ev => {
-        // console.log('**got following in subscribe**', ev)
+        console.log('**got following in subscribe**', ev)
         state.following.set(ev)
     })
 
@@ -159,7 +176,7 @@ function uploadAvatar (file, state) {
             return response.json()
         })
         .then(json => {
-            console.log('**avatar res json**', json)
+            // console.log('**avatar res json**', json)
             console.log(json.message)
         })
 }
