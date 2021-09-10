@@ -15,7 +15,6 @@ function Home (props) {
 
         getFollowing(me.secrets.id)
             .then(res => {
-                // console.log('**got following**', res)
                 emit(evs.following.got, res)
             })
             .catch(err => {

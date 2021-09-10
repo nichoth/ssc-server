@@ -13,9 +13,12 @@ function subscribe (bus, state) {
     bus.on(evs.following.stop, userId => {
         // console.log('**unfollow event**', userId)
         client.unfollow(state.me.secrets(), { id: userId })
-            .then(res => {
+            .then((res) => {
 
                 // console.log('**unfollow res**', res, userId)
+
+                // need to set the state for following
+                console.log('unfollow res', res)
 
                 // need to re-request the posts
                 getPostsWithFoafs(state.me.secrets().id)

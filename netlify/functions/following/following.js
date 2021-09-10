@@ -51,6 +51,7 @@ exports.handler = function (ev, ctx, cb) {
         // who are you following?
         return follow.get(author)
             .then(res => {
+                console.log('ok in here')
                 return cb(null, {
                     statusCode: 200,
                     body: JSON.stringify(res)

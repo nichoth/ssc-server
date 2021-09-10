@@ -160,7 +160,7 @@ module.exports = function Client () {
         },
 
         getFollowing: function (author) {
-            // console.log('**author**', author)
+            console.log('**author**', author)
             // this should return a map of followed IDs => profile data
 
             // we request the list of who you're following,
@@ -172,10 +172,21 @@ module.exports = function Client () {
 
             return fetch(BASE + '/.netlify/functions/following' + '?' + qs)
                 .then(res => {
+                    console.log('foll res', res)
+                    // res.text().then(t => {
+                    //     console.log('aaaaa', t)
+                    // })
                     if (!res.ok) {
-                        return res.text()
+                        return res.text().then(t => {
+                            console.log('ttttt', t)
+                            return t
+                        })
                     }
+
                     return res.json()
+                })
+                .catch(err => {
+                    console.log('errrrrrr', err)
                 })
         },
 
