@@ -51,14 +51,14 @@ exports.handler = function (ev, ctx, cb) {
         // who are you following?
         return follow.get(author)
             .then(res => {
-                console.log('ok in here')
+                // console.log('ok in here')
                 return cb(null, {
                     statusCode: 200,
                     body: JSON.stringify(res)
                 })
             })
             .catch(err => {
-                console.log('eeeeeekkk', err)
+                // console.log('eeeeeekkk', err)
                 return cb(null, {
                     statusCode: 500,
                     body: JSON.stringify({
