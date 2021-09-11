@@ -5,7 +5,7 @@ var evs = namespace({
     relevantPosts: ['got'],
     userFeed: ['got'],
     keys: ['got'],
-    following: ['got', 'start', 'stop'],
+    following: ['got', 'start', 'stop', 'err'],
     profile: ['got'],
     identity: ['setName', 'setAvatar', 'gotAvatar']
 })

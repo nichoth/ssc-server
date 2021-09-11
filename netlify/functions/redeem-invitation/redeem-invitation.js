@@ -36,7 +36,7 @@ exports.handler = function (ev, ctx, cb) {
     try {
         isValid = ssc.verify({ public: publicKey }, signature, code)
     } catch(err) {
-        console.log('errrrr', err)
+        console.log('errrrr in redeption', err)
         return cb(null, {
             statusCode: 400,
             body: err.toString()

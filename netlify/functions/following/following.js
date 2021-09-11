@@ -58,7 +58,7 @@ exports.handler = function (ev, ctx, cb) {
                 })
             })
             .catch(err => {
-                console.log('aaaaaaa', err)
+                console.log('eeeeeekkk', err)
                 return cb(null, {
                     statusCode: 500,
                     body: JSON.stringify({

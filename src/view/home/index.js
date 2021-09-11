@@ -18,7 +18,7 @@ function Home (props) {
                 emit(evs.following.got, res)
             })
             .catch(err => {
-                console.log('oh no following errrrr', err)
+                emit(evs.following.err, err)
             })
 
         if (me.secrets.id) {
@@ -28,7 +28,7 @@ function Home (props) {
                     emit(evs.relevantPosts.got, res.msg)
                 })
                 .catch(err => {
-                    console.log('errrrrr', err)
+                    console.log('aaa errrrrr', err)
                 })
         }
     }, []);
@@ -56,6 +56,17 @@ function Home (props) {
             generateFromString(me.secrets.public || ''))
 
     return html`<div class="home-route">
+
+        ${props.following && props.following.err ?
+            html`<p class="error">
+                ${props.following.err.includes('NotFound') ?
+                    "There was an error getting who you're following" :
+                    props.following.err
+                }
+            </p>` :
+            null
+        }
+
         <ul class="post-list">
             ${(following && relevantPosts && relevantPosts.map((post) => {
                 var writing = post.value.content.text

@@ -238,7 +238,7 @@ exports.handler = function (ev, ctx, cb) {
                 return arr
             })
             .catch((err) => {
-                console.log('errrrrr', err)
+                console.log('errrrrr in post one', err)
                 revert(msg, file, slug)
             })
     }

@@ -131,8 +131,14 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.following.got, ev => {
-        console.log('**got following in subscribe**', ev)
+        console.log('**got following**', ev)
         state.following.set(ev)
+    })
+
+    bus.on(evs.following.err, err => {
+        state.following.set(xtend(state.following() || {}, {
+            err: err.message
+        }))
     })
 
     bus.on(evs.userFeed.got, ev => {

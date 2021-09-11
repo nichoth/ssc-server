@@ -54,7 +54,7 @@ exports.handler = function (ev, ctx, cb) {
         })
         .catch(err => {
             // login failed, return an err
-            console.log('errrrr', err)
+            console.log('errrrr in id', err)
             return cb(null, {
                 statusCode: 500,
                 body: JSON.stringify({
