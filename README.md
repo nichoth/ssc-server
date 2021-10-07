@@ -4,6 +4,57 @@
 
 [https://ssc-server.netlify.app/](https://ssc-server.netlify.app/)
 
+-----------------------------------------------
+
+## what is this?
+
+This is a server/social-network for hosting images. `ssc-server` because it is based on `ssb`, and the lower-level library [ssc](https://github.com/nichoth/ssc). 
+
+This uses a 'federated' server model, which means that anyone can host a server that participates in the network. SSB was an experiment with database replication, and with using a merkle-dag in a more general and replicable way. As such some issues around p2p nerworking were never addressed. Like for example every peer in the network is a 'full' peer or 'thick' style client. This means that every peer stores the full merkle-list for everyone that the peer is following. This means that when a new peer joins the network and follows some people, there is a long waiting time while the database downloads and indexes *all the messages* from peers that you follow. Also your client machine must have enough storage space for everything. And this is limited to one machine per user. There's no using the same account on your laptop and phone.
+
+The ssc model makes that part better because it does assume *some trust* between you and a server. This means that your browser is once again a 'thin' client, just *browsing* a collection of data that the server stores (the server has a full merkle-log of data). This is the one place where trust is significantly different than `ssb`. Thinking about an evil server operator, if you know that clients request like 20 messages at a time, you could return a bogus message for message 1/20, then the following merkle list could still match up and it could be whatever I want since the browser doesn't have a full merkle-list. (The browser is able to independently verify the merkle-list on it's own, but starts with the earliest message that it knows about, not the absolute first message)
+
+Messages here look like
+
+```js
+{
+     previous: null,
+     sequence: 1,
+     author: '@IGrkmx/GjfzaOLNjTpdmmPWuTj5xeSv/2pCP+yUI8eo=.ed25519',
+     timestamp: 1608054728047,
+     hash: 'sha256',
+     content: {
+        type: 'post',
+        text: 'woooo',
+        mentions: ['my-hash']
+    },
+     signature: 'LJUQXvR6SZ9lQSlF1w1RFQi3GFIU4B/Cc1sP6kjxnMZn3YW8X7nj9/hlWiTF3cJbWkc9xHvApJ+9uRtHxicXAQ==.sig.ed25519'
+}
+```
+
+The `mentions` array in the message is the hash of an image file. The author is the ID of a user, and user IDs are just a public key string prepended with `@`. The `previous` field is the hash of the immediately preceeding message (forming a merkle-list). `signature` is the signature of this message made from the user's private key, after the message has been stringified.
+
+This is how blobs are incorporated into the ssb merkle-list -- they are referenced by a unique hash, and must be stored somewhere that is addressed by hash that the application knows about. SSB uses [multiblob](https://github.com/ssbc/multiblob).
+
+I thought it would be easier to keep things 'serverless', so I've used something called [cloudinary](https://cloudinary.com/) as an image host. Images are saved using their hash as a name, so it's still functionally a content addressable store. Then the client uses the hash of the image to construct a `src` url for the image file, similar to what you would do on ssb, where an image would be hosted on `localhost`.
+
+One of the cool things about ssb is that it uses a database that was more-or-less custom written for the application -- [flume db](https://github.com/flumedb/flumedb). Again in the interest of doing things 'serverlessly', I've used [fauna db](https://fauna.com/).
+
+That's another questionable decision I've made. I think it would be cooler if this used a *local* DB, then the local DB synchronized with the server DB. That's a drawback of my setup -- there is no offline first, or use without internet. I did make [another version](https://nichoth.com/projects/dev-diary-ssc-flume/) of the DB behind this, using flume & muxrpc. That could be worthwhile if you were wanting to do more with the DB side of things.
+
+So, how does a server know who to accept `posts` from? The server is like a 'pub' in traditional ssb, meaning that the server has it's own identity, and it keeps a like of people that it follows.
+
+In order for a server to follow you, you must be invited by someone who is already followed by the server. There are several ways to do the invitations. 
+
+The simplest is to just have a passward that is hashed (so it is secret) then saved to a text file in the repo. When the server gets a request to redeem an invitation, it checks if the request contains the right password.
+
+You could create a record in the database with a hashed password. Then you would be able to record additional information like who invited who. This is necessary if you want to enable users to unvite other users, vs just people the server operator chooses to invite. Users with a valid password then get saved to a list of allowed people. (You save the person's DID, which would need to be in the request).
+
+If the server has its own identity (an identity is a keypair) then it could create a UCAN for the invited user, but that means you need to store a private key for the server, whereas you don't need to if you are using the password method.
+
+-------------------------------------------------
+
+
 ## start a local server
 ```
 npm start
