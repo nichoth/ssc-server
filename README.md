@@ -58,6 +58,14 @@ Users with a valid password then get saved to a list of allowed people. (You sav
 
 If the server has its own identity (an identity is a keypair) then it could create a UCAN for the invited user, but that means you need to store a private key for the server, whereas you don't need to if you are using the password method.
 
+### how it's made
+
+I used [preact](https://preactjs.com/) (a small react-like library) and [htm](https://github.com/developit/htm) as a view layer. A nice thing about `htm` is that it obviates the need for `babel`.
+
+Another key element is that it depends on Netlify's lambda functions. These are in the folder [netlify/functions](https://github.com/nichoth/ssc-server/tree/main/netlify/functions). 
+
+Also we are using [faunaDB](https://fauna.com/) to store messages.
+
 -------------------------------------------------
 
 
