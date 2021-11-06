@@ -148,7 +148,7 @@ exports.handler = function (ev, ctx, cb) {
                 }
 
                 // msg list is ok, write it to DB
-                return msgAndFile(msg, file, slugifiedHash, _hash)
+                return msgAndFile(msg, file, slugifiedHash)
                     .then(res => {
                         // make the url here for the image
                         var imgUrl = cloudinary.url(slugifiedHash, {
@@ -174,7 +174,7 @@ exports.handler = function (ev, ctx, cb) {
             .catch(err => {
                 if (err.name === 'NotFound') {
                     // write the msg b/c the feed is new
-                    return msgAndFile(msg, file, slugifiedHash, _hash)
+                    return msgAndFile(msg, file, slugifiedHash)
                         .then(res => {  
                             var imgUrl = cloudinary.url(slugifiedHash, {
                                 // width: 100,
@@ -216,10 +216,10 @@ exports.handler = function (ev, ctx, cb) {
 
 
 
-    function msgAndFile (msg, file, slug, hash) {
+    function msgAndFile (msg, file, slug) {
         // console.log('**in msg and file**')
         return Promise.all([
-            writeMsg(msg, hash).then(res => {
+            writeMsg(msg).then(res => {
                 return res.data ? res.data : res
             }),
             upload(file, slug)
@@ -242,7 +242,7 @@ exports.handler = function (ev, ctx, cb) {
 
 
     // return the new msg
-    function writeMsg (_msg, hash) {
+    function writeMsg (_msg) {
         var msg = _msg
         var msgHash = ssc.getId(msg)
 
