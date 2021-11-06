@@ -1,5 +1,6 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
+// import md5Hex from 'md5-hex';
 var evs = require('../EVENTS')
 var ssc = require('@nichoth/ssc')
 const dragDrop = require('drag-drop')
@@ -173,15 +174,17 @@ function submit (me, feed, setErr, setRes, ev) {
     reader.readAsDataURL(file)
 }
 
-function getHash (file) {
-    var hash = createHash('sha256')
-    hash.update(file)
-    return hash.digest('base64')
-}
+// function getHash (file) {
+//     var hash = createHash('md5')
+//     hash.update(file)
+//     return hash.digest('hex')
+// }
 
 // This will upload the file after having read it
 function upload (me, file, text, feed) {
-    var hash = getHash(file)
+    // var hash = getHash(file)
+    var hash = createHash('md5').update(file).digest('hex')
+    // var hash = md5Hex(file)
     var keys = me.secrets
     var content = { type: 'test', text: text, mentions: [hash] }
 
