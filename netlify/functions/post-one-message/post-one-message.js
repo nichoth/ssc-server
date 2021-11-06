@@ -252,7 +252,8 @@ exports.handler = function (ev, ctx, cb) {
         return client.query(
             q.Create(q.Collection('posts'), {
                 key: msgHash,
-                data: { value: msg, key: msgHash }
+                value: msg,
+                // data: { value: msg, key: msgHash }
             })
         )
             .then(res => {
@@ -261,10 +262,3 @@ exports.handler = function (ev, ctx, cb) {
             })
     }
 }
-
-
-
-
-
-
-
