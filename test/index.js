@@ -31,7 +31,6 @@ test('setup', function (t) {
     t.end()
 })
 
-
 test('following', t => {
     require('./follow/follow')(t.test, { keys, userOneKeys, userTwoKeys})
 })
@@ -46,6 +45,10 @@ test('foafs', t => {
     var userTwoKeys = ssc.createKeys()
     var ks = { keys, userOneKeys, userTwoKeys }
     require('./foafs/foafs')(t.test, ks)
+})
+
+test('images', t =>{
+    require('./image/image')(t.test)
 })
 
 test('get relevant posts', function (t) {

@@ -2,8 +2,8 @@ require('dotenv').config()
 var ssc = require('@nichoth/ssc')
 var faunadb = require('faunadb')
 var upload = require('./upload')
-var createHash = require('crypto').createHash
 var xtend = require('xtend')
+var createHash = require('../create-hash')
 
 let cloudinary = require("cloudinary").v2;
 
@@ -123,11 +123,7 @@ exports.handler = function (ev, ctx, cb) {
 
     function doTheThings () {
         // create the hash
-        var hash = createHash('sha256')
-        hash.update(file)
-        var _hash = hash.digest('base64')
-        // console.log('******hash', hash, _hash)
-        var slugifiedHash = encodeURIComponent('' + _hash)
+        var slugifiedHash = createHash(file)
 
         // get an existing feed
         // to check if the merkle list matches up
@@ -155,8 +151,7 @@ exports.handler = function (ev, ctx, cb) {
                 return msgAndFile(msg, file, slugifiedHash, _hash)
                     .then(res => {
                         // make the url here for the image
-                        var slugslug = encodeURIComponent(slugifiedHash)
-                        var imgUrl = cloudinary.url(slugslug, {
+                        var imgUrl = cloudinary.url(slugifiedHash, {
                             // width: 100,
                             // height: 150,
                             // crop: "fill"
@@ -181,11 +176,7 @@ exports.handler = function (ev, ctx, cb) {
                     // write the msg b/c the feed is new
                     return msgAndFile(msg, file, slugifiedHash, _hash)
                         .then(res => {  
-                            // console.log('**got msg and file**')
-                            var slugslug = encodeURIComponent(slugifiedHash)
-
-                            // we slugify twice
-                            var imgUrl = cloudinary.url(slugslug, {
+                            var imgUrl = cloudinary.url(slugifiedHash, {
                                 // width: 100,
                                 // height: 150,
                                 // crop: "fill"
