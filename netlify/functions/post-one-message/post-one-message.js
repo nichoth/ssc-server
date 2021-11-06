@@ -155,7 +155,7 @@ exports.handler = function (ev, ctx, cb) {
                             // width: 100,
                             // height: 150,
                             // crop: "fill"
-                        })      
+                        })
 
                         var _response = xtend(res[0], {
                             mentionUrls: [imgUrl]

@@ -8,7 +8,7 @@
 
 ## what is this?
 
-This is a server/social-network for hosting images. `ssc-server` because it is based on `ssb`, and the lower-level library [ssc](https://github.com/nichoth/ssc). 
+This is a server/social-network for hosting images. `ssc-server` because it is based on `ssb`, and c comes after b in the alphabet. `ssc` stands for nothing. 
 
 This uses a 'federated' server model, which means that anyone can host a server that participates in the network. SSB was an experiment with database replication and with using a merkle-dag in a more general and replicable way. As such, some issues around p2p nerworking were never addressed. Like for example every peer in the network is a 'full' peer, or 'thick' style client. This means that every peer stores the full merkle-list for everyone that the peer is following. So when a new peer joins the network and follows some people, there is a long waiting time while the database downloads and indexes *all the messages* from peers that you follow. Also your client machine must have enough storage space for everything. And it is a direct one to one relationship of users:machine. There's no using the same account on your laptop and phone.
 
