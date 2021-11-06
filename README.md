@@ -806,3 +806,12 @@ For example, to upload an image file to the Cloudinary 'demo' account, send an H
 https://api.cloudinary.com/v1_1/demo/image/upload
 ```
 
+-----------------------------------------------------------------
+
+https://cloudinary.com/documentation/node_image_and_video_upload#server_side_upload
+
+> The file to upload can be specified as a local path, a remote HTTP or HTTPS URL, a whitelisted storage bucket (S3 or Google Storage) URL, a base64 data URI, or an FTP URL. 
+
+**not a blob apparently**
+
+Maybe you should upload to cloudinary first, from the browser, then save a msg to fauna/our-server. There would be no way of knowing if the save to fauna failed, but maybe that's ok. Meaning there could be lingering images in cloudinary if the save to fauna fails after the image upload completes.
