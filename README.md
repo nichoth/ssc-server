@@ -815,3 +815,6 @@ https://cloudinary.com/documentation/node_image_and_video_upload#server_side_upl
 **not a blob apparently**
 
 Maybe you should upload to cloudinary first, from the browser, then save a msg to fauna/our-server. There would be no way of knowing if the save to fauna failed, but maybe that's ok. Meaning there could be lingering images in cloudinary if the save to fauna fails after the image upload completes.
+
+* [md5-hex](https://github.com/sindresorhus/md5-hex)
+* [hasha](https://github.com/sindresorhus/hasha)
