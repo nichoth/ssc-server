@@ -7,6 +7,8 @@ const xtend = require('xtend')
 var baseUrl = 'http://localhost:8888'
 var BASE = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
 
+// process.env.BRANCH === 'test'
+
 // this is a client-side file that calls our API
 
 module.exports = function Client () {
