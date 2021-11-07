@@ -62,9 +62,9 @@ exports.handler = function (ev, ctx, cb) {
 
                                 // slugify the hash twice
                                 // don't know why we need to do it twice
-                                var slugifiedHash = encodeURIComponent('' + mention)
-                                var slugslug = encodeURIComponent(slugifiedHash)
-                                return cloudinary.url(slugslug)      
+                                // var slugifiedHash = encodeURIComponent('' + mention)
+                                // var slugslug = encodeURIComponent(slugifiedHash)
+                                return cloudinary.url(mention)      
                             })
 
                         var xtendedMsg = xtend(post.data, {
