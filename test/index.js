@@ -47,6 +47,10 @@ test('foafs', t => {
     require('./foafs/foafs')(t.test, ks)
 })
 
+test('invitations', t => {
+    require('./invitation/invitation')(t.test)
+})
+
 test('images', t =>{
     require('./image/image')(t.test)
 })
