@@ -42,11 +42,6 @@ exports.handler = function (ev, ctx, cb) {
                             return xtend(msg, {
                                 mentionUrls: msg.value.content.mentions ?
                                     msg.value.content.mentions.map(m => {
-                                        // slugify the hash twice
-                                        // don't know why we need to do it twice
-                                        // var slugifiedHash = encodeURIComponent('' + m)
-                                        // var slugslug = encodeURIComponent(
-                                        //     slugifiedHash)
                                         return cloudinary.url(m)      
                                     }) :
                                     []
@@ -68,7 +63,6 @@ exports.handler = function (ev, ctx, cb) {
 
     getRelevantPosts(userId)
         .then(res => {
-            // console.log('**got relevant posts****', res)
 
             cb(null, {
                 statusCode: 200,
@@ -82,10 +76,10 @@ exports.handler = function (ev, ctx, cb) {
                                 msg.value.content.mentions.map(m => {
                                     // slugify the hash twice
                                     // don't know why we need to do it twice
-                                    var slugifiedHash = encodeURIComponent('' + m)
-                                    var slugslug = encodeURIComponent(
-                                        slugifiedHash)
-                                    return cloudinary.url(slugslug)      
+                                    // var slugifiedHash = encodeURIComponent('' + m)
+                                    // var slugslug = encodeURIComponent(
+                                    //     slugifiedHash)
+                                    return cloudinary.url(m)      
                                 }) :
                                 []
                         })
