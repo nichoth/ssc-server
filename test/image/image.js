@@ -8,6 +8,8 @@ module.exports = function imageTests (test) {
         var hash = createHash(base64Caracal)
         console.log('hash', hash)
         t.ok(hash, 'should create a hash')
+        t.equal(hash, '7602e0d96bdcb35fc90e085840fcbe8873d8ce342efe7ec24a446b269093eb47',
+            'should create the right hash')
         t.end()
     })
 }
