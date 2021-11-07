@@ -42,8 +42,6 @@ function CreateInvitation (props) {
             .then(res => {
                 if (!res.ok) {
                     res.text().then(t => {
-                        console.log('***create inv errrr***', t)
-                        console.log('errrrrrr')
                         setErr(t)
                     })
                     return
@@ -51,7 +49,6 @@ function CreateInvitation (props) {
                 return res.json()
             })
             .then(res => {
-                console.log('***create inv res***', res)
                 if (res) setInv(res)
             })
     }

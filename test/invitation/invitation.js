@@ -38,7 +38,7 @@ module.exports = function invitationTests (test) {
                 code = res.code
                 t.end()
             })
-            .catch(err => {
+            .catch(() => {
                 t.fail('should not get an error')
                 t.end()
             })
@@ -52,7 +52,7 @@ module.exports = function invitationTests (test) {
             })
             .catch(err => {
                 t.pass('should get an error response')
-                t.ok(err.includes('Invalid invitation'),
+                t.ok(err.toString().includes('Invalid invitation'),
                     'should return the right error message')
                 t.end()
             })

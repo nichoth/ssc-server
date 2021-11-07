@@ -4,7 +4,7 @@ var test = require('tape')
 // var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
 var fs = require('fs')
-var createHash = require('crypto').createHash
+// var createHash = require('crypto').createHash
 // var Client = require('../src/client')
 // var client = Client()
 // var base = 'http://localhost:8888'
@@ -17,11 +17,11 @@ var userOneKeys = ssc.createKeys()
 var userTwoKeys = ssc.createKeys()
 
 // get the test file & its hash ready
-var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
-let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
-var hash = createHash('sha256')
-hash.update(base64Caracal)
-var fileHash = hash.digest('base64')
+// var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
+// let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
+// var hash = createHash('sha256')
+// hash.update(base64Caracal)
+// var fileHash = hash.digest('base64')
 
 var ntl
 test('setup', function (t) {

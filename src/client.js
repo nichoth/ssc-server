@@ -353,7 +353,6 @@ module.exports = function Client () {
                 .then(res => {
                     if (!res.ok) {
                         return res.text().then(t => {
-                            console.log('errrrrrr')
                             return Promise.reject(t)
                         })
                     }
