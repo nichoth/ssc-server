@@ -214,8 +214,6 @@ exports.handler = function (ev, ctx, cb) {
             })
     }
 
-
-
     function msgAndFile (msg, file, slug) {
         // console.log('**in msg and file**')
         return Promise.all([
