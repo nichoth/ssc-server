@@ -15,38 +15,50 @@ console.log('node env', process.env.NODE_ENV)
 console.log('secret', process.env.FAUNADB_SERVER_SECRET_TEST)
 console.log('sec', sec)
 
-client.query(
-    q.CreateCollection({ name: 'posts' })
-)
-    .then((ret) => console.log('**create posts**', ret))
-    .catch((err) => console.error('Error: %s', err))
+// this will reset the DB to its initial state
 
-client.query(
-    q.CreateCollection({ name: 'abouts' })
-)
-    .then((ret) => console.log('**create abouts**', ret))
-    .catch((err) => console.error('Error: %s', err))
+var collections = [
+    // [ collectionName, index ]
+    ['posts', {
+        name: 'post-by-author',
+        source: q.Collection('posts'),
+        terms: [
+            { field: ['data', 'value', 'author'] },
+        ]
+    }],
+    ['abouts'],
+    ['profiles'],
+    ['invitations'],
+    ['server-following'],
+    ['follow']
+]
 
-client.query(
-    q.CreateCollection({ name: 'profiles' })
-)
-    .then((ret) => console.log('**create profiles**', ret))
-    .catch((err) => console.error('Error: %s', err))
-
-client.query(
-    q.CreateCollection({ name: 'invitations' })
-)
-    .then((ret) => console.log('**create invitations**', ret))
-    .catch((err) => console.error('Error: %s', err))
-
-client.query(
-    q.CreateCollection({ name: 'server-following' })
-)
-    .then((ret) => console.log('**create server-following**', ret))
-    .catch((err) => console.error('Error: %s', err))
-
-client.query(
-    q.CreateCollection({ name: 'follow' })
-)
-    .then((ret) => console.log('**create follow**', ret))
-    .catch((err) => console.error('Error: %s', err))
+Promise.all(collections.map(([name, index]) => {
+    return client.query(
+        q.If(
+            q.Exists(q.Collection(name)),
+            name + ' exists',
+            // q.Do(
+                // this doesn't work b/c of the cache
+            //     q.Delete(q.Collection(name)),
+            //     q.CreateCollection({ name })
+            // ),
+            q.CreateCollection({ name })
+        )
+    )
+        .then(() => {
+            if (!index) return
+            return client.query(
+                q.If(
+                    q.Exists(q.Index(index.name)),
+                    'collection ' + name + ' exists, ' +
+                        'index ' + index.name + ' exists',
+                    q.CreateIndex(index)
+                )
+            )
+        })
+}))
+    .then((res) => {
+        console.log('created collections', res)
+    })
+    .catch(err => console.log('errr', err))
