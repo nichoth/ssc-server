@@ -46,13 +46,14 @@ Promise.all(collections.map(([name, index]) => {
             q.CreateCollection({ name })
         )
     )
-        .then(() => {
+        .then((res) => {
+            console.log('res', res)
             if (!index) return
             return client.query(
                 q.If(
                     q.Exists(q.Index(index.name)),
-                    'collection ' + name + ' exists, ' +
-                        'index ' + index.name + ' exists',
+                    'collection -- ' + res +
+                        ', index -- ' + index.name + ' exists',
                     q.CreateIndex(index)
                 )
             )
