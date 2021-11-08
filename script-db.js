@@ -47,8 +47,8 @@ Promise.all(collections.map(([name, index]) => {
         )
     )
         .then((res) => {
-            console.log('res', res)
-            if (!index) return 'collection -- ' + res
+            if (!index) return 'collection -- ' + res +
+             ', no index'
             return client.query(
                 q.If(
                     q.Exists(q.Index(index.name)),
