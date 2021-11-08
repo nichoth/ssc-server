@@ -112,8 +112,11 @@ exports.handler = function (ev, ctx, cb) {
                 // we are already following them, do nothing
                 'Already following',
 
-                // we're not following them yet, so follow them
+                // we're not following them yet, so follow them, if applicable
                 q.Do(
+                    // if this `delete` fails, then the entire `do` clause
+                    // fails and we don't follow anyone new, and
+                    // it goes to the `catch` clause below
                     q.Delete(
                         // delete the invitation since it was used once now
                         q.Select(
