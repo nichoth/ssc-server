@@ -15,7 +15,9 @@ console.log('node env', process.env.NODE_ENV)
 console.log('secret', process.env.FAUNADB_SERVER_SECRET_TEST)
 console.log('sec', sec)
 
-// this will reset the DB to its initial state
+// this will create the necessary collections and indices for the
+// DB defined by the env variable FAUNADB_SERVER_SECRET or
+// FAUNADB_SERVER_SECRET_TEST
 
 var collections = [
     // [ collectionName, index ]
