@@ -114,7 +114,8 @@ exports.handler = function (ev, ctx, cb) {
 
                 // we're not following them yet, so follow them, if applicable
                 q.Do(
-                    // if this `delete` fails, then the entire `do` clause
+                    // if this `delete` fails, like becuase there is no
+                    // invitation with this code, then the entire `do` clause
                     // fails and we don't follow anyone new, and
                     // it goes to the `catch` clause below
                     q.Delete(
