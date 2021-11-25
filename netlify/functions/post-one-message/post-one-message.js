@@ -46,6 +46,7 @@ exports.handler = function (ev, ctx, cb) {
         })
     }
 
+    // TODO
     // need to check that the message has a mention for the given image
     var hasMentions = (msg.content.mentions &&
         Array.isArray(msg.content.mentions))
@@ -93,7 +94,6 @@ exports.handler = function (ev, ctx, cb) {
         q.Get( q.Match(q.Index('server-following-who'), '@' + keys.public) )
     )
         .then((_res) => {
-            console.log('zzzzzzzzzz', _res)
             // post the stuff
             doTheThings()
                 .then(res => {

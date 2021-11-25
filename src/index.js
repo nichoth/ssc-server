@@ -115,9 +115,7 @@ function Connector ({ emit, state, setRoute }) {
         />`
     }
 
-    return html`<${Shell} setRoute=${setRoute} emit=${emit} ...${_state}
-        path=${_state.route}
-    >
+    return html`<${Shell} emit=${emit} ...${_state} path=${_state.route}>
         <${routeView} emit=${emit} ...${_state} params=${params}
             setRoute=${setRoute}
             path=${_state.route}
