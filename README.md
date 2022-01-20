@@ -56,7 +56,7 @@ In order for a server to follow you, you must be invited by someone who is alrea
 
 The simplest is to just have a passward that is hashed (so it is secret) then saved to a text file in the repo. When the server gets a request to redeem an invitation, it checks if the request contains the right password. The drawback of this is that regular users cannot invite others. Only the server owner would be able to create a password in a file in the repo.
 
-You could create a record in the database with a hashed password. Then you would be able to record additional information like who invited who. This is necessary if you want to enable users to unvite other users, vs just people the server operator chooses to invite.
+You could create a record in the database with a hashed password. Then you would be able to record additional information like who invited who. This is necessary if you want to enable users to invite other users, vs just people the server operator chooses to invite.
 
 Users with a valid password then get saved to a list of allowed people. (You save the person's DID, which would need to be in the request).
 
