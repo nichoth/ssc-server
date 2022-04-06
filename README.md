@@ -6,6 +6,11 @@
 
 -----------------------------------------------
 
+This is the frontend and also server-side code for ssc. A deployable netlify
+website. This uses netlify lambda functions to call a faunaDB. As such, it is "serverless", and only requires lambda functions, not a dedicated server.
+
+-----------------------------------------------
+
 ## what is this?
 
 This is a server/social-network for hosting images. `ssc-server` because it is based on `ssb`, and c comes after b in the alphabet. `ssc` stands for nothing. 
