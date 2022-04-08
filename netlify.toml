@@ -25,5 +25,5 @@
   publish = "public" # Folder with the static content for _redirect file
 
 [template.environment]
-  FAUNA_DB_SECRET = "fauna secret"
+  FAUNA_DB_SECRET = "faunaDB secret"
   CLOUDINARY_SECRET = "cloudinary secret"
