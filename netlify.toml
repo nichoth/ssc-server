@@ -6,10 +6,10 @@
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
-  #[[redirects]]
-  #  from = "/*"
-  #  to = "/index.html"
-  #  status = 200
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
 
   ## (optional) Settings for Netlify Dev
   ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
@@ -21,5 +21,9 @@
   ## more info on configuring this file: https://www.netlify.com/docs/netlify-toml-reference/
 
 [dev]
-  autoLaunch = false
+  # autoLaunch = false
   publish = "public" # Folder with the static content for _redirect file
+
+[template.environment]
+  FAUNA_DB_SECRET = "fauna secret"
+  CLOUDINARY_SECRET = "cloudinary secret"
