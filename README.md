@@ -12,7 +12,7 @@ website. This uses netlify lambda functions to call a faunaDB. As such, it is "s
 -----------------------------------------------
 
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/nichoth/ssc-server)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/nichoth/ssc-server#SECRET_TOKEN=specialuniquevalue)
 
 
 --------------------------------------------
