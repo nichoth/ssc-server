@@ -11,6 +11,10 @@ website. This uses netlify lambda functions to call a faunaDB. As such, it is "s
 
 -----------------------------------------------
 
+Deploy your own here -- [nichoth.com/ssc](https://nichoth.com/ssc/)
+
+-------------------------------------------
+
 
 ## what is this?
 
