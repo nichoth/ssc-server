@@ -3,7 +3,7 @@ require('isomorphic-fetch')
 var test = require('tape')
 // var { spawn } = require('child_process')
 var ssc = require('@nichoth/ssc')
-var fs = require('fs')
+// var fs = require('fs')
 // var createHash = require('crypto').createHash
 // var Client = require('../src/client')
 // var client = Client()
@@ -27,8 +27,13 @@ var ntl
 test('setup', function (t) {
     require('./setup')(t.test, (netlify) => {
         ntl = netlify
+
+        process.on('exit', () => {
+            ntl.kill('SIGINT');
+        })
+
+        t.end()
     })
-    t.end()
 })
 
 test('following', t => {

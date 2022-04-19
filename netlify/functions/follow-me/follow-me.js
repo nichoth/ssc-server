@@ -9,11 +9,16 @@ exports.handler = function (ev, ctx, cb) {
     if (ev.httpMethod !== 'POST') {
         return cb(null, {
             statusCode: 400,
-            body: (new Error('should be a post request')).toString()
+            body: (new Error('should be a POST request')).toString()
         })
     }
 
-    var req = JSON.parse(ev.body)
+    var req
+    try {
+        req = JSON.parse(ev.body)
+    } catch (err) {
+        console.log('**json err**', err)
+    }
 
     var { password, user } = req
     var client = new faunadb.Client({
@@ -26,42 +31,53 @@ exports.handler = function (ev, ctx, cb) {
         return (acc || bcrypt.compare(password, pwdHash))
     }, false)
 
-    // if equal, write a follow msg to the DB
-    //   { type: 'follow', contact: userId }
-    if (ok) {
-        // in here, write to DB
-        return client.query(
-            q.Create(q.Collection('server-following'), {
-                data: { type: 'follow', contact: user }
-            })
-        )
-            .then(res => {
-                return cb(null, {
-                    statusCode: 200,
-                    body: JSON.stringify(res.data)
+    // ok.then(ok.then(_ok => {
+    //     console.log('aaaaaaaaaaaaaa', _ok)
+    // }))
+
+    ok.then(isOk => {
+        // if equal, write a follow msg to the DB
+        //   { type: 'follow', contact: userId }
+        if (isOk) {
+            // in here, write to DB
+            client.query(
+                q.Create(q.Collection('server-following'), {
+                    data: { type: 'follow', contact: user }
                 })
-            })
-            .catch(err => {
-                // in here, handle the case where it is an existing user
-                // (we are already following them)
-                // should return a success in that case
-                // console.log('errrrr', err)
-                // console.log('eeerrrppppp', err)
-                return cb(null, {
-                    statusCode: 500,
-                    body: err.toString()
+            )
+                .then(res => {
+                    return cb(null, {
+                        statusCode: 200,
+                        body: JSON.stringify(res.data)
+                    })
                 })
+                .catch(err => {
+                    // in here, handle the case where it is an existing user
+                    // (we are already following them)
+                    // should return a success in that case
+                    // console.log('eeerrrppppp', err)
+                    return cb(null, {
+                        statusCode: 500,
+                        body: err.toString()
+                    })
+                })
+
+            return 
+        } else {
+            // they don't have the 'master' password, so check the DB invitations
+
+            console.log('**TODO -- lookup in the DB if they have been invited**')
+
+            return cb(null, {
+                statusCode: 401,
+                body: (new Error('Invalid password')).toString()
             })
-    } else {
-        // they don't have the 'master' password, so check the DB invitations
+        }
 
-        // TODO -- in here, do the DB lookup for the `code`
-        console.log('****hhhhhhhhh***')
-
-    }
-
-    return cb(null, {
-        statusCode: 401,
-        body: (new Error('Invalid password')).toString()
+        // return cb(null, {
+        //     statusCode: 401,
+        //     body: (new Error('Invalid password')).toString()
+        // })
     })
+
 }

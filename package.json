@@ -16,7 +16,7 @@
     "watch-js-test": "watchify -t [ envify --NODE_ENV test ] -t uglifyify --debug -p esmify src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
     "cypress-test": "NODE_ENV=test env $(cat .env | xargs) concurrently --kill-others \"npm run start-test\" \"cypress open\"",
-    "test": "NODE_ENV=test tape test/*.js | tap-arc"
+    "test": "NODE_ENV=test tape test/index.js | tap-arc"
   },
   "repository": {
     "type": "git",
@@ -40,7 +40,7 @@
     "create-hash": "^1.2.0",
     "dotenv": "^8.6.0",
     "drag-drop": "^7.0.1",
-    "faunadb": "^4.2.0",
+    "faunadb": "^4.5.4",
     "generate-avatar": "^1.4.10",
     "htm": "^3.0.4",
     "isomorphic-fetch": "^3.0.0",

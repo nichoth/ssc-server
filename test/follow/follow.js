@@ -20,10 +20,15 @@ module.exports = function followTests (test, ks) {
             })
         })
             .then(res => {
+                console.log('ok????', res.ok)
+
                 if (!res.ok) {
-                    console.log('**not ok**')
-                    res.text().then(text => console.log('text', text))
+                    console.log('**not ok in client**')
+                    res.text().then(text => console.log('**text**', text))
+                    return 
                 }
+
+                // res.text().then(text => console.log('ttttt', text))
                 res.json().then(json => {
                     t.equal(json.type, 'follow', 'should follow the person')
                     t.equal(json.contact, keys.id, 'should return the right id')
@@ -36,25 +41,25 @@ module.exports = function followTests (test, ks) {
 
         // we follow userTwo here also just because the later tests depend on
         // it (the foaf test)
-        fetch(base + '/.netlify/functions/follow-me', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                user: userTwoKeys.id,
-                password: process.env.TEST_PW
-            })
-        })
-            .then(res => {
-                res.json().then(json => {
-                    t.equal(json.contact, userTwoKeys.id,
-                        'should follow user two')
-                })
-            })
-            .catch(err => {
-                t.error(err)
-            })
+        // fetch(base + '/.netlify/functions/follow-me', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         user: userTwoKeys.id,
+        //         password: process.env.TEST_PW
+        //     })
+        // })
+        //     .then(res => {
+        //         res.json().then(json => {
+        //             t.equal(json.contact, userTwoKeys.id,
+        //                 'should follow user two')
+        //         })
+        //     })
+        //     .catch(err => {
+        //         t.error(err)
+        //     })
     })
 
 
