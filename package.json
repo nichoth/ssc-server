@@ -16,7 +16,7 @@
     "watch-js-test": "watchify -t [ envify --NODE_ENV test ] -t uglifyify --debug -p esmify src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
     "cypress-test": "NODE_ENV=test env $(cat .env | xargs) concurrently --kill-others \"npm run start-test\" \"cypress open\"",
-    "test": "NODE_ENV=test tape test/*.js | tap-spec"
+    "test": "NODE_ENV=test tape test/*.js | tap-arc"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "@nichoth/forms": "^0.0.27",
     "@nichoth/ssc": "^0.0.17",
     "@nichoth/ssc-fauna": "^0.0.42",
+    "@sindresorhus/slugify": "^2.1.0",
     "bcrypt": "^5.0.1",
     "blake2s-js": "^1.3.0",
     "cloudinary": "^1.25.1",
@@ -63,7 +64,7 @@
     "esmify": "^2.1.1",
     "netlify-cli": "^5.2.6",
     "sass": "^1.32.12",
-    "tap-spec": "^5.0.0",
+    "tap-arc": "^0.3.4",
     "tape": "^5.2.2",
     "uglifyify": "^5.0.2",
     "watchify": "^4.0.0"

@@ -85,6 +85,21 @@ Also we are using [faunaDB](https://fauna.com/) to store messages.
 -------------------------------------------------
 
 
+## blocking/following
+
+Blocking a user means we don't want to save any message from them. So we will
+not replicate their content regardless of FOAF status.
+
+We may still save messages from users we are not following, because by
+default we save any message from a friend of a friend.
+
+If you _are_ following someone, then you will save all their messages, and
+all messages from their friends (your FOAFs).
+
+
+-----------------------------------------------
+
+
 ## start a local server
 ```
 npm start
@@ -237,6 +252,20 @@ $ npm test
 ```
 
 --------------------------------------------------------------
+
+
+## cloudinary API
+
+* [upload API](https://cloudinary.com/documentation/node_asset_administration#upload_api)
+
+* [upload API](https://cloudinary.com/documentation/image_upload_api_reference#upload)
+
+* [assign a public ID](https://cloudinary.com/documentation/upload_images#public_id)
+
+* [cloudinary browser API](https://cloudinary.com/documentation/javascript_integration#get_started_with_the_javascript_sdk)
+
+
+-----------------------------------------------------------
 
 
 The plan for now is just to make something that works for basic crud and stuff
