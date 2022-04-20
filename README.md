@@ -109,7 +109,7 @@ npm start
 
 The `post` test:
 ```
-NODE_ENV=test node test/post/ | tap-spec
+NODE_ENV=test node test/follow/ | npx tap-arc
 ```
 
 ## run all tests
