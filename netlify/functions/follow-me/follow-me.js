@@ -36,6 +36,8 @@ exports.handler = function (ev, ctx, cb) {
     // }))
 
     ok.then(isOk => {
+        console.log('****aaaaaaaaaaaaaa****', isOk)
+
         // if equal, write a follow msg to the DB
         //   { type: 'follow', contact: userId }
         if (isOk) {

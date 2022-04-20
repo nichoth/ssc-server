@@ -28,7 +28,6 @@ module.exports = function followTests (test, ks) {
                     return 
                 }
 
-                // res.text().then(text => console.log('ttttt', text))
                 res.json().then(json => {
                     t.equal(json.type, 'follow', 'should follow the person')
                     t.equal(json.contact, keys.id, 'should return the right id')
