@@ -11,17 +11,13 @@ module.exports = function followTests (test, ks) {
 
         fetch(base + '/.netlify/functions/follow-me', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user: keys.id,
                 password: process.env.TEST_PW
             })
         })
             .then(res => {
-                console.log('ok????', res.ok)
-
                 if (!res.ok) {
                     console.log('**not ok in client**')
                     res.text().then(text => console.log('**text**', text))
@@ -29,8 +25,10 @@ module.exports = function followTests (test, ks) {
                 }
 
                 res.json().then(json => {
-                    t.equal(json.type, 'follow', 'should follow the person')
-                    t.equal(json.contact, keys.id, 'should return the right id')
+                    t.equal(json.type, 'follow',
+                        'should return a "follow" message')
+                    t.equal(json.contact, keys.id,
+                        'should return the right userID')
                 })
             })
             .catch(err => {
@@ -40,25 +38,23 @@ module.exports = function followTests (test, ks) {
 
         // we follow userTwo here also just because the later tests depend on
         // it (the foaf test)
-        // fetch(base + '/.netlify/functions/follow-me', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         user: userTwoKeys.id,
-        //         password: process.env.TEST_PW
-        //     })
-        // })
-        //     .then(res => {
-        //         res.json().then(json => {
-        //             t.equal(json.contact, userTwoKeys.id,
-        //                 'should follow user two')
-        //         })
-        //     })
-        //     .catch(err => {
-        //         t.error(err)
-        //     })
+        fetch(base + '/.netlify/functions/follow-me', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user: userTwoKeys.id,
+                password: process.env.TEST_PW
+            })
+        })
+            .then(res => {
+                res.json().then(json => {
+                    t.equal(json.contact, userTwoKeys.id,
+                        'should follow user two')
+                })
+            })
+            .catch(err => {
+                t.error(err)
+            })
     })
 
 

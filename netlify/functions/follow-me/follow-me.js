@@ -36,7 +36,7 @@ exports.handler = function (ev, ctx, cb) {
     // }))
 
     ok.then(isOk => {
-        console.log('****aaaaaaaaaaaaaa****', isOk)
+        // console.log('****aaaaaaaaaaaaaa****', isOk)
 
         // if equal, write a follow msg to the DB
         //   { type: 'follow', contact: userId }
@@ -48,6 +48,7 @@ exports.handler = function (ev, ctx, cb) {
                 })
             )
                 .then(res => {
+                    // console.log('***client query response***', res)
                     return cb(null, {
                         statusCode: 200,
                         body: JSON.stringify(res.data)
