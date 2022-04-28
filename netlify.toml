@@ -27,4 +27,6 @@
 [template.environment]
   FAUNA_DB_SECRET = "faunaDB secret"
   CLOUDINARY_SECRET = "cloudinary secret"
+  PUBLIC_KEY = "public key"
   SECRET_KEY = "secret key"
+
