@@ -12,6 +12,13 @@ https://app.netlify.com/start/deploy?repository=https://github.com/myworkspace/s
 
 > Passing environment variable values in the hash ensures that they’re processed on the client side only. You can can create custom Deploy to Netlify buttons for your users with tokens and other secure data, and they won’t appear in Netlify logs.
 
+## boostrap example
+
+[bootstrap example](https://github.com/netlify/netlify-faunadb-example/blob/master/scripts/bootstrap-fauna-database.js)
+
+
+
+
 
 
 
