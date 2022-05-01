@@ -14,7 +14,7 @@ if (!process.env.FAUNADB_SERVER_SECRET) {
 
 // Has var. Do the thing
 createFaunaDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
-    console.log('Fauna Database schema has been created')
+    console.log(chalk.green('Fauna Database schema has been created'))
 })
 
 function createFaunaDB (key) {

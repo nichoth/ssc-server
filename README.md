@@ -15,6 +15,13 @@ website. This uses netlify lambda functions to call a faunaDB. As such, it is "s
 
 It's not ready yet though
 
+-------------------------------------
+
+## note
+Netlify *does* run the _deploy-succeeded_ function the first time you deploy. Meaning after you click the _deploy to netlify_ button.
+
+Should use that hook to create indexes and collections in the DB.
+
 -------------------------------------------
 
 
