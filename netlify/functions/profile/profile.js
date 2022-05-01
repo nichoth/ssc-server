@@ -31,8 +31,9 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
+        var isValid
         try {
-            var isValid = ssc.verifyObj(keys, lastAboutMsg || null, msg)
+            isValid = ssc.verifyObj(keys, lastAboutMsg || null, msg)
         } catch (err) {
             console.log('!!!!!not isvalid!!!!!!', isValid, err)
             return {
