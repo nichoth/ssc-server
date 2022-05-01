@@ -1,5 +1,23 @@
 # the log
 
+
+## deploy to netlify button
+
+### Pre-fill environment variables
+https://docs.netlify.com/site-deploys/create-deploys/#pre-fill-environment-variables
+
+```
+https://app.netlify.com/start/deploy?repository=https://github.com/myworkspace/sweetkittentemplate#SECRET_TOKEN=specialuniquevalue&CUSTOM_LOGO=https://placekitten.com/100/100
+```
+
+> Passing environment variable values in the hash ensures that they’re processed on the client side only. You can can create custom Deploy to Netlify buttons for your users with tokens and other secure data, and they won’t appear in Netlify logs.
+
+
+
+
+
+
+
 ## use `netlify-cli` to create a demo function, 'test'
 
 ```

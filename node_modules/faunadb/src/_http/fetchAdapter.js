@@ -1,5 +1,5 @@
 'use strict'
-require('abort-controller/polyfill')
+var { AbortController } = require('node-abort-controller')
 var util = require('../_util')
 var faunaErrors = require('../errors')
 var errors = require('./errors')
@@ -44,7 +44,7 @@ function FetchAdapter(options) {
     this._keepAliveEnabledAgent = new (options.isHttps
       ? require('https')
       : require('http')
-    ).Agent({ keepAlive: true })
+    ).Agent({ keepAlive: true, timeout: 3000 })
   }
 }
 

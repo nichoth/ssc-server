@@ -11,9 +11,7 @@ module.exports = function followTests (test, ks) {
 
         fetch(base + '/.netlify/functions/follow-me', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user: keys.id,
                 password: process.env.TEST_PW
@@ -21,12 +19,16 @@ module.exports = function followTests (test, ks) {
         })
             .then(res => {
                 if (!res.ok) {
-                    console.log('**not ok**')
-                    res.text().then(text => console.log('text', text))
+                    console.log('**not ok in client**')
+                    res.text().then(text => console.log('**text**', text))
+                    return 
                 }
+
                 res.json().then(json => {
-                    t.equal(json.type, 'follow', 'should follow the person')
-                    t.equal(json.contact, keys.id, 'should return the right id')
+                    t.equal(json.type, 'follow',
+                        'should return a "follow" message')
+                    t.equal(json.contact, keys.id,
+                        'should return the right userID')
                 })
             })
             .catch(err => {
@@ -38,9 +40,7 @@ module.exports = function followTests (test, ks) {
         // it (the foaf test)
         fetch(base + '/.netlify/functions/follow-me', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user: userTwoKeys.id,
                 password: process.env.TEST_PW

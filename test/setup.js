@@ -1,7 +1,7 @@
 var { spawn } = require('child_process')
 
 function setup (test, cb) {
-    test('setup', function (t) {
+    test('setup the server', function (t) {
         var ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
 
         ntl.stdout.on('data', function (d) {
@@ -13,6 +13,10 @@ function setup (test, cb) {
 
         ntl.stdout.pipe(process.stdout)
         ntl.stderr.pipe(process.stderr)
+
+        ntl.stderr.on('data', (data) => {
+            console.log('**data**', data)
+        })
 
         ntl.stderr.on('data', (data) => {
             console.error(`stderr: ${data}`)
