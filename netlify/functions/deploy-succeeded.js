@@ -1,3 +1,5 @@
+console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+
 exports.handler = async function (ev, ctx) {
     console.log('wooooooooooooooooooooo')
     console.log('deploy sucess')
