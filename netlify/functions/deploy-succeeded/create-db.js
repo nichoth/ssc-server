@@ -8,6 +8,8 @@ if (require.main === module) {
 
 module.exports = createFaunaDB
 
+// https://github.com/netlify/netlify-faunadb-example/blob/master/scripts/bootstrap-fauna-database.js
+
 function createFaunaDB (key) {
     console.log('node env', process.env.NODE_ENV)
 
