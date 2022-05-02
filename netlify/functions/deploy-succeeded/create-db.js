@@ -15,6 +15,8 @@ function createFaunaDB (key) {
 
     const client = new faunadb.Client({ secret: key })
 
+    console.log('*client*', client)
+
     var collections = [
         // [ collectionName, indices ]
         ['posts', [{
