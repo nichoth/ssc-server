@@ -1,5 +1,5 @@
+import chalk from 'chalk'
 const createDB = require('./create-db')
-const chalk = require('chalk')
 
 console.log('aaaaaaaaaaaaaaaaaaa')
 
