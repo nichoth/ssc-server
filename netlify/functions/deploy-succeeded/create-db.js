@@ -78,7 +78,7 @@ function createFaunaDB (key) {
         }, 3000)
     })
 
-    test().then(res => console.log('test fn', res))
+    test.then(res => console.log('test fn', res))
 
     return Promise.all(collections.map(([name, indexes]) => {
         return client.query(
