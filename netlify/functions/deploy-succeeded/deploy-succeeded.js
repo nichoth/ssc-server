@@ -1,5 +1,3 @@
-// var faunadb = require('faunadb')
-// var q = faunadb.query
 const createDB = require('./create-db')
 const chalk = require('chalk')
 
@@ -20,12 +18,7 @@ exports.handler = async function (ev, ctx) {
     }
 
     // Has var. Do the thing
-    createFaunaDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
+    createDB(key).then(() => {
         console.log(chalk.green('Fauna Database schema has been created'))
     })
-
-    function createFaunaDB (key) {
-        console.log('Create the fauna database schema!')
-        return createDB(key)
-    }
 }

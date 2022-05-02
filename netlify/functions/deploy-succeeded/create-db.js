@@ -51,8 +51,8 @@ function createFaunaDB (key) {
         //     }
         // ]],
 
-        // who is the given user following?
         ['follow', [
+            // who is the given user following?
             {
                 name: 'following',
                 source: q.Collection('follow'),
