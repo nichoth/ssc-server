@@ -1,6 +1,7 @@
 // var faunadb = require('faunadb')
 // var q = faunadb.query
 const createDB = require('./create-db')
+const chalk = require('chalk')
 
 console.log('aaaaaaaaaaaaaaaaaaa')
 
