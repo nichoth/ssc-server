@@ -17,6 +17,10 @@ function createFaunaDB (key) {
 
     console.log('*client*', client)
 
+    setTimeout(() => {
+        console.log('fooo')
+    }, 2000)
+
     const collections = [
         // [ collectionName, indices ]
         ['posts', [{
