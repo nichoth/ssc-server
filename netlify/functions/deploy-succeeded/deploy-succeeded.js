@@ -20,6 +20,7 @@ exports.handler = async function (ev, ctx) {
     }
 
     // Has var. Do the thing
+    console.log('has the env var')
     createDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
         console.log('Fauna Database schema has been created')
         // console.log(chalk.green('Fauna Database schema has been created'))
