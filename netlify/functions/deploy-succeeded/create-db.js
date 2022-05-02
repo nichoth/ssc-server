@@ -11,7 +11,7 @@ module.exports = createFaunaDB
 // https://github.com/netlify/netlify-faunadb-example/blob/master/scripts/bootstrap-fauna-database.js
 
 function createFaunaDB (key) {
-    console.log('node env', process.env.NODE_ENV)
+    console.log('*in createFaunaDB*')
 
     const client = new faunadb.Client({ secret: key })
 
@@ -96,6 +96,7 @@ function createFaunaDB (key) {
     }))
         .then((res) => {
             console.log('*created collections*', res)
+            return res
         })
         .catch(err => console.log('errr', err))
 }
