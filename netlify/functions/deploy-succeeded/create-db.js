@@ -83,16 +83,29 @@ function createFaunaDB (key) {
                 if (!indexes) return ('collection -- ' + res +
                     ', no index')
 
-                return Promise.all(indexes.map(index => {
-                    return client.query(
-                        q.If(
-                            q.Exists(q.Index(index.name)),
-                            'collection -- ' + res +
-                                ', index -- ' + index.name + ' exists',
-                            q.CreateIndex(index)
+                return indexes.reduce((p, index) => {
+                    return p.then(() => {
+                        return client.query(
+                            q.If(
+                                q.Exists(q.Index(index.name)),
+                                'collection -- ' + res +
+                                    ', index -- ' + index.name + ' exists',
+                                q.CreateIndex(index)
+                            )
                         )
-                    )
-                }))
+                    })
+                }, Promise.resolve())
+
+                // return Promise.all(indexes.map(index => {
+                //     return client.query(
+                //         q.If(
+                //             q.Exists(q.Index(index.name)),
+                //             'collection -- ' + res +
+                //                 ', index -- ' + index.name + ' exists',
+                //             q.CreateIndex(index)
+                //         )
+                //     )
+                // }))
 
             })
     }))
