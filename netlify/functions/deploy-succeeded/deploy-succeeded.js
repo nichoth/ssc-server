@@ -3,7 +3,7 @@ const createDB = require('./create-db')
 
 console.log('aaaaaaaaaaaaaaaaaaa')
 
-exports.handler = async function (ev, ctx) {
+exports.handler = function (ev, ctx) {
     console.log('wooooooooooooooooooooo')
     console.log('deploy success')
 
