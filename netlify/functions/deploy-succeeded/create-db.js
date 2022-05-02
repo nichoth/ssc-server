@@ -68,7 +68,7 @@ function createFaunaDB (key) {
         ]]
     ]
 
-    Promise.all(collections.map(([name, indexes]) => {
+    return Promise.all(collections.map(([name, indexes]) => {
         return client.query(
             q.If(
                 q.Exists(q.Collection(name)),
