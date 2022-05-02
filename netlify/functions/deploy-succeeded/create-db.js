@@ -17,7 +17,7 @@ function createFaunaDB (key) {
 
     console.log('*client*', client)
 
-    var collections = [
+    const collections = [
         // [ collectionName, indices ]
         ['posts', [{
                 name: 'post-by-author',
@@ -70,6 +70,8 @@ function createFaunaDB (key) {
         ]]
     ]
 
+    console.log('*collections*', collections)
+
     return Promise.all(collections.map(([name, indexes]) => {
         return client.query(
             q.If(
@@ -82,6 +84,8 @@ function createFaunaDB (key) {
                 // @TODO -- every collection should have an index
                 if (!indexes) return ('collection -- ' + res +
                     ', no index')
+
+                console.log('**aaaa**', res)
 
                 return indexes.reduce((p, index) => {
                     return p.then(() => {
