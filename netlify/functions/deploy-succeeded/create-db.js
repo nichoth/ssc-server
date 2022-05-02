@@ -17,10 +17,6 @@ function createFaunaDB (key) {
 
     console.log('*client*', client)
 
-    setTimeout(() => {
-        console.log('fooo')
-    }, 2000)
-
     const collections = [
         // [ collectionName, indices ]
         ['posts', [{
@@ -75,14 +71,6 @@ function createFaunaDB (key) {
     ]
 
     console.log('*collections*', collections)
-
-    var test = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('ok')
-        }, 3000)
-    })
-
-    test.then(res => console.log('test fn', res))
 
     return Promise.all(collections.map(([name, indexes]) => {
         return client.query(
