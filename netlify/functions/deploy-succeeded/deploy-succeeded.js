@@ -1,14 +1,8 @@
 // import chalk from 'chalk'
 const createDB = require('./create-db')
 
-console.log('aaaaaaaaaaaaaaaaaaa')
-
 exports.handler = function (ev, ctx) {
-    console.log('wooooooooooooooooooooo')
-    console.log('deploy success')
-
     console.log('Creating your FaunaDB Database...\n')
-    // console.log(chalk.cyan('Creating your FaunaDB Database...\n'))
 
     // 1. Check for required enviroment variables
     if (!process.env.FAUNADB_SERVER_SECRET) {
@@ -20,7 +14,6 @@ exports.handler = function (ev, ctx) {
     }
 
     // Has var. Do the thing
-    console.log('has the env var')
     return createDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
         console.log('Fauna Database schema has been created')
         // console.log(chalk.green('Fauna Database schema has been created'))

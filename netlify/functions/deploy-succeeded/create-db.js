@@ -11,11 +11,7 @@ module.exports = createFaunaDB
 // https://github.com/netlify/netlify-faunadb-example/blob/master/scripts/bootstrap-fauna-database.js
 
 function createFaunaDB (key) {
-    console.log('*in createFaunaDB*')
-
     const client = new faunadb.Client({ secret: key })
-
-    console.log('*client*', client)
 
     const collections = [
         // [ collectionName, indices ]
@@ -70,8 +66,6 @@ function createFaunaDB (key) {
         ]]
     ]
 
-    console.log('*collections*', collections)
-
     return Promise.all(collections.map(([name, indexes]) => {
         return client.query(
             q.If(
@@ -85,8 +79,6 @@ function createFaunaDB (key) {
                 if (!indexes) return ('collection -- ' + res +
                     ', no index')
 
-                console.log('**aaaa**', res)
-
                 return indexes.reduce((p, index) => {
                     return p.then(() => {
                         return client.query(
@@ -99,22 +91,10 @@ function createFaunaDB (key) {
                         )
                     })
                 }, Promise.resolve())
-
-                // return Promise.all(indexes.map(index => {
-                //     return client.query(
-                //         q.If(
-                //             q.Exists(q.Index(index.name)),
-                //             'collection -- ' + res +
-                //                 ', index -- ' + index.name + ' exists',
-                //             q.CreateIndex(index)
-                //         )
-                //     )
-                // }))
-
             })
     }))
         .then((res) => {
-            console.log('*created collections*', res)
+            // console.log('*created collections*', res)
             return res
         })
         .catch(err => console.log('errr', err))
