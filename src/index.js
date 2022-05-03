@@ -2,12 +2,15 @@ import { html } from 'htm/preact'
 import { render } from 'preact'
 var route = require('route-event')()
 var Bus = require('@nichoth/events')
+const ssc = require('@nichoth/ssc/web')
 var subscribe = require('./subscribe')
 var State = require('./state')
 const Connector = require('./connector')
 
+const keystore = ssc.createKeys()
+
 var bus = Bus({ memo: true })
-var state = State()
+var state = State(keystore)
 subscribe(bus, state)
 
 // for testing

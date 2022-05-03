@@ -1,10 +1,11 @@
-const Observable = require('mutant/value')
 var observ = require('observ')
 var struct = require('observ-struct')
 
 function State (keys, profile) {
 
     // console.log('in state', profile)
+
+    console.log('in state', keys)
 
     return struct({
         route: observ(''),

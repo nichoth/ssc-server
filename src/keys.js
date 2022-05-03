@@ -1,4 +1,4 @@
-var ssc = require('@nichoth/ssc')
+var ssc = require('@nichoth/ssc/web')
 
 var sscKeys = {
     save: function (keys) {

@@ -32,7 +32,7 @@
   "dependencies": {
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^0.0.27",
-    "@nichoth/ssc": "^0.0.17",
+    "@nichoth/ssc": "^0.8.0",
     "@nichoth/ssc-fauna": "^0.0.42",
     "@sindresorhus/slugify": "^2.1.0",
     "bcrypt": "^5.0.1",

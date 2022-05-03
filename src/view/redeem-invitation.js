@@ -2,7 +2,7 @@ import { html } from 'htm/preact'
 import { useEffect, useState } from 'preact/hooks';
 var TextInput = require('@nichoth/forms/preact/text-input')
 var Button = require('@nichoth/forms/preact/button')
-var ssc = require('@nichoth/ssc')
+var ssc = require('@nichoth/ssc/web')
 
 function createRedeption (code) {
 

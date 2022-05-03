@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-var ssc = require('@nichoth/ssc')
+var ssc = require('@nichoth/ssc/web')
 var createHash = require('create-hash')
 const xtend = require('xtend')
 

@@ -1,7 +1,7 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
 var evs = require('../EVENTS')
-var ssc = require('@nichoth/ssc')
+var ssc = require('@nichoth/ssc/web')
 const dragDrop = require('drag-drop')
 var createHash = require('create-hash')
 

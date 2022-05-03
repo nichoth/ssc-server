@@ -1,5 +1,5 @@
 import { html } from 'htm/preact'
-var ssc = require('@nichoth/ssc')
+var ssc = require('@nichoth/ssc/web')
 import { useState } from 'preact/hooks';
 
 function CreateInvitation (props) {

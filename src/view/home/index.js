@@ -13,7 +13,7 @@ function Home (props) {
     useEffect(() => {
         if (!me || !me.did) return
 
-        getFollowing(me.secrets.id)
+        getFollowing(me.did)
             .then(res => {
                 emit(evs.following.got, res)
             })
@@ -22,7 +22,7 @@ function Home (props) {
             })
 
         if (me.did) {
-            getPostsWithFoafs(me.secrets.id)
+            getPostsWithFoafs(me.did)
                 .then(res => {
                     // console.log('**got foaf posts**', res)
                     emit(evs.relevantPosts.got, res.msg)

@@ -1,7 +1,7 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
-var ssc = require('@nichoth/ssc')
+var ssc = require('@nichoth/ssc/web')
 var evs = require('../EVENTS')
 
 function Shell (props) {
