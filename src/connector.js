@@ -17,8 +17,6 @@ function Connector ({ emit, state, setRoute }) {
         })
     })
 
-    console.log('state.route', _state.route)
-
     var match = router.match(_state.route)
     console.log('match', match)
 
@@ -37,8 +35,6 @@ function Connector ({ emit, state, setRoute }) {
             ...${_state} path=${_state.route}
         />`
     }
-
-    console.log('in connector')
 
     return html`<${Shell} setRoute=${setRoute} emit=${emit} ...${_state}
         path=${_state.route}

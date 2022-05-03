@@ -21,6 +21,11 @@ function Router () {
         return { view: Home }
     })
 
+    router.addRoute('/hello', () => {
+        console.log({ view: Hello })
+        return { view: Hello }
+    })
+
     // router.addRoute('/new', (match) => {
     //     return {
     //         view: New
