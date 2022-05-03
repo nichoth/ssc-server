@@ -8,13 +8,11 @@ function Shell (props) {
     var { path, emit, me } = props
     var { profile } = me
 
-    // console.log('props in shell', props)
-
     // component did mount
     // get avatar
     useEffect(() => {
         if (!me || !me.secrets || !me.secrets.id) return
-        var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString();
+        var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString()
 
         fetch('/.netlify/functions/avatar' + '?' + qs)
             .then(res => {

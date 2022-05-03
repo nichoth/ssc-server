@@ -5,8 +5,6 @@ var client = require('./client')()
 var { getPostsWithFoafs } = client
 
 function subscribe (bus, state) {
-    console.log('state', state)
-
     bus.on('*', ev => {
         console.log('***star***', ev)
     })
