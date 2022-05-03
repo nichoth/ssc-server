@@ -8,11 +8,11 @@ var CreateInvitation = require('./view/create-invitation')
 var RedeemInvitation = require('./view/redeem-invitation')
 var Hello = require('./view/hello.js')
 
-var tabs = {
-    save: require('./view/whoami/save'),
-    create: require('./view/whoami/create'),
-    import: require('./view/whoami/import')
-}
+// var tabs = {
+//     save: require('./view/whoami/save'),
+//     create: require('./view/whoami/create'),
+//     import: require('./view/whoami/import')
+// }
 
 function Router () {
     var router = _router()

@@ -11,7 +11,7 @@ function Home (props) {
 
     // component did mount
     useEffect(() => {
-        if (!me || !me.secrets) return
+        if (!me || !me.did) return
 
         getFollowing(me.secrets.id)
             .then(res => {
@@ -21,7 +21,7 @@ function Home (props) {
                 emit(evs.following.err, err)
             })
 
-        if (me.secrets.id) {
+        if (me.did) {
             getPostsWithFoafs(me.secrets.id)
                 .then(res => {
                     // console.log('**got foaf posts**', res)
@@ -33,13 +33,21 @@ function Home (props) {
         }
     }, []);
 
-    if (!me.secrets || !me.secrets.id) {
+    if (!me.did) {
         return html`<div class="home-route">
             <p class="need-id">It looks like you don't have an identity.
-                Create one <a href="/whoami/create"> here</a>
+                Create one <a href="/whoami/create">here</a>
             </p>
         </div>`
     }
+
+    // if (!me.secrets || !me.secrets.id) {
+    //     return html`<div class="home-route">
+    //         <p class="need-id">It looks like you don't have an identity.
+    //             Create one <a href="/whoami/create">here</a>
+    //         </p>
+    //     </div>`
+    // }
 
     function onFollow (userId) {
         emit(evs.following.start, userId)
