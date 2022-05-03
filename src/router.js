@@ -21,67 +21,67 @@ function Router () {
         return { view: Home }
     })
 
-    router.addRoute('/new', (match) => {
-        return {
-            view: New
-        }
-    })
+    // router.addRoute('/new', (match) => {
+    //     return {
+    //         view: New
+    //     }
+    // })
 
-    router.addRoute('/whoami', match => {
-        return {
-            view: Whoami
-        }
-    })
+    // // router.addRoute('/whoami', match => {
+    // //     return {
+    // //         view: Whoami
+    // //     }
+    // // })
 
-    router.addRoute('/whoami/:subroute', match => {
-        var { params } = match
-        var { subroute } = params
-        var subView = tabs[subroute]
+    // // router.addRoute('/whoami/:subroute', match => {
+    // //     var { params } = match
+    // //     var { subroute } = params
+    // //     var subView = tabs[subroute]
 
-        return {
-            view: Whoami,
-            subView: subView
-        }
-    })
+    // //     return {
+    // //         view: Whoami,
+    // //         subView: subView
+    // //     }
+    // // })
 
-    router.addRoute('/post/:key', match => {
-        return {
-            view: SingleImage
-        }
-    })
+    // router.addRoute('/post/:key', match => {
+    //     return {
+    //         view: SingleImage
+    //     }
+    // })
 
-    router.addRoute('/create-invitation', () => {
-        return {
-            view: CreateInvitation
-        }
-    })
+    // router.addRoute('/create-invitation', () => {
+    //     return {
+    //         view: CreateInvitation
+    //     }
+    // })
 
-    router.addRoute('/invitation*', (match) => {
-        var { splats } = match
-        var qs = splats[0]
-        const urlSearchParams = new URLSearchParams(qs)
-        const params = Object.fromEntries(urlSearchParams.entries())
-        var { code } = params
+    // router.addRoute('/invitation*', (match) => {
+    //     var { splats } = match
+    //     var qs = splats[0]
+    //     const urlSearchParams = new URLSearchParams(qs)
+    //     const params = Object.fromEntries(urlSearchParams.entries())
+    //     var { code } = params
 
-        console.log('params', params)
+    //     console.log('params', params)
 
-        return {
-            view: RedeemInvitation(code)
-        }
-    })
+    //     return {
+    //         view: RedeemInvitation(code)
+    //     }
+    // })
 
-    router.addRoute('/hello', () => {
-        return {
-            view: Hello
-        }
-    })
+    // router.addRoute('/hello', () => {
+    //     return {
+    //         view: Hello
+    //     }
+    // })
 
-    router.addRoute('/:username', match => {
-        var { username } = match.params
-        return {
-            view: createProfileView(username)
-        }
-    })
+    // router.addRoute('/:username', match => {
+    //     var { username } = match.params
+    //     return {
+    //         view: createProfileView(username)
+    //     }
+    // })
 
     return router
 }
