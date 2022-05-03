@@ -18,6 +18,7 @@ ssc.createKeys().then(keystore => {
     var emit = bus.emit.bind(bus)
 
     route(function onRoute (path) {
+        console.log('on route', path)
         // // check this synchronously for now,
         // // change it later if necessary
         if (!state.me.did && path !== '/hello') {
@@ -32,6 +33,8 @@ ssc.createKeys().then(keystore => {
 
         state.route.set(path)
     })
+
+    console.log('keys', keystore)
 
     render(html`<${Connector} emit=${emit} state=${state}
         setRoute=${route.setRoute}

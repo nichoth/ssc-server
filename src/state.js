@@ -1,12 +1,13 @@
-var observ = require('observ')
-var struct = require('observ-struct')
+const observ = require('observ')
+const struct = require('observ-struct')
+const { getRoute } = require('route-event')
 
 function State (keys, profile) {
 
     console.log('in state', keys)
 
     return struct({
-        route: observ(''),
+        route: observ(getRoute()),
         me: struct({
             did: observ(null),
             profile: struct({
