@@ -6,7 +6,7 @@ var evs = require('../EVENTS')
 import { useEffect } from 'preact/hooks';
 
 function Hello (props) {
-    console.log('hello props', props)
+    console.log('*hello props*', props)
     var { emit, setRoute } = props
 
     function createLocalId (ev) {
@@ -32,28 +32,45 @@ function Hello (props) {
         }
     }, [])
 
+    function submitInvitation (ev) {
+        ev.preventDefault()
+        console.log('submit inv code', ev.target.elements.code.value)
+    }
+
     return html`<div class="hello">
         <h1>Hello</h1>
-        <p class="need-id">It looks like you don't have an identity. You
-            can create one here.
-        </p>
-
-        <div class="id-sources">
-            <div class="id-source create-id">
-                <h2>Create a local identity</h2>
-                ${(props.me.secrets && props.me.secrets.id) ?
-                    html`<p>This will destroy your current ID</p>` :
-                    null
-                } 
-                <button type="submit" onClick=${createLocalId}>Create</button>
-            </div>
-
-            <div class="id-source">
-                <h2>Load an identity from a server</h2>
-                <h2>Use <code>${MY_URL}</code> as an ID server</h2>
-            </div>
-        </div>
+        <p class="explain-server">You must be invited to use this server.</p>
+        <p>Enter your invitation code here</p>
+        <form onsubmit=${submitInvitation}>
+            <input name="code" type="text" />
+            <button type="submit">
+                Redeem invitation
+            </button>
+        </form>
     </div>`
+
+    // return html`<div class="hello">
+    //     <h1>Hello</h1>
+    //     <p class="need-id">It looks like you don't have an identity. You
+    //         can create one here.
+    //     </p>
+
+    //     <div class="id-sources">
+    //         <div class="id-source create-id">
+    //             <h2>Create a local identity</h2>
+    //             ${(props.me.secrets && props.me.secrets.id) ?
+    //                 html`<p>This will destroy your current ID</p>` :
+    //                 null
+    //             } 
+    //             <button type="submit" onClick=${createLocalId}>Create</button>
+    //         </div>
+
+    //         <div class="id-source">
+    //             <h2>Load an identity from a server</h2>
+    //             <h2>Use <code>${MY_URL}</code> as an ID server</h2>
+    //         </div>
+    //     </div>
+    // </div>`
 }
 
 module.exports = Hello

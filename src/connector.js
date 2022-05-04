@@ -18,7 +18,6 @@ function Connector ({ emit, state, setRoute }) {
     })
 
     var match = router.match(_state.route)
-    console.log('match', match)
 
     if (!match) {
         console.log('not match')

@@ -22,7 +22,6 @@ function Router () {
     })
 
     router.addRoute('/hello', () => {
-        console.log({ view: Hello })
         return { view: Hello }
     })
 

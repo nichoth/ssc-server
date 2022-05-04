@@ -1,20 +1,28 @@
+const ssc = require('@nichoth/ssc/web')
 const observ = require('observ')
 const struct = require('observ-struct')
 const { getRoute } = require('route-event')
 
-function State (keys, profile) {
+function State (keystore, profile) {
 
-    console.log('in state', keys)
-
-    return struct({
+    const state = struct({
         route: observ(getRoute()),
         me: struct({
             did: observ(null),
             profile: struct({
-                userName: observ(null)
-            })
+                userName: observ(null),
+                avatar: observ(null)
+            }),
+            keys: observ(keystore || null)
         })
     })
+
+    ssc.getDidFromKeys(keystore).then(did => {
+        console.log('*did in state*', did)
+        state.me.did.set(did)
+    })
+
+    return state
 
     // var state = struct({
     //     // feed: observ(null),

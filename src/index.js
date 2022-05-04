@@ -7,7 +7,7 @@ var subscribe = require('./subscribe')
 var State = require('./state')
 const Connector = require('./connector')
 
-ssc.createKeys().then(keystore => {
+ssc.createKeys(ssc.keyTypes.ECC, { storeName: 'ssc' }).then(keystore => {
     var state = State(keystore)
     var bus = Bus({ memo: true })
     subscribe(bus, state)
@@ -21,7 +21,8 @@ ssc.createKeys().then(keystore => {
         console.log('**on route**', path)
         // // check this synchronously for now,
         // // change it later if necessary
-        if (!state.me().did && path !== '/hello') {
+        if (!state.me.profile.username() && path !== '/hello') {
+        // if (!state.me().did && path !== '/hello') {
         // if (!state.me.secrets().id && path !== '/hello') {
             console.log('!!!not did!!!')
             // if you don't have an id, then go to a login screen
@@ -46,9 +47,6 @@ ssc.createKeys().then(keystore => {
         // if you don't have an id, then go to a login screen
         return route.setRoute('/hello')
     }
-
-
-    console.log('keys', keystore)
 
     render(html`<${Connector} emit=${emit} state=${state}
         setRoute=${route.setRoute}
