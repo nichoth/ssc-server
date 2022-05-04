@@ -19,18 +19,11 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: 'ssc' }).then(keystore => {
 
     route(function onRoute (path) {
         console.log('**on route**', path)
-        // // check this synchronously for now,
-        // // change it later if necessary
+
         if (!state.me.profile.username() && path !== '/hello') {
-        // if (!state.me().did && path !== '/hello') {
-        // if (!state.me.secrets().id && path !== '/hello') {
-            console.log('!!!not did!!!')
-            // if you don't have an id, then go to a login screen
+            console.log('!!!not profile!!!')
             return route.setRoute('/hello')
         }
-
-        // if you have an ID, but the server is not following you,
-        // show an invitation route
 
         state.route.set(path)
     })
@@ -38,7 +31,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: 'ssc' }).then(keystore => {
 
     const path = route.getRoute()
     if (!state.me().did && path !== '/hello') {
-        console.log('aaa not did')
 
         render(html`<${Connector} emit=${emit} state=${state}
             setRoute=${route.setRoute}

@@ -1,30 +1,36 @@
-.redeem {
-    > div {
-        margin-top: 1rem;
-    }
+// .redeem {
+//     > div {
+//         margin-top: 1rem;
+//     }
 
-    label {
-        display: block;
-    }
+//     label {
+//         display: block;
+//     }
 
-    input {
-        width: 100%;
+//     input {
+//         width: 100%;
+//         max-width: 40rem;
+//         padding: 1rem;
+//     }
+// }
+
+.hello {
+    form {
         max-width: 40rem;
-        padding: 1rem;
     }
 }
 
 body {
-    &.invitation {
-        background: linear-gradient(53deg,
-            rgb(248, 242, 146), rgb(7, 190, 216), rgb(253, 87, 144),
-            rgb(255, 168, 73), rgb(248, 242, 146)) rgb(255, 255, 255);
-        backdrop-filter: brightness(1.8);
-        height: 101vh;
-        margin: 0;
-        padding: 1rem;
-        margin-top: -1rem;
-    }
+    // &.invitation {
+    //     background: linear-gradient(53deg,
+    //         rgb(248, 242, 146), rgb(7, 190, 216), rgb(253, 87, 144),
+    //         rgb(255, 168, 73), rgb(248, 242, 146)) rgb(255, 255, 255);
+    //     backdrop-filter: brightness(1.8);
+    //     height: 101vh;
+    //     margin: 0;
+    //     padding: 1rem;
+    //     margin-top: -1rem;
+    // }
 
     &.hello {
         backdrop-filter: brightness(1.8);

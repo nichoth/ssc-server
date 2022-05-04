@@ -10,12 +10,14 @@ function State (keystore, profile) {
         me: struct({
             did: observ(null),
             profile: struct({
-                userName: observ(null),
+                username: observ(null),
                 avatar: observ(null)
             }),
             keys: observ(keystore || null)
         })
     })
+
+    if (!keystore) return state
 
     ssc.getDidFromKeys(keystore).then(did => {
         console.log('*did in state*', did)
