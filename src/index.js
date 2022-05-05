@@ -27,16 +27,21 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     route(function onRoute (path) {
         console.log('**on route**', path)
 
-        if (!state.me.profile.username() && path !== '/hello') {
-            console.log('!!!not profile!!!')
-            return route.setRoute('/hello')
-        }
+        // const noProfile = (state.me.profile().hasFetched &&
+        //     state.me.profile().err)
+
+        // if (noProfile) return route.setRoute('/hello')
+
+        // if (!state.me.profile.username() && path !== '/hello') {
+        //     console.log('!!!not profile!!!')
+        //     return route.setRoute('/hello')
+        // }
 
         state.route.set(path)
     })
 
 
-    console.log('node env', process.env.NODE_ENV)
+    // console.log('node env', process.env.NODE_ENV)
 
 
     // need to call to get username & profile in here
@@ -47,51 +52,35 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
         state.me.did.set(did)
 
         client.getProfile(did).then(res => {
-            console.log('got profile', res)
+            console.log('aaa got profile aaa', res)
+            state.me.profile.hasFetched.set(true)
 
             if (!res.ok) {
                 res.text().then(txt => {
-                    console.log('text', txt)
+                    console.log('*errrr text*', txt)
                     if (txt.includes('invalid DID')) {
                         state.me.profile.err.set(txt)
+                    }
+
+                    const noProfile = (state.me.profile().hasFetched &&
+                        state.me.profile().err)
+
+                    // TODO -- handle the case where you have redeemed an
+                    // invitation, but have not set a profile
+
+                    if (noProfile) {
+                        // if no profile, then go to an intro screen
+                        route.setRoute('/hello')
                     }
                 })
             }
 
-            state.me.profile.hasFetched.set(true)
-
-
-            const path = route.getRoute()
-            const noProfile = (!state.me.profile().username &&
-                state.me.profile().hasFetched &&
-                path !== '/hello')
-
-            // need to check also if this server has the DID recorded in the DB
-            // someone could have redeemed an invitation, but not yet created a
-            // profile
-            // in that case, the `hello` screen should ask for a profile, but
-            // not ask for an invitation
-
-            // look at the hello page, change content accordingly
-
-            if (noProfile) {
-                // if you don't have a username, then go to an intro screen
-                route.setRoute('/hello')
-            }
-
             render(html`<${Connector} emit=${emit} state=${state}
-                setRoute=${route.setRoute}
+                admins=${admins} setRoute=${route.setRoute}
             />`, document.getElementById('content'))
         })
         .catch(err => {
             console.log('profile errrr', err)
-            // err.text().then(t => console.log('tttttt', t))
         })
     })
-
-
-
-
-
-
 })

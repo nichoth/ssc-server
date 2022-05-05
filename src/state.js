@@ -10,13 +10,13 @@ function State (keystore, profile) {
         me: struct({
             did: observ(null),
             isAdmin: observ(false),
+            keys: observ(keystore || null),
             profile: struct({
                 err: observ(null),
                 hasFetched: observ(false),
                 username: observ(null),
-                avatar: observ(null)
-            }),
-            keys: observ(keystore || null)
+                avatarUrl: observ(null)
+            })
         })
     })
 

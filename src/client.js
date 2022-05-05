@@ -14,13 +14,15 @@ module.exports = function Client () {
 
     const client = {
         getProfile: function getProfile (did) {
-            console.log('base url', BASE)
+            // console.log('base url', BASE)
             const qs = new URLSearchParams({ did }).toString()
             var url = (BASE + '/.netlify/functions/profile' + '?' + qs)
 
-            // return ky.get(url)
-
             return fetch(url)
+        },
+
+        postProfile: function () {
+
         }
     }
 

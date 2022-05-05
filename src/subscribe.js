@@ -1,13 +1,75 @@
 var evs = require('./EVENTS')
 var Keys = require('./keys')
 var xtend = require('xtend')
+const sscKeys = require('./keys')
 var client = require('./client')()
 var { getPostsWithFoafs } = client
+const ssc = require('@nichoth/ssc/web')
+const sha256 = require('simple-sha256')
 
 function subscribe (bus, state) {
     bus.on('*', ev => {
         console.log('***star***', ev)
     })
+
+    bus.on(evs.identity.setAvatar, ev => {
+        console.log('set avatar', ev)
+        const { file } = ev
+        console.log('*file in subscribe*', file)
+        uploadAvatar(file, state)
+    })
+}
+
+function uploadAvatar (file, state) {
+    const { did, profile } = state.me()
+    const { username } = profile
+
+    return sha256(file).then(hash => {
+        const msg = ssc.createMsg(state.me().keys, null, {
+            type: 'profile',
+            about: did,
+            username,
+            avatar: hash
+        })
+
+        return fetch('/.netlify/functions/profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ msg, file })
+        })
+
+
+        // body: JSON.stringify({
+        //     file: file,
+        //     did
+        // })
+    })
+
+    // return fetch('/.netlify/functions/avatar', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //         file: file,
+    //         did,
+    //     })
+    // })
+    //     .then(response => {
+    //         console.log('respspsps', response)
+    //         if (!response.ok) {
+    //             return response.text()
+    //                 .then(t => {
+    //                     console.log('not ok', t)
+    //                 })
+    //         }
+
+    //         return response.json()
+    //     })
+    //     .then(json => {
+    //         console.log('**avatar res json**', json)
+    //         // console.log(json.message)
+    //     })
 }
 
 module.exports = subscribe
