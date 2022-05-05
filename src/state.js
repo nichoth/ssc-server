@@ -9,7 +9,10 @@ function State (keystore, profile) {
         route: observ(getRoute()),
         me: struct({
             did: observ(null),
+            isAdmin: observ(false),
             profile: struct({
+                err: observ(null),
+                hasFetched: observ(false),
                 username: observ(null),
                 avatar: observ(null)
             }),
@@ -20,7 +23,6 @@ function State (keystore, profile) {
     if (!keystore) return state
 
     ssc.getDidFromKeys(keystore).then(did => {
-        console.log('*did in state*', did)
         state.me.did.set(did)
     })
 

@@ -31,11 +31,11 @@ function Router () {
     //     }
     // })
 
-    // // router.addRoute('/whoami', match => {
-    // //     return {
-    // //         view: Whoami
-    // //     }
-    // // })
+    router.addRoute('/whoami', match => {
+        return {
+            view: Whoami
+        }
+    })
 
     // // router.addRoute('/whoami/:subroute', match => {
     // //     var { params } = match

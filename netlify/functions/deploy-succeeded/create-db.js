@@ -28,7 +28,7 @@ function createFaunaDB (key) {
         ],
 
         ['profiles', [{
-                name: 'profile-by-id',
+                name: 'profile-by-did',
                 source: q.Collection('profiles'),
                 terms: [ { field: ['data', 'value', 'content', 'about'] } ],
             },
