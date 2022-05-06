@@ -53,16 +53,18 @@ function Hello (props) {
         console.log('set profile', username, image)
     }
 
+    // if the `admins` key exists in the JSON, then we don't show info for a
+    // potential admin
+    // if there is no admin field, then we show instructions for the admin
     return html`<div class="hello">
         <h1>Hello</h1>
-
 
         ${!admins ?
             html`<h2>If you own this server</h2>
                 <p>
                     Copy/paste the following DID into a file,
                     <code> /src/config.json</code>, in the key <code>admins</code>:
-                    <pre>{"admins": [ "my-did" ]}</pre>,
+                    <pre>{"admins": [ "my-did" ]}</pre>
                     then commit & push the repository to github.
                 </p>
             ` :
@@ -70,16 +72,21 @@ function Hello (props) {
         }
 
         ${profile.err === 'invalid DID' ?
-            html`<h2>If you do not own this server</h2>
-            <p class="explain-server">You must be invited to use this server.</p>
-            <p>Enter your invitation code here</p>
+            html`
+                ${!admins ?
+                    html`<h2>If you do not own this server</h2>` :
+                    null
+                }
+                <p class="explain-server">You must be invited to use this server.</p>
+                <p>Enter your invitation code here</p>
 
-            <form onsubmit=${submitInvitation}>
-                <${TextInput} name="code" />
-                <${Button} isSpinning=${resolving} type="submit">
-                    Redeem invitation
-                <//>
-            </form>` :
+                <form onsubmit=${submitInvitation}>
+                    <${TextInput} name="code" />
+                    <${Button} isSpinning=${resolving} type="submit">
+                        Redeem invitation
+                    <//>
+                </form>
+            ` :
 
             html`<form class="set-profile" onSubmit=${setProfile}>
                 <${TextInput} name="username" />
@@ -88,7 +95,6 @@ function Hello (props) {
                     title="set your avatar"
                     onSelect=${selectImg}
                 <//>
-
             </form>`
         }
     </div>`

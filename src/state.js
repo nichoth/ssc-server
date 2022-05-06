@@ -3,10 +3,11 @@ const observ = require('observ')
 const struct = require('observ-struct')
 const { getRoute } = require('route-event')
 
-function State (keystore, profile) {
+function State (keystore, { admins }) {
 
     const state = struct({
         route: observ(getRoute()),
+        admins: observ(admins),
         me: struct({
             did: observ(null),
             isAdmin: observ(false),
