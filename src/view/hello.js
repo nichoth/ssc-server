@@ -2,14 +2,15 @@ import { html } from 'htm/preact'
 // var evs = require('../EVENTS')
 import { useEffect, useState } from 'preact/hooks';
 const { TextInput, Button } = require('@nichoth/forms/preact')
-const { admins } = require('../config.json')
+// const { admins } = require('../config.json')
 const EditableImg = require('./components/editable-img')
+import { generateFromString } from 'generate-avatar'
 
 function Hello (props) {
     console.log('*hello props*', props)
-    const profile = props.me.profile
-    const { avatarUrl } = profile
-    const { emit, admins } = props
+    const { profile, isAdmin } = props.me
+    // const { avatarUrl } = profile
+    const { emit, me, admins } = props
 
     useEffect(() => {
         document.body.classList.add('hello')
@@ -53,6 +54,14 @@ function Hello (props) {
         console.log('set profile', username, image)
     }
 
+    const adminNeedsProfile = !!(isAdmin && profile.hasFetched && profile.err)
+
+    console.log('*is admin*', isAdmin)
+    console.log('*admin needs profile*', adminNeedsProfile)
+
+    const avatarUrl = (profile.avatarUrl ||
+        ('data:image/svg+xml;utf8,' + generateFromString(me.did || '')))
+
     // if the `admins` key exists in the JSON, then we don't show info for a
     // potential admin
     // if there is no admin field, then we show instructions for the admin
@@ -64,14 +73,21 @@ function Hello (props) {
                 <p>
                     Copy/paste the following DID into a file,
                     <code> /src/config.json</code>, in the key <code>admins</code>:
-                    <pre>{"admins": [ "my-did" ]}</pre>
+                    <pre>${me.did}</pre>
+                    like this:
+                    <pre>{ "admins": [{ "did": "${me.did}" }] }</pre>
                     then commit & push the repository to github.
                 </p>
             ` :
             null
         }
 
-        ${profile.err === 'invalid DID' ?
+        ${isAdmin ?
+            null :
+            null
+        }
+
+        ${(profile.err === 'invalid DID' && !isAdmin) ?
             html`
                 ${!admins ?
                     html`<h2>If you do not own this server</h2>` :
@@ -88,14 +104,27 @@ function Hello (props) {
                 </form>
             ` :
 
-            html`<form class="set-profile" onSubmit=${setProfile}>
-                <${TextInput} name="username" />
+            // has profile err, and is admin
+            html`<p>You have admin status for this server.</p>
+                <p>Your DID is <code>${me.did}</code></p>
+
+                <p>You have not yet set a profile for this identity. You can do
+                    that now.</p>
                 
+                <form class="set-profile" onSubmit=${setProfile}>
+                    <${TextInput} name="username"
+                        displayName="Your display name"
+                    />
+                    
+                    <${Button} type="submit">Save user name<//>
+                </form>
+
                 <${EditableImg} url=${avatarUrl} name="image"
                     title="set your avatar"
                     onSelect=${selectImg}
+                    label="Your avatar image"
                 <//>
-            </form>`
+            `
         }
     </div>`
 }

@@ -86,6 +86,7 @@ function Shell (props) {
             me.secrets.public) || '')
         )
 
+    // TODO -- setAvatar event
     return html`<div class="shell">
         <ul class="nav-part">
             <li class="name">

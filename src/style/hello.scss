@@ -1,5 +1,5 @@
 .hello {
-    form {
+    form, label {
         max-width: 40rem;
     }
 }
@@ -15,4 +15,53 @@ body {
         padding: 1rem;
         margin-top: -1rem;
     }
+
+
+    .set-profile {
+        margin-bottom: 2rem;
+
+        .form-stuff {
+            &:last-child {
+                display: block;
+            }
+        }
+    }
+
+
+    .my-avatar {
+        // display: inline-block;
+        // height: 4rem;
+        // width: 4rem;
+        margin-right: 0.4rem;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        border: 1px solid;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+
+        // display: block;
+        margin-bottom: 2rem;
+
+        &:hover {
+            opacity: 0.4;
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+            max-width: 4rem;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+
+    #avatar-input {
+        display: none;
+    }
+
 }

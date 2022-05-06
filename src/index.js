@@ -29,7 +29,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
         state.route.set(path)
     })
 
-    // console.log('node env', process.env.NODE_ENV)
 
 
     // need to call to get username & profile in here
@@ -38,46 +37,42 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     ssc.getDidFromKeys(keystore).then(did => {
         state.me.did.set(did)
 
-        const adminInfo = state.admins().find(user => user.did === did)
-        if (adminInfo) {
-            console.log('i am the admin!!!!!')
-            state.me.profile.set({
-                hasFetched: true,
-                userName: adminInfo.username,
-                avatarUrl: null
-            })
-        } else {
-            client.getProfile(did).then(res => {
-                state.me.profile.hasFetched.set(true)
+        const adminInfo = (state.admins() || []).find(user => user.did === did)
 
-                if (!res.ok) {
-                    res.text().then(txt => {
-                        // console.log('*errrr text*', txt)
-                        if (txt.includes('invalid DID')) {
-                            state.me.profile.err.set(txt)
-                        }
+        state.me.isAdmin.set(!!adminInfo)
 
-                        const noProfile = (state.me.profile.hasFetched() &&
-                            state.me.profile.err())
+        client.getProfile(did).then(res => {
+            state.me.profile.hasFetched.set(true)
 
-                        // TODO -- handle the case where you have redeemed an
-                        // invitation, but have not set a profile
+            if (!res.ok) {
+                res.text().then(txt => {
+                    // console.log('*errrr text*', txt)
+                    if (txt.includes('invalid DID')) {
+                        console.log('invalid did', res)
+                        state.me.profile.err.set(txt)
+                    }
 
-                        if (noProfile) {
-                            // if no profile, then go to an intro screen
-                            route.setRoute('/hello')
-                        }
-                    })
-                }
-            })
-            .catch(err => {
-                console.log('profile errrr', err)
-            })
+                    const noProfile = (state.me.profile.hasFetched() &&
+                        state.me.profile.err())
 
-        }
+                    // TODO -- handle the case where you have redeemed an
+                    // invitation, but have not set a profile
 
-        render(html`<${Connector} emit=${emit} state=${state}
-            setRoute=${route.setRoute}
-        />`, document.getElementById('content'))
+                    if (noProfile) {
+                        // if no profile, then go to an intro screen
+                        route.setRoute('/hello')
+                    }
+                })
+            }
+
+            // render the app *after* you fetch the profile initially
+            render(html`<${Connector} emit=${emit} state=${state}
+                setRoute=${route.setRoute}
+            />`, document.getElementById('content'))
+        })
+        .catch(err => {
+            console.log('profile errrr', err)
+        })
+
     })
 })
