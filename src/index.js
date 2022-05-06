@@ -6,9 +6,12 @@ const ssc = require('@nichoth/ssc/web')
 var subscribe = require('./subscribe')
 var State = require('./state')
 const Connector = require('./connector')
-var { appName, admins } = require('./config.json')
+const config = require('./config.json')
+var { appName, admins } = config
 appName = appName || 'ssc-demo'
 const client = require('./client')()
+
+console.log('NODE_ENV', process.env.NODE_ENV)
 
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     var state = State(keystore, { admins })

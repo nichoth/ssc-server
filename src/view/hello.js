@@ -112,7 +112,7 @@ function Hello (props) {
                     that now.</p>
                 
                 <form class="set-profile" onSubmit=${setProfile}>
-                    <${TextInput} name="username"
+                    <${TextInput} name="username" required=${true}
                         displayName="Your display name"
                     />
                     
