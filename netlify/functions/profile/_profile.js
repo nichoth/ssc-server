@@ -1,17 +1,17 @@
 // import { createRequire } from 'module';
 // import path from 'path'
-// console.log('*import.meta.url*', import.meta.url)
+console.log('*import.meta.url*', import.meta.url)
 // const data = context.clientContext.custom.netlify
 // const decoded = JSON.parse(Buffer.from(data, "base64").toString("utf-8"))
 // console.log('*decoded*', decoded)
 // const require = createRequire(import.meta.url);
 // const require = createRequire(decoded)
 
-// process.import = {
-//     meta: {
-//         url: '123'
-//     }
-// }
+process.import = {
+    meta: {
+        url: '123'
+    }
+}
 
 const faunadb = require('faunadb')
 const xtend = require('xtend')

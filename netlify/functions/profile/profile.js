@@ -49906,6 +49906,13 @@ var init_ssc = __esm({
 });
 
 // netlify/functions/profile/_profile.js
+var import_meta3 = {};
+console.log("*import.meta.url*", import_meta3.url);
+process.import = {
+  meta: {
+    url: "123"
+  }
+};
 var faunadb = require_faunadb();
 var xtend = require_immutable();
 var sha2562 = require_simple_sha256();

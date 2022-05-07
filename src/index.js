@@ -53,11 +53,12 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                     // console.log('*errrr text*', txt)
                     if (txt.includes('invalid DID')) {
                         console.log('invalid did', res)
-                        state.me.profile.err.set(txt)
                     }
 
+                    state.me.profile.err.set(txt)
+
                     const noProfile = (state.me.profile.hasFetched() &&
-                        (state.me.profile.err() || '').includes('invalid DID'))
+                        !!state.me.profile.err())
 
                     // TODO -- handle the case where you have redeemed an
                     // invitation, but have not set a profile
