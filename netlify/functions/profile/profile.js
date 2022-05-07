@@ -4,7 +4,6 @@ import { createRequire } from 'module';
 // const decoded = JSON.parse(Buffer.from(data, "base64").toString("utf-8"))
 // console.log('*decoded*', decoded)
 // const require = createRequire(decoded)
-const require = createRequire(import.meta.url);
 
 process.import = {
     meta: {
@@ -13,6 +12,7 @@ process.import = {
 }
 
 console.log('*import.meta.url*', import.meta.url)
+const require = createRequire(import.meta.url);
 
 const faunadb = require('faunadb')
 const xtend = require('xtend')
