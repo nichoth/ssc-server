@@ -17,6 +17,8 @@
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
     "cypress-test": "NODE_ENV=test env $(cat .env | xargs) concurrently --kill-others \"npm run start-test\" \"cypress open\"",
     "bootstrap": "node ./netlify/functions/deploy-succeeded/create-db.js",
+    "prepare": "npm run esbuild",
+    "esbuild": "esbuild netlify/functions/profile/_profile.js --bundle --platform=node --outfile=netlify/functions/profile/profile.js",
     "test": "NODE_ENV=test tape test/index.js | tap-arc"
   },
   "repository": {
@@ -41,6 +43,7 @@
     "create-hash": "^1.2.0",
     "dotenv": "^8.6.0",
     "drag-drop": "^7.0.1",
+    "esbuild": "^0.14.38",
     "faunadb": "^4.5.4",
     "generate-avatar": "^1.4.10",
     "htm": "^3.0.4",
@@ -65,7 +68,7 @@
     "envify": "^4.1.0",
     "eslint-config-minlint": "^2.0.0",
     "esmify": "^2.1.1",
-    "netlify-cli": "^5.2.6",
+    "netlify-cli": "^10.3.0",
     "sass": "^1.32.12",
     "tap-arc": "^0.3.4",
     "tape": "^5.2.2",

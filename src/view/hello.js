@@ -1,14 +1,15 @@
 import { html } from 'htm/preact'
-// var evs = require('../EVENTS')
+var evs = require('../EVENTS')
 import { useEffect, useState } from 'preact/hooks';
 const { TextInput, Button } = require('@nichoth/forms/preact')
-// const { admins } = require('../config.json')
+const ssc = require('@nichoth/ssc/web')
 const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
+// import client from '../client';
 
 function Hello (props) {
     console.log('*hello props*', props)
-    const { profile, isAdmin } = props.me
+    const { profile, isAdmin, client } = props.me
     // const { avatarUrl } = profile
     const { emit, me, admins } = props
 
@@ -46,12 +47,28 @@ function Hello (props) {
         reader.readAsDataURL(file)
     }
 
+    var [ profileResolving, setProfileResolving ] = useState(false)
+
     function setProfile (ev) {
         ev.preventDefault()
-        var { username, image } = ev.target.elements
+        var { username } = ev.target.elements
         username = username.value
-        image = image.value
-        console.log('set profile', username, image)
+        // image = image.value
+        console.log('set profile', username)
+        
+        setProfileResolving(true)
+        // (did, username, image)
+        client.postProfile(me.did, username, image)
+            .then(res => {
+                setProfileResolving(false)
+                console.log('post profile res', res)
+                emit(evs.identity.setUsername, { username })
+            })
+            .catch(err => {
+                console.log('errrrrrrrrrrrr', err)
+                setProfileResolving(false)
+            })
+        
     }
 
     const adminNeedsProfile = !!(isAdmin && profile.hasFetched && profile.err)
@@ -105,6 +122,7 @@ function Hello (props) {
             ` :
 
             // has profile err, and is admin
+            // this means you are an admin, but don't yet have profile data
             html`<p>You have admin status for this server.</p>
                 <p>Your DID is <code>${me.did}</code></p>
 
@@ -116,7 +134,11 @@ function Hello (props) {
                         displayName="Your display name"
                     />
                     
-                    <${Button} type="submit">Save user name<//>
+                    <${Button} isSpinning=${profileResolving}
+                        type="submit"
+                    >
+                        Save user name
+                    <//>
                 </form>
 
                 <${EditableImg} url=${avatarUrl} name="image"

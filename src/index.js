@@ -9,7 +9,7 @@ const Connector = require('./connector')
 const config = require('./config.json')
 var { appName, admins } = config
 appName = appName || 'ssc-demo'
-const client = require('./client')()
+const Client = require('./client')
 
 console.log('NODE_ENV', process.env.NODE_ENV)
 
@@ -17,6 +17,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     var state = State(keystore, { admins })
     var bus = Bus({ memo: true })
     subscribe(bus, state)
+    const client = Client(keystore)
 
     state(function onChange (newState) {
         console.log('change', newState)
@@ -56,7 +57,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                     }
 
                     const noProfile = (state.me.profile.hasFetched() &&
-                        state.me.profile.err())
+                        (state.me.profile.err() || '').includes('invalid DID'))
 
                     // TODO -- handle the case where you have redeemed an
                     // invitation, but have not set a profile
@@ -70,7 +71,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
 
             // render the app *after* you fetch the profile initially
             render(html`<${Connector} emit=${emit} state=${state}
-                setRoute=${route.setRoute}
+                setRoute=${route.setRoute} client=${client}
             />`, document.getElementById('content'))
         })
         .catch(err => {

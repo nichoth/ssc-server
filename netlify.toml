@@ -30,3 +30,6 @@
   CLOUDINARY_API_KEY="cloudinary API key"
   PUBLIC_KEY = "public key"
   SECRET_KEY = "secret key"
+
+[functions]
+  node_bundler = "esbuild"

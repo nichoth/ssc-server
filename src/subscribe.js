@@ -1,9 +1,9 @@
 var evs = require('./EVENTS')
-var Keys = require('./keys')
-var xtend = require('xtend')
-const sscKeys = require('./keys')
-var client = require('./client')()
-var { getPostsWithFoafs } = client
+// var Keys = require('./keys')
+// var xtend = require('xtend')
+// const sscKeys = require('./keys')
+// var client = require('./client')()
+// var { getPostsWithFoafs } = client
 const ssc = require('@nichoth/ssc/web')
 const sha256 = require('simple-sha256')
 
@@ -17,6 +17,11 @@ function subscribe (bus, state) {
         const { file } = ev
         console.log('*file in subscribe*', file)
         uploadAvatar(file, state)
+    })
+
+    bus.on(evs.identity.setUsername, ev => {
+        const { username } = ev
+        console.log('*set profile in subscribe*', username)
     })
 }
 

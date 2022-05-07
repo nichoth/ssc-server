@@ -6,8 +6,9 @@ var evs = namespace({
     userFeed: ['got'],
     keys: ['got'],
     following: ['got', 'start', 'stop', 'err'],
-    profile: ['got'],
-    identity: ['setName', 'setAvatar', 'gotAvatar']
+    // profile: ['got'],
+    // identity: ['setName', 'setAvatar', 'gotAvatar']
+    identity: ['setUsername', 'setAvatar']
 })
 
 module.exports = evs

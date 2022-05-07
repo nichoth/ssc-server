@@ -10,19 +10,35 @@ var BASE = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
 
 // this is a client-side file that calls our API
 
-module.exports = function Client () {
+module.exports = function Client (keystore) {
 
     const client = {
         getProfile: function getProfile (did) {
-            // console.log('base url', BASE)
             const qs = new URLSearchParams({ did }).toString()
             var url = (BASE + '/.netlify/functions/profile' + '?' + qs)
-
             return fetch(url)
         },
 
-        postProfile: function () {
+        // must pass a username
+        // image is optional (should use existing image if there is not a new one)
+        postProfile: function (did, username, image) {
+            if (!username) return Promise.reject(
+                new Error('must include username'))
 
+            return fetch(BASE + '/.netlify/functions/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    msg: ssc.createMsg(keystore, null, {
+                        type: 'about',
+                        about: did,
+                        username,
+                        image: (image || null)
+                    }),
+
+                    file: image
+                })
+            })
         }
     }
 
