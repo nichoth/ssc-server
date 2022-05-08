@@ -52,13 +52,13 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                 res.text().then(txt => {
                     // console.log('*errrr text*', txt)
                     if (txt.includes('invalid DID')) {
-                        console.log('invalid did', res)
+                        console.log('**invalid did**', res)
                     }
 
                     state.me.profile.err.set(txt)
 
                     const noProfile = (state.me.profile.hasFetched() &&
-                        !!state.me.profile.err())
+                        state.me.profile.err())
 
                     // TODO -- handle the case where you have redeemed an
                     // invitation, but have not set a profile
@@ -67,13 +67,26 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                         // if no profile, then go to an intro screen
                         route.setRoute('/hello')
                     }
+
+                    // render the app *after* you fetch the profile initially
+                    render(html`<${Connector} emit=${emit} state=${state}
+                        setRoute=${route.setRoute} client=${client}
+                    />`, document.getElementById('content'))
+                })
+            } else {
+                console.log('got profile ok')
+
+                res.json().then(json => {
+                    state.me.profile.err.set(null)
+                    state.me.profile.username.set(json.profile.username)
+                    state.me.profile.image.set(json.profile.image || null)
+
+                    // render the app *after* you fetch the profile initially
+                    render(html`<${Connector} emit=${emit} state=${state}
+                        setRoute=${route.setRoute} client=${client}
+                    />`, document.getElementById('content'))
                 })
             }
-
-            // render the app *after* you fetch the profile initially
-            render(html`<${Connector} emit=${emit} state=${state}
-                setRoute=${route.setRoute} client=${client}
-            />`, document.getElementById('content'))
         })
         .catch(err => {
             console.log('profile errrr', err)

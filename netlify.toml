@@ -33,3 +33,10 @@
 
 [functions]
   node_bundler = "esbuild"
+
+[functions.profile]
+  external_node_modules = ["@nichoth/ssc"]
+
+# Include all files in all functions
+# [functions]
+#   included_files = ["node_modules/@nichoth/ssc/**"]
