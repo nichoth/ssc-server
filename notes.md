@@ -1,10 +1,73 @@
 # the log
 
+## 5-9-2022
+
+[the interactive demo](https://cloudinary.com/documentation/resizing_and_cropping#resizing_and_cropping_interactive_demo) -- kind of cool
+
+[cloudingary browser API](https://cloudinary.com/documentation/javascript_image_transformations#chaining_transformations)
+
+[cloudinary resizing cropping](https://cloudinary.com/documentation/resizing_and_cropping)
+
+[cloudinary 'fill' example](https://cloudinary.com/documentation/resizing_and_cropping#fill)
+
+### JS 'fill' example
+```js
+new CloudinaryImage("docs/models.jpg").resize(fill().width(250).height(250));
+```
+
+### chaining transformations example
+```js
+import {Cloudinary} from "@cloudinary/url-gen";
+
+// Import required actions.
+import {fill} from "@cloudinary/url-gen/actions/resize";
+import {source} from "@cloudinary/url-gen/actions/overlay";
+import {byAngle} from "@cloudinary/url-gen/actions/rotate"
+import {sepia} from "@cloudinary/url-gen/actions/effect";
+import {byRadius} from "@cloudinary/url-gen/actions/roundCorners";
+
+// Import required values.
+import {text} from "@cloudinary/url-gen/qualifiers/source";
+import {Position} from "@cloudinary/url-gen/qualifiers/position";
+import {TextStyle} from "@cloudinary/url-gen/qualifiers/textStyle";
+import {compass} from "@cloudinary/url-gen/qualifiers/gravity";
+
+
+// Create and configure your Cloudinary instance.
+const cld = new Cloudinary({
+  cloud: {
+    cloudName: 'demo'
+  }
+}); 
+
+// Use the image with public ID, 'sample'.
+const myImage = cld.image('sample');
+
+// Transform the image.
+myImage
+  .resize(fill(150, 150))
+  .roundCorners(byRadius(20))
+  .effect(sepia())
+  .overlay(   
+    source(
+      text('This is my picture', new TextStyle('arial',18))
+      .textColor('white')      
+    )
+    .position(new Position().gravity(compass('north')).offsetY(20)))
+  .rotate(byAngle(20))
+  .format('png');
+
+  // Return the delivery URL
+  const myUrl = myImage.toURL();
+```
+
+
+### example bad URL
 ```
 https://res.cloudinary.com/nichoth/image/upload/v1652065651/%255Bobject%2520Object%255D.jpg
 ```
 
-## 5-9-2022
+
 
 The old admin DID
 ```js

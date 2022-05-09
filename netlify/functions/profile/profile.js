@@ -119,6 +119,17 @@ exports.handler = function (ev, ctx) {
                         body: err.toString()
                     }
                 })
+        } else {
+            // if !file, then the image hash should be equal to existing hash
+            const key = ssc.getId(msg)
+            return writeMsg(did, key, msg).then(res => {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        db: res
+                    })
+                }
+            })
         }
     }
 

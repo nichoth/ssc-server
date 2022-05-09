@@ -1,5 +1,6 @@
 import { html } from 'htm/preact'
-import { useState, useEffect } from 'preact/hooks';
+// import { useState, useEffect } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 var ssc = require('@nichoth/ssc/web')
@@ -16,71 +17,67 @@ function Shell (props) {
     var { path, emit, me } = props
     var { profile } = me
 
-    // component did mount
-    // get avatar
-    // useEffect(() => {
-    //     if (!me || !me.secrets || !me.secrets.id) return
-    //     var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString()
-
-    //     fetch('/.netlify/functions/avatar' + '?' + qs)
-    //         .then(res => {
-    //             if (!res.ok) {
-    //                 return res.text().then(t => {
-    //                     console.log('aaaaa', t)
-    //                 })
-    //             }
-    //             return res.json()
-    //         })
-    //         .then(res => {
-    //             emit(evs.identity.gotAvatar, res)
-    //         })
-    //         .catch(err => {
-    //             console.log('oh no', err)
-    //         })
-    // }, [])
-
-
+    // @TODO
+    // make a save name function
     async function saveName (me, newName) {
         console.log('set name in here', newName)
 
-        var msgContent = {
+        ssc.createMsg(me.keys, null, {
             type: 'about',
-            about: me.secrets.id,
-            name: newName
-        }
-
-        var keys = me.secrets
-        var qs = new URLSearchParams({ author: me.secrets.id }).toString();
-        var url = '/.netlify/functions/abouts' + '?' + qs
-
-        try {
-            var _prev = await fetch(url).then(res => res.json())
-        } catch (err) {
-            console.log('about fetch errr', err)
-        }
-
-        var prev = _prev && _prev.msg && _prev.msg.value || null
-        var msg = ssc.createMsg(keys, prev || null, msgContent)
-
-        // make the fetch call to set the name,
-        // then emit the event after success
-        return fetch('/.netlify/functions/set-name', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                keys: { public: me.secrets.public },
-                msg: msg
+            about: did,
+            username: newName,
+            image: me.profile.image
+        }).then(msg => {
+            return fetch(BASE + '/.netlify/functions/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    did,
+                    msg
+                })
             })
         })
-            .then(res => res.json())
-            .then(res => {
-                console.log('**set name**', res)
-                emit(evs.identity.setName, res.value.content.name)
-                return res
-            })
-            .catch(err => {
-                console.log('errrrr', err)
-            })
+
+
+
+        // var msgContent = {
+        //     type: 'about',
+        //     about: me.id,
+        //     username: newName
+        // }
+
+        // var keys = me.secrets
+        // var qs = new URLSearchParams({ author: me.secrets.id }).toString();
+        // var url = '/.netlify/functions/abouts' + '?' + qs
+
+        // try {
+        //     var _prev = await fetch(url).then(res => res.json())
+        // } catch (err) {
+        //     console.log('about fetch errr', err)
+        // }
+
+        // var prev = _prev && _prev.msg && _prev.msg.value || null
+        // var msg = ssc.createMsg(keys, prev || null, msgContent)
+
+        // // make the fetch call to set the name,
+        // // then emit the event after success
+        // return fetch('/.netlify/functions/set-name', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         keys: { public: me.secrets.public },
+        //         msg: msg
+        //     })
+        // })
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         console.log('**set name**', res)
+        //         emit(evs.identity.setName, res.value.content.name)
+        //         return res
+        //     })
+        //     .catch(err => {
+        //         console.log('errrrr', err)
+        //     })
     }
 
     function active (href) {
