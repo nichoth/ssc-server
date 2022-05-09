@@ -43,11 +43,6 @@ a {
 }
 
 button {
-    &:disabled {
-        &:hover {
-            cursor: wait;
-        }
-    }
     &:hover {
         cursor: pointer;
     }

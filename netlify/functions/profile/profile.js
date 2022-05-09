@@ -1,3 +1,4 @@
+const sha256 = require('simple-sha256')
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
 const xtend = require('xtend')
@@ -59,6 +60,7 @@ exports.handler = function (ev, ctx) {
         }
 
         const pubKey = ssc.didToPublicKey(ssc.getAuthor(msg))
+
         if (!ssc.isValidMsg(msg, null, pubKey)) {
             console.log('**invalid msg**', pubKey)
             return cb(null, {

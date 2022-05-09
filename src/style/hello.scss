@@ -44,7 +44,6 @@ body {
         gap: 1rem;
         padding: 1rem;
 
-        // display: block;
         margin-bottom: 2rem;
 
         &:hover {
@@ -52,11 +51,10 @@ body {
         }
 
         img {
-            height: 100%;
-            width: 100%;
-            max-width: 4rem;
+            height: 4rem;
+            width: 4rem;
             border-radius: 50%;
-            object-fit: cover;
+            object-fit: fill;
         }
     }
 
