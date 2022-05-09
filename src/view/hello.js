@@ -80,10 +80,10 @@ function Hello (props) {
 
                 res.json().then(json => {
                     console.log('*json*', json)
-                    const { image } = json.db.data.value.content
+                    const id = json.db.data.value.content.image
                     emit(evs.identity.setUsername, { username: json.username })
                     emit(evs.identity.setAvatar, { image: {
-                        id: image,
+                        id,
                         url: json.image.url
                     } })
                 }) 

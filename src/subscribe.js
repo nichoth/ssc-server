@@ -20,7 +20,13 @@ function subscribe (bus, state) {
     bus.on(evs.identity.setUsername, ev => {
         const { username } = ev
         state.me.profile.username.set(username)
-        console.log('*set profile in subscribe*', username)
+        console.log('*set username in subscribe*', username)
+    })
+
+    bus.on(evs.identity.setProfile, ev => {
+        const { username, image } = ev
+        state.me.profile.username.set(username)
+        state.me.profile.image.set(image)
     })
 }
 

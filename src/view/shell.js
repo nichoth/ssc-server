@@ -93,14 +93,6 @@ function Shell (props) {
         cld.image(encodeURIComponent(me.profile.image)).toURL() :
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did || '')))
     
-    console.log('*me.profile.image*', me.profile.image)
-
-    // var avatarUrl = (me.avatar && me.avatar.url) ||
-    //     ('data:image/svg+xml;utf8,' + generateFromString((me && me.secrets && 
-    //         me.secrets.public) || '')
-    //     )
-
-    // TODO -- setAvatar event
     return html`<div class="shell">
         <ul class="nav-part">
             <li class="name">

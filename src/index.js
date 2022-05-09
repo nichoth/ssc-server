@@ -10,6 +10,7 @@ const config = require('./config.json')
 var { appName, admins } = config
 appName = appName || 'ssc-demo'
 const Client = require('./client')
+const evs = require('./EVENTS')
 
 console.log('NODE_ENV', process.env.NODE_ENV)
 
@@ -74,15 +75,13 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                     />`, document.getElementById('content'))
                 })
             } else {
-                console.log('got profile ok')
-
                 res.json().then(json => {
-                    console.log('json', json)
-                    const { username, image } = json.value.content
-                    state.me.profile.err.set(null)
-                    state.me.profile.username.set(username)
+                    // const { username, image } = json.value.content
+                    // state.me.profile.err.set(null)
+                    emit(evs.identity.setProfile, json.value.content)
+                    // state.me.profile.username.set(username)
                     // here we set `profile.image` to the image hash
-                    state.me.profile.image.set(image || null)
+                    // state.me.profile.image.set(image || null)
 
                     // render the app *after* you fetch the profile initially
                     render(html`<${Connector} emit=${emit} state=${state}
