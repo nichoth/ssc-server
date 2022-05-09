@@ -34,8 +34,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
         state.route.set(path)
     })
 
-
-
     // need to call to get username & profile in here
     // don't show anything before your username has returned
 
@@ -76,12 +74,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                 })
             } else {
                 res.json().then(json => {
-                    // const { username, image } = json.value.content
-                    // state.me.profile.err.set(null)
                     emit(evs.identity.setProfile, json.value.content)
-                    // state.me.profile.username.set(username)
-                    // here we set `profile.image` to the image hash
-                    // state.me.profile.image.set(image || null)
 
                     // render the app *after* you fetch the profile initially
                     render(html`<${Connector} emit=${emit} state=${state}
