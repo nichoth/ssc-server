@@ -36,7 +36,7 @@
     "@nichoth/forms": "^1.0.0",
     "@nichoth/ssc": "^0.9.0",
     "@nichoth/ssc-fauna": "^0.0.42",
-    "@nichoth/ssc-lambda": "^0.0.2",
+    "@nichoth/ssc-lambda": "^0.0.3",
     "@sindresorhus/slugify": "^2.1.0",
     "bcrypt": "^5.0.1",
     "blake2s-js": "^1.3.0",

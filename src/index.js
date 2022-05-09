@@ -77,9 +77,11 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                 console.log('got profile ok')
 
                 res.json().then(json => {
+                    console.log('json', json)
+                    const { username, image } = json.value.content
                     state.me.profile.err.set(null)
-                    state.me.profile.username.set(json.profile.username)
-                    state.me.profile.image.set(json.profile.image || null)
+                    state.me.profile.username.set(username)
+                    state.me.profile.image.set(image || null)
 
                     // render the app *after* you fetch the profile initially
                     render(html`<${Connector} emit=${emit} state=${state}

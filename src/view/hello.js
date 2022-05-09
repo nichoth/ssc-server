@@ -63,18 +63,21 @@ function Hello (props) {
 
     function setProfile (ev) {
         ev.preventDefault()
-        var { username } = ev.target.elements
-        username = username.value
-        if (username === profile.username) return
-        // image = image.value
-        console.log('set profile', username)
+        var { username, image } = pendingProfile
+        image = image || null
         
         setProfileResolving(true)
+
         // (did, username, image)
-        client.postProfile(me.did, username, null)
+        client.postProfile(me.did, username, image)
             .then(res => {
                 setProfileResolving(false)
-                console.log('post profile res', res)
+                if (!res.ok) {
+                    return res.text().then(text => {
+                        console.log('*the rrrrrror*', text)
+                    })
+                }
+
                 res.json().then(json => {
                     console.log('*json*', json)
                     emit(evs.identity.setUsername, { username: json.username })

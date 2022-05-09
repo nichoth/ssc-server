@@ -15,7 +15,6 @@ function upload (file, hash) {
             overwrite: true
         }, function (err, res) {
             if (err) return reject(err)
-
             resolve(res)
         })
     })
