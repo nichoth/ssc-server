@@ -14,6 +14,37 @@ body {
         margin: 0;
         padding: 1rem;
         margin-top: -1rem;
+
+        .my-avatar {
+            margin-right: 0.4rem;
+            padding: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+
+            &:hover {
+                opacity: 0.4;
+            }
+
+            img {
+                height: 4rem;
+                width: 4rem;
+                border-radius: 50%;
+                object-fit: fill;
+            }
+        }
+
+        #avatar-input {
+            display: none;
+        }
+
     }
 
 
@@ -27,38 +58,5 @@ body {
         }
     }
 
-
-    .my-avatar {
-        // display: inline-block;
-        // height: 4rem;
-        // width: 4rem;
-        margin-right: 0.4rem;
-        padding: 0;
-        background: none;
-        border: none;
-        cursor: pointer;
-
-        border: 1px solid;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        margin-bottom: 2rem;
-
-        &:hover {
-            opacity: 0.4;
-        }
-
-        img {
-            height: 4rem;
-            width: 4rem;
-            border-radius: 50%;
-            object-fit: fill;
-        }
-    }
-
-    #avatar-input {
-        display: none;
-    }
 
 }
