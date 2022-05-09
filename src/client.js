@@ -19,7 +19,8 @@ module.exports = function Client (keystore) {
 
         // must pass a username
         // image is optional (should use existing image if there is not a new one)
-        postProfile: function (did, username, image) {
+        // imgHash should be the existing profile image hash
+        postProfile: function (did, username, imgHash, image) {
             if (!username) return Promise.reject(
                 new Error('must include username'))
 
@@ -31,7 +32,7 @@ module.exports = function Client (keystore) {
                 type: 'about',
                 about: did,
                 username,
-                image: (_hash || null)
+                image: (_hash || imgHash)
             }).then(msg => {
                 return fetch(BASE + '/.netlify/functions/profile', {
                     method: 'POST',

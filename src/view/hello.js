@@ -68,13 +68,13 @@ function Hello (props) {
         
         setProfileResolving(true)
 
-        // (did, username, image)
-        client.postProfile(me.did, username, image)
+        // (did, username, existingImageHash, newImage)
+        client.postProfile(me.did, username, profile.image, image)
             .then(res => {
                 setProfileResolving(false)
                 if (!res.ok) {
                     return res.text().then(text => {
-                        console.log('*the rrrrrror*', text)
+                        console.log('*rrrrrror*', text)
                     })
                 }
 

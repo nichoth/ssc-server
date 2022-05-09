@@ -81,6 +81,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                     const { username, image } = json.value.content
                     state.me.profile.err.set(null)
                     state.me.profile.username.set(username)
+                    // here we set `profile.image` to the image hash
                     state.me.profile.image.set(image || null)
 
                     // render the app *after* you fetch the profile initially
