@@ -14,70 +14,15 @@ function subscribe (bus, state) {
 
     bus.on(evs.identity.setAvatar, ev => {
         console.log('*set avatar*', ev)
-        // const { url, id } = ev.image
-        // console.log('in herererererer', url, id)
-        state.me.profile.image.set(ev.image)
-        // console.log('*file in subscribe*', file)
-        // uploadAvatar(file, state)
+        state.me.profile.image.set(ev.image.id)
     })
 
     bus.on(evs.identity.setUsername, ev => {
         const { username } = ev
+        state.me.profile.username.set(username)
         console.log('*set profile in subscribe*', username)
     })
 }
-
-// function uploadAvatar (file, state) {
-//     const { did, profile } = state.me()
-//     const { username } = profile
-
-//     return sha256(file).then(hash => {
-//         const msg = ssc.createMsg(state.me().keys, null, {
-//             type: 'profile',
-//             about: did,
-//             username,
-//             avatar: hash
-//         })
-
-//         return fetch('/.netlify/functions/profile', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ msg, file })
-//         })
-
-
-//         // body: JSON.stringify({
-//         //     file: file,
-//         //     did
-//         // })
-//     })
-
-//     // return fetch('/.netlify/functions/avatar', {
-//     //     method: 'POST',
-//     //     headers: {
-//     //         'Content-Type': 'application/json'
-//     //     },
-//     //     body: JSON.stringify({
-//     //         file: file,
-//     //         did,
-//     //     })
-//     // })
-//     //     .then(response => {
-//     //         console.log('respspsps', response)
-//     //         if (!response.ok) {
-//     //             return response.text()
-//     //                 .then(t => {
-//     //                     console.log('not ok', t)
-//     //                 })
-//     //         }
-
-//     //         return response.json()
-//     //     })
-//     //     .then(json => {
-//     //         console.log('**avatar res json**', json)
-//     //         // console.log(json.message)
-//     //     })
-// }
 
 module.exports = subscribe
 

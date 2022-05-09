@@ -18,26 +18,26 @@ function Shell (props) {
 
     // component did mount
     // get avatar
-    useEffect(() => {
-        if (!me || !me.secrets || !me.secrets.id) return
-        var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString()
+    // useEffect(() => {
+    //     if (!me || !me.secrets || !me.secrets.id) return
+    //     var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString()
 
-        fetch('/.netlify/functions/avatar' + '?' + qs)
-            .then(res => {
-                if (!res.ok) {
-                    return res.text().then(t => {
-                        console.log('aaaaa', t)
-                    })
-                }
-                return res.json()
-            })
-            .then(res => {
-                emit(evs.identity.gotAvatar, res)
-            })
-            .catch(err => {
-                console.log('oh no', err)
-            })
-    }, [])
+    //     fetch('/.netlify/functions/avatar' + '?' + qs)
+    //         .then(res => {
+    //             if (!res.ok) {
+    //                 return res.text().then(t => {
+    //                     console.log('aaaaa', t)
+    //                 })
+    //             }
+    //             return res.json()
+    //         })
+    //         .then(res => {
+    //             emit(evs.identity.gotAvatar, res)
+    //         })
+    //         .catch(err => {
+    //             console.log('oh no', err)
+    //         })
+    // }, [])
 
 
     async function saveName (me, newName) {
@@ -90,14 +90,9 @@ function Shell (props) {
     }
 
     const avatarUrl = me.profile.image ?
-        // cld.image(encodeURIComponent(encodeURIComponent(me.profile.image))).toURL() :
-        // 'https://res.cloudinary.com/nichoth/image/upload/XTuoJBv1MeD8H4g6nRB5f%252FhsqvQtGa%252BZwNbPc53naks%253D?_a=ATAMhAA0'
         cld.image(encodeURIComponent(me.profile.image)).toURL() :
-        // 'https://res.cloudinary.com/nichoth/image/upload/' + encodeURIComponent(me.profile.image) :
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did || '')))
     
-    console.log('*avatar url*', avatarUrl)
-
     console.log('*me.profile.image*', me.profile.image)
 
     // var avatarUrl = (me.avatar && me.avatar.url) ||

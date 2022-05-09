@@ -64,9 +64,7 @@ exports.handler = function (ev, ctx) {
         console.log('**got a post req**', msg)
 
         const did = ssc.getAuthor(msg)
-        console.log('**author**', did)
         const pubKey = ssc.didToPublicKey(did).publicKey
-        console.log('pub key', pubKey)
 
         if (!ssc.isValidMsg(msg, null, pubKey)) {
             console.log('**invalid msg**', pubKey)
@@ -82,6 +80,10 @@ exports.handler = function (ev, ctx) {
                 body: 'missing username'
             }
         }
+
+        // if not updateing the avatar, then you upload a message with
+        // the same file hash in the `msg.image` field, but no `file` key in
+        // the request
 
         if (file) {
             var hash = createHash('sha256')
