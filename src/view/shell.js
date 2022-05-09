@@ -1,8 +1,16 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
+import { Cloudinary } from '@cloudinary/url-gen';
 var ssc = require('@nichoth/ssc/web')
 var evs = require('../EVENTS')
+
+const cld = new Cloudinary({
+    cloud: { cloudName: 'nichoth' },
+    url: {
+      secure: true // force https, set to false to force http
+    }
+})
 
 function Shell (props) {
     var { path, emit, me } = props
@@ -81,10 +89,21 @@ function Shell (props) {
         return baseHref === basePath ? 'active' : ''
     }
 
-    var avatarUrl = (me.avatar && me.avatar.url) ||
-        ('data:image/svg+xml;utf8,' + generateFromString((me && me.secrets && 
-            me.secrets.public) || '')
-        )
+    const avatarUrl = me.profile.image ?
+        // cld.image(encodeURIComponent(encodeURIComponent(me.profile.image))).toURL() :
+        // 'https://res.cloudinary.com/nichoth/image/upload/XTuoJBv1MeD8H4g6nRB5f%252FhsqvQtGa%252BZwNbPc53naks%253D?_a=ATAMhAA0'
+        cld.image(encodeURIComponent(me.profile.image)).toURL() :
+        // 'https://res.cloudinary.com/nichoth/image/upload/' + encodeURIComponent(me.profile.image) :
+        ('data:image/svg+xml;utf8,' + generateFromString((me && me.did || '')))
+    
+    console.log('*avatar url*', avatarUrl)
+
+    console.log('*me.profile.image*', me.profile.image)
+
+    // var avatarUrl = (me.avatar && me.avatar.url) ||
+    //     ('data:image/svg+xml;utf8,' + generateFromString((me && me.secrets && 
+    //         me.secrets.public) || '')
+    //     )
 
     // TODO -- setAvatar event
     return html`<div class="shell">
@@ -122,7 +141,7 @@ function Shell (props) {
 }
 
 function getName (profile) {
-    return (profile && profile.userName) || null
+    return (profile && profile.username) || null
 }
 
 module.exports = Shell

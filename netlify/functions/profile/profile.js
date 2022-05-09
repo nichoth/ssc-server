@@ -34,7 +34,7 @@ exports.handler = function (ev, ctx) {
             .catch(err => {
                 console.log('errrrr', err)
 
-                if (err.toString().includes('invalid ref')) {
+                if (err.toString().includes('not found')) {
                     return {
                         statusCode: 400,
                         body: 'invalid DID'
@@ -95,7 +95,7 @@ exports.handler = function (ev, ctx) {
                 }
             }
 
-            return upload(file, hash)
+            return upload(file, _hash)
                 .then(res => {
                     // then write the profile message to the DB
 

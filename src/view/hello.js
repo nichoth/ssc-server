@@ -2,7 +2,7 @@ import { html } from 'htm/preact'
 var evs = require('../EVENTS')
 import { useEffect, useState } from 'preact/hooks';
 const { TextInput, Button } = require('@nichoth/forms/preact')
-const ssc = require('@nichoth/ssc/web')
+// const ssc = require('@nichoth/ssc/web')
 const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
 
@@ -80,7 +80,12 @@ function Hello (props) {
 
                 res.json().then(json => {
                     console.log('*json*', json)
+                    const { image } = json.db.data.value.content
                     emit(evs.identity.setUsername, { username: json.username })
+                    emit(evs.identity.setAvatar, { image: {
+                        id: image,
+                        url: json.image.url
+                    } })
                 }) 
             })
             .catch(err => {
@@ -100,9 +105,7 @@ function Hello (props) {
         (profile.avatarUrl ||
             ('data:image/svg+xml;utf8,' + generateFromString(me.did || '')))
 
-    // if the `admins` key exists in the JSON, then we don't show info for a
-    // potential admin
-    // if there is no admin field, then we show instructions for the admin
+    // what to do if there are no `admins` in the field
     return html`<div class="hello">
         <h1>Hello</h1>
 
@@ -175,26 +178,4 @@ function Hello (props) {
     </div>`
 }
 
-function uploadAvatar (file, me) {
-    const { did, profile } = me
-    const { username } = profile
-
-    return sha256(file).then(hash => {
-        const msg = ssc.createMsg(me.keys, null, {
-            type: 'profile',
-            about: did,
-            username,
-            avatar: hash
-        })
-
-        return fetch('/.netlify/functions/profile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ msg, file })
-        })
-    })
-}
-
 module.exports = Hello
-
-

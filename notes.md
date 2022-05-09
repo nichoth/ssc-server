@@ -1,5 +1,27 @@
 # the log
 
+```
+https://res.cloudinary.com/nichoth/image/upload/v1652065651/%255Bobject%2520Object%255D.jpg
+```
+
+## 5-9-2022
+
+The old admin DID
+```js
+{
+    "admins": [
+        {
+            "did": "did:key:z82T5XeMUNk67GZtcQ2pYnc34ZyUnMrE1YC1bHQAveSZn7oHAz2xyouSRLYo5FYsi2LD9wGmMBQcobhT3JbKPDfhVF5D4"
+        }
+      ],
+      "appName": "ssc-demo"
+}
+
+```
+
+
+
+
 ## 5-1-2022
 
 Netlify *does* run the _deploy-succeeded_ function the first time you deploy.
