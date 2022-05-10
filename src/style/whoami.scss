@@ -1,5 +1,18 @@
 .route.whoami {
     margin: 1vw;
+
+    p {
+        background-color: #ffffff61;
+        padding: 1rem;
+        border: 1px solid gray;
+    }
+
+    pre {
+        border: 1px solid;
+        background-color: white;
+        padding: 1rem;
+        border-radius: 5px;
+    }
 }
 
 //     margin-bottom: 6rem;

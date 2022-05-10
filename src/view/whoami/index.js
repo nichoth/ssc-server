@@ -6,8 +6,10 @@ function Whoami (props) {
     return html`<div class="route whoami">
         <h1>who am i?</h1>
 
-        <p>Your DID:</p>
-        <code>${me.did}</code>
+        <p>
+            Your DID:
+            <pre><code>${me.did}</code></pre>
+        </p>
     </div>`
 }
 
