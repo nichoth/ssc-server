@@ -24,15 +24,23 @@ module.exports = function Client (keystore) {
             if (!username) return Promise.reject(
                 new Error('must include username'))
 
-            var hash = createHash('sha256')
-            hash.update(image)
-            var _hash = hash.digest('base64')
+            if (!imgHash && !image) return new Promise.reject(
+                new Error('must include an image or a hash for an existing image')
+            )
+
+            // if we are passed an image, set _hash to the right hash
+            var _hash = imgHash
+            if (image) {
+                let hash = createHash('sha256')
+                hash.update(image)
+                _hash = hash.digest('base64')
+            }
 
             return ssc.createMsg(keystore, null, {
                 type: 'about',
                 about: did,
                 username,
-                image: (_hash || imgHash)
+                image: (_hash)
             }).then(msg => {
                 return fetch(BASE + '/api/profile', {
                     method: 'POST',

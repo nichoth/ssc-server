@@ -5,12 +5,18 @@ const { TextInput, Button } = require('@nichoth/forms/preact')
 // const ssc = require('@nichoth/ssc/web')
 const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
+import { Cloudinary } from '@cloudinary/url-gen';
+const cld = new Cloudinary({
+    cloud: { cloudName: 'nichoth' },
+    url: {
+      secure: true // force https, set to false to force http
+    }
+})
 
 
 function Hello (props) {
     console.log('*hello props*', props)
     const { profile, isAdmin } = props.me
-    // const { avatarUrl } = profile
     const { emit, me, admins, client } = props
 
     useEffect(() => {
@@ -68,8 +74,10 @@ function Hello (props) {
         
         setProfileResolving(true)
 
+        const existingHash = image ? null : profile.image
+
         // (did, username, existingImageHash, newImage)
-        client.postProfile(me.did, username, profile.image, image)
+        client.postProfile(me.did, username, existingHash, image)
             .then(res => {
                 setProfileResolving(false)
                 if (!res.ok) {
@@ -102,8 +110,10 @@ function Hello (props) {
 
     const avatarUrl = (pendingProfile && pendingProfile.image) ?
         pendingProfile.image :
-        (profile.avatarUrl ||
-            ('data:image/svg+xml;utf8,' + generateFromString(me.did || '')))
+        (profile.image ?
+            cld.image(encodeURIComponent(profile.image)).toURL() :
+            generateFromString(me.did || '')
+        )
 
     // what to do if there are no `admins` in the field
     return html`<div class="hello">
