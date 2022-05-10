@@ -16,9 +16,9 @@ function setup (test, cb) {
         ntl.stdout.pipe(process.stdout)
         ntl.stderr.pipe(process.stderr)
 
-        ntl.stderr.on('data', (data) => {
-            console.log('**data**', data)
-        })
+        // ntl.stdout.on('data', (data) => {
+        //     console.log('**data**', data.toString())
+        // })
 
         ntl.stderr.on('data', (data) => {
             console.error(`stderr: ${data}`)
