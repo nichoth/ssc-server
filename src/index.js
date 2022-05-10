@@ -40,6 +40,10 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     ssc.getDidFromKeys(keystore).then(did => {
         state.me.did.set(did)
 
+        if(process.env.NODE_ENV === 'cypress') {
+            console.log('did', did)
+        }
+
         const adminInfo = (state.admins() || []).find(user => user.did === did)
 
         state.me.isAdmin.set(!!adminInfo)
