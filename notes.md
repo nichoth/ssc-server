@@ -4,6 +4,11 @@
 
 **Playwright always starts the tests with a new DID**
 
+but, **cypress starts with the same DID every time**
+
+*cypress DID:*
+did:key:z82T5ZsScqa5WWLLN2cHwZgxV4kcmxVLxXro3XZTopxoE4i154mhNEmxcxX9cAgMfFL4MrSAkj2q3kHxQke6GeaWQe4j2
+
 
 ----------------------------------------------------------
 

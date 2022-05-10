@@ -12,8 +12,6 @@ appName = appName || 'ssc-demo'
 const Client = require('./client')
 const evs = require('./EVENTS')
 
-console.log('*****NODE_ENV******', process.env.NODE_ENV)
-
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     var state = State(keystore, { admins })
     var bus = Bus({ memo: true })
@@ -40,8 +38,8 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     ssc.getDidFromKeys(keystore).then(did => {
         state.me.did.set(did)
 
-        if(process.env.NODE_ENV === 'cypress') {
-            console.log('did', did)
+        if(process.env.NODE_ENV === 'test') {
+            console.log('**did**', did)
         }
 
         const adminInfo = (state.admins() || []).find(user => user.did === did)

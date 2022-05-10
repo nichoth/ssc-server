@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 
-describe('example to-do app', () => {
+describe('example test', () => {
     it('starts', () => {
-        cy.visit('https://example.cypress.io/todo')
-        cy.get('body').should('exist')
+        cy.visit('http://localhost:8888')
+        cy.get('h1').should('have.text', 'Hello')
     })
 })
