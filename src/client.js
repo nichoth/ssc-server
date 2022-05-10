@@ -29,18 +29,18 @@ module.exports = function Client (keystore) {
             )
 
             // if we are passed an image, set _hash to the right hash
-            var _hash = imgHash
+            var hash = imgHash
             if (image) {
-                let hash = createHash('sha256')
-                hash.update(image)
-                _hash = hash.digest('base64')
+                let _hash = createHash('sha256')
+                _hash.update(image)
+                hash = _hash.digest('base64')
             }
 
             return ssc.createMsg(keystore, null, {
                 type: 'about',
                 about: did,
                 username,
-                image: (_hash)
+                image: hash
             }).then(msg => {
                 return fetch(BASE + '/api/profile', {
                     method: 'POST',

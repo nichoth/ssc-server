@@ -4,7 +4,7 @@ import { useState } from 'preact/hooks';
 function Whoami (props) {
     console.log('props in here', props)
     return html`<div class="whoami">
-
+        who am i?
     </div>`
 }
 
