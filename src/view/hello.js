@@ -16,7 +16,7 @@ const cld = new Cloudinary({
 function Hello (props) {
     console.log('*hello props*', props)
     const { profile, isAdmin } = props.me
-    const { emit, me, admins, client } = props
+    const { emit, me, client } = props
 
     useEffect(() => {
         document.body.classList.add('hello')

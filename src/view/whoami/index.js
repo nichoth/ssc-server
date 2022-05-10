@@ -1,10 +1,13 @@
 import { html } from 'htm/preact'
-import { useState } from 'preact/hooks';
+// import { useState } from 'preact/hooks';
 
 function Whoami (props) {
-    console.log('props in here', props)
-    return html`<div class="whoami">
-        who am i?
+    const { me } = props
+    return html`<div class="route whoami">
+        <h1>who am i?</h1>
+
+        <p>Your DID:</p>
+        <code>${me.did}</code>
     </div>`
 }
 

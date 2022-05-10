@@ -42,10 +42,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
             console.log('**did**', did)
         }
 
-        const adminInfo = (state.admins() || []).find(user => user.did === did)
-
-        state.me.isAdmin.set(!!adminInfo)
-
         client.getProfile(did).then(res => {
             state.me.profile.hasFetched.set(true)
 
