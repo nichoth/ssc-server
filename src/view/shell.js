@@ -88,7 +88,7 @@ function Shell (props) {
 
     const avatarUrl = me.profile.image ?
         cld.image(encodeURIComponent(me.profile.image)).toURL() :
-        ('data:image/svg+xml;utf8,' + generateFromString((me && me.did || '')))
+        ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
     
     return html`<div class="shell">
         <ul class="nav-part">

@@ -13,7 +13,6 @@ const cld = new Cloudinary({
     }
 })
 
-
 function Hello (props) {
     console.log('*hello props*', props)
     const { profile, isAdmin } = props.me
@@ -115,11 +114,47 @@ function Hello (props) {
             generateFromString(me.did || '')
         )
 
+
+
+    // instructions either isAdmin or is not
+    // we only show this route if you do not have profile info yet
+
+
+
+
     // what to do if there are no `admins` in the field
     return html`<div class="hello">
         <h1>Hello</h1>
 
-        ${!admins ?
+        ${isAdmin ?
+            html`<p>You have admin status for this server.</p>
+                <p>Your DID is <code>${me.did}</code></p>
+
+                <p>You have not yet set a profile for this identity. You can do
+                    that now.</p>
+                
+                <form class="set-profile" onSubmit=${setProfile}>
+                    <${TextInput} name="username" required=${true}
+                        displayName="Your display name"
+                        onInput=${handleInput}
+                    />
+
+                    <${EditableImg} url=${avatarUrl} name="image"
+                        title="set your avatar"
+                        onSelect=${selectImg}
+                        label="Your avatar image"
+                    <//>
+
+                    <${Button} isSpinning=${profileResolving}
+                        type="submit"
+                        disabled=${!(pendingProfile &&
+                            pendingProfile.username) || !pendingProfile.image}
+                    >
+                        Save your profile
+                    <//>
+                </form>
+            ` :
+
             html`<h2>If you own this server</h2>
                 <p>
                     Copy/paste the following DID into a file,
@@ -129,21 +164,22 @@ function Hello (props) {
                     <pre>{ "admins": [{ "did": "${me.did}" }] }</pre>
                     then commit & push the repository to github.
                 </p>
-            ` :
-            null
-        }
 
-        ${isAdmin ?
-            null :
-            null
+                <h2>If you do not own this server</h2>
+                <p class="explain-server">You must be invited to use this server.</p>
+                <p>Enter your invitation code here</p>
+
+                <form onsubmit=${submitInvitation}>
+                    <${TextInput} name="code" />
+                    <${Button} isSpinning=${resolving} type="submit">
+                        Redeem invitation
+                    <//>
+                </form>
+            `
         }
 
         ${(profile.err === 'invalid DID' && !isAdmin) ?
             html`
-                ${!admins ?
-                    html`<h2>If you do not own this server</h2>` :
-                    null
-                }
                 <p class="explain-server">You must be invited to use this server.</p>
                 <p>Enter your invitation code here</p>
 
