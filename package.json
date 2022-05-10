@@ -12,9 +12,8 @@
     "build-sass": "sass src/style/main.scss public/style.css",
     "watch-js": "watchify -p esmify -t [ envify --NODE_ENV test ] -t uglifyify --debug src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
-    "cypress-test": "NODE_ENV=test env $(cat .env | xargs) concurrently --kill-others \"npm start\" \"cypress open\"",
+    "e2e-test": "npm run build && node tests/index.js | tap-arc",
     "bootstrap": "node ./netlify/functions/deploy-succeeded/create-db.js",
-    "esbuild": "esbuild netlify/functions/profile/_profile.js --bundle --platform=node --outfile=netlify/functions/profile/profile.js",
     "test": "NODE_ENV=test tape test/index.js | tap-arc"
   },
   "repository": {
@@ -41,7 +40,6 @@
     "create-hash": "^1.2.0",
     "dotenv": "^8.6.0",
     "drag-drop": "^7.0.1",
-    "esbuild": "^0.14.38",
     "faunadb": "^4.5.4",
     "generate-avatar": "^1.4.10",
     "htm": "^3.0.4",
@@ -60,6 +58,7 @@
     "xtend": "^4.0.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.21.1",
     "browserify": "^17.0.0",
     "concurrently": "^6.1.0",
     "cypress": "^9.6.1",
@@ -68,6 +67,7 @@
     "esmify": "^2.1.1",
     "netlify-cli": "^10.3.0",
     "sass": "^1.32.12",
+    "signal-exit": "^3.0.7",
     "tap-arc": "^0.3.4",
     "tape": "^5.2.2",
     "uglifyify": "^5.0.2",

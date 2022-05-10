@@ -2,6 +2,12 @@
 
 ## 5-10-2022
 
+**Playwright always starts the tests with a new DID**
+
+
+----------------------------------------------------------
+
+
 * DID1 signs a UCAN that says it is the same as DID2
   - DID1 needs to know DID2 somehow.
       + Could use an input with the format `foo@server2.com`.
