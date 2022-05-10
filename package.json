@@ -13,6 +13,7 @@
     "watch-js": "watchify -p esmify -t [ envify --NODE_ENV test ] -t uglifyify --debug src/index.js -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
     "e2e-test": "npm run build && node tests/index.js | tap-arc",
+    "test-cypress": "concurrently --kill-others \"npm start\" \"npx cypress open\"",
     "bootstrap": "node ./netlify/functions/deploy-succeeded/create-db.js",
     "test": "NODE_ENV=test tape test/index.js | tap-arc"
   },
