@@ -4,7 +4,7 @@
 
 [the interactive demo](https://cloudinary.com/documentation/resizing_and_cropping#resizing_and_cropping_interactive_demo) -- kind of cool
 
-[cloudingary browser API](https://cloudinary.com/documentation/javascript_image_transformations#chaining_transformations)
+[cloudingary browser API / chaining transformations](https://cloudinary.com/documentation/javascript_image_transformations#chaining_transformations)
 
 [cloudinary resizing cropping](https://cloudinary.com/documentation/resizing_and_cropping)
 
