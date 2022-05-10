@@ -1,6 +1,73 @@
 # the log
 
+## 5-10-2022
+
+* DID1 signs a UCAN that says it is the same as DID2
+  - DID1 needs to know DID2 somehow.
+      + Could use an input with the format `foo@server2.com`.
+        server1 then calls server2 and gets the profile info
+      + or could have an input that just takes a DID from server2.
+        server1 would still need the address of server2 to get the assets for profile.
+        So two inputs -- one for DID and one for address.
+  - must record the DID and also the domain that it is from (as a `fact` in the UCAN)
+
+* DID1 needs to fetch the avatar and username from server2
+
+Can use the format `nichoth@server1.com`. The server *must return the first* user with that username. That way it wont break if additional users use the same name.
+
+
+
 ## 5-9-2022
+
+**sharing an ID**
+How to handle repeating the same ID across multiple servers?
+
+**Need to use UCAN to sign a new DID for another domain**, because you can't share IDs across domains.
+
+----------------------------------------
+
+* Can do [cross tab communication](https://blog.bitsrc.io/4-ways-to-communicate-across-browser-tabs-in-realtime-e4f5f6cbedca)
+* can use a query param on a link if opening the page via link
+* can do WebRTC or WSS between machines
+* QR code
+
+-------------------------------
+
+Could have a route like `/link-id?did=123abc`
+
+Every domain has a "primary" DID. The primary must sign a UCAN linking a second DID to the first. If you sign that UCAN, the signing key is the *originating* ID
+
+* signs a UCAN that means this other DID is me too.
+
+* when you visit that link, the primary DID signs a doc meaning DID2 is equivalent
+
+as an example,
+server 2 creates a link like `hermes.com/link-id?myDID=123abc`
+
+You need to visit the link to sign the UCAN client-side. the page at `hermes.com` gets loaded and it signs a UCAN delegating to server2's ID. `hermes.com` returns a new UCAN doc meaning that server2 is equivalent. And also saves the UCAN to the DB.
+
+**Need to give that UCAN to server2 somehow.**
+
+You could serve the UCANs from `hermes.com` somehow: `hermes.com/ucan?did=123abc`
+`did` there is the DID for server2. (the DID that the UCAN is signed to)
+
+
+How does that help us? We want to share the *profile* info across multiple domains.
+
+* can record the originating domain per DID in a `fact` in the UCAN
+
+
+Need to get the *root* UCAN
+
+Could have a server-side route that records the UCAN and also transfers profile data to itself
+
+server 2 has a UCAN that means 'this is proof that this DID is the same as this DID from server 1'. and it's signed by ID 1
+
+
+
+---------------------------------------------------------------------
+
+
 
 [the interactive demo](https://cloudinary.com/documentation/resizing_and_cropping#resizing_and_cropping_interactive_demo) -- kind of cool
 

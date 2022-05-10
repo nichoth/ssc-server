@@ -13,7 +13,7 @@ module.exports = function Client (keystore) {
     const client = {
         getProfile: function getProfile (did) {
             const qs = new URLSearchParams({ did }).toString()
-            var url = (BASE + '/.netlify/functions/profile' + '?' + qs)
+            var url = (BASE + '/api/profile' + '?' + qs)
             return fetch(url)
         },
 
@@ -34,7 +34,7 @@ module.exports = function Client (keystore) {
                 username,
                 image: (_hash || imgHash)
             }).then(msg => {
-                return fetch(BASE + '/.netlify/functions/profile', {
+                return fetch(BASE + '/api/profile', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
