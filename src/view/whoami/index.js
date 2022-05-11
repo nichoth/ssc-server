@@ -48,7 +48,8 @@ function Whoami (props) {
 
                 <dt>Description</dt>
                 <dd>
-                    <${EditableTextarea} value="foo bar" onSave=${saveDesc}
+                    <${EditableTextarea} value=${me.profile.description}
+                        onSave=${saveDesc}
                         name="description"
                     />
                 </dd>

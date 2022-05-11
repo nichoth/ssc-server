@@ -49,7 +49,9 @@ function EditableTextarea (props) {
 
             <div class="form-controls">
                 <!-- <button type="reset" disabled=${isResolving}>cancel</button> -->
-                <${Button} type="reset" isSpinning=${false}>
+                <${Button} type="reset" disabled=${isResolving}
+                    isSpinning=${false}
+                >
                     cancel
                 </${Button}>
                 <${Button} type="submit" isSpinning=${isResolving}>
@@ -62,7 +64,7 @@ function EditableTextarea (props) {
 
     return html`
         <${EditPencil} onClick=${_setEditing} />
-        <p class="editable-textarea">${value}</p>
+        <p class="editable-textarea">${value || html`<em>none</em>`}</p>
     `
 }
 
