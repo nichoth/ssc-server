@@ -13,7 +13,7 @@ const cld = new Cloudinary({
 })
 
 function Shell (props) {
-    var { path, emit, me } = props
+    var { path, me } = props
     var { profile } = me
 
     // @TODO
