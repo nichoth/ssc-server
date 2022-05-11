@@ -28,8 +28,14 @@ function Whoami (props) {
     return html`<div class="route whoami">
         <h1>who am i?</h1>
 
+        ${me.isAdmin ?
+            html`<p>You have admin status for this server.</p>` :
+            null
+        }
+
         <div class="my-profile">
             <img src=${avatarUrl} />
+
             <dl>
                 <dt>Your username</dt>
                 <dd>${me.profile.username}</dd>

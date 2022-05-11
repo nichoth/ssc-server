@@ -8,7 +8,7 @@ function EditableImg (props) {
             title=${title}
         >
             <img class="avatar" src="${url}" title=${title} />
-            <span>${label || null}</span>
+            ${label ? html`<span>${label}</span>` : null}
         </label>
         <input type="file" id="avatar-input" name="${name}"
             accept="image/png, image/jpeg"

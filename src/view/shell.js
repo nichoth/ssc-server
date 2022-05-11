@@ -1,10 +1,9 @@
 import { html } from 'htm/preact'
-// import { useState, useEffect } from 'preact/hooks';
-import { useState } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 var ssc = require('@nichoth/ssc/web')
-var evs = require('../EVENTS')
+const EditableImg = require('./components/editable-img')
+const EditableField = require('./components/editable-field')
 
 const cld = new Cloudinary({
     cloud: { cloudName: 'nichoth' },
@@ -22,7 +21,7 @@ function Shell (props) {
     async function saveName (me, newName) {
         console.log('set name in here', newName)
 
-        ssc.createMsg(me.keys, null, {
+        return ssc.createMsg(me.keys, null, {
             type: 'about',
             about: did,
             username: newName,
@@ -37,48 +36,29 @@ function Shell (props) {
                 })
             })
         })
-
-
-
-        // var msgContent = {
-        //     type: 'about',
-        //     about: me.id,
-        //     username: newName
-        // }
-
-        // var keys = me.secrets
-        // var qs = new URLSearchParams({ author: me.secrets.id }).toString();
-        // var url = '/.netlify/functions/abouts' + '?' + qs
-
-        // try {
-        //     var _prev = await fetch(url).then(res => res.json())
-        // } catch (err) {
-        //     console.log('about fetch errr', err)
-        // }
-
-        // var prev = _prev && _prev.msg && _prev.msg.value || null
-        // var msg = ssc.createMsg(keys, prev || null, msgContent)
-
-        // // make the fetch call to set the name,
-        // // then emit the event after success
-        // return fetch('/.netlify/functions/set-name', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         keys: { public: me.secrets.public },
-        //         msg: msg
-        //     })
-        // })
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         console.log('**set name**', res)
-        //         emit(evs.identity.setName, res.value.content.name)
-        //         return res
-        //     })
-        //     .catch(err => {
-        //         console.log('errrrr', err)
-        //     })
     }
+
+
+    function selectImg (ev) {
+        ev.preventDefault()
+        console.log('on image select', ev)
+        var file = ev.target.files[0]
+        console.log('*file*', file)
+
+        const reader = new FileReader()
+
+        reader.onloadend = () => {
+            console.log('*done reading file*')
+            setPendingProfile({
+                image: reader.result,
+                username: (pendingProfile && pendingProfile.username) || null
+            })
+        }
+
+        // this gives us base64
+        reader.readAsDataURL(file)
+    }
+
 
     function active (href) {
         var baseHref = href.split('/')[1]
@@ -93,18 +73,14 @@ function Shell (props) {
     return html`<div class="shell">
         <ul class="nav-part">
             <li class="name">
-                <${EditableImg} url=${avatarUrl}
+                <${EditableImg} url=${avatarUrl} name="image"
                     title="set your avatar"
-                    onSelect=${ev => {
-                        ev.preventDefault()
-                        console.log('on select', ev)
-                        emit(evs.identity.setAvatar, ev)
-                    }}
+                    onSelect=${selectImg}
                 />
 
                 <${EditableField} name="username"
                     class="name-editor"
-                    value=${getName(profile) || 'Anonymous'}
+                    value=${profile.username || 'Anonymous'}
                     onSave=${saveName.bind(null, me)}
                 />
             </li>
@@ -124,83 +100,5 @@ function Shell (props) {
     </div>`
 }
 
-function getName (profile) {
-    return (profile && profile.username) || null
-}
-
 module.exports = Shell
 
-
-function EditableImg (props) {
-    var { url, onSelect, title } = props
-
-    return html`
-        <label for="avatar-input" class="my-avatar" id="avatar-label"
-            title=${title}
-        >
-            <img class="avatar" src="${url}" title="set avatar" />
-        </label>
-        <input type="file" id="avatar-input" name="avatar"
-            accept="image/png, image/jpeg"
-            onchange=${onSelect}
-        />
-    `
-}
-
-function EditableField (props) {
-    var { value, onSave, name } = props
-    var [isEditing, setEditing] = useState(false)
-    var [isResolving, setResolving] = useState(false)
-
-    function _setEditing (ev) {
-        ev.preventDefault()
-        setEditing(true)
-    }
-
-    function stopEditing (ev) {
-        ev.preventDefault()
-        setEditing(false)
-    }
-
-    function _onSave (ev) {
-        ev.preventDefault()
-        var val = ev.target.elements[name].value
-        setResolving(true)
-        onSave(val)
-            .then(() => {
-                setResolving(false)
-                setEditing(false)
-            })
-            .catch(err => {
-                setResolving(false)
-                console.log('errrrrr', err)
-            })
-    }
-
-    var _class = 'editable-field' +
-        (isResolving ? ' resolving' : '') +
-        (props.class ? (' ' + props.class) : '')
-
-    if (isEditing) {
-        return html`<form onreset=${stopEditing}
-            onsubmit=${_onSave}
-            class=${_class}
-        >
-            <input name=${name} id=${name} placeholder="${value}" />
-            <button type="reset" disabled=${isResolving}>cancel</button>
-            <button type="submit" disabled=${isResolving}>save</button>
-        </form>`;
-    }
-
-    return html`
-        <h1>${value}</h1>
-
-        <!-- pencil emoji -->
-        <button class="edit-pencil"
-            onClick=${_setEditing}
-            title="edit"
-        >
-            ✏
-        </button>
-    `;
-}

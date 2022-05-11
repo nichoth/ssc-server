@@ -7,7 +7,7 @@
         img {
             flex-wrap: wrap;
             display: flex;
-            margin: 2rem;
+            margin: 1rem 2rem;
             border-radius: 50%;
             width: 50vmin;
             height: 50vmin;
@@ -20,11 +20,6 @@
 
         dt {
             text-decoration: underline;
-        }
-
-        h2 {
-            margin-left: 2rem;
-            width: 40vw;
         }
     }
 
