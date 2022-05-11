@@ -1,6 +1,33 @@
 .route.whoami {
     margin: 1vw;
 
+    .my-profile {
+        display: flex;
+
+        img {
+            flex-wrap: wrap;
+            display: flex;
+            margin: 2rem;
+            border-radius: 50%;
+            width: 50vmin;
+            height: 50vmin;
+            object-fit: cover;
+        }
+
+        dl {
+            margin-left: 2rem;
+        }
+
+        dt {
+            text-decoration: underline;
+        }
+
+        h2 {
+            margin-left: 2rem;
+            width: 40vw;
+        }
+    }
+
     .icon {
         margin-right: 1rem;
         margin-left: 1rem;

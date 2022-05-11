@@ -1,5 +1,14 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
+import { Cloudinary } from '@cloudinary/url-gen';
+
+const cld = new Cloudinary({
+    cloud: { cloudName: 'nichoth' },
+    url: {
+      secure: true // force https, set to false to force http
+    }
+})
+
 
 function Whoami (props) {
     const { me } = props
@@ -10,9 +19,22 @@ function Whoami (props) {
         navigator.clipboard.writeText(me.did)
         setCopied(true)
     }
+    const avatarUrl = me.profile.image ?
+        cld.image(encodeURIComponent(me.profile.image)).toURL() :
+        ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
+
+            // <h2>${me.profile.username}</h2>
 
     return html`<div class="route whoami">
         <h1>who am i?</h1>
+
+        <div class="my-profile">
+            <img src=${avatarUrl} />
+            <dl>
+                <dt>Your username</dt>
+                <dd>${me.profile.username}</dd>
+            </dl>
+        </div>
 
         <p>
             Your DID
