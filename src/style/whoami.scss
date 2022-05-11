@@ -1,6 +1,15 @@
 .route.whoami {
     margin: 1vw;
 
+    .icon {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+
+    .has-copied {
+        color: #7502df;
+    }
+
     p {
         background-color: #ffffff61;
         padding: 1rem;

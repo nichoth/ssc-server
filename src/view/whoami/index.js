@@ -1,13 +1,28 @@
 import { html } from 'htm/preact'
-// import { useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 function Whoami (props) {
     const { me } = props
+    const [copied, setCopied] = useState(false)
+
+    function copyDid (ev) {
+        ev.preventDefault()
+        navigator.clipboard.writeText(me.did)
+        setCopied(true)
+    }
+
     return html`<div class="route whoami">
         <h1>who am i?</h1>
 
         <p>
-            Your DID:
+            Your DID
+            <button class="icon" onclick=${copyDid}>
+                <img class="copy-icon" src="/copy-solid.svg" title="copy" />
+            </button>
+            ${copied ?
+                html`<span class="has-copied">copied!</span>` :
+                null
+            }
             <pre><code>${me.did}</code></pre>
         </p>
     </div>`
