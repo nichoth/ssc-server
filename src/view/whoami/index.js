@@ -1,6 +1,8 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { Cloudinary } from '@cloudinary/url-gen';
+const EditableTextarea = require('../components/editable-textarea')
+const { EditPencil } = EditableTextarea
 
 const cld = new Cloudinary({
     cloud: { cloudName: 'nichoth' },
@@ -8,7 +10,6 @@ const cld = new Cloudinary({
       secure: true // force https, set to false to force http
     }
 })
-
 
 function Whoami (props) {
     const { me } = props
@@ -23,7 +24,12 @@ function Whoami (props) {
         cld.image(encodeURIComponent(me.profile.image)).toURL() :
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
 
-            // <h2>${me.profile.username}</h2>
+    function saveDesc (value) {
+        console.log('*save desc*', value)
+        return new Promise ((resolve, reject) => {
+            setTimeout(() => resolve('woooo'), 3000)
+        })
+    }
 
     return html`<div class="route whoami">
         <h1>who am i?</h1>
@@ -39,6 +45,13 @@ function Whoami (props) {
             <dl>
                 <dt>Your username</dt>
                 <dd>${me.profile.username}</dd>
+
+                <dt>Description</dt>
+                <dd>
+                    <${EditableTextarea} value="foo bar" onSave=${saveDesc}
+                        name="description"
+                    />
+                </dd>
             </dl>
         </div>
 

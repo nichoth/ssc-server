@@ -1,8 +1,20 @@
 .route.whoami {
     margin: 1vw;
 
+    #profile-description {
+        width: 50vw;
+        min-width: 10rem;
+        height: 40vh;
+    }
+
     .my-profile {
         display: flex;
+
+        p.editable-textarea {
+            font-weight: normal;
+            width: 50vw;
+            display: inline-block;
+        }
 
         img {
             flex-wrap: wrap;
@@ -24,6 +36,7 @@
 
         dd {
             font-weight: bold;
+            margin-bottom: 2rem;
         }
     }
 
