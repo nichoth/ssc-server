@@ -1,5 +1,6 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
+var { Button } = require('@nichoth/forms/preact')
 
 function EditableTextarea (props) {
     const { value, onSave, name } = props
@@ -41,10 +42,21 @@ function EditableTextarea (props) {
             onsubmit=${_onSave}
             class=${_class}
         >
-            <textarea id=${name} name=${name} placeholder=${value} autofocus>
+            <textarea id=${name} name=${name} placeholder=${value}
+                autofocus=${true}
+            >
             </textarea>
-            <button type="reset" disabled=${isResolving}>cancel</button>
-            <button type="submit" disabled=${isResolving}>save</button>
+
+            <div class="form-controls">
+                <!-- <button type="reset" disabled=${isResolving}>cancel</button> -->
+                <${Button} type="reset" isSpinning=${false}>
+                    cancel
+                </${Button}>
+                <${Button} type="submit" isSpinning=${isResolving}>
+                    save
+                </${Button}>
+                <!-- <button type="submit" disabled=${isResolving}>save</button> -->
+            </div>
         </form>`
     }
 
@@ -53,7 +65,7 @@ function EditableTextarea (props) {
         <p class="editable-textarea">${value}</p>
     `
 }
-    
+
 function EditPencil (props) {
     const { onClick } = props
 
@@ -65,4 +77,3 @@ function EditPencil (props) {
 }
 
 module.exports = EditableTextarea
-// module.exports.EditPencil = EditPencil

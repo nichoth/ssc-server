@@ -10,6 +10,10 @@
     .my-profile {
         display: flex;
 
+        form.editable-textarea {
+            margin: 1rem 0;
+        }
+
         p.editable-textarea {
             font-weight: normal;
             width: 50vw;
