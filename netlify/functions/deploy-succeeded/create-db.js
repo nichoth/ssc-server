@@ -27,6 +27,8 @@ function createFaunaDB (key) {
             }]
         ],
 
+        ['pin'],
+
         ['profiles', [{
                 name: 'profile-by-did',
                 source: q.Collection('profiles'),

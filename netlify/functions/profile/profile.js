@@ -81,7 +81,7 @@ exports.handler = function (ev, ctx) {
             }
         }
 
-        // if not updateing the avatar, then you upload a message with
+        // if not updating the avatar, then you upload a message with
         // the same file hash in the `msg.image` field, but no `file` key in
         // the request
 

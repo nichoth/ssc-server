@@ -4,7 +4,7 @@ var ssc = require('@nichoth/ssc/web')
 var createHash = require('create-hash')
 
 var baseUrl = 'http://localhost:8888'
-var BASE = (process.env.NODE_ENV === 'test' ?  baseUrl : '')
+var BASE = (process.env.NODE_ENV === 'test' ? baseUrl : '')
 
 // this is a client-side file that calls our API
 
@@ -52,6 +52,25 @@ module.exports = function Client (keystore) {
                     })
                 })
             })
+        },
+
+        postPin: function (text) {
+            return ssc.createMsg(keystore, null, {
+                type: 'pin',
+                text
+            })
+                .then(msg => {
+                    return fetch(BASE + '/api/pin', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ msg })
+                    })
+                })
+
+        },
+
+        getPins: function () {
+
         }
     }
 

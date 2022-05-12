@@ -7,7 +7,8 @@ const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 const cld = new Cloudinary({
-    cloud: { cloudName: 'nichoth' },
+    // @TODO -- use an env var or something for the cloudname
+    cloud: { cloudName: process.env.CLOUDINARY_CLOUD_NAME },
     url: {
       secure: true // force https, set to false to force http
     }

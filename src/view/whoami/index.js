@@ -4,7 +4,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 const EditableTextarea = require('../components/editable-textarea')
 
 const cld = new Cloudinary({
-    cloud: { cloudName: 'nichoth' },
+    cloud: { cloudName: process.env.CLOUDINARY_CLOUD_NAME },
     url: {
       secure: true // force https, set to false to force http
     }

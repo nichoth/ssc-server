@@ -26,7 +26,9 @@ function State (keystore, { admins }) {
     ssc.getDidFromKeys(keystore).then(did => {
         state.me.did.set(did)
         const isAdmin = (admins || []).find(user => user.did === did)
-        state.me.isAdmin.set(!!isAdmin)
+        if (isAdmin) {
+            state.me.isAdmin.set(true)
+        }
     })
 
     return state
