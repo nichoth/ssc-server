@@ -8,6 +8,7 @@ const test = require('tape')
 // var { spawn } = require('child_process')
 // const ssc = require('@nichoth/ssc')
 // const ssc = require('@nichoth/ssc')
+var onExit = require('signal-exit')
 import ssc from '@nichoth/ssc'
 import setup from './setup.js'
 // var fs = require('fs')
@@ -19,7 +20,7 @@ import setup from './setup.js'
 // var { follow, getPostsWithFoafs, post } = Client()
 
 var ntl
-var keys = ssc.createKeys()
+var keys
 var userOneKeys = ssc.createKeys()
 var userTwoKeys = ssc.createKeys()
 
@@ -35,40 +36,52 @@ test('setup', function (t) {
     setup(t.test, (netlify) => {
         ntl = netlify
 
-        process.on('exit', () => {
-            ntl.kill('SIGINT');
+        onExit(() => {
+            ntl.kill('SIGINT')
         })
 
-        t.end()
+        ssc.createKeys().then(_keys => {
+            console.log('*created keys*', _keys)
+            keys = _keys.keys
+            t.end()
+        })
     })
 })
 
 test('pin a message', t => {
-    fetch(base + '/.netlify/functions/pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ssc.createMsg(keys, null, {
-            type: 'pin',
-            test: 'wooo'
-        }))
+    ssc.createMsg(keys, null, {
+        type: 'pin',
+        test: 'wooo'
     })
-        .then(res => {
-            if (!res.ok) {
-                res.text().then(text => {
-                    t.fail(text)
+        .then(msg => {
+            console.log('*msg*', msg)
+
+            fetch(base + '/.netlify/functions/pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(msg)
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        return res.text().then(text => {
+                            console.log('errrrrrrrrr', text)
+                            t.fail(text)
+                            t.end()
+                        })
+                    }
+
+                    return res.json()
+                })
+                .then(res => {
+                    console.log('got a response', res)
+                })
+                .catch(err => {
+                    t.fail(err.toString())
                     t.end()
                 })
-            }
+        })
 
-            return res.json()
-        })
-        .then(res => {
-            console.log('got a response', res)
-        })
-        .catch(err => {
-            t.fail(err.toString())
-            t.end()
-        })
+
 })
 
 // test('following', t => {

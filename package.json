@@ -32,7 +32,7 @@
     "@cloudinary/url-gen": "^1.8.0",
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^1.0.0",
-    "@nichoth/ssc": "^0.9.0",
+    "@nichoth/ssc": "^0.10.0",
     "@nichoth/ssc-fauna": "^0.0.42",
     "@nichoth/ssc-lambda": "^0.0.3",
     "@sindresorhus/slugify": "^2.1.0",

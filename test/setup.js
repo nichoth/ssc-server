@@ -1,4 +1,3 @@
-// var { spawn } = require('child_process')
 import { spawn } from 'child_process'
 
 function setup (test, cb) {
@@ -8,7 +7,6 @@ function setup (test, cb) {
         ntl.stdout.on('data', function (d) {
             if (d.toString().includes('Server now ready')) {
                 cb(ntl)
-                t.end()
             }
         })
 

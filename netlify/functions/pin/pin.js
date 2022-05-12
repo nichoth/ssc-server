@@ -1,6 +1,6 @@
 const faunadb = require('faunadb')
 const ssc = require('@nichoth/ssc-lambda')
-const admins = require('../../../src/config.json')
+const { admins } = require('../../../src/config.json')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
@@ -24,8 +24,7 @@ exports.handler = async function (ev, ctx) {
         // post the given msg to the DB
         var msg
         try {
-            const body = JSON.parse(ev.body)
-            msg = body.msg
+            msg = JSON.parse(ev.body)
         } catch (err) {
             return {
                 statusCode: 422,
