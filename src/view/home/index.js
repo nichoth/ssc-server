@@ -1,14 +1,15 @@
 import { html } from 'htm/preact'
-import { useEffect } from 'preact/hooks';
-import { generateFromString } from 'generate-avatar'
-var evs = require('../../EVENTS')
-var Client = require('../../client')
-var FollowIcon = require('../follow-btn')
-var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
+// import { useEffect } from 'preact/hooks';
+// import { generateFromString } from 'generate-avatar'
+// var evs = require('../../EVENTS')
+// var Client = require('../../client')
+// var FollowIcon = require('../follow-btn')
+// var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
     console.log('home props', props)
-    return null
+    const { me, emit, relevantPosts, following } = props
+    return html`<div class="route home">home route</div>`
 }
 
 module.exports = Home;

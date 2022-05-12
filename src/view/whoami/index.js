@@ -2,7 +2,6 @@ import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { Cloudinary } from '@cloudinary/url-gen';
 const EditableTextarea = require('../components/editable-textarea')
-// const { EditPencil } = EditableTextarea
 
 const cld = new Cloudinary({
     cloud: { cloudName: 'nichoth' },
