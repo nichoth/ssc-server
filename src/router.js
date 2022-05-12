@@ -6,7 +6,8 @@ var SingleImage = require('./view/single-image')
 var createProfileView = require('./view/profile')
 var CreateInvitation = require('./view/create-invitation')
 var RedeemInvitation = require('./view/redeem-invitation')
-var Hello = require('./view/hello.js')
+var Hello = require('./view/hello')
+const NewPin = require('./view/new-pin')
 
 // var tabs = {
 //     save: require('./view/whoami/save'),
@@ -35,6 +36,10 @@ function Router () {
         return {
             view: Whoami
         }
+    })
+
+    router.addRoute('/new-pin', match => {
+        return { view: NewPin }
     })
 
     // // router.addRoute('/whoami/:subroute', match => {

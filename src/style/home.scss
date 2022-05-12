@@ -1,7 +1,10 @@
 .click-new {
     background: none;
     border: none;
-    font-size: 1.4rem;
+    i {
+        margin-right: 1rem;
+        font-size: 1.4rem;
+    }
 
     &:hover {
         opacity: 0.4;

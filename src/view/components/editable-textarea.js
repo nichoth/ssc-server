@@ -49,13 +49,13 @@ function EditableTextarea (props) {
 
             <div class="form-controls">
                 <!-- <button type="reset" disabled=${isResolving}>cancel</button> -->
+                <${Button} type="submit" isSpinning=${isResolving}>
+                    save
+                </${Button}>
                 <${Button} type="reset" disabled=${isResolving}
                     isSpinning=${false}
                 >
                     cancel
-                </${Button}>
-                <${Button} type="submit" isSpinning=${isResolving}>
-                    save
                 </${Button}>
                 <!-- <button type="submit" disabled=${isResolving}>save</button> -->
             </div>

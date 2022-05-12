@@ -8,21 +8,21 @@ import { html } from 'htm/preact'
 
 function Home (props) {
     console.log('home props', props)
-    const { me, emit, relevantPosts, following } = props
+    const { me } = props
     const { isAdmin } = me
 
     return html`<div class="route home">
         ${isAdmin ?
             html`
-                <button class="click-new">
-                    <i class="fa fa-solid fa-plus"></i>
-                </button>
-                <span>Pin a new post here</span>
+                <div>
+                    <a href="/new-pin" class="click-new">
+                        <i class="fa fa-solid fa-plus"></i>
+                        <span>Pin a new post here</span>
+                    </a>
+                </div>
             `:
             null
         }
-
-        <p>home route</p>
     </div>`
 }
 
