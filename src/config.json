@@ -1,7 +1,9 @@
 {
     "admins": [
         {
-            "did": "did:key:z82T5ZAWZe8wA1DgbeWVt9Vzn64W3SbJDAUPBSRxSZ24qM5Y8WSQ1QoGUrmnQmZuGaSDBhTxJwNF9rYmzYbowdShBUHqa",
+            "did": "did:key:z82T5ZAWZe8wA1DgbeWVt9Vzn64W3SbJDAUPBSRxSZ24qM5Y8WSQ1QoGUrmnQmZuGaSDBhTxJwNF9rYmzYbowdShBUHqa"
+        },
+        {
             "//did": "did:key:z82T5Z4A8UdkqmrAfYt4ZPqsSJNGtDrsgQ9Lsf9CLmR3EJRreLheQt8u49i27TxbuAjXg5Bbf93ernAtFhP8Q1Vkm9C9r"
         }
     ],

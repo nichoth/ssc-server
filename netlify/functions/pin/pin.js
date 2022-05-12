@@ -47,13 +47,19 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
-        const isAdmin = (admins || []).find(user => user.did === did)
-        isVal = isVal && isAdmin
-
         if (!isVal) {
             return {
                 statusCode: 400,
                 body: 'invalid message'
+            }
+        }
+
+        const isAdmin = (admins || []).find(user => user.did === did)
+
+        if (!isAdmin) {
+            return {
+                statusCode: 403,
+                body: 'not allowed'
             }
         }
 
