@@ -9,7 +9,21 @@ import { html } from 'htm/preact'
 function Home (props) {
     console.log('home props', props)
     const { me, emit, relevantPosts, following } = props
-    return html`<div class="route home">home route</div>`
+    const { isAdmin } = me
+
+    return html`<div class="route home">
+        ${isAdmin ?
+            html`
+                <button class="click-new">
+                    <i class="fa fa-solid fa-plus"></i>
+                </button>
+                <span>Pin a new post here</span>
+            `:
+            null
+        }
+
+        <p>home route</p>
+    </div>`
 }
 
 module.exports = Home;
