@@ -36,36 +36,36 @@ test('setup', function (t) {
     })
 })
 
-test('following', t => {
-    require('./follow/follow')(t.test, { keys, userOneKeys, userTwoKeys})
-})
+// test('following', t => {
+//     require('./follow/follow')(t.test, { keys, userOneKeys, userTwoKeys})
+// })
 
-test('posts', t => {
-    require('./post/post')(t.test)
-})
+// test('posts', t => {
+//     require('./post/post')(t.test)
+// })
 
-test('foafs', t => {
-    var keys = ssc.createKeys()
-    var userOneKeys = ssc.createKeys()
-    var userTwoKeys = ssc.createKeys()
-    var ks = { keys, userOneKeys, userTwoKeys }
-    require('./foafs/foafs')(t.test, ks)
-})
+// test('foafs', t => {
+//     var keys = ssc.createKeys()
+//     var userOneKeys = ssc.createKeys()
+//     var userTwoKeys = ssc.createKeys()
+//     var ks = { keys, userOneKeys, userTwoKeys }
+//     require('./foafs/foafs')(t.test, ks)
+// })
 
-test('invitations', t => {
-    require('./invitation/invitation')(t.test)
-})
+// test('invitations', t => {
+//     require('./invitation/invitation')(t.test)
+// })
 
-test('images', t =>{
-    require('./image/image')(t.test)
-})
+// test('images', t =>{
+//     require('./image/image')(t.test)
+// })
 
-test('get relevant posts', function (t) {
-    console.log('todo')
-    t.end()
-})
+// test('get relevant posts', function (t) {
+//     console.log('todo')
+//     t.end()
+// })
 
-test('all done', function (t) {
-    ntl.kill()
-    t.end()
-})
+// test('all done', function (t) {
+//     ntl.kill()
+//     t.end()
+// })
