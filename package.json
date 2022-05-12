@@ -1,6 +1,7 @@
 {
   "name": "ssc-server",
   "description": "a server for ssc",
+  "type": "module",
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {

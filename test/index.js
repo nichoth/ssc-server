@@ -1,8 +1,15 @@
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url)
 require('dotenv').config()
 require('isomorphic-fetch')
-var test = require('tape')
+const base = 'http://localhost:8888'
+const test = require('tape')
+// import { test } from 'tape'
 // var { spawn } = require('child_process')
-var ssc = require('@nichoth/ssc')
+// const ssc = require('@nichoth/ssc')
+// const ssc = require('@nichoth/ssc')
+import ssc from '@nichoth/ssc'
+import setup from './setup.js'
 // var fs = require('fs')
 // var createHash = require('crypto').createHash
 // var Client = require('../src/client')
@@ -25,7 +32,7 @@ var userTwoKeys = ssc.createKeys()
 
 var ntl
 test('setup', function (t) {
-    require('./setup')(t.test, (netlify) => {
+    setup(t.test, (netlify) => {
         ntl = netlify
 
         process.on('exit', () => {
@@ -34,6 +41,34 @@ test('setup', function (t) {
 
         t.end()
     })
+})
+
+test('pin a message', t => {
+    fetch(base + '/.netlify/functions/pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ssc.createMsg(keys, null, {
+            type: 'pin',
+            test: 'wooo'
+        }))
+    })
+        .then(res => {
+            if (!res.ok) {
+                res.text().then(text => {
+                    t.fail(text)
+                    t.end()
+                })
+            }
+
+            return res.json()
+        })
+        .then(res => {
+            console.log('got a response', res)
+        })
+        .catch(err => {
+            t.fail(err.toString())
+            t.end()
+        })
 })
 
 // test('following', t => {

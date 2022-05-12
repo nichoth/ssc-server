@@ -1,4 +1,5 @@
-var { spawn } = require('child_process')
+// var { spawn } = require('child_process')
+import { spawn } from 'child_process'
 
 function setup (test, cb) {
     test('setup the server', function (t) {
@@ -28,4 +29,4 @@ function setup (test, cb) {
     })
 }
 
-module.exports = setup
+export default setup
