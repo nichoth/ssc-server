@@ -15,8 +15,6 @@ const test = require('tape')
 var onExit = require('signal-exit')
 const fs = require('fs')
 const ssc = require('@nichoth/ssc-lambda')
-// import ssc from '@nichoth/ssc'
-// import setup from './setup.js'
 const setup = require('./setup')
 
 const { admins } = require('../src/config.json')
