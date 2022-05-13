@@ -38,7 +38,7 @@ function Home (props) {
                     </a>
 
                     ${pin ?
-                        html`<div>${pin.value.content.text}</div>` : 
+                        html`<p>${pin.value.content.text}</p>` : 
                         null
                     }
                 </div>

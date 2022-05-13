@@ -80,6 +80,41 @@ test('pin a message', t => {
         })
 })
 
+test('try to pin something with an invalid DID', t => {
+    // we don't add this DID to the `admins` array in config.json,
+    // so it is not allowed
+    ssc.createKeys().then(alice => {
+        return ssc.createMsg(alice.keys, null, {
+            type: 'pin',
+            text: 'test two'
+        })
+    })
+        .then(msg => {
+            return fetch(base + '/.netlify/functions/pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(msg)
+            })
+        })
+        .then(res => {
+            if (res.ok) {
+                t.fail('ok response')
+                t.end()
+            }
+
+            res.text().then(text => {
+                t.equal(res.status, 403, 'should have exprected status code')
+                t.equal(text, 'not allowed', 'should have expected error body')
+                t.end()
+            })
+        })
+        .catch(err => {
+            console.log('errrrrrrrrrrrrrrrrrrrr in here', err)
+            t.fail()
+            t.end()
+        })
+})
+
 test('get pinned messages', t => {
     fetch(base + '/.netlify/functions/pin')
         .then(res => {
@@ -94,9 +129,9 @@ test('get pinned messages', t => {
             return res.json()
         })
         .then(json => {
-            t.equal(json[0].value.content.text, 'wooo',
+            t.equal(json.value.content.text, 'wooo',
                 'should return the expected message')
-            t.equal(json[0].value.content.type, 'pin',
+            t.equal(json.value.content.type, 'pin',
                 'should return the expected type')
             t.end()
         })
