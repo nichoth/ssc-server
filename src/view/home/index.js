@@ -1,15 +1,32 @@
 import { html } from 'htm/preact'
-// import { useEffect } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 // import { generateFromString } from 'generate-avatar'
-// var evs = require('../../EVENTS')
+var evs = require('../../EVENTS')
 // var Client = require('../../client')
 // var FollowIcon = require('../follow-btn')
 // var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
     console.log('home props', props)
-    const { me } = props
+    const { emit, me, client, pin } = props
     const { isAdmin } = me
+
+    useEffect(() => {
+        if (pin) return
+
+        client.getPin().then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    console.log('not ok', text)
+                    emit(evs.pin.error, text)
+                })
+            }
+
+            res.json().then(json => {
+                emit(evs.pin.got, json)
+            })
+        })
+    }, [])
 
     return html`<div class="route home">
         ${isAdmin ?
@@ -19,6 +36,11 @@ function Home (props) {
                         <i class="fa fa-solid fa-plus"></i>
                         <span>Pin a new post here</span>
                     </a>
+
+                    ${pin ?
+                        html`<div>${pin.value.content.text}</div>` : 
+                        null
+                    }
                 </div>
             `:
             null

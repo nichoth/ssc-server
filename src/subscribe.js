@@ -12,6 +12,15 @@ function subscribe (bus, state) {
         console.log('***star***', ev)
     })
 
+    bus.on(evs.pin.got, ev => {
+        console.log('*pin in subscribe*', ev)
+        state.pin.set(ev)
+    })
+
+    bus.on(evs.pin.error, err => {
+        console.log('rrrrr', err)
+    })
+
     bus.on(evs.identity.setAvatar, ev => {
         console.log('*set avatar*', ev)
         state.me.profile.image.set(ev.image.id)

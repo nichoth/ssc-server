@@ -8,6 +8,7 @@ function State (keystore, { admins }) {
     const state = struct({
         route: observ(getRoute()),
         admins: observ(admins),
+        pin: observ(null),
         me: struct({
             did: observ(null),
             isAdmin: observ(false),

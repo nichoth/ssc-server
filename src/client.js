@@ -69,9 +69,8 @@ module.exports = function Client (keystore) {
 
         },
 
-        getPins: function () {
-            return fetch(BASE + '/api/pin', {
-            })
+        getPin: function () {
+            return fetch(BASE + '/api/pin')
         }
     }
 
