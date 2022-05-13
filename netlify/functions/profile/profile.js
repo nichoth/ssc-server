@@ -10,9 +10,11 @@ var client = new faunadb.Client({
 })
 
 
-exports.handler = function (ev, ctx) {
+exports.handler = function handler (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         const did = ev.queryStringParameters.did
+
+        console.log('**did**', did)
 
         return client.query(
             q.Get(q.Match(q.Index('profile-by-did'), did))

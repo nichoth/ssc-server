@@ -1,9 +1,9 @@
 {
   "name": "ssc-server",
   "description": "a server for ssc",
-  "type": "module",
   "version": "0.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "npm run build && concurrently --kill-others \"npm run watch-sass\" \"npm run watch-js\" \"netlify dev --port=8888\"",
     "start-test": "npm run build-test && concurrently --kill-others \"npm run watch-sass\" \"npm run watch-js-test\" \"netlify dev --port=8888\"",

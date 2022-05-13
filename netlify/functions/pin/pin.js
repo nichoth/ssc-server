@@ -63,7 +63,7 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
-        const key = ssc.getId(key)
+        const key = ssc.getId(msg)
 
         // msg is valid; handle the post request
         return client.query(

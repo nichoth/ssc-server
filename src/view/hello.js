@@ -2,7 +2,6 @@ import { html } from 'htm/preact'
 var evs = require('../EVENTS')
 import { useEffect, useState } from 'preact/hooks';
 const { TextInput, Button } = require('@nichoth/forms/preact')
-// const ssc = require('@nichoth/ssc/web')
 const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
@@ -13,6 +12,13 @@ const cld = new Cloudinary({
       secure: true // force https, set to false to force http
     }
 })
+
+
+// this should be two options --
+// either you have admin status or you do not
+
+
+
 
 function Hello (props) {
     console.log('*hello props*', props)
@@ -179,7 +185,7 @@ function Hello (props) {
             `
         }
 
-        ${(profile.err === 'invalid DID' && !isAdmin) ?
+        ${(profile.err === 'invalid DID') ?
             html`
                 <p class="explain-server">You must be invited to use this server.</p>
                 <p>Enter your invitation code here</p>
@@ -192,35 +198,37 @@ function Hello (props) {
                 </form>
             ` :
 
-            // has profile err, and is admin
-            // this means you are an admin, but don't yet have profile data
-            html`<p>You have admin status for this server.</p>
-                <p>Your DID is <code>${me.did}</code></p>
+            null
 
-                <p>You have not yet set a profile for this identity. You can do
-                    that now.</p>
+            // // has profile err, and is admin
+            // // this means you are an admin, but don't yet have profile data
+            // html`<p>You have admin status for this server.</p>
+            //     <p>Your DID is <code>${me.did}</code></p>
+
+            //     <p>You have not yet set a profile for this identity. You can do
+            //         that now.</p>
                 
-                <form class="set-profile" onSubmit=${setProfile}>
-                    <${TextInput} name="username" required=${true}
-                        displayName="Your display name"
-                        onInput=${handleInput}
-                    />
+            //     <form class="set-profile" onSubmit=${setProfile}>
+            //         <${TextInput} name="username" required=${true}
+            //             displayName="Your display name"
+            //             onInput=${handleInput}
+            //         />
 
-                    <${EditableImg} url=${avatarUrl} name="image"
-                        title="set your avatar"
-                        onSelect=${selectImg}
-                        label="Your avatar image"
-                    <//>
+            //         <${EditableImg} url=${avatarUrl} name="image"
+            //             title="set your avatar"
+            //             onSelect=${selectImg}
+            //             label="Your avatar image"
+            //         <//>
 
-                    <${Button} isSpinning=${profileResolving}
-                        type="submit"
-                        disabled=${!(pendingProfile &&
-                            pendingProfile.username) || !pendingProfile.image}
-                    >
-                        Save your profile
-                    <//>
-                </form>
-            `
+            //         <${Button} isSpinning=${profileResolving}
+            //             type="submit"
+            //             disabled=${!(pendingProfile &&
+            //                 pendingProfile.username) || !pendingProfile.image}
+            //         >
+            //             Save your profile
+            //         <//>
+            //     </form>
+            // `
         }
     </div>`
 }

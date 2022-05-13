@@ -1,5 +1,12 @@
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url)
+
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+import path from 'path'
+
 require('dotenv').config()
 require('isomorphic-fetch')
 const base = 'http://localhost:8888'
@@ -9,8 +16,11 @@ const test = require('tape')
 // const ssc = require('@nichoth/ssc')
 // const ssc = require('@nichoth/ssc')
 var onExit = require('signal-exit')
+const fs = require('fs')
 import ssc from '@nichoth/ssc'
 import setup from './setup.js'
+
+const { admins } = require('../src/config.json')
 // var fs = require('fs')
 // var createHash = require('crypto').createHash
 // var Client = require('../src/client')
@@ -21,8 +31,8 @@ import setup from './setup.js'
 
 var ntl
 var keys
-var userOneKeys = ssc.createKeys()
-var userTwoKeys = ssc.createKeys()
+// var userOneKeys = ssc.createKeys()
+// var userTwoKeys = ssc.createKeys()
 
 // get the test file & its hash ready
 // var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
@@ -41,21 +51,33 @@ test('setup', function (t) {
         })
 
         ssc.createKeys().then(_keys => {
-            console.log('*created keys*', _keys)
             keys = _keys.keys
-            t.end()
+            ssc.exportKeys(keys).then(exported => {
+                // need to write this did to config.admins
+                const did = ssc.publicKeyToDid(exported.public)
+                console.log('*did*', did)
+                const configPath = path.resolve(__dirname, '..', 'src',
+
+                    'config.json')
+                admins.push({ did })
+
+                fs.writeFileSync(configPath, JSON.stringify({
+                    admins
+                }, null, 2))
+
+                t.end()
+            })
         })
     })
 })
 
+
 test('pin a message', t => {
     ssc.createMsg(keys, null, {
         type: 'pin',
-        test: 'wooo'
+        text: 'wooo'
     })
         .then(msg => {
-            console.log('*msg*', msg)
-
             fetch(base + '/.netlify/functions/pin', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -73,15 +95,20 @@ test('pin a message', t => {
                     return res.json()
                 })
                 .then(res => {
-                    console.log('got a response', res)
+                    t.equal(res.data.value.content.text, 'wooo',
+                        'should return the pinned message')
+                    t.end()
                 })
                 .catch(err => {
                     t.fail(err.toString())
                     t.end()
                 })
         })
+})
 
-
+test('all done', function (t) {
+    ntl.kill()
+    t.end()
 })
 
 // test('following', t => {
