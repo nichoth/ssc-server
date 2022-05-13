@@ -9,13 +9,15 @@ var client = new faunadb.Client({
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         // query the DB and return pins
-        return q.Map(
-            q.Paginate(q.Documents(q.Collection('pins'))),
-            q.Lambda(x => q.Get(x))
+        return client.query(
+            q.Map(
+                q.Paginate(q.Documents(q.Collection('pin'))),
+                q.Lambda(x => q.Get(x))
+            )
         ).then(res => {
             return {
                 statusCode: 200,
-                body: JSON.stringify(res)
+                body: JSON.stringify(res.data.map(d => d.data))
             }
         })
     }
@@ -31,8 +33,6 @@ exports.handler = async function (ev, ctx) {
                 body: 'invalid json'
             }
         }
-
-        console.log('**got a post pin req**', msg)
 
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey

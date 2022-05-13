@@ -1,4 +1,5 @@
-import { spawn } from 'child_process'
+// import { spawn } from 'child_process'
+const { spawn } = require('child_process')
 
 function setup (test, cb) {
     test('setup the server', function (t) {
@@ -27,4 +28,5 @@ function setup (test, cb) {
     })
 }
 
-export default setup
+// export default setup
+module.exports = setup

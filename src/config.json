@@ -1,6 +1,9 @@
 {
   "admins": [
     {
+      "did": "did:key:z82T5XeMUNk67GZtcQ2pYnc34ZyUnMrE1YC1bHQAveSZn7oHAz2xyouSRLYo5FYsi2LD9wGmMBQcobhT3JbKPDfhVF5D4"
+    },
+    {
       "did": "did:key:z82T5ZAWZe8wA1DgbeWVt9Vzn64W3SbJDAUPBSRxSZ24qM5Y8WSQ1QoGUrmnQmZuGaSDBhTxJwNF9rYmzYbowdShBUHqa"
     },
     {
@@ -113,6 +116,45 @@
     },
     {
       "did": "did:key:z82T5WzrAKQRTJcQV8Cu3YZsA1qMAtQTFq28FzG6zJQARiWLqXhJG2hiisS5HnaLfrGDBgMxjdSzk9HfBcNLvRu9DdvuN"
+    },
+    {
+      "did": "did:key:z82T5ZhBhgtqPmaB26jp8QqPWjHFc3A5GYsBWkS8uxPu3sur58LpKrHtrs74Vsrgib9WDU1axb4csHAYu44xJrgT9K8Qj"
+    },
+    {
+      "did": "did:key:z82T5a3D4xtmp4dt5rEV7h2ZFB9MXVSDugHZLwegJbZtppF35ti13jYjehwVVdzntP6i8gsaYYxJjPcpLab7okwHtVkcK"
+    },
+    {
+      "did": "did:key:z82T5Vw9jbxtEVNjf74HqxyVNppHzqgCpAtxt3b3L179mBUHvbPU4bsPKdfh29HAdVEDa2pnJLzyFYZZNScxArk9xhnCu"
+    },
+    {
+      "did": "did:key:z82T5Z6wssxygxBJzkdFm2k2Exo7Xnj6LbBUZvTDVfotDkx9HG2N6pxSLhzdda9fXbZhMDYtojkZ7q3qndtxbs1bidEZP"
+    },
+    {
+      "did": "did:key:z82T5VK8Qzunr6UE28Y9htniM1pZuo9DkbcbMHrJPUtBWr2Q9aZT9J4PH8qvw2bLoUErfVsi3DPDcHkkuVarxaMjVTm5e"
+    },
+    {
+      "did": "did:key:z82T5Yr4WhH1QYZYpBNL9WhJNA6pXyUdThzMLpGcwH34dH1mNPFfqQ5cnz3gunCNZRoi463iTQDkNnjbfDzp2hT3k7AEd"
+    },
+    {
+      "did": "did:key:z82T5X1R78xTNqeQUy5tQqQvQcbEXRJFWpwK2PZd5UkowcHpfniYtzdSvAMM5UYZUReEV42EF9cZXr5VP9CfKWQPD6PsR"
+    },
+    {
+      "did": "did:key:z82T5Xi9e38KDsKLTxSEFCiCRiWH2mVyrsJnyD9yhMxi6y4bgBUydYovEve1UwX5tHt8ffsr1RFyg3eWspxgfg5JftXSU"
+    },
+    {
+      "did": "did:key:z82T5a6d2yM9n3G7d4jCNX27LUbsAieycSzPpjFQLSj2Ymc5Uqom9VGKLWVJk63QpLK6peihWFgEzr8obuo2gNnHDxCYY"
+    },
+    {
+      "did": "did:key:z82T5a9dy883m3ntbza38Q55MnqyXunXVf3A62oD7TFkUQk7mVcUCwSoC9xn5yGBuM6QcaTCJfiCX1nQ7DAxTL7nU21zA"
+    },
+    {
+      "did": "did:key:z82T5ZRjnd2gCJ7WpguoXSSUGRwox8JKc9f8rVcKT3CRbjZ5EmhwZjcYLjgRDyonJ2BkMFAEkbnqJa9kqbRRR6g9k2WrB"
+    },
+    {
+      "did": "did:key:z82T5XvrvZfyrn7EK9HEph79ZbAQYt248JKbrM7gadcZkvNKepsPQJd7Z1Z8jDNvboXbx5VqMLMDC49mWCXf52miMkmkT"
+    },
+    {
+      "did": "did:key:z82T5VHQGaihq2xzjNh75FisVYzuAxzReCnueaMrJ157nuyeiCqorEcSFAKWEtPsMthy2DRvJg2DTScmLDK99tRBbMg3o"
     }
   ]
 }

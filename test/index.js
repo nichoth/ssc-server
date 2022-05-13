@@ -1,11 +1,12 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url)
+// import { createRequire } from 'module';
+// const require = createRequire(import.meta.url)
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// import { dirname } from 'path';
+// import { fileURLToPath } from 'url';
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
-import path from 'path'
+// import path from 'path'
+const path = require('path')
 
 require('dotenv').config()
 require('isomorphic-fetch')
@@ -13,8 +14,10 @@ const base = 'http://localhost:8888'
 const test = require('tape')
 var onExit = require('signal-exit')
 const fs = require('fs')
-import ssc from '@nichoth/ssc'
-import setup from './setup.js'
+const ssc = require('@nichoth/ssc-lambda')
+// import ssc from '@nichoth/ssc'
+// import setup from './setup.js'
+const setup = require('./setup')
 
 const { admins } = require('../src/config.json')
 // var fs = require('fs')
@@ -101,6 +104,33 @@ test('pin a message', t => {
                     t.fail(err.toString())
                     t.end()
                 })
+        })
+})
+
+test('get pinned messages', t => {
+    fetch(base + '/.netlify/functions/pin')
+        .then(res => {
+            if (!res.ok) {
+                res.text()
+                    .then(text => {
+                        console.log('**errrr**', text)
+                        throw new Error(text)
+                    })
+            }
+
+            return res.json()
+        })
+        .then(json => {
+            t.equal(json[0].value.content.text, 'wooo',
+                'should return the expected message')
+            t.equal(json[0].value.content.type, 'pin',
+                'should return the expected type')
+            t.end()
+        })
+        .catch(err => {
+            console.log('*errrrrrr in catch*', err)
+            t.fail(err)
+            t.end()
         })
 })
 

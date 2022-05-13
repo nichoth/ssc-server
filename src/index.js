@@ -12,6 +12,10 @@ appName = appName || 'ssc-demo'
 const Client = require('./client')
 const evs = require('./EVENTS')
 
+console.log('*appName*', appName)
+console.log('*NODE_ENV*', process.env.NODE_ENV)
+console.log('*CLOUDINARY NAME*', process.env.CLOUDINARY_CLOUD_NAME)
+
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     var state = State(keystore, { admins })
     var bus = Bus({ memo: true })

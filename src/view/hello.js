@@ -118,7 +118,7 @@ function Hello (props) {
         pendingProfile.image :
         (profile.image ?
             cld.image(encodeURIComponent(profile.image)).toURL() :
-            generateFromString(me.did || '')
+            ('data:image/svg+xml;utf8,' + generateFromString(me.did || ''))
         )
 
 

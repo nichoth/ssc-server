@@ -63,14 +63,15 @@ module.exports = function Client (keystore) {
                     return fetch(BASE + '/api/pin', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ msg })
+                        body: JSON.stringify(msg)
                     })
                 })
 
         },
 
         getPins: function () {
-
+            return fetch(BASE + '/api/pin', {
+            })
         }
     }
 
