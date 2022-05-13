@@ -13,8 +13,9 @@ const cld = new Cloudinary({
 })
 
 function Shell (props) {
-    var { path, me } = props
-    var { profile } = me
+    const { route, me } = props
+    const path = route
+    const { profile } = me
 
     // @TODO
     // make a save name function

@@ -28,7 +28,6 @@ test('setup', function (t) {
             ssc.exportKeys(keys).then(exported => {
                 // need to write this did to config.admins
                 const did = ssc.publicKeyToDid(exported.public)
-                console.log('*did*', did)
                 const configPath = path.resolve(__dirname, '..', 'src',
                     'config.json')
                 admins.push({ did })
