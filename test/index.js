@@ -1,11 +1,3 @@
-// import { createRequire } from 'module';
-// const require = createRequire(import.meta.url)
-
-// import { dirname } from 'path';
-// import { fileURLToPath } from 'url';
-// const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// import path from 'path'
 const path = require('path')
 
 require('dotenv').config()
@@ -18,25 +10,9 @@ const ssc = require('@nichoth/ssc-lambda')
 const setup = require('./setup')
 
 const { admins } = require('../src/config.json')
-// var fs = require('fs')
-// var createHash = require('crypto').createHash
-// var Client = require('../src/client')
-// var client = Client()
-// var base = 'http://localhost:8888'
-
-// var { follow, getPostsWithFoafs, post } = Client()
 
 var ntl
 var keys
-// var userOneKeys = ssc.createKeys()
-// var userTwoKeys = ssc.createKeys()
-
-// get the test file & its hash ready
-// var caracal = fs.readFileSync(__dirname + '/caracal.jpg')
-// let base64Caracal = 'data:image/png;base64,' + caracal.toString('base64')
-// var hash = createHash('sha256')
-// hash.update(base64Caracal)
-// var fileHash = hash.digest('base64')
 
 var ntl
 test('setup', function (t) {
@@ -136,37 +112,3 @@ test('all done', function (t) {
     ntl.kill()
     t.end()
 })
-
-// test('following', t => {
-//     require('./follow/follow')(t.test, { keys, userOneKeys, userTwoKeys})
-// })
-
-// test('posts', t => {
-//     require('./post/post')(t.test)
-// })
-
-// test('foafs', t => {
-//     var keys = ssc.createKeys()
-//     var userOneKeys = ssc.createKeys()
-//     var userTwoKeys = ssc.createKeys()
-//     var ks = { keys, userOneKeys, userTwoKeys }
-//     require('./foafs/foafs')(t.test, ks)
-// })
-
-// test('invitations', t => {
-//     require('./invitation/invitation')(t.test)
-// })
-
-// test('images', t =>{
-//     require('./image/image')(t.test)
-// })
-
-// test('get relevant posts', function (t) {
-//     console.log('todo')
-//     t.end()
-// })
-
-// test('all done', function (t) {
-//     ntl.kill()
-//     t.end()
-// })
