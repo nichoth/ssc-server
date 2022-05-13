@@ -11,10 +11,6 @@ require('dotenv').config()
 require('isomorphic-fetch')
 const base = 'http://localhost:8888'
 const test = require('tape')
-// import { test } from 'tape'
-// var { spawn } = require('child_process')
-// const ssc = require('@nichoth/ssc')
-// const ssc = require('@nichoth/ssc')
 var onExit = require('signal-exit')
 const fs = require('fs')
 import ssc from '@nichoth/ssc'
@@ -57,7 +53,6 @@ test('setup', function (t) {
                 const did = ssc.publicKeyToDid(exported.public)
                 console.log('*did*', did)
                 const configPath = path.resolve(__dirname, '..', 'src',
-
                     'config.json')
                 admins.push({ did })
 
@@ -95,6 +90,9 @@ test('pin a message', t => {
                     return res.json()
                 })
                 .then(res => {
+                    const key = ssc.getId(msg)
+                    t.equal(res.data.key, key,
+                        'should return the exprected key')
                     t.equal(res.data.value.content.text, 'wooo',
                         'should return the pinned message')
                     t.end()
