@@ -22,7 +22,6 @@ function NewPin (props) {
 
         client.postPin(text).then(res => {
             setResolving(false)
-            console.log('*pin response*', res)
             emit(evs.pin.post, res)
         }).catch(err => {
             setResolving(false)
@@ -43,7 +42,9 @@ function NewPin (props) {
         <form onsubmit=${savePin}>
             <textarea required=${true} id="new-pin" name="new-pin"
                 autofocus=${true}
-            >${props.pin}</textarea>
+            >
+                ${props.pin}
+            </textarea>
 
             <div class="form-controls">
                 <${Button} type="submit" isSpinning=${isResolving}>

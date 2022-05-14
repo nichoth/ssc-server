@@ -1,14 +1,13 @@
 import { html } from 'htm/preact'
-import { useEffect } from 'preact/hooks';
+const { marked } = require('marked')
 // import { generateFromString } from 'generate-avatar'
-var evs = require('../../EVENTS')
+// var evs = require('../../EVENTS')
 // var Client = require('../../client')
 // var FollowIcon = require('../follow-btn')
 // var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
     console.log('home props', props)
-    // const { emit, me, client, pin } = props
     const { me, pin } = props
     const { isAdmin } = me
 
@@ -21,7 +20,12 @@ function Home (props) {
                         <span>Pin a new post here</span>
                     </a>
 
-                    <p>${pin}</p>
+                    ${pin ?
+                        html`<div dangerouslySetInnerHTML=${{
+                            __html: marked(pin)
+                        }}></div>` :
+                        null
+                    }
                 </div>
             `:
             null

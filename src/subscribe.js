@@ -12,9 +12,13 @@ function subscribe (bus, state) {
         console.log('***star***', ev)
     })
 
-    bus.on(evs.pin.got, ev => {
-        console.log('*pin in subscribe*', ev)
-        state.pin.set(ev)
+    // bus.on(evs.pin.got, ev => {
+    //     console.log('*pin in subscribe*', ev)
+    //     state.pin.set(ev)
+    // })
+
+    bus.on(evs.pin.post, ev => {
+        state.pin.set(ev.value.content.text)
     })
 
     bus.on(evs.pin.error, err => {
