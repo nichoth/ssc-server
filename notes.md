@@ -1,5 +1,64 @@
 # the log
 
+## 5-13-2022
+
+*linking profiles*
+
+
+
+
+I send a request to server1, that says "I'm requesting to link IDs. This is my DID"
+
+On server1 I am logged in, and I click "link an ID"
+
+On server1 I must enter the DID from server2, to do a search for it amongst the
+pending link requests
+  * it would be nice to have a search/autocomplete situation here
+
+Once I enter the DID from server2, then the DID on server1 will create a UCAN
+that says, "I am the same as person2"
+
+The pending request from server2 could be a signed UCAN stating, "person2 is the same as person1"
+
+So to link, each server needs a UCAN from each party. 
+Each server needs to have *both UCANs* for it to view the link as valid.
+
+
+UCAN from person1 to person2 alleging identity
+
+UCAN from person2 to person1 alleging identity
+
+
+
+
+----------------------------------------------------------------
+
+
+What happens if I *only* link from server2???
+
+Write a message to the DB on server2 that says, "I am the same as person1"???
+
+
+
+
+
+
+
+from alice2's perspective
+
+We can host an endpoint, like `/link-id` or something on alice2's primary server. Requests to that endpoint should have a UCAN from alice to alice2. 
+
+Once we get that request, with a UCAN linking alice -> alice2, then we record the UCAN in our DB, and import the profile info.
+
+
+this makes me think of an ID server. A network just for DIDs and UCANs
+
+
+
+
+------------------------------------------------------------
+
+
 ## 5-10-2022
 
 **Playwright always starts the tests with a new DID**

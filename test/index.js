@@ -113,6 +113,37 @@ test('try to pin something with an invalid DID', t => {
         })
 })
 
+test('try to pin something with an invalid signature', t => {
+    ssc.createMsg(keys, null, {
+        type: 'pin',
+        text: 'wooo'
+    })
+        .then(msg => {
+            msg.signature = '123'
+
+            fetch(base + '/.netlify/functions/pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(msg)
+            })
+                .then(res => {
+                    if (res.ok) {
+                        t.fail('should return an error code')
+                        t.end()
+                        return
+                    }
+
+                    t.equal(res.status, 400, 'should return a 400 code')
+                    res.text().then(text => {
+                        t.equal(text, 'invalid message')
+                        t.end()
+                    })
+                })
+        })
+})
+
+
+
 test('get pinned messages', t => {
     fetch(base + '/.netlify/functions/pin')
         .then(res => {
