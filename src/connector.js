@@ -23,10 +23,15 @@ function Connector ({ emit, state, setRoute, client }) {
         console.log('not match')
         return null
     }
-    var { params } = match
-    var route = match ? match.action(match) : null
-    var routeView = route ? route.view : null
-    var subView = route ? route.subView : null
+    const { params } = match
+    const route = match ? match.action(match) : null
+    const routeView = route ? route.view : null
+    const getContent = route.getContent
+    const subView = route ? route.subView : null
+
+    if (getContent) {
+        getContent(state, client)
+    }
 
     // don't show the `shell` component in this case
     if (match.route === '/hello' || match.route === '/invitation') {

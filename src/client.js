@@ -66,11 +66,26 @@ module.exports = function Client (keystore) {
                         body: JSON.stringify(msg)
                     })
                 })
+                .then(res => {
+                    if (!res.ok) res.text().then(text => {
+                        throw new Error(text)
+                    })
+
+                    return res.json()
+                })
+                .then(json => json.data)
 
         },
 
         getPin: function () {
             return fetch(BASE + '/api/pin')
+                .then(res => {
+                    if (!res.ok) res.text().then(text => {
+                        throw new Error(text)
+                    })
+
+                    return res.json()
+                })
         }
     }
 

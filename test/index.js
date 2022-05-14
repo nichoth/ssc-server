@@ -14,7 +14,6 @@ const { admins } = require('../src/config.json')
 var ntl
 var keys
 
-var ntl
 test('setup', function (t) {
     setup(t.test, (netlify) => {
         ntl = netlify
@@ -98,8 +97,8 @@ test('try to pin something with an invalid DID', t => {
         })
         .then(res => {
             if (res.ok) {
-                t.fail('ok response')
-                t.end()
+                t.fail('should not have ok response')
+                return t.end()
             }
 
             res.text().then(text => {
@@ -109,8 +108,7 @@ test('try to pin something with an invalid DID', t => {
             })
         })
         .catch(err => {
-            console.log('errrrrrrrrrrrrrrrrrrrr in here', err)
-            t.fail()
+            t.fail(err.toString())
             t.end()
         })
 })

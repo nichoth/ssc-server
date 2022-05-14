@@ -19,7 +19,7 @@ function Router () {
     var router = _router()
 
     router.addRoute('/', () => {
-        return { view: Home }
+        return { view: Home, getContent: newPinContent }
     })
 
     router.addRoute('/hello', () => {
@@ -33,14 +33,21 @@ function Router () {
     // })
 
     router.addRoute('/whoami', match => {
-        return {
-            view: Whoami
-        }
+        return { view: Whoami }
     })
 
     router.addRoute('/new-pin', match => {
-        return { view: NewPin }
+        return { view: NewPin, getContent: newPinContent }
     })
+
+    function newPinContent (state, client) {
+        if (!state.pin()) {
+            client.getPin().then(pin => {
+                console.log('got pin in router', pin)
+                state.pin.set(pin.value.content.text)
+            })
+        }
+    }
 
     // // router.addRoute('/whoami/:subroute', match => {
     // //     var { params } = match

@@ -36,13 +36,13 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
         state.route.set(path)
     })
 
-    // need to call to get username & profile in here
+    // need to call to get profile in here
     // don't show anything before your username has returned
 
     ssc.getDidFromKeys(keystore).then(did => {
         state.me.did.set(did)
 
-        if(process.env.NODE_ENV === 'test') {
+        if (process.env.NODE_ENV === 'test') {
             console.log('**did**', did)
         }
 

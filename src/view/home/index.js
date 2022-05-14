@@ -8,25 +8,9 @@ var evs = require('../../EVENTS')
 
 function Home (props) {
     console.log('home props', props)
-    const { emit, me, client, pin } = props
+    // const { emit, me, client, pin } = props
+    const { me, pin } = props
     const { isAdmin } = me
-
-    useEffect(() => {
-        if (pin) return
-
-        client.getPin().then(res => {
-            if (!res.ok) {
-                return res.text().then(text => {
-                    console.log('not ok', text)
-                    emit(evs.pin.error, text)
-                })
-            }
-
-            res.json().then(json => {
-                emit(evs.pin.got, json)
-            })
-        })
-    }, [])
 
     return html`<div class="route home">
         ${isAdmin ?
@@ -37,10 +21,7 @@ function Home (props) {
                         <span>Pin a new post here</span>
                     </a>
 
-                    ${pin ?
-                        html`<p>${pin.value.content.text}</p>` : 
-                        null
-                    }
+                    <p>${pin}</p>
                 </div>
             `:
             null

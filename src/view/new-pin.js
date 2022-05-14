@@ -1,30 +1,29 @@
 import { html } from 'htm/preact'
-import { useState, useEffect } from 'preact/hooks';
-const ssc = require('@nichoth/ssc/web')
-var { Button } = require('@nichoth/forms/preact')
+import { useState } from 'preact/hooks';
+// const ssc = require('@nichoth/ssc/web')
+const { Button } = require('@nichoth/forms/preact')
+const evs = require('../EVENTS')
 
 // ssc.createMsg (keyStore, prevMsg, content)
 
 // this will replace a single pinned message
 
 function NewPin (props) {
-    const { me, client } = props
+    const { client, emit, pin } = props
     console.log('*props*', props)
 
     const [isResolving, setResolving] = useState(false)
 
-    useEffect(function didMount () {
-        // in here, get the existing pinned post if we don't have it already
-    }, [])
-
     function savePin (ev) {
         ev.preventDefault()
         const text = ev.target.elements['new-pin'].value
-        console.log('save pin', text)
+        if (text === pin) return console.log('same')
         setResolving(true)
-        client.postPin('this is a **test message**').then(res => {
+
+        client.postPin(text).then(res => {
             setResolving(false)
             console.log('*pin response*', res)
+            emit(evs.pin.post, res)
         }).catch(err => {
             setResolving(false)
             console.log('errrrr new pin', err)
@@ -39,10 +38,12 @@ function NewPin (props) {
             homepage of this server.
         </p>
 
+        <p>Whatever you save here will <em>replace</em> any existing message.</p>
+
         <form onsubmit=${savePin}>
             <textarea required=${true} id="new-pin" name="new-pin"
                 autofocus=${true}
-            ></textarea>
+            >${props.pin}</textarea>
 
             <div class="form-controls">
                 <${Button} type="submit" isSpinning=${isResolving}>
