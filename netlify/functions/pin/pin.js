@@ -6,6 +6,9 @@ var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 
+// we just allow posting text here
+// @TODO -- should allow posting image
+
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         // query the DB and return pins

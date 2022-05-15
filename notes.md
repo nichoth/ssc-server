@@ -7,12 +7,13 @@
 
 
 
-I send a request to server1, that says "I'm requesting to link IDs. This is my DID"
+I send a request to server1 from serber2, that says "I'm requesting to link IDs. This is my DID"
 
 On server1 I am logged in, and I click "link an ID"
 
-On server1 I must enter the DID from server2, to do a search for it amongst the
-pending link requests
+(create record -- `{ status: pending, did: DID2 }`)
+
+On server1 I must enter the DID from server2, to be able to get it by DID a for it amongst the pending link requests
   * it would be nice to have a search/autocomplete situation here
 
 Once I enter the DID from server2, then the DID on server1 will create a UCAN
