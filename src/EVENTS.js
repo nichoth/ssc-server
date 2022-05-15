@@ -9,7 +9,7 @@ var evs = namespace({
     following: ['got', 'start', 'stop', 'err'],
     // profile: ['got'],
     // identity: ['setName', 'setAvatar', 'gotAvatar']
-    identity: ['setUsername', 'setAvatar', 'setProfile']
+    identity: ['setUsername', 'setAvatar', 'setProfile', 'setDesc']
 })
 
 module.exports = evs

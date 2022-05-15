@@ -21,11 +21,11 @@ module.exports = function Client (keystore) {
         // must pass a username
         // image is optional (should use existing image if there is not a new one)
         // imgHash should be the existing profile image hash
-        postProfile: function (did, username, imgHash, image) {
+        postProfile: function ({ did, username, imgHash, image, desc }) {
             if (!username) return Promise.reject(
                 new Error('must include username'))
 
-            if (!imgHash && !image) return new Promise.reject(
+            if (!imgHash && !image) return Promise.reject(
                 new Error('must include an image or a hash for an existing image')
             )
 
@@ -43,6 +43,7 @@ module.exports = function Client (keystore) {
                 type: 'about',
                 about: did,
                 username,
+                desc: desc || null,
                 image: hash
             }).then(msg => {
                 return fetch(BASE + '/api/profile', {

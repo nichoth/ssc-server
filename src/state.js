@@ -17,7 +17,8 @@ function State (keystore, { admins }) {
                 err: observ(null),
                 hasFetched: observ(false),
                 username: observ(null),
-                image: observ(null)
+                image: observ(null),
+                desc: observ(null)
             })
         })
     })

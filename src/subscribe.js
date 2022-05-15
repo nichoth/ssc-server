@@ -36,6 +36,10 @@ function subscribe (bus, state) {
         console.log('*set username in subscribe*', username)
     })
 
+    bus.on(evs.identity.setDesc, ev => {
+        state.me.profile.desc.set(ev.content.desc)
+    })
+
     bus.on(evs.identity.setProfile, ev => {
         const { username, image } = ev
         state.me.profile.username.set(username)

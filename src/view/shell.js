@@ -42,7 +42,6 @@ function Shell (props) {
         })
     }
 
-
     function selectImg (ev) {
         ev.preventDefault()
         console.log('on image select', ev)
@@ -60,7 +59,13 @@ function Shell (props) {
 
             setResolving(true)
             // (did, username, imgHash, image)
-            client.postProfile(me.did, username, null, image)
+            client.postProfile({
+                did: me.did,
+                username,
+                imgHash: null,
+                image,
+                desc: profile.description
+            })
                 .then(res => {
                     setResolving(false)
                     const id = res.db.data.value.content.image

@@ -83,7 +83,12 @@ function Hello (props) {
         const existingHash = image ? null : profile.image
 
         // (did, username, existingImageHash, newImage)
-        client.postProfile(me.did, username, existingHash, image)
+        client.postProfile({
+            did: me.did,
+            username,
+            imgHash: existingHash,
+            image
+        })
             .then(res => {
                 setProfileResolving(false)
                 console.log('*json*', res)
@@ -102,10 +107,10 @@ function Hello (props) {
         
     }
 
-    const adminNeedsProfile = !!(isAdmin && profile.hasFetched && profile.err)
+    // const adminNeedsProfile = !!(isAdmin && profile.hasFetched && profile.err)
 
-    console.log('*is admin*', isAdmin)
-    console.log('*admin needs profile*', adminNeedsProfile)
+    // console.log('*is admin*', isAdmin)
+    // console.log('*admin needs profile*', adminNeedsProfile)
 
     const avatarUrl = (pendingProfile && pendingProfile.image) ?
         pendingProfile.image :
