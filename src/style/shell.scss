@@ -47,6 +47,10 @@
     }
 
     li.name {
+        &.resolving {
+            opacity: 0.4;
+        }
+
         .name-editor.resolving {
             // TODO -- change this so the style makes more sense
             border-bottom: 4px solid gray;

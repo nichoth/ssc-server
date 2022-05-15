@@ -1,4 +1,5 @@
 import { html } from 'htm/preact'
+import { useState } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 var ssc = require('@nichoth/ssc/web')
@@ -17,6 +18,7 @@ function Shell (props) {
     const { route, me, client, emit } = props
     const path = route
     const { profile } = me
+    const [ isResolving, setResolving ] = useState(false)
 
     // @TODO
     // make a save name function
@@ -56,18 +58,22 @@ function Shell (props) {
             const username = me.profile.username
             const image = reader.result
 
+            setResolving(true)
+            // (did, username, imgHash, image)
             client.postProfile(me.did, username, null, image)
                 .then(res => {
-                    console.log('ressssssssssssssssss', res)
-                    console.log('img.id', res.image.public_id)
-
+                    setResolving(false)
                     const id = res.db.data.value.content.image
+                    console.log('ressssssssssssssssss', res)
+                    console.log('*id*', id)
+
                     emit(evs.identity.setAvatar, { image: {
                         id,
                         url: res.image.url
                     } })
                 })
                 .catch(err => {
+                    setResolving(false)
                     console.log('errrrrrrrrrrr', err)
                 })
         }
@@ -89,7 +95,7 @@ function Shell (props) {
     
     return html`<div class="shell">
         <ul class="nav-part">
-            <li class="name">
+            <li class="name${isResolving ? ' resolving' : ''}">
                 <${EditableImg} url=${avatarUrl} name="image"
                     title="set your avatar"
                     onSelect=${selectImg}
