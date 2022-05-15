@@ -14,6 +14,7 @@ const cld = new Cloudinary({
 function Whoami (props) {
     const { me, client, emit } = props
     const [copied, setCopied] = useState(false)
+    const desc = me.profile.desc
 
     function copyDid (ev) {
         ev.preventDefault()
@@ -25,10 +26,6 @@ function Whoami (props) {
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
 
     function saveDesc (desc) {
-        console.log('*save desc*', desc)
-
-        console.log('img', me.profile.image)
-
         // postProfile: function (did, username, imgHash, image, desc) {
         client.postProfile({
             did: me.did,
@@ -38,8 +35,6 @@ function Whoami (props) {
             desc
         })
             .then(res => {
-                console.log('resssssssssssssssssss', res)
-                console.log('description', res.db.data.value.content.desc)
                 emit(evs.identity.setDesc, res.db.data.value)
 
             })
@@ -71,6 +66,7 @@ function Whoami (props) {
                 <dd>
                     <${EditableTextarea} value=${me.profile.description}
                         onSave=${saveDesc}
+                        value=${desc}
                         name="description"
                     />
                 </dd>

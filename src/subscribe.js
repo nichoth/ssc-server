@@ -41,9 +41,10 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.identity.setProfile, ev => {
-        const { username, image } = ev
+        const { username, image, desc } = ev
         state.me.profile.username.set(username)
         state.me.profile.image.set(image)
+        state.me.profile.desc.set(desc)
     })
 }
 
