@@ -2,7 +2,7 @@
 require('isomorphic-fetch')
 var ssc = require('@nichoth/ssc/web')
 var createHash = require('create-hash')
-var Blake2s = require('blake2s')
+// var Blake2s = require('blake2s')
 
 var baseUrl = 'http://localhost:8888'
 var BASE = (process.env.NODE_ENV === 'test' ? baseUrl : '')
@@ -32,11 +32,11 @@ module.exports = function Client (keystore) {
             // if we are passed an image, set _hash to the right hash
             var hash = imgHash
             if (image) {
-                let _hash = new Blake2s()
-                // let _hash = createHash('sha256')
+                // let _hash = new Blake2s()
+                let _hash = createHash('sha256')
                 _hash.update(image)
-                // hash = _hash.digest('base64')
-                hash = _hash.digest()
+                hash = _hash.digest('base64')
+                // hash = _hash.digest()
             }
 
             return ssc.createMsg(keystore, null, {
@@ -54,6 +54,7 @@ module.exports = function Client (keystore) {
                         file: image
                     })
                 })
+                    .then(res => res.json())
             })
         },
 

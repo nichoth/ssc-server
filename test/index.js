@@ -41,14 +41,8 @@ test('setup', function (t) {
     })
 })
 
-
 test('pin', t => {
     require('./pin')(t.test, keys)
-})
-
-test('all done', function (t) {
-    ntl.kill()
-    t.end()
 })
 
 test('all done', function (t) {

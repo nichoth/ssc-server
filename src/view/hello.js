@@ -86,21 +86,14 @@ function Hello (props) {
         client.postProfile(me.did, username, existingHash, image)
             .then(res => {
                 setProfileResolving(false)
-                if (!res.ok) {
-                    return res.text().then(text => {
-                        console.log('*rrrrrror*', text)
-                    })
-                }
+                console.log('*json*', res)
 
-                res.json().then(json => {
-                    console.log('*json*', json)
-                    const id = json.db.data.value.content.image
-                    emit(evs.identity.setUsername, { username: json.username })
-                    emit(evs.identity.setAvatar, { image: {
-                        id,
-                        url: json.image.url
-                    } })
-                }) 
+                const id = res.db.data.value.content.image
+                emit(evs.identity.setUsername, { username: res.username })
+                emit(evs.identity.setAvatar, { image: {
+                    id,
+                    url: res.image.url
+                } })
             })
             .catch(err => {
                 console.log('errrrrrrrrrrrr', err)

@@ -1,7 +1,6 @@
 require('dotenv').config()
 require('isomorphic-fetch')
 const base = 'http://localhost:8888'
-// const test = require('tape')
 const ssc = require('@nichoth/ssc-lambda')
 
 module.exports = function pin (test, keys) {

@@ -4,6 +4,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 var ssc = require('@nichoth/ssc/web')
 const EditableImg = require('./components/editable-img')
 const EditableField = require('./components/editable-field')
+const evs = require('../EVENTS')
 
 const cld = new Cloudinary({
     cloud: { cloudName: process.env.CLOUDINARY_CLOUD_NAME },
@@ -13,7 +14,7 @@ const cld = new Cloudinary({
 })
 
 function Shell (props) {
-    const { route, me } = props
+    const { route, me, client, emit } = props
     const path = route
     const { profile } = me
 
@@ -50,10 +51,25 @@ function Shell (props) {
 
         reader.onloadend = () => {
             console.log('*done reading file*')
-            setPendingProfile({
-                image: reader.result,
-                username: (pendingProfile && pendingProfile.username) || null
-            })
+            // in here, want to upload the image
+
+            const username = me.profile.username
+            const image = reader.result
+
+            client.postProfile(me.did, username, null, image)
+                .then(res => {
+                    console.log('ressssssssssssssssss', res)
+                    console.log('img.id', res.image.public_id)
+
+                    const id = res.db.data.value.content.image
+                    emit(evs.identity.setAvatar, { image: {
+                        id,
+                        url: res.image.url
+                    } })
+                })
+                .catch(err => {
+                    console.log('errrrrrrrrrrr', err)
+                })
         }
 
         // this gives us base64
