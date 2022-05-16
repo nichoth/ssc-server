@@ -26,8 +26,6 @@ function Whoami (props) {
     const [resolving, setResolving] = useState(false)
     const [pendingProfile, setPendingProfile] = useState(null)
 
-    console.log('*state*', pendingProfile)
-
     function copyDid (ev) {
         ev.preventDefault()
         navigator.clipboard.writeText(me.did)
@@ -75,7 +73,6 @@ function Whoami (props) {
         const reader = new FileReader()
 
         reader.onloadend = () => {
-            console.log('*done reading file*', reader.result)
             setPendingProfile({
                 image: reader.result,
                 username: (pendingProfile && pendingProfile.username) || null
@@ -92,6 +89,8 @@ function Whoami (props) {
             username: ev.target.value
         })
     }
+
+    const placeholderSvg = 'data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <circle cx="50" cy="50" r="50"/> </svg>'
 
     const dids = (JSON.parse(ls.getItem('dids')) || [])
 
@@ -151,22 +150,28 @@ function Whoami (props) {
         <p>Create and use a new identity.
         This will create a separate ID from any others you may have used.</p>
 
-        <form onSubmit=${newId}>
+
+        <form class="new-id" onSubmit=${newId}>
             <${TextInput} name="Username" displayName="Username"
                 required=${true}
                 onInput=${handleInput}
             />
 
-            <${EditableImg} url=${pendingProfile && pendingProfile.image}
+            <img src=/>
+
+
+            <${EditableImg}
+                url=${(pendingProfile && pendingProfile.image) || placeholderSvg}
                 name="new-avatar-image"
                 title="set your avatar"
                 onSelect=${selectNewAvatar}
-                label="Your avatar image"
+                label="New avatar image"
             />
 
             <div class="form-controls">
                 <${Button} disabled=${!(pendingProfile &&
-                    pendingProfile.username && pendingProfile.image)}
+                    (pendingProfile.username || '').trim() &&
+                    pendingProfile.image)}
                     type="submit"
                 >
                     Create a new ID

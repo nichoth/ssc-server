@@ -1,6 +1,12 @@
 .route.whoami {
     margin: 1vw;
 
+    form.new-id {
+        border: 1px solid;
+        padding: 1rem;
+        background-color: #ffffff61
+    }
+
     #profile-description {
         width: 50vw;
         min-width: 10rem;
