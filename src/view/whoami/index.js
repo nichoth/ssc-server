@@ -211,8 +211,6 @@ function Whoami (props) {
                 onInput=${handleInput}
             />
 
-            <img src=/>
-
             <${EditableImg}
                 url=${(pendingProfile && pendingProfile.image) || placeholderSvg}
                 name="new-avatar-image"
