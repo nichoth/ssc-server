@@ -1,8 +1,12 @@
 var evs = require('./EVENTS')
 
 function subscribe (bus, state) {
-    bus.on('*', ev => {
-        console.log('***star***', ev)
+    bus.on('*', (name, ev) => {
+        console.log('***star***', name, ev)
+    })
+
+    bus.on(evs.identity.newId, ev => {
+        state.dids.set(ev)
     })
 
     bus.on(evs.pin.post, ev => {

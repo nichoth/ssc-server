@@ -1,15 +1,15 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { Cloudinary } from '@cloudinary/url-gen';
+const ssc = require('@nichoth/ssc/web')
 const EditableTextarea = require('../components/editable-textarea')
 const EditableImg = require('../components/editable-img')
 const evs = require('../../EVENTS')
 const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
 const { TextInput, Button } = require('@nichoth/forms/preact')
+const { LS_NAME } = require('../../constants')
 
 const ls = window.localStorage
-// localStorage.colorSetting = '#a4509b';
-
 
 const cld = new Cloudinary({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -37,7 +37,7 @@ function Whoami (props) {
 
     function saveDesc (desc) {
         // postProfile: function (did, username, imgHash, image, desc) {
-        client.postProfile({
+        return client.postProfile({
             did: me.did,
             username: me.profile.username,
             imgHash: me.profile.image,
@@ -52,16 +52,70 @@ function Whoami (props) {
                 console.log('errrrrrrrrrrrrrrrrrr', err)
             })
 
-        return new Promise ((resolve, reject) => {
-            setTimeout(() => resolve('woooo'), 1000)
-        })
+        // return new Promise ((resolve, reject) => {
+        //     setTimeout(() => resolve('woooo'), 1000)
+        // })
     }
 
-    function newId (ev) {
+    function createNewId (ev) {
         ev.preventDefault()
-        const els = ev.target.elements
-        const { username } = els
-        console.log('create new ID', username)
+        const { image, username } = pendingProfile
+        console.log('***create new id**', pendingProfile)
+        // in here,
+        //   * create a new keystore
+        //   * save the DID and profile to the server
+        //   * save the username to localStorage
+        // the username must also be the name of the new keystore
+        setResolving(true)
+        
+        ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
+            .then(keystore => {
+                console.log('kssssssssssss', keystore)
+                return ssc.getDidFromKeys(keystore)
+            })
+            .then(did => {
+                console.log('**did***', did)
+
+                const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
+                dids[username] = { username, did }
+                ls.setItem(LS_NAME, JSON.stringify(dids))
+                const event = {}
+                event[username] = { username, did }
+                emit(evs.identity.newId, event)
+
+                // postProfile: function ({ did, username, imgHash, image, desc }) {
+
+                // return client.postProfile({
+                //     did,
+                //     username,
+                //     imgHash: null,
+                //     image
+                // })
+            })
+            // .then(res => {
+            //     console.log('***created a new ID***', res)
+            // })
+
+            // .then(keystore => {
+            //     return ssc.getDidFromKeys(keystore).then(did => {
+            //         console.log('***did', did)
+            //     })
+            // })
+
+        // client.postProfile({
+
+        //     // XXX change this XXX
+        //     did: me.did,
+
+        //     username,
+        //     imgHash: null,
+        //     image
+        // }).then(res => {
+        //     console.log('created a new ID', res)
+        // })
+        // .catch(err => {
+        //     console.log('errrrrrrrrrrrrr', err)
+        // })
     }
 
     function selectNewAvatar (ev) {
@@ -91,8 +145,7 @@ function Whoami (props) {
     }
 
     const placeholderSvg = 'data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <circle cx="50" cy="50" r="50"/> </svg>'
-
-    const dids = (JSON.parse(ls.getItem('dids')) || [])
+    const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
 
     return html`<div class="route whoami">
         <h1>who am i?</h1>
@@ -134,10 +187,10 @@ function Whoami (props) {
 
         <h2>Other DIDs</h2>
         <ul>
-            ${dids.length ?
-                    dids.map(did => {
+            ${Object.keys(dids).length ?
+                    Object.keys(dids).map(key => {
                         return html`
-                            <li>${did}</li>
+                            <li>${dids[key].username}</li>
                         `
                     }) :
                     html`<em>none</em>`
@@ -147,18 +200,18 @@ function Whoami (props) {
         <hr />
 
         <h2>Create a new ID</h2>
-        <p>Create and use a new identity.
-        This will create a separate ID from any others you may have used.</p>
+        <p>
+            Create and use a new identity.
+            This will create a separate ID from any others you may have used.
+        </p>
 
-
-        <form class="new-id" onSubmit=${newId}>
+        <form class="new-id" onSubmit=${createNewId}>
             <${TextInput} name="Username" displayName="Username"
                 required=${true}
                 onInput=${handleInput}
             />
 
             <img src=/>
-
 
             <${EditableImg}
                 url=${(pendingProfile && pendingProfile.image) || placeholderSvg}
@@ -172,6 +225,7 @@ function Whoami (props) {
                 <${Button} disabled=${!(pendingProfile &&
                     (pendingProfile.username || '').trim() &&
                     pendingProfile.image)}
+                    isSpinning=${resolving}
                     type="submit"
                 >
                     Create a new ID
@@ -180,9 +234,5 @@ function Whoami (props) {
         </form>
     </div>`
 }
-
-            // <label for="username">Username</label>
-            // <input type="text" required=${true} id="username" name="username" />
-                // <button type="submit" class="new-id">Create new ID</button>
 
 module.exports = Whoami

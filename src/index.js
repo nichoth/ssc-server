@@ -11,13 +11,16 @@ var { appName, admins, CLOUDINARY_CLOUD_NAME } = config
 appName = appName || 'ssc-demo'
 const Client = require('./client')
 const evs = require('./EVENTS')
+const { LS_NAME } = require('./constants')
 
 console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
-    var state = State(keystore, { admins })
+    const dids = JSON.parse(localStorage.getItem(LS_NAME))
+    // dids is a map of { username: {did object} }
+    const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
     subscribe(bus, state)
     const client = Client(keystore)
@@ -43,7 +46,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
         state.me.did.set(did)
 
         if (process.env.NODE_ENV === 'test') {
-            console.log('**did**', did)
+            console.log('**my did**', did)
         }
 
         client.getProfile(did).then(res => {

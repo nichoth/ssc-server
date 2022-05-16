@@ -9,6 +9,7 @@ function State (keystore, { admins, dids }) {
         route: observ(getRoute()),
         admins: observ(admins),
         pin: observ(null),
+        dids: observ(dids),
         me: struct({
             did: observ(null),
             isAdmin: observ(false),
