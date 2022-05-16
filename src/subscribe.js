@@ -5,7 +5,7 @@ function subscribe (bus, state) {
         console.log('***star***', name, ev)
     })
 
-    bus.on(evs.identity.newId, ev => {
+    bus.on(evs.identity.newDid, ev => {
         state.dids.set(ev)
     })
 

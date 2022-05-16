@@ -57,7 +57,7 @@ function Whoami (props) {
         // })
     }
 
-    function createNewId (ev) {
+    function createNewDid (ev) {
         ev.preventDefault()
         const { image, username } = pendingProfile
         console.log('***create new id**', pendingProfile)
@@ -81,7 +81,7 @@ function Whoami (props) {
                 ls.setItem(LS_NAME, JSON.stringify(dids))
                 const event = {}
                 event[username] = { username, did }
-                emit(evs.identity.newId, event)
+                emit(evs.identity.newDid, event)
 
                 // postProfile: function ({ did, username, imgHash, image, desc }) {
 
@@ -205,7 +205,7 @@ function Whoami (props) {
             This will create a separate ID from any others you may have used.
         </p>
 
-        <form class="new-id" onSubmit=${createNewId}>
+        <form class="new-id" onSubmit=${createNewDid}>
             <${TextInput} name="Username" displayName="Username"
                 required=${true}
                 onInput=${handleInput}
