@@ -1,21 +1,9 @@
 var evs = require('./EVENTS')
-// var Keys = require('./keys')
-// var xtend = require('xtend')
-// const sscKeys = require('./keys')
-// var client = require('./client')()
-// var { getPostsWithFoafs } = client
-// const ssc = require('@nichoth/ssc/web')
-// const sha256 = require('simple-sha256')
 
 function subscribe (bus, state) {
     bus.on('*', ev => {
         console.log('***star***', ev)
     })
-
-    // bus.on(evs.pin.got, ev => {
-    //     console.log('*pin in subscribe*', ev)
-    //     state.pin.set(ev)
-    // })
 
     bus.on(evs.pin.post, ev => {
         state.pin.set(ev.value.content.text)
@@ -45,6 +33,13 @@ function subscribe (bus, state) {
         state.me.profile.username.set(username)
         state.me.profile.image.set(image)
         state.me.profile.desc.set(desc)
+    })
+
+    bus.on(evs.identity.setId, ev => {
+        console.log('set id', ev)
+        // ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName })
+        //     .then(keystore => {
+        //     })
     })
 }
 

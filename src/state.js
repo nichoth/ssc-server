@@ -3,7 +3,7 @@ const observ = require('observ')
 const struct = require('observ-struct')
 const { getRoute } = require('route-event')
 
-function State (keystore, { admins }) {
+function State (keystore, { admins, dids }) {
 
     const state = struct({
         route: observ(getRoute()),

@@ -7,14 +7,14 @@ var subscribe = require('./subscribe')
 var State = require('./state')
 const Connector = require('./connector')
 const config = require('./config.json')
-var { appName, admins } = config
+var { appName, admins, CLOUDINARY_CLOUD_NAME } = config
 appName = appName || 'ssc-demo'
 const Client = require('./client')
 const evs = require('./EVENTS')
 
 console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
-console.log('*CLOUDINARY NAME*', process.env.CLOUDINARY_CLOUD_NAME)
+console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
     var state = State(keystore, { admins })

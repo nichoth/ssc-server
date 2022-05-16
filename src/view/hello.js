@@ -5,9 +5,11 @@ const { TextInput, Button } = require('@nichoth/forms/preact')
 const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
+const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
+
 const cld = new Cloudinary({
     // @TODO -- use an env var or something for the cloudname
-    cloud: { cloudName: process.env.CLOUDINARY_CLOUD_NAME },
+    cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
     url: {
       secure: true // force https, set to false to force http
     }

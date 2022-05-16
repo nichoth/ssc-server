@@ -6,9 +6,12 @@ var ssc = require('@nichoth/ssc/web')
 const EditableImg = require('./components/editable-img')
 const EditableField = require('./components/editable-field')
 const evs = require('../EVENTS')
+const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 
 const cld = new Cloudinary({
-    cloud: { cloudName: process.env.CLOUDINARY_CLOUD_NAME },
+    cloud: {
+        cloudName: CLOUDINARY_CLOUD_NAME
+    },
     url: {
       secure: true // force https, set to false to force http
     }
