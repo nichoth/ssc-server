@@ -12,3 +12,43 @@
         }
     }
 }
+
+.avatar-label {
+    vertical-align: middle;
+    display: inline-block;
+    // height: 4rem;
+    // width: 4rem;
+    margin-right: 1rem;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    img {
+        height: 4rem;
+        width: 4rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+span.label-text {
+    margin-left: 1rem;
+}
+
+.avatar-input {
+    display: none;
+}
+
+.edit-pencil {
+    position: relative;
+    top: 6px;
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+    color: blue;
+
+    &:hover {
+        color: cyan;
+    }
+}

@@ -10,42 +10,6 @@
         margin-right: 0.2rem;
     }
 
-    .my-avatar {
-        vertical-align: middle;
-        display: inline-block;
-        height: 4rem;
-        width: 4rem;
-        margin-right: 1rem;
-        padding: 0;
-        background: none;
-        border: none;
-        cursor: pointer;
-
-        img {
-            height: 100%;
-            width: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-    }
-
-    #avatar-input {
-        display: none;
-    }
-
-    .edit-pencil {
-        position: relative;
-        top: 6px;
-        background-color: transparent;
-        border: none;
-        font-size: 2rem;
-        color: blue;
-
-        &:hover {
-            color: cyan;
-        }
-    }
-
     li.name {
         &.resolving {
             opacity: 0.4;
@@ -56,7 +20,6 @@
             border-bottom: 4px solid gray;
         }
     }
-
 }
 
 .nav-part {

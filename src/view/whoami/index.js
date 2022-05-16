@@ -2,6 +2,7 @@ import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { Cloudinary } from '@cloudinary/url-gen';
 const EditableTextarea = require('../components/editable-textarea')
+const EditableImg = require('../components/editable-img')
 const evs = require('../../EVENTS')
 const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
 const { TextInput, Button } = require('@nichoth/forms/preact')
@@ -24,6 +25,8 @@ function Whoami (props) {
 
     const [resolving, setResolving] = useState(false)
     const [pendingProfile, setPendingProfile] = useState(null)
+
+    console.log('*state*', pendingProfile)
 
     function copyDid (ev) {
         ev.preventDefault()
@@ -61,6 +64,33 @@ function Whoami (props) {
         const els = ev.target.elements
         const { username } = els
         console.log('create new ID', username)
+    }
+
+    function selectNewAvatar (ev) {
+        ev.preventDefault()
+        // console.log('on image select', ev)
+        var file = ev.target.files[0]
+        console.log('*file*', file)
+
+        const reader = new FileReader()
+
+        reader.onloadend = () => {
+            console.log('*done reading file*', reader.result)
+            setPendingProfile({
+                image: reader.result,
+                username: (pendingProfile && pendingProfile.username) || null
+            })
+        }
+
+        // this gives us base64
+        reader.readAsDataURL(file)
+    }
+
+    function handleInput (ev) {
+        setPendingProfile({
+            image: (pendingProfile && pendingProfile.image) || null,
+            username: ev.target.value
+        })
     }
 
     const dids = (JSON.parse(ls.getItem('dids')) || [])
@@ -119,14 +149,28 @@ function Whoami (props) {
 
         <h2>Create a new ID</h2>
         <p>Create and use a new identity.
-        This is a separate ID from any others you may have used.</p>
+        This will create a separate ID from any others you may have used.</p>
 
         <form onSubmit=${newId}>
             <${TextInput} name="Username" displayName="Username"
                 required=${true}
+                onInput=${handleInput}
             />
+
+            <${EditableImg} url=${pendingProfile && pendingProfile.image}
+                name="new-avatar-image"
+                title="set your avatar"
+                onSelect=${selectNewAvatar}
+                label="Your avatar image"
+            />
+
             <div class="form-controls">
-                <${Button}>Create a new ID<//>
+                <${Button} disabled=${!(pendingProfile &&
+                    pendingProfile.username && pendingProfile.image)}
+                    type="submit"
+                >
+                    Create a new ID
+                <//>
             </div>
         </form>
     </div>`
