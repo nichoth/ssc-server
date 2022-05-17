@@ -61,61 +61,41 @@ function Whoami (props) {
         ev.preventDefault()
         const { image, username } = pendingProfile
         console.log('***create new id**', pendingProfile)
+
         // in here,
         //   * create a new keystore
         //   * save the DID and profile to the server
         //   * save the username to localStorage
         // the username must also be the name of the new keystore
+
         setResolving(true)
         
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
                 console.log('kssssssssssss', keystore)
-                return ssc.getDidFromKeys(keystore)
+
+                return ssc.getDidFromKeys(keystore).then(did => {
+                    console.log('**did***', did)
+
+                    const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
+                    dids[username] = { username, did }
+                    ls.setItem(LS_NAME, JSON.stringify(dids))
+                    const event = {}
+                    event[username] = { username, did, keystore }
+                    console.log('then post to the server and emit this event',
+                        event)
+
+                    return client.createNewProfile({
+                        newKeystore: keystore,
+                        username,
+                        image
+                    }).then(res => {
+                        console.log('posted a new ID', res)
+                        emit(evs.identity.newDid, event)
+                        setPendingProfile(null)
+                    })
+                })
             })
-            .then(did => {
-                console.log('**did***', did)
-
-                const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
-                dids[username] = { username, did }
-                ls.setItem(LS_NAME, JSON.stringify(dids))
-                const event = {}
-                event[username] = { username, did }
-                emit(evs.identity.newDid, event)
-
-                // postProfile: function ({ did, username, imgHash, image, desc }) {
-
-                // return client.postProfile({
-                //     did,
-                //     username,
-                //     imgHash: null,
-                //     image
-                // })
-            })
-            // .then(res => {
-            //     console.log('***created a new ID***', res)
-            // })
-
-            // .then(keystore => {
-            //     return ssc.getDidFromKeys(keystore).then(did => {
-            //         console.log('***did', did)
-            //     })
-            // })
-
-        // client.postProfile({
-
-        //     // XXX change this XXX
-        //     did: me.did,
-
-        //     username,
-        //     imgHash: null,
-        //     image
-        // }).then(res => {
-        //     console.log('created a new ID', res)
-        // })
-        // .catch(err => {
-        //     console.log('errrrrrrrrrrrrr', err)
-        // })
     }
 
     function selectNewAvatar (ev) {

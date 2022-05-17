@@ -9,13 +9,19 @@ var BASE = (process.env.NODE_ENV === 'test' ? baseUrl : '')
 
 // this is a client-side file that calls our API
 
-module.exports = function Client (keystore) {
+module.exports = function Client (_keystore) {
+    var keystore = _keystore
 
     const client = {
         getProfile: function getProfile (did) {
             const qs = new URLSearchParams({ did }).toString()
             var url = (BASE + '/api/profile' + '?' + qs)
             return fetch(url)
+        },
+
+        setKeystore: function (ks) {
+            keystore = ks
+            return client
         },
 
         // must pass a username
@@ -38,24 +44,40 @@ module.exports = function Client (keystore) {
                 hash = _hash.digest('base64')
                 // hash = _hash.digest()
             }
+            
+            return ssc.getDidFromKeys(keystore).then(did => {
+                return ssc.createMsg(keystore, null, {
+                    type: 'about',
+                    about: did,
+                    username,
+                    desc: desc || null,
+                    image: hash
+                }).then(msg => {
+                    return fetch(BASE + '/api/profile', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            did,
+                            msg,
+                            file: image
+                        })
+                    })
+                        .then(res => res.json())
+                })
+            })
+        },
+
+        createNewProfile: function ({ newKeystore, username, image }) {
+            if (!newKeystore || !username || !image) {
+                return Promise.reject(new Error('Missing something'))
+            }
+
+            const oldDid = keystore
 
             return ssc.createMsg(keystore, null, {
-                type: 'about',
-                about: did,
-                username,
-                desc: desc || null,
-                image: hash
-            }).then(msg => {
-                return fetch(BASE + '/api/profile', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        did,
-                        msg,
-                        file: image
-                    })
-                })
-                    .then(res => res.json())
+                type: 'alternate',
+                from: '',
+                newDid: ''
             })
         },
 

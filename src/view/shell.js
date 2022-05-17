@@ -28,21 +28,18 @@ function Shell (props) {
     async function saveName (me, newName) {
         console.log('set name in here', newName)
 
-        return ssc.createMsg(me.keys, null, {
-            type: 'about',
-            about: did,
+        // postProfile: function ({ did, username, imgHash, image, desc }) {
+        return client.postProfile({
+            did: me.did,
             username: newName,
-            image: me.profile.image
-        }).then(msg => {
-            return fetch(BASE + '/.netlify/functions/profile', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    did,
-                    msg
-                })
-            })
+            imgHash: me.profile.image
         })
+            .then(res => {
+                console.log('resssssssssssssss', res)
+                const { username } = res.db.data.value.content
+                console.log('*new name*', username)
+                emit(evs.identity.setUsername, { username })
+            })
     }
 
     function selectImg (ev) {

@@ -1,4 +1,5 @@
 var evs = require('./EVENTS')
+const xtend = require('xtend')
 
 function subscribe (bus, state) {
     bus.on('*', (name, ev) => {
@@ -6,7 +7,7 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.identity.newDid, ev => {
-        state.dids.set(ev)
+        state.dids.set(xtend(state.dids(), ev))
     })
 
     bus.on(evs.pin.post, ev => {
@@ -25,7 +26,6 @@ function subscribe (bus, state) {
     bus.on(evs.identity.setUsername, ev => {
         const { username } = ev
         state.me.profile.username.set(username)
-        console.log('*set username in subscribe*', username)
     })
 
     bus.on(evs.identity.setDesc, ev => {
@@ -39,12 +39,12 @@ function subscribe (bus, state) {
         state.me.profile.desc.set(desc)
     })
 
-    bus.on(evs.identity.setId, ev => {
-        console.log('set id', ev)
-        // ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName })
-        //     .then(keystore => {
-        //     })
-    })
+    // bus.on(evs.identity.setId, ev => {
+    //     console.log('set id', ev)
+    //     // ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName })
+    //     //     .then(keystore => {
+    //     //     })
+    // })
 }
 
 module.exports = subscribe
