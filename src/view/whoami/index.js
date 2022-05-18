@@ -92,7 +92,9 @@ function Whoami (props) {
                         dids.lastUser = did
                         ls.setItem(LS_NAME, JSON.stringify(dids))
                         emit(evs.identity.newDid, event)
-                        emit(evs.identity.change, { did, keystore })
+                        client.setKeystore(keystore)
+                        // the new keystore is in effect now
+                        emit(evs.identity.change, { did })
                         setPendingProfile(null)
                     })
                 })

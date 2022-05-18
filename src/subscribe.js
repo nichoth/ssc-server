@@ -1,7 +1,7 @@
 var evs = require('./EVENTS')
 const xtend = require('xtend')
 
-function subscribe (bus, state, client) {
+function subscribe (bus, state) {
     bus.on('*', (name, ev) => {
         console.log('***star***', name, ev)
     })
@@ -14,7 +14,6 @@ function subscribe (bus, state, client) {
         // this changes the "active" DID that the app is using
         console.log('change DID', did)
         state.me.keys.set(keystore)
-        client.setKeystore(keystore)
         // need to re-fetch the data that the app is using
     })
 
