@@ -72,16 +72,13 @@ function Whoami (props) {
         
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
-                console.log('kssssssssssss', keystore)
 
                 return ssc.getDidFromKeys(keystore).then(did => {
-                    console.log('**did***', did)
-
                     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
-                    dids[username] = { username, did }
+                    dids[did] = { username, did }
                     ls.setItem(LS_NAME, JSON.stringify(dids))
                     const event = {}
-                    event[username] = { username, did, keystore }
+                    event[did] = { username, did, image, keystore }
                     console.log('then post to the server and emit this event',
                         event)
 
@@ -91,7 +88,11 @@ function Whoami (props) {
                         image
                     }).then(res => {
                         console.log('posted a new ID', res)
+                        const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
+                        dids.lastUser = did
+                        ls.setItem(LS_NAME, JSON.stringify(dids))
                         emit(evs.identity.newDid, event)
+                        emit(evs.identity.change, { did, keystore })
                         setPendingProfile(null)
                     })
                 })

@@ -17,6 +17,7 @@ module.exports = function Client (_keystore) {
             const qs = new URLSearchParams({ did }).toString()
             var url = (BASE + '/api/profile' + '?' + qs)
             return fetch(url)
+                .then(res => res.json())
         },
 
         setKeystore: function (ks) {
@@ -72,13 +73,35 @@ module.exports = function Client (_keystore) {
                 return Promise.reject(new Error('Missing something'))
             }
 
-            const oldDid = keystore
+            return ssc.getDidFromKeys(keystore)
+                .then(oldDid => {
+                    return ssc.getDidFromKeys(newKeystore)
+                        .then(newDid => {
+                            return { oldDid, newDid }
+                        })
+                })
+                .then(({ newDid, oldDid }) => {
+                    return ssc.createMsg(keystore, null, {
+                        type: 'alternate',
+                        from: oldDid,
+                        newDid: newDid
+                    })
+                })
+                .then(msg => {
+                    return fetch(BASE + '/api/did', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(msg)
+                    })
+                })
+                .then(res => {
+                    if (!res.ok) return res.text().then(text => {
+                        throw new Error(text)
+                    })
 
-            return ssc.createMsg(keystore, null, {
-                type: 'alternate',
-                from: '',
-                newDid: ''
-            })
+                    return res.json()
+                })
+
         },
 
         postPin: function (text) {
@@ -94,7 +117,7 @@ module.exports = function Client (_keystore) {
                     })
                 })
                 .then(res => {
-                    if (!res.ok) res.text().then(text => {
+                    if (!res.ok) return res.text().then(text => {
                         throw new Error(text)
                     })
 

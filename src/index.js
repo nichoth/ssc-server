@@ -17,12 +17,17 @@ console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
-ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
-    const dids = JSON.parse(localStorage.getItem(LS_NAME))
+const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+// lastDid should be a username (string) that can be used to create a keystore
+const { lastUser } = dids
+
+// appName is the 'default' user
+ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keystore => {
+    // const dids = JSON.parse(localStorage.getItem(LS_NAME))
     // dids is a map of { username: {did object} }
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
-    subscribe(bus, state)
+    subscribe(bus, state, client)
     const client = Client(keystore)
 
     state(function onChange (newState) {
@@ -31,6 +36,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
 
     // for testing
     window.state = state
+    window.LS_NAME = LS_NAME
 
     var emit = bus.emit.bind(bus)
 
@@ -78,14 +84,12 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName }).then(keystore => {
                     />`, document.getElementById('content'))
                 })
             } else {
-                res.json().then(json => {
-                    emit(evs.identity.setProfile, json.value.content)
+                emit(evs.identity.setProfile, json.value.content)
 
-                    // render the app *after* you fetch the profile initially
-                    render(html`<${Connector} emit=${emit} state=${state}
-                        setRoute=${route.setRoute} client=${client}
-                    />`, document.getElementById('content'))
-                })
+                // render the app *after* you fetch the profile initially
+                render(html`<${Connector} emit=${emit} state=${state}
+                    setRoute=${route.setRoute} client=${client}
+                />`, document.getElementById('content'))
             }
         })
         .catch(err => {

@@ -1,13 +1,21 @@
 var evs = require('./EVENTS')
 const xtend = require('xtend')
 
-function subscribe (bus, state) {
+function subscribe (bus, state, client) {
     bus.on('*', (name, ev) => {
         console.log('***star***', name, ev)
     })
 
     bus.on(evs.identity.newDid, ev => {
         state.dids.set(xtend(state.dids(), ev))
+    })
+
+    bus.on(evs.identity.change, ({ did, keystore }) => {
+        // this changes the "active" DID that the app is using
+        console.log('change DID', did)
+        state.me.keys.set(keystore)
+        client.setKeystore(keystore)
+        // need to re-fetch the data that the app is using
     })
 
     bus.on(evs.pin.post, ev => {
@@ -38,13 +46,6 @@ function subscribe (bus, state) {
         state.me.profile.image.set(image)
         state.me.profile.desc.set(desc)
     })
-
-    // bus.on(evs.identity.setId, ev => {
-    //     console.log('set id', ev)
-    //     // ssc.createKeys(ssc.keyTypes.ECC, { storeName: appName })
-    //     //     .then(keystore => {
-    //     //     })
-    // })
 }
 
 module.exports = subscribe
