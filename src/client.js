@@ -28,7 +28,7 @@ module.exports = function Client (_keystore) {
         // must pass a username
         // image is optional (should use existing image if there is not a new one)
         // imgHash should be the existing profile image hash
-        postProfile: function ({ did, username, imgHash, image, desc }) {
+        postProfile: function ({ username, imgHash, image, desc }) {
             if (!username) return Promise.reject(
                 new Error('must include username'))
 
@@ -63,14 +63,20 @@ module.exports = function Client (_keystore) {
                             file: image
                         })
                     })
-                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.ok) return res.text().then(text => {
+                                throw new Error(text)
+                            })
+
+                            return res.json()
+                        })
                 })
             })
         },
 
-        createNewProfile: function ({ newKeystore, username, image }) {
-            if (!newKeystore || !username || !image) {
-                return Promise.reject(new Error('Missing something'))
+        createNewDid: function ({ newKeystore }) {
+            if (!newKeystore || !username || !imageHash) {
+                return Promise.reject(new Error('Missing keystore'))
             }
 
             return ssc.getDidFromKeys(keystore)
@@ -81,14 +87,20 @@ module.exports = function Client (_keystore) {
                         })
                 })
                 .then(({ newDid, oldDid }) => {
+                    // create a msg from oldDid that says
+                    // "newDid is an alternate ID for me"
+                    // (we sign with the existing `keystore` here)
                     return ssc.createMsg(keystore, null, {
                         type: 'alternate',
                         from: oldDid,
-                        newDid: newDid
+                        to: newDid
                     })
                 })
                 .then(msg => {
-                    return fetch(BASE + '/api/did', {
+                    // post the 'alternate' message
+                    // server-side -- need to check that the message is valid,
+                    //   and check that we are following the oldDid
+                    return fetch(BASE + '/api/alternate', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(msg)
@@ -101,7 +113,6 @@ module.exports = function Client (_keystore) {
 
                     return res.json()
                 })
-
         },
 
         postPin: function (text) {

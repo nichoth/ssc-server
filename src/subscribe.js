@@ -6,14 +6,18 @@ function subscribe (bus, state) {
         console.log('***star***', name, ev)
     })
 
+    // this event means 'there is a new DID now'
     bus.on(evs.identity.newDid, ev => {
         state.dids.set(xtend(state.dids(), ev))
     })
 
-    bus.on(evs.identity.change, ({ did, keystore }) => {
+    // this event means 'the app is changing to use this new DID'
+    bus.on(evs.identity.change, ({ did, keystore, profile }) => {
         // this changes the "active" DID that the app is using
         console.log('change DID', did)
         state.me.keys.set(keystore)
+        state.me.did.set(did)
+        state.me.profile.set(xtend(state.me.profile(), profile))
         // need to re-fetch the data that the app is using
     })
 

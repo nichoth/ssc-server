@@ -27,8 +27,8 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keysto
     // dids is a map of { username: {did object} }
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
-    subscribe(bus, state, client)
     const client = Client(keystore)
+    subscribe(bus, state)
 
     state(function onChange (newState) {
         console.log('change', newState)
@@ -58,39 +58,46 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keysto
         client.getProfile(did).then(res => {
             state.me.profile.hasFetched.set(true)
 
-            if (!res.ok) {
-                res.text().then(txt => {
-                    // console.log('*errrr text*', txt)
-                    if (txt.includes('invalid DID')) {
-                        console.log('**invalid did**', res)
-                    }
+            emit(evs.identity.setProfile, res.value.content)
 
-                    state.me.profile.err.set(txt)
+            // render the app *after* you fetch the profile initially
+            render(html`<${Connector} emit=${emit} state=${state}
+                setRoute=${route.setRoute} client=${client}
+            />`, document.getElementById('content'))
 
-                    const noProfile = (state.me.profile.hasFetched() &&
-                        state.me.profile.err())
+            // if (!res.ok) {
+            //     res.text().then(txt => {
+            //         // console.log('*errrr text*', txt)
+            //         if (txt.includes('invalid DID')) {
+            //             console.log('**invalid did**', res)
+            //         }
 
-                    // TODO -- handle the case where you have redeemed an
-                    // invitation, but have not set a profile
+            //         state.me.profile.err.set(txt)
 
-                    if (noProfile) {
-                        // if no profile, then go to an intro screen
-                        route.setRoute('/hello')
-                    }
+            //         const noProfile = (state.me.profile.hasFetched() &&
+            //             state.me.profile.err())
 
-                    // render the app *after* you fetch the profile initially
-                    render(html`<${Connector} emit=${emit} state=${state}
-                        setRoute=${route.setRoute} client=${client}
-                    />`, document.getElementById('content'))
-                })
-            } else {
-                emit(evs.identity.setProfile, json.value.content)
+            //         // TODO -- handle the case where you have redeemed an
+            //         // invitation, but have not set a profile
 
-                // render the app *after* you fetch the profile initially
-                render(html`<${Connector} emit=${emit} state=${state}
-                    setRoute=${route.setRoute} client=${client}
-                />`, document.getElementById('content'))
-            }
+            //         if (noProfile) {
+            //             // if no profile, then go to an intro screen
+            //             route.setRoute('/hello')
+            //         }
+
+            //         // render the app *after* you fetch the profile initially
+            //         render(html`<${Connector} emit=${emit} state=${state}
+            //             setRoute=${route.setRoute} client=${client}
+            //         />`, document.getElementById('content'))
+            //     })
+            // } else {
+                // emit(evs.identity.setProfile, json.value.content)
+
+                // // render the app *after* you fetch the profile initially
+                // render(html`<${Connector} emit=${emit} state=${state}
+                //     setRoute=${route.setRoute} client=${client}
+                // />`, document.getElementById('content'))
+            // }
         })
         .catch(err => {
             console.log('profile errrr', err)

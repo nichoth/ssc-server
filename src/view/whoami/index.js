@@ -70,34 +70,61 @@ function Whoami (props) {
 
         setResolving(true)
         
+        // create a new DID
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
-
-                return ssc.getDidFromKeys(keystore).then(did => {
+                return ssc.getDidFromKeys(keystore).then(newDid => {
                     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
-                    dids[did] = { username, did }
+                    dids[did] = { username, did: newDid }
                     ls.setItem(LS_NAME, JSON.stringify(dids))
                     const event = {}
-                    event[did] = { username, did, image, keystore }
-                    console.log('then post to the server and emit this event',
-                        event)
+                    event[newDid] = { username, did: newDid, image, keystore }
+                    // console.log('then post to the server and emit this event',
+                    //     event)
 
-                    return client.createNewProfile({
-                        newKeystore: keystore,
-                        username,
-                        image
-                    }).then(res => {
-                        console.log('posted a new ID', res)
+                    // then sign a message setting the profile for the new DID
+                    return client.createNewDid({
+                        newKeystore: keystore
+                    })
+                    .then(res => {
+                        // now set the profile data (image and username) for the 
+                        // new DID
+                        console.log('*createNewDid response*', res)
+
+                        // DID is allowed on the server
+                        client.setKeystore(keystore)
+                        // now need to create profile info for that DID
+                        return client.postProfile({ username, imageHash, image })
+                            .then(res => {
+                                console.log('post profile response', res)
+                                return res
+                            })
+                    })
+                    .then(res => {
+                        console.log('posted a new profile', res)
                         const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
-                        dids.lastUser = did
+                        const profile = { username, image }
+                        // update the localStorage object,
+                        // then switch to the new ID
+                        dids.lastUser = newDid
                         ls.setItem(LS_NAME, JSON.stringify(dids))
                         emit(evs.identity.newDid, event)
-                        client.setKeystore(keystore)
                         // the new keystore is in effect now
-                        emit(evs.identity.change, { did })
+                        emit(evs.identity.change, {
+                            did: newDid,
+                            keystore,
+                            profile
+                        })
                         setPendingProfile(null)
+                        setResolving(false)
+
+                        // need to re-fetch the data that the app is using...
                     })
                 })
+            })
+            .catch(err => {
+                console.log('errrrrrrrrrrrrr', err)
+                setResolving(false)
             })
     }
 
