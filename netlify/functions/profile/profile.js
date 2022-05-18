@@ -10,7 +10,7 @@ var client = new faunadb.Client({
 })
 
 
-exports.handler = function (ev, ctx) {
+exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         const did = ev.queryStringParameters.did
 
@@ -61,12 +61,13 @@ exports.handler = function (ev, ctx) {
             }
         }
 
-        console.log('**got a post req**', msg)
+        console.log('**got a profile post req**', msg)
 
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
 
-        if (!ssc.isValidMsg(msg, null, pubKey)) {
+        const isVal = await ssc.isValidMsg(msg, null, pubKey)
+        if (!isVal) {
             console.log('**invalid msg**', pubKey)
             return {
                 statusCode: 422,
