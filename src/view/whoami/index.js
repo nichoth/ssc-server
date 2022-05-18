@@ -75,7 +75,7 @@ function Whoami (props) {
             .then(keystore => {
                 return ssc.getDidFromKeys(keystore).then(newDid => {
                     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
-                    dids[did] = { username, did: newDid }
+                    dids[newDid] = { username, did: newDid }
                     ls.setItem(LS_NAME, JSON.stringify(dids))
                     const event = {}
                     event[newDid] = { username, did: newDid, image, keystore }
