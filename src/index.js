@@ -60,10 +60,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keysto
 
             emit(evs.identity.setProfile, res.value.content)
 
-            if (!res.ok) {
-                res.text().then(text => console.log('texttttttt', text))
-            }
-
             // render the app *after* you fetch the profile initially
             render(html`<${Connector} emit=${emit} state=${state}
                 setRoute=${route.setRoute} client=${client}
