@@ -74,7 +74,7 @@ module.exports = function Client (_keystore) {
             })
         },
 
-        createNewDid: function ({ newKeystore }) {
+        createAlternateDid: function ({ newKeystore }) {
             if (!newKeystore) return Promise.reject(new Error('Missing keystore'))
 
             return ssc.getDidFromKeys(keystore)

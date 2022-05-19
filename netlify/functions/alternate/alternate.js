@@ -57,6 +57,9 @@ exports.handler = async function (ev, ctx) {
 
     // check to make sure the server is following the given did
     // can look for profile by DID
+
+    // if the given profile exists,
+    // then create the alternate profile from the message data
     const did = ssc.getAuthor(msg)
     console.log('*did*', did)
     return client.query(

@@ -83,13 +83,13 @@ function Whoami (props) {
                     //     event)
 
                     // then sign a message setting the profile for the new DID
-                    return client.createNewDid({
+                    return client.createAlternateDid({
                         newKeystore: keystore
                     })
                         .then(res => {
                             // now set the profile data (image and username) for the 
                             // new DID
-                            console.log('*createNewDid response*', res)
+                            console.log('*create alternate did response*', res)
 
                             // DID is allowed on the server
                             // client.setKeystore(keystore)
