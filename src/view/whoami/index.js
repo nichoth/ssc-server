@@ -8,6 +8,7 @@ const evs = require('../../EVENTS')
 const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
 const { TextInput, Button } = require('@nichoth/forms/preact')
 const { LS_NAME } = require('../../constants')
+const { admins } = require('../../config.json')
 
 const ls = window.localStorage
 
@@ -79,8 +80,6 @@ function Whoami (props) {
                     ls.setItem(LS_NAME, JSON.stringify(dids))
                     const event = {}
                     event[newDid] = { username, did: newDid, image, keystore }
-                    // console.log('then post to the server and emit this event',
-                    //     event)
 
                     // then sign a message setting the profile for the new DID
                     return client.createAlternateDid({
@@ -92,7 +91,8 @@ function Whoami (props) {
                             console.log('*create alternate did response*', res)
 
                             // DID is allowed on the server
-                            // client.setKeystore(keystore)
+                            client.setKeystore(keystore)
+
                             // now need to create profile info for that DID
                             return client.postProfile({ username, image })
                                 .then(res => {
@@ -160,7 +160,7 @@ function Whoami (props) {
     return html`<div class="route whoami">
         <h1>who am i?</h1>
 
-        ${me.isAdmin ?
+        ${(admins.indexOf(me.did) > -1) ?
             html`<p>You have admin status for this server.</p>` :
             null
         }

@@ -17,7 +17,13 @@ module.exports = function Client (_keystore) {
             const qs = new URLSearchParams({ did }).toString()
             var url = (BASE + '/api/profile' + '?' + qs)
             return fetch(url)
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) return res.text().then(text => {
+                        throw new Error(text)
+                    })
+
+                    return res.json()
+                })
         },
 
         setKeystore: function (ks) {
