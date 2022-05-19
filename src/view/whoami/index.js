@@ -60,7 +60,7 @@ function Whoami (props) {
     function createNewDid (ev) {
         ev.preventDefault()
         const { image, username } = pendingProfile
-        console.log('***create new id**', pendingProfile)
+        console.log('***pending profile**', pendingProfile)
 
         // in here,
         //   * create a new keystore
@@ -86,40 +86,40 @@ function Whoami (props) {
                     return client.createNewDid({
                         newKeystore: keystore
                     })
-                    .then(res => {
-                        // now set the profile data (image and username) for the 
-                        // new DID
-                        console.log('*createNewDid response*', res)
+                        .then(res => {
+                            // now set the profile data (image and username) for the 
+                            // new DID
+                            console.log('*createNewDid response*', res)
 
-                        // DID is allowed on the server
-                        client.setKeystore(keystore)
-                        // now need to create profile info for that DID
-                        return client.postProfile({ username, imageHash, image })
-                            .then(res => {
-                                console.log('post profile response', res)
-                                return res
-                            })
-                    })
-                    .then(res => {
-                        console.log('posted a new profile', res)
-                        const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
-                        const profile = { username, image }
-                        // update the localStorage object,
-                        // then switch to the new ID
-                        dids.lastUser = newDid
-                        ls.setItem(LS_NAME, JSON.stringify(dids))
-                        emit(evs.identity.newDid, event)
-                        // the new keystore is in effect now
-                        emit(evs.identity.change, {
-                            did: newDid,
-                            keystore,
-                            profile
+                            // DID is allowed on the server
+                            // client.setKeystore(keystore)
+                            // now need to create profile info for that DID
+                            return client.postProfile({ username, image })
+                                .then(res => {
+                                    console.log('post profile response', res)
+                                    return res
+                                })
                         })
-                        setPendingProfile(null)
-                        setResolving(false)
+                        .then(res => {
+                            console.log('posted a new profile', res)
+                            const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
+                            const profile = { username, image }
+                            // update the localStorage object,
+                            // then switch to the new ID
+                            dids.lastUser = newDid
+                            ls.setItem(LS_NAME, JSON.stringify(dids))
+                            emit(evs.identity.newDid, event)
+                            // the new keystore is in effect now
+                            emit(evs.identity.change, {
+                                did: newDid,
+                                keystore,
+                                profile
+                            })
+                            setPendingProfile(null)
+                            setResolving(false)
 
-                        // need to re-fetch the data that the app is using...
-                    })
+                            // need to re-fetch the data that the app is using...
+                        })
                 })
             })
             .catch(err => {

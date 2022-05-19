@@ -19,7 +19,7 @@ console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 // lastDid should be a username (string) that can be used to create a keystore
-const { lastUser } = dids
+const lastUser = dids ? dids.lastUser : null
 
 // appName is the 'default' user
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keystore => {

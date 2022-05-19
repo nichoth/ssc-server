@@ -76,14 +76,12 @@ module.exports = function Client (_keystore) {
 
         createNewDid: function ({ newKeystore }) {
             if (!newKeystore) return Promise.reject(new Error('Missing keystore'))
-            // if (!newKeystore || !username || !imageHash) {
-            //     return Promise.reject(new Error('Missing keystore'))
-            // }
 
             return ssc.getDidFromKeys(keystore)
                 .then(oldDid => {
                     return ssc.getDidFromKeys(newKeystore)
                         .then(newDid => {
+                            console.log('old, new', { oldDid, newDid })
                             return { oldDid, newDid }
                         })
                 })

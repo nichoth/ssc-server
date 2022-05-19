@@ -1,4 +1,3 @@
-// const sha256 = require('simple-sha256')
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
 const xtend = require('xtend')

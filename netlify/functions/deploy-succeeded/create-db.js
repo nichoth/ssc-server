@@ -103,7 +103,7 @@ function createFaunaDB (key) {
             })
     }))
         .then((res) => {
-            // console.log('*created collections*', res)
+            console.log('*created collections*', res)
             return res
         })
         .catch(err => console.log('errr', err))
