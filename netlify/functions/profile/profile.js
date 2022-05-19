@@ -108,7 +108,7 @@ exports.handler = async function (ev, ctx) {
                             statusCode: 200,
                             body: JSON.stringify({
                                 image: res,
-                                db: _res
+                                db: _res.data
                             })
                         }
                     })
@@ -126,7 +126,7 @@ exports.handler = async function (ev, ctx) {
                 return {
                     statusCode: 200,
                     body: JSON.stringify({
-                        db: res
+                        db: res.data
                     })
                 }
             })

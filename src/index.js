@@ -18,13 +18,11 @@ console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
-// lastDid should be a username (string) that can be used to create a keystore
+// dids is a map of { username: {did object} }
 const lastUser = dids ? dids.lastUser : null
 
 // appName is the 'default' user
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keystore => {
-    // const dids = JSON.parse(localStorage.getItem(LS_NAME))
-    // dids is a map of { username: {did object} }
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
     const client = Client(keystore)
