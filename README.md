@@ -23,6 +23,10 @@ Netlify *does* run the _deploy-succeeded_ function the first time you deploy. Me
 
 Should use that hook to create indexes and collections in the DB.
 
+-----------------------------------------
+
+* currently using the `test` DB in fauna
+
 -------------------------------------------
 
 

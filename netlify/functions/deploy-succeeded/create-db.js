@@ -27,6 +27,13 @@ function createFaunaDB (key) {
             }]
         ],
 
+        ['alternate', [{
+                name: 'alternate-from',
+                source: q.Collection('alternate'),
+                terms: [ { field: ['data', 'value', 'content', 'from'] } ]
+            }]
+        ],
+
         ['pin'],
 
         ['profiles', [{

@@ -1,5 +1,13 @@
 # the log
 
+## 5-18-2022
+
+### The `create-db` function
+```
+node ./netlify/functions/deploy-succeeded/create-db.js
+```
+
+
 ## 5-13-2022
 
 *linking profiles*

@@ -2,7 +2,7 @@ const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
 // var createHash = require('create-hash')
 
-exports.handler = function (ev, ctx) {
+exports.handler = async function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -21,12 +21,19 @@ exports.handler = function (ev, ctx) {
         }
     }
 
-    const did = ssc.getAuthor(msg)
-    const pubKey = ssc.didToPublicKey(did).publicKey
+    try {
+        var did = ssc.getAuthor(msg)
+        var pubKey = ssc.didToPublicKey(did).publicKey
+    } catch (err) {
+        return {
+            statusCode: 422,
+            body: 'invalid message'
+        }
+    }
 
     var isVal
     try {
-        isVal = ssc.isValidMsg(msg, null, pubKey)
+        isVal = await ssc.isValidMsg(msg, null, pubKey)
     } catch (err) {
         return {
             statusCode: 422,
@@ -40,6 +47,12 @@ exports.handler = function (ev, ctx) {
             body: 'invalid message'
         }
     }
+
+    // message is valid, so write to the DB
+
+    // create an 'alternate' collection in DB
+    // check to make sure the server is following the given did
+    // if all is ok, write the message to the collection
 
 
 
