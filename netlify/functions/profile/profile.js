@@ -13,6 +13,8 @@ exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         const did = ev.queryStringParameters.did
 
+        console.log('*get profile req*', did)
+
         return client.query(
             q.Get(q.Match(q.Index('profile-by-did'), did))
         )
@@ -32,6 +34,7 @@ exports.handler = async function (ev, ctx) {
             })
             .catch(err => {
                 console.log('errrrr', err)
+                console.log('*did*', did)
 
                 if (err.toString().includes('not found')) {
                     return {

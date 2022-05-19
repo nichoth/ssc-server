@@ -53,6 +53,8 @@ module.exports = function Client (_keystore) {
             }
             
             return ssc.getDidFromKeys(keystore).then(did => {
+                console.log('*did in posting*', did)
+
                 return ssc.createMsg(keystore, null, {
                     type: 'about',
                     about: did,

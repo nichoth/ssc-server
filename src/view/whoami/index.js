@@ -88,22 +88,20 @@ function Whoami (props) {
                         .then(res => {
                             // now set the profile data (image and username) for the 
                             // new DID
-                            console.log('*create alternate did response*', res)
-
                             client.setKeystore(keystore)
 
                             // now need to create profile info for that DID
                             return client.postProfile({ username, image })
                         })
                         .then(res => {
-                            console.log('posted a new profile', res)
                             const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
 
                             const imgId = res.db.value.content.image
                             const profile = { username, image: imgId }
                             // update the localStorage object,
                             // then switch to the new ID
-                            dids.lastUser = newDid
+                            dids.lastUser = username
+                            // dids.lastUser = newDid
                             ls.setItem(LS_NAME, JSON.stringify(dids))
                             emit(evs.identity.newDid, event)
                             // the new keystore is in effect now

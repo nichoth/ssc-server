@@ -23,6 +23,7 @@ const lastUser = dids ? dids.lastUser : null
 
 // appName is the 'default' user
 ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keystore => {
+    console.log('keystore', keystore)
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
     const client = Client(keystore)
