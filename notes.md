@@ -1,5 +1,15 @@
 # the log
 
+
+## 5-20-2022
+
+### multiple DIDs per machine
+
+Any DID that has been created on this machine is visible here
+
+
+
+
 ## 5-18-2022
 
 ### The `create-db` function

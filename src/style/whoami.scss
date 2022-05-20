@@ -1,6 +1,16 @@
 .route.whoami {
     margin: 1vw;
 
+    .other-dids {
+        li {
+            margin-bottom: 1rem;
+
+            button {
+                margin-left: 1rem;
+            }
+        }
+    }
+
     label.avatar-label {
         display: flex;
         align-items: center;

@@ -10,6 +10,7 @@ const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
 const { TextInput, Button } = require('@nichoth/forms/preact')
 const { LS_NAME } = require('../../constants')
 const { admins } = require('../../config.json')
+// const Client = require('../../client')
 
 console.log('LS_NAME', LS_NAME)
 
@@ -149,6 +150,22 @@ function Whoami (props) {
         })
     }
 
+    function switchProfile (opts, ev) {
+        ev.preventDefault()
+        const { storeName, username, did, image } = opts
+        console.log('switch profiles', opts)
+        ssc.createKeys(ssc.keyTypes.ECC, { storeName })
+            .then(keystore => {
+                console.log('new keystore', keystore)
+                const profile = { username, image }
+                const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+                // set the lastUser as the current DID
+                dids.lastUser = did
+                window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
+                emit(evs.identity.change, { keystore, did, profile })
+            })
+    }
+
     const placeholderSvg = 'data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <circle cx="50" cy="50" r="50"/> </svg>'
     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
     const lastUser = dids ? dids.lastUser : null
@@ -158,7 +175,14 @@ function Whoami (props) {
             if (key === 'lastUser') return null
             // `lastUser` _must_ be the current username here
             if (dids[key].did === lastUser) return null
-            return dids[key].username
+            const user = dids[key]
+            return user
+            // return {
+            //     username: user.username,
+            //     image: user.image,
+            //     did: user.did,
+            //     storeName: user.storeName
+            // }
         }) :
         []).filter(Boolean)
 
@@ -202,11 +226,25 @@ function Whoami (props) {
         </p>
 
         <h2>Other DIDs</h2>
-        <ul>
+        <ul class="other-dids">
             ${listOfUsers.length ? 
-                listOfUsers.map(username => {
-                    return html`<li>${username}</li>`
+                listOfUsers.map(user => {
+                    console.log('user', user)
+                    return html`<li>
+                        <span>${user.username}</span>
+                        <button
+                            onClick=${switchProfile.bind(null, {
+                                storeName: user.storeName,
+                                username: user.username,
+                                image: user.image,
+                                did: user.did
+                            })}
+                        >
+                            switch to this profile
+                        </button>
+                    </li>`
                 }) :
+
                 html`<em>none</em>`
             }
         </ul>

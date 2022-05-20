@@ -1,5 +1,5 @@
 var evs = require('./EVENTS')
-const { LS_NAME } = require('./constants')
+// const { LS_NAME } = require('./constants')
 const xtend = require('xtend')
 
 function subscribe (bus, state) {
@@ -15,7 +15,8 @@ function subscribe (bus, state) {
     // this event means 'the app is changing to use this new DID'
     bus.on(evs.identity.change, ({ did, keystore, profile }) => {
         // this changes the "active" DID that the app is using
-        console.log('change DID', did)
+        console.log('identity change', did, profile)
+        const { username, image } = profile
         state.me.keys.set(keystore)
         state.me.did.set(did)
         state.me.profile.set(xtend(state.me.profile(), profile))
@@ -40,16 +41,7 @@ function subscribe (bus, state) {
     })
 
     bus.on(evs.identity.setProfile, ev => {
-        const { username, image, desc, about } = ev
-        // handle lastUser key
-        // const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
-        // dids[username] = { did: about, username }
-        // // dids is a map of { username: { did, username } }
-        // const lastUser = { did: about, username }
-        // dids.lastUser = lastUser
-        // console.log('aaaaaaaaaaa', LS_NAME, JSON.stringify(dids))
-        // window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
-
+        const { username, image, desc } = ev
         state.me.profile.username.set(username)
         state.me.profile.image.set(image)
         state.me.profile.desc.set(desc)

@@ -19,14 +19,6 @@ exports.handler = async function (ev, ctx) {
             q.Get(q.Match(q.Index('profile-by-did'), did))
         )
             .then(doc => {
-                // const res = xtend(doc.data, {
-                //     value: xtend(doc.data.value, {
-                //         content: xtend(doc.data.value.content, {
-                //             avatar: doc.data.value.content.avatar || null
-                //         })
-                //     })
-                // })
-
                 return {
                     statusCode: 200,
                     body: JSON.stringify(doc.data)
