@@ -24,7 +24,8 @@ const lastUser = dids ? dids.lastUser : null
 console.log('LS_NAME', LS_NAME)
 console.log('*dids*', dids)
 
-console.log('**store name**', (lastUser || {}).username)
+console.log('**last user**', lastUser)
+console.log('**store name**', lastUser)
 
 
 // here, the first time the app loads, it is called appName
@@ -70,7 +71,7 @@ console.log('**store name**', (lastUser || {}).username)
 
 // appName is the 'default' user
 ssc.createKeys(ssc.keyTypes.ECC, {
-    storeName: (lastUser || {}).username || appName
+    storeName: lastUser || appName
     // storeName: appName
 }).then(keystore => {
     console.log('keystore', keystore)

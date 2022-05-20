@@ -55,10 +55,6 @@ function Whoami (props) {
             .catch(err => {
                 console.log('errrrrrrrrrrrrrrrrrr', err)
             })
-
-        // return new Promise ((resolve, reject) => {
-        //     setTimeout(() => resolve('woooo'), 1000)
-        // })
     }
 
     function createNewDid (ev) {
@@ -79,9 +75,6 @@ function Whoami (props) {
             .then(keystore => {
                 console.log('created keystore', username)
                 return ssc.getDidFromKeys(keystore).then(newDid => {
-                    // const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
-                    // dids[newDid] = { username, did: newDid }
-                    // ls.setItem(LS_NAME, JSON.stringify(dids))
                     const event = {}
                     event[newDid] = { username, did: newDid, image, keystore }
 
@@ -171,7 +164,7 @@ function Whoami (props) {
         Object.keys(dids).map(key => {
             if (key === 'lastUser') return null
             // `lastUser` _must_ be the current username here
-            if (dids[key].username === lastUser.username) return null
+            if (dids[key].username === lastUser) return null
             return dids[key].username
         }) :
         []).filter(Boolean)

@@ -48,13 +48,13 @@ function subscribe (bus, state) {
         const { username, image, desc, about } = ev
         console.log('**ev**', ev)
         // handle lastUser key
-        const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
-        dids[username] = { did: about, username }
-        // dids is a map of { username: { did, username } }
-        const lastUser = { did: about, username }
-        dids.lastUser = lastUser
-        console.log('aaaaaaaaaaa', LS_NAME, JSON.stringify(dids))
-        window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
+        // const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
+        // dids[username] = { did: about, username }
+        // // dids is a map of { username: { did, username } }
+        // const lastUser = { did: about, username }
+        // dids.lastUser = lastUser
+        // console.log('aaaaaaaaaaa', LS_NAME, JSON.stringify(dids))
+        // window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
 
         state.me.profile.username.set(username)
         state.me.profile.image.set(image)
