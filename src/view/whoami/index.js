@@ -170,19 +170,14 @@ function Whoami (props) {
     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
     const lastUser = dids ? dids.lastUser : null
 
+    // we filter for just the ones that are useful to see
+    // (not the current user)
     const listOfUsers = (Object.keys(dids).length ?
         Object.keys(dids).map(key => {
             if (key === 'lastUser') return null
-            // `lastUser` _must_ be the current username here
             if (dids[key].did === lastUser) return null
             const user = dids[key]
             return user
-            // return {
-            //     username: user.username,
-            //     image: user.image,
-            //     did: user.did,
-            //     storeName: user.storeName
-            // }
         }) :
         []).filter(Boolean)
 
