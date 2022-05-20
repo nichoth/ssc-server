@@ -85,7 +85,7 @@ function Whoami (props) {
                     return client.createAlternateDid({
                         newKeystore: keystore
                     })
-                        .then(res => {
+                        .then(() => {
                             // now set the profile data (image and username) for the 
                             // new DID
                             client.setKeystore(keystore)

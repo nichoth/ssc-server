@@ -24,8 +24,6 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    // console.log('*msg*', msg)
-
     try {
         var { publicKey } = ssc.didToPublicKey(msg.author)
         console.log('**public key**', publicKey)
@@ -55,22 +53,44 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
+    console.log('*msg*', msg)
+
+    const did = ssc.getAuthor(msg)
+
+    if (!(did === msg.content.from)) {
+        return {
+            statusCode: 400,
+            body: 'invalid message'
+        }
+    }
+
     // check to make sure the server is following the given did
     // can look for profile by DID
 
     // if the given profile exists,
     // then create the alternate profile from the message data
-    const did = ssc.getAuthor(msg)
-    console.log('*did*', did)
+
+    // need to check the lineage also
+    // check if this profile is an alternate from another that is 'original'
+
+    // the alternate messages are a linked list
+    // foo -> bar -> baz
+
+    // first get to:baz
+    // then get to:bar
+    // keep following the `to` field until you get no results
+    // then check if `foo` is followed by this server
+
     return client.query(
         q.Get(q.Match(q.Index('profile-by-did'), did))
     )
         .then(doc => {
             console.log('doc', doc)
-            return doc
-        })
-        .then(doc => {
-            return { statusCode: 200, body: JSON.stringify(doc.data) }
+            // return doc
+            return {
+                statusCode: 200,
+                body: JSON.stringify(doc.data)
+            }
         })
         .catch(err => {
             console.log('errrrrrr in here', err)
@@ -82,6 +102,7 @@ exports.handler = async function (ev, ctx) {
                 body: 'oh no'
             }
         })
+
 
     // if all is ok, write the message to the collection
 

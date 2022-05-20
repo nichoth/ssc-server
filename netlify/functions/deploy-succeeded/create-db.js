@@ -27,10 +27,17 @@ function createFaunaDB (key) {
             }]
         ],
 
+        // get all profiles created by the given DID
         ['alternate', [{
                 name: 'alternate-from',
                 source: q.Collection('alternate'),
                 terms: [ { field: ['data', 'value', 'content', 'from'] } ]
+            },
+            // get the DID that created this one
+            {
+                name: 'alternate-to',
+                source: q.Collection('alternate'),
+                terms: [ { field: ['data', 'value', 'content', 'to'] } ]
             }]
         ],
 
