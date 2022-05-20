@@ -190,7 +190,7 @@ function Whoami (props) {
     return html`<div class="route whoami">
         <h1>who am i?</h1>
 
-        ${(admins.indexOf(me.did) > -1) ?
+        ${(admins.some(user => user.did === me.did)) ?
             html`<p>You have admin status for this server.</p>` :
             null
         }
@@ -229,16 +229,10 @@ function Whoami (props) {
         <ul class="other-dids">
             ${listOfUsers.length ? 
                 listOfUsers.map(user => {
-                    console.log('user', user)
                     return html`<li>
                         <span>${user.username}</span>
                         <button
-                            onClick=${switchProfile.bind(null, {
-                                storeName: user.storeName,
-                                username: user.username,
-                                image: user.image,
-                                did: user.did
-                            })}
+                            onClick=${switchProfile.bind(null, user)}
                         >
                             switch to this profile
                         </button>
