@@ -220,7 +220,7 @@ function Whoami (props) {
             <pre><code>${me.did}</code></pre>
         </p>
 
-        <h2>Other DIDs</h2>
+        <h2>Other Users</h2>
         <ul class="other-dids">
             ${listOfUsers.length ? 
                 listOfUsers.map(user => {
