@@ -72,7 +72,6 @@ function Whoami (props) {
         
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
-                console.log('created keystore', username)
                 return ssc.getDidFromKeys(keystore).then(newDid => {
                     const event = {}
                     event[newDid] = { username, did: newDid, image, keystore }
@@ -90,21 +89,18 @@ function Whoami (props) {
                             return client.postProfile({ username, image })
                         })
                         .then(res => {
-                            console.log('**res from postProfile**', res)
                             const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
 
                             const imgId = res.db.value.content.image
                             const profile = {
                                 username,
                                 image: imgId,
+                                storeName: username,
                                 did: newDid
                             }
                             // update the localStorage object,
                             // then switch to the new ID
                             dids.lastUser = newDid
-                            // dids.lastUser = newDid
-                            console.log('bbbbbbbbbbbbbbbbb', LS_NAME)
-                            console.log('bbbbbbbbbbbbbbbbb', dids.lastUser)
                             dids[newDid] = profile
                             ls.setItem(LS_NAME, JSON.stringify(dids))
                             // emit(evs.identity.newDid, event)

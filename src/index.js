@@ -17,26 +17,15 @@ console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
-const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 // dids is a map of { username: { did, username } }
+const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const lastUser = dids ? dids.lastUser : null
 
 console.log('LS_NAME', LS_NAME)
 console.log('*dids*', dids)
 
-const storeName = (dids ? dids[dids.lastUser] : {}).storeName || appName
+const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
-console.log('___storename____', storeName)
-
-
-
-// need to fetch the profile before we create the keystore
-// we have the most recent DID that was used b/c of localStorage
-
-
-
-
-// appName is the 'default' user
 ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     console.log('keystore', keystore)
     const state = State(keystore, { admins, dids })
@@ -71,7 +60,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
         client.getProfile(did).then(res => {
             state.me.profile.hasFetched.set(true)
 
-            console.log('!!!!!app name store name!!!!!', appName, storeName)
             const { username, image } = res.value.content
             const _dids = dids || {}
             _dids[did] = { storeName, username, image, did }

@@ -30,11 +30,6 @@ function subscribe (bus, state) {
         console.log('rrrrr', err)
     })
 
-    bus.on(evs.identity.setAvatar, ev => {
-        console.log('*set avatar*', ev)
-        state.me.profile.image.set(ev.image.id)
-    })
-
     bus.on(evs.identity.setUsername, ev => {
         const { username } = ev
         state.me.profile.username.set(username)
@@ -46,7 +41,6 @@ function subscribe (bus, state) {
 
     bus.on(evs.identity.setProfile, ev => {
         const { username, image, desc, about } = ev
-        console.log('**set profile**', ev)
         // handle lastUser key
         // const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
         // dids[username] = { did: about, username }
