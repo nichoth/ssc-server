@@ -46,7 +46,7 @@ function subscribe (bus, state) {
 
     bus.on(evs.identity.setProfile, ev => {
         const { username, image, desc, about } = ev
-        console.log('**ev**', ev)
+        console.log('**set profile**', ev)
         // handle lastUser key
         // const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
         // dids[username] = { did: about, username }

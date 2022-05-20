@@ -24,56 +24,20 @@ const lastUser = dids ? dids.lastUser : null
 console.log('LS_NAME', LS_NAME)
 console.log('*dids*', dids)
 
-console.log('**last user**', lastUser)
-console.log('**store name**', lastUser)
+const storeName = (dids ? dids[dids.lastUser] : {}).storeName || appName
 
-
-// here, the first time the app loads, it is called appName
-// after that, it is lastUser.username
-
-// need to get the right storename
-
-// the first time the app loads, we use `appName`
-// the second time it loads, we have `username` in localStorage
+console.log('___storename____', storeName)
 
 
 
-// how to save the `appName` as the lastUser in localStorage?
+// need to fetch the profile before we create the keystore
+// we have the most recent DID that was used b/c of localStorage
 
 
-
-
-// lastUser.username vs appName
-// _need_ to use the same appName
-
-// _must_ fetch the username before loading the keys
-
-// if ((lastUser || {}).did) {
-//     Client.GetProfile((lastUser || {}).did)
-//         .then(res => {
-//             console.log('got profile', res)
-//         })
-// } else {
-
-// }
-
-
-
-
-// aaa vs ssc-demo
-// my DID is saved in localForage under `ssc-demo`
-// when the app re-loads, we use the name `aaa`, b/c that was saved
-//   as  `lastUser`
-//   this creates a separate DID, b/c different localForage instance
-
-// is appName the source of truth? or is it localStorage
 
 
 // appName is the 'default' user
-ssc.createKeys(ssc.keyTypes.ECC, {
-    storeName: lastUser || appName
-    // storeName: appName
-}).then(keystore => {
+ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     console.log('keystore', keystore)
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
@@ -105,8 +69,14 @@ ssc.createKeys(ssc.keyTypes.ECC, {
         }
 
         client.getProfile(did).then(res => {
-            console.log('res***', res)
             state.me.profile.hasFetched.set(true)
+
+            console.log('!!!!!app name store name!!!!!', appName, storeName)
+            const { username, image } = res.value.content
+            const _dids = dids || {}
+            _dids[did] = { storeName, username, image, did }
+            _dids.lastUser = did
+            window.localStorage.setItem(LS_NAME, JSON.stringify(_dids))
 
             emit(evs.identity.setProfile, res.value.content)
 

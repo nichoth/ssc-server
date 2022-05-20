@@ -70,7 +70,6 @@ function Whoami (props) {
 
         setResolving(true)
         
-        // create a new DID
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
                 console.log('created keystore', username)
@@ -102,11 +101,11 @@ function Whoami (props) {
                             }
                             // update the localStorage object,
                             // then switch to the new ID
-                            dids.lastUser = username
+                            dids.lastUser = newDid
                             // dids.lastUser = newDid
                             console.log('bbbbbbbbbbbbbbbbb', LS_NAME)
                             console.log('bbbbbbbbbbbbbbbbb', dids.lastUser)
-                            dids[username] = profile
+                            dids[newDid] = profile
                             ls.setItem(LS_NAME, JSON.stringify(dids))
                             // emit(evs.identity.newDid, event)
                             // the new keystore is in effect now
@@ -158,18 +157,14 @@ function Whoami (props) {
     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
     const lastUser = dids ? dids.lastUser : null
 
-    console.log('dids', Object.keys(dids))
-
     const listOfUsers = (Object.keys(dids).length ?
         Object.keys(dids).map(key => {
             if (key === 'lastUser') return null
             // `lastUser` _must_ be the current username here
-            if (dids[key].username === lastUser) return null
+            if (dids[key].did === lastUser) return null
             return dids[key].username
         }) :
         []).filter(Boolean)
-
-    console.log('list of users', listOfUsers)
 
 
     return html`<div class="route whoami">
