@@ -44,22 +44,22 @@ function subscribe (bus, state) {
         state.me.profile.desc.set(ev.content.desc)
     })
 
-    // bus.on(evs.identity.setProfile, ev => {
-    //     const { username, image, desc, about } = ev
-    //     console.log('**ev**', ev)
-    //     // handle lastUser key
-    //     const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
-    //     dids[username] = { did: about, username }
-    //     // dids is a map of { username: { did, username } }
-    //     const lastUser = { did: about, username }
-    //     dids.lastUser = lastUser
-    //     console.log('aaaaaaaaaaa', LS_NAME, JSON.stringify(dids))
-    //     window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
+    bus.on(evs.identity.setProfile, ev => {
+        const { username, image, desc, about } = ev
+        console.log('**ev**', ev)
+        // handle lastUser key
+        const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
+        dids[username] = { did: about, username }
+        // dids is a map of { username: { did, username } }
+        const lastUser = { did: about, username }
+        dids.lastUser = lastUser
+        console.log('aaaaaaaaaaa', LS_NAME, JSON.stringify(dids))
+        window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
 
-    //     state.me.profile.username.set(username)
-    //     state.me.profile.image.set(image)
-    //     state.me.profile.desc.set(desc)
-    // })
+        state.me.profile.username.set(username)
+        state.me.profile.image.set(image)
+        state.me.profile.desc.set(desc)
+    })
 }
 
 module.exports = subscribe

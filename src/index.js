@@ -104,9 +104,10 @@ ssc.createKeys(ssc.keyTypes.ECC, {
         }
 
         client.getProfile(did).then(res => {
+            console.log('res***', res)
             state.me.profile.hasFetched.set(true)
 
-            // emit(evs.identity.setProfile, res.value.content)
+            emit(evs.identity.setProfile, res.value.content)
 
             // render the app *after* you fetch the profile initially
             render(html`<${Connector} emit=${emit} state=${state}
