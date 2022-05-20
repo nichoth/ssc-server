@@ -18,11 +18,61 @@ console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
-// dids is a map of { username: {did object} }
+// dids is a map of { username: { did, username } }
 const lastUser = dids ? dids.lastUser : null
 
+console.log('LS_NAME', LS_NAME)
+console.log('*dids*', dids)
+
+console.log('**store name**', (lastUser || {}).username)
+
+
+// here, the first time the app loads, it is called appName
+// after that, it is lastUser.username
+
+// need to get the right storename
+
+// the first time the app loads, we use `appName`
+// the second time it loads, we have `username` in localStorage
+
+
+
+// how to save the `appName` as the lastUser in localStorage?
+
+
+
+
+// lastUser.username vs appName
+// _need_ to use the same appName
+
+// _must_ fetch the username before loading the keys
+
+// if ((lastUser || {}).did) {
+//     Client.GetProfile((lastUser || {}).did)
+//         .then(res => {
+//             console.log('got profile', res)
+//         })
+// } else {
+
+// }
+
+
+
+
+// aaa vs ssc-demo
+// my DID is saved in localForage under `ssc-demo`
+// when the app re-loads, we use the name `aaa`, b/c that was saved
+//   as  `lastUser`
+//   this creates a separate DID, b/c different localForage instance
+
+// is appName the source of truth? or is it localStorage
+
+
 // appName is the 'default' user
-ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keystore => {
+ssc.createKeys(ssc.keyTypes.ECC, {
+    storeName: (lastUser || {}).username || appName
+    // storeName: appName
+}).then(keystore => {
     console.log('keystore', keystore)
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
@@ -44,7 +94,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keysto
         state.route.set(path)
     })
 
-    // need to call to get profile in here
     // don't show anything before your username has returned
 
     ssc.getDidFromKeys(keystore).then(did => {
@@ -57,46 +106,12 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName: lastUser || appName }).then(keysto
         client.getProfile(did).then(res => {
             state.me.profile.hasFetched.set(true)
 
-            emit(evs.identity.setProfile, res.value.content)
+            // emit(evs.identity.setProfile, res.value.content)
 
             // render the app *after* you fetch the profile initially
             render(html`<${Connector} emit=${emit} state=${state}
                 setRoute=${route.setRoute} client=${client}
             />`, document.getElementById('content'))
-
-            // if (!res.ok) {
-            //     res.text().then(txt => {
-            //         // console.log('*errrr text*', txt)
-            //         if (txt.includes('invalid DID')) {
-            //             console.log('**invalid did**', res)
-            //         }
-
-            //         state.me.profile.err.set(txt)
-
-            //         const noProfile = (state.me.profile.hasFetched() &&
-            //             state.me.profile.err())
-
-            //         // TODO -- handle the case where you have redeemed an
-            //         // invitation, but have not set a profile
-
-            //         if (noProfile) {
-            //             // if no profile, then go to an intro screen
-            //             route.setRoute('/hello')
-            //         }
-
-            //         // render the app *after* you fetch the profile initially
-            //         render(html`<${Connector} emit=${emit} state=${state}
-            //             setRoute=${route.setRoute} client=${client}
-            //         />`, document.getElementById('content'))
-            //     })
-            // } else {
-                // emit(evs.identity.setProfile, json.value.content)
-
-                // // render the app *after* you fetch the profile initially
-                // render(html`<${Connector} emit=${emit} state=${state}
-                //     setRoute=${route.setRoute} client=${client}
-                // />`, document.getElementById('content'))
-            // }
         })
         .catch(err => {
             console.log('profile errrr', err)

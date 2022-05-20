@@ -10,7 +10,13 @@
     form.new-id {
         border: 1px solid;
         padding: 1rem;
-        background-color: #ffffff61
+        background-color: #ffffff61;
+
+        p {
+            background-color: transparent;
+            padding: 0;
+            border: none;
+        }
     }
 
     #profile-description {

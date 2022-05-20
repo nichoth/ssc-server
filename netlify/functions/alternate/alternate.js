@@ -79,7 +79,7 @@ exports.handler = async function (ev, ctx) {
     // first get to:baz
     // then get to:bar
     // keep following the `to` field until you get no results
-    // then check if `foo` is followed by this server
+    // then check if `foo` is followed by this server or an _admin_
 
     return client.query(
         q.Get(q.Match(q.Index('profile-by-did'), did))

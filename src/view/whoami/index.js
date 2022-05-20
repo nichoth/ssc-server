@@ -1,6 +1,7 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { Cloudinary } from '@cloudinary/url-gen';
+import { generateFromString } from 'generate-avatar'
 const ssc = require('@nichoth/ssc/web')
 const EditableTextarea = require('../components/editable-textarea')
 const EditableImg = require('../components/editable-img')
@@ -9,6 +10,8 @@ const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
 const { TextInput, Button } = require('@nichoth/forms/preact')
 const { LS_NAME } = require('../../constants')
 const { admins } = require('../../config.json')
+
+console.log('LS_NAME', LS_NAME)
 
 const ls = window.localStorage
 
@@ -74,10 +77,11 @@ function Whoami (props) {
         // create a new DID
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
+                console.log('created keystore', username)
                 return ssc.getDidFromKeys(keystore).then(newDid => {
-                    const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
-                    dids[newDid] = { username, did: newDid }
-                    ls.setItem(LS_NAME, JSON.stringify(dids))
+                    // const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
+                    // dids[newDid] = { username, did: newDid }
+                    // ls.setItem(LS_NAME, JSON.stringify(dids))
                     const event = {}
                     event[newDid] = { username, did: newDid, image, keystore }
 
@@ -94,16 +98,24 @@ function Whoami (props) {
                             return client.postProfile({ username, image })
                         })
                         .then(res => {
+                            console.log('**res from postProfile**', res)
                             const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
 
                             const imgId = res.db.value.content.image
-                            const profile = { username, image: imgId }
+                            const profile = {
+                                username,
+                                image: imgId,
+                                did: newDid
+                            }
                             // update the localStorage object,
                             // then switch to the new ID
                             dids.lastUser = username
                             // dids.lastUser = newDid
+                            console.log('bbbbbbbbbbbbbbbbb', LS_NAME)
+                            console.log('bbbbbbbbbbbbbbbbb', dids.lastUser)
+                            dids[username] = profile
                             ls.setItem(LS_NAME, JSON.stringify(dids))
-                            emit(evs.identity.newDid, event)
+                            // emit(evs.identity.newDid, event)
                             // the new keystore is in effect now
                             emit(evs.identity.change, {
                                 did: newDid,
@@ -151,6 +163,21 @@ function Whoami (props) {
 
     const placeholderSvg = 'data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <circle cx="50" cy="50" r="50"/> </svg>'
     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
+    const lastUser = dids ? dids.lastUser : null
+
+    console.log('dids', Object.keys(dids))
+
+    const listOfUsers = (Object.keys(dids).length ?
+        Object.keys(dids).map(key => {
+            if (key === 'lastUser') return null
+            // `lastUser` _must_ be the current username here
+            if (dids[key].username === lastUser.username) return null
+            return dids[key].username
+        }) :
+        []).filter(Boolean)
+
+    console.log('list of users', listOfUsers)
+
 
     return html`<div class="route whoami">
         <h1>who am i?</h1>
@@ -192,26 +219,24 @@ function Whoami (props) {
 
         <h2>Other DIDs</h2>
         <ul>
-            ${Object.keys(dids).length ?
-                    Object.keys(dids).map(key => {
-                        if (key === 'lastUser') return null
-                        return html`
-                            <li>${dids[key].username}</li>
-                        `
-                    }) :
-                    html`<em>none</em>`
+            ${listOfUsers.length ? 
+                listOfUsers.map(username => {
+                    return html`<li>${username}</li>`
+                }) :
+                html`<em>none</em>`
             }
         </ul>
 
         <hr />
 
         <h2>Create a new ID</h2>
-        <p>
-            Create and use a new identity.
-            This will create a separate ID from any others you may have used.
-        </p>
-
         <form class="new-id" onSubmit=${createNewDid}>
+            <p>
+                Create and use a new identity.
+                This will create a separate ID from any others you may have
+                used.
+            </p>
+
             <${TextInput} name="Username" displayName="Username"
                 required=${true}
                 onInput=${handleInput}

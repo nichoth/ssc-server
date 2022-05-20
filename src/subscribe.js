@@ -1,4 +1,5 @@
 var evs = require('./EVENTS')
+const { LS_NAME } = require('./constants')
 const xtend = require('xtend')
 
 function subscribe (bus, state) {
@@ -7,9 +8,9 @@ function subscribe (bus, state) {
     })
 
     // this event means 'there is a new DID now'
-    bus.on(evs.identity.newDid, ev => {
-        state.dids.set(xtend(state.dids(), ev))
-    })
+    // bus.on(evs.identity.newDid, ev => {
+    //     state.dids.set(xtend(state.dids(), ev))
+    // })
 
     // this event means 'the app is changing to use this new DID'
     bus.on(evs.identity.change, ({ did, keystore, profile }) => {
@@ -43,12 +44,22 @@ function subscribe (bus, state) {
         state.me.profile.desc.set(ev.content.desc)
     })
 
-    bus.on(evs.identity.setProfile, ev => {
-        const { username, image, desc } = ev
-        state.me.profile.username.set(username)
-        state.me.profile.image.set(image)
-        state.me.profile.desc.set(desc)
-    })
+    // bus.on(evs.identity.setProfile, ev => {
+    //     const { username, image, desc, about } = ev
+    //     console.log('**ev**', ev)
+    //     // handle lastUser key
+    //     const dids = (JSON.parse(window.localStorage.getItem(LS_NAME)) || {})
+    //     dids[username] = { did: about, username }
+    //     // dids is a map of { username: { did, username } }
+    //     const lastUser = { did: about, username }
+    //     dids.lastUser = lastUser
+    //     console.log('aaaaaaaaaaa', LS_NAME, JSON.stringify(dids))
+    //     window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
+
+    //     state.me.profile.username.set(username)
+    //     state.me.profile.image.set(image)
+    //     state.me.profile.desc.set(desc)
+    // })
 }
 
 module.exports = subscribe

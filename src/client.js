@@ -13,18 +13,7 @@ module.exports = function Client (_keystore) {
     var keystore = _keystore
 
     const client = {
-        getProfile: function getProfile (did) {
-            const qs = new URLSearchParams({ did }).toString()
-            var url = (BASE + '/api/profile' + '?' + qs)
-            return fetch(url)
-                .then(res => {
-                    if (!res.ok) return res.text().then(text => {
-                        throw new Error(text)
-                    })
-
-                    return res.json()
-                })
-        },
+        getProfile: _getProfile,
 
         setKeystore: function (ks) {
             keystore = ks
@@ -158,4 +147,19 @@ module.exports = function Client (_keystore) {
     }
 
     return client
+}
+
+module.exports.GetProfile = _getProfile
+
+function _getProfile (did) {
+    const qs = new URLSearchParams({ did }).toString()
+    var url = (BASE + '/api/profile' + '?' + qs)
+    return fetch(url)
+        .then(res => {
+            if (!res.ok) return res.text().then(text => {
+                throw new Error(text)
+            })
+
+            return res.json()
+        })
 }

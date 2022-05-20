@@ -19,17 +19,17 @@ exports.handler = async function (ev, ctx) {
             q.Get(q.Match(q.Index('profile-by-did'), did))
         )
             .then(doc => {
-                const res = xtend(doc.data, {
-                    value: xtend(doc.data.value, {
-                        content: xtend(doc.data.value.content, {
-                            avatar: doc.data.value.content.avatar || null
-                        })
-                    })
-                })
+                // const res = xtend(doc.data, {
+                //     value: xtend(doc.data.value, {
+                //         content: xtend(doc.data.value.content, {
+                //             avatar: doc.data.value.content.avatar || null
+                //         })
+                //     })
+                // })
 
                 return {
                     statusCode: 200,
-                    body: JSON.stringify(res)
+                    body: JSON.stringify(doc.data)
                 }
             })
             .catch(err => {
@@ -67,6 +67,20 @@ exports.handler = async function (ev, ctx) {
 
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
+
+
+
+
+        // need to check if the request is from an either an `admin`
+        // or someone in an `alternate` chain
+        // if it is, then we can write the message to the DB
+
+        // if there is a message `to` this DID, then it is part of an alt chain
+        // if there is no `to` message, then this _must_ be an `admin` DID,
+        // or a DID that is `follow`ed by the server
+
+
+
 
         const isVal = await ssc.isValidMsg(msg, null, pubKey)
         if (!isVal) {
