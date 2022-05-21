@@ -28,7 +28,14 @@ function Home (props) {
                     }
                 </div>
             `:
-            null
+            html`<div>
+                ${pin ?
+                    html`<div dangerouslySetInnerHTML=${{
+                        __html: marked(pin)
+                    }}></div>` :
+                    null
+                }
+            </div>`
         }
     </div>`
 }

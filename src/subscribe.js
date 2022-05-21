@@ -1,6 +1,7 @@
 var evs = require('./EVENTS')
 // const { LS_NAME } = require('./constants')
 const xtend = require('xtend')
+const { admins } = require('./config.json')
 
 function subscribe (bus, state) {
     bus.on('*', (name, ev) => {
@@ -16,10 +17,14 @@ function subscribe (bus, state) {
     bus.on(evs.identity.change, ({ did, keystore, profile }) => {
         // this changes the "active" DID that the app is using
         console.log('identity change', did, profile)
-        const { username, image } = profile
+        // const { username, image } = profile
         state.me.keys.set(keystore)
         state.me.did.set(did)
+        console.log('admins', admins)
+        const isAdmin = admins.some(obj => obj.did === did)
+        console.log('*is admin*', isAdmin)
         state.me.profile.set(xtend(state.me.profile(), profile))
+        state.me.isAdmin.set(isAdmin)
         // need to re-fetch the data that the app is using
     })
 
