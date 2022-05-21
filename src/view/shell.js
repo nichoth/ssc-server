@@ -2,11 +2,11 @@ import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
-var ssc = require('@nichoth/ssc/web')
 const EditableImg = require('./components/editable-img')
 const EditableField = require('./components/editable-field')
 const evs = require('../EVENTS')
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
+const { LS_NAME } = require('../constants')
 
 const cld = new Cloudinary({
     cloud: {
@@ -31,8 +31,15 @@ function Shell (props) {
             imgHash: me.profile.image
         })
             .then(res => {
+                console.log('meeeeeeeeeeeeee', me)
                 const { username } = res.db.value.content
                 emit(evs.identity.setUsername, { username })
+                // update localStorage with the new profile info
+                // TODO -- should refactor into a single object
+                //   that handles localStorage & server-side storage
+                const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+                dids[me.did] = Object.assign(dids[me.did], { username })
+                window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
                 setResolving(false)
             })
     }
