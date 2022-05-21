@@ -9,10 +9,15 @@ const evs = require('../EVENTS')
 // this will replace a single pinned message
 
 function NewPin (props) {
-    const { client, emit, pin } = props
+    const { client, emit, pin, setRoute } = props
     console.log('*props*', props)
 
     const [isResolving, setResolving] = useState(false)
+
+    function cancel (ev) {
+        ev.preventDefault()
+        setRoute('/')
+    }
 
     function savePin (ev) {
         ev.preventDefault()
@@ -39,7 +44,7 @@ function NewPin (props) {
 
         <p>Whatever you save here will <em>replace</em> any existing message.</p>
 
-        <form onsubmit=${savePin}>
+        <form onsubmit=${savePin} onReset=${cancel}>
             <textarea required=${true} id="new-pin" name="new-pin"
                 autofocus=${true}
             >
