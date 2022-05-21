@@ -21,8 +21,8 @@ console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const lastUser = dids ? dids.lastUser : null
 
-console.log('LS_NAME', LS_NAME)
-console.log('*dids*', dids)
+// console.log('LS_NAME', LS_NAME)
+// console.log('*dids*', dids)
 
 const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
