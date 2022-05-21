@@ -1,10 +1,7 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
-// const ssc = require('@nichoth/ssc/web')
 const { Button } = require('@nichoth/forms/preact')
 const evs = require('../EVENTS')
-
-// ssc.createMsg (keyStore, prevMsg, content)
 
 // this will replace a single pinned message
 

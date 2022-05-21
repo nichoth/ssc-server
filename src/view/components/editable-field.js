@@ -2,9 +2,8 @@ import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 
 function EditableField (props) {
-    var { value, onSave, name } = props
+    var { value, onSave, name, isResolving } = props
     var [isEditing, setEditing] = useState(false)
-    var [isResolving, setResolving] = useState(false)
 
     function _setEditing (ev) {
         ev.preventDefault()
@@ -19,14 +18,11 @@ function EditableField (props) {
     function _onSave (ev) {
         ev.preventDefault()
         var val = ev.target.elements[name].value
-        setResolving(true)
         onSave(val)
             .then(() => {
-                setResolving(false)
                 setEditing(false)
             })
             .catch(err => {
-                setResolving(false)
                 console.log('errrrrr', err)
             })
     }

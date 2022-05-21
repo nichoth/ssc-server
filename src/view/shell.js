@@ -23,22 +23,17 @@ function Shell (props) {
     const { profile } = me
     const [ isResolving, setResolving ] = useState(false)
 
-    // @TODO
-    // make a save name function
     async function saveName (me, newName) {
-        console.log('set name in here', newName)
-
-        // postProfile: function ({ did, username, imgHash, image, desc }) {
+        setResolving(true)
         return client.postProfile({
             did: me.did,
             username: newName,
             imgHash: me.profile.image
         })
             .then(res => {
-                console.log('resssssssssssssss', res)
-                const { username } = res.db.data.value.content
-                console.log('*new name*', username)
+                const { username } = res.db.value.content
                 emit(evs.identity.setUsername, { username })
+                setResolving(false)
             })
     }
 
@@ -108,6 +103,7 @@ function Shell (props) {
 
                 <${EditableField} name="username"
                     class="name-editor"
+                    isResolving=${isResolving}
                     value=${profile.username || 'Anonymous'}
                     onSave=${saveName.bind(null, me)}
                 />
