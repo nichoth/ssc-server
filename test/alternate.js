@@ -1,6 +1,5 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-// const client = require('../src/client')
 const path = require('path')
 const ssc = require('@nichoth/ssc-lambda')
 const test = require('tape')
