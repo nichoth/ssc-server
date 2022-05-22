@@ -90,11 +90,16 @@ exports.handler = async function (ev, ctx) {
         if (isFollowed) {
             return await update({ did, pubKey, msg, file })
         }
+
+        return {
+            statusCode: 401,
+            body: 'not allowed'
+        }
     }
 
     return {
-        statusCode: 401,
-        body: 'not allowed'
+        statusCode: 405,
+        body: 'method is not ok'
     }
 }
 
