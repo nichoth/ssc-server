@@ -1,9 +1,39 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const base = 'http://localhost:8888'
+const path = require('path')
 const ssc = require('@nichoth/ssc-lambda')
+const test = require('tape')
+const fs = require('fs')
+const { admins } = require('../src/config.json')
+const base = 'http://localhost:8888'
 
-module.exports = function pin (test, keys) {
+if (require.main === module) {
+    ssc.createKeys().then(user => {
+        ssc.exportKeys(user.keys).then(exported => {
+            // need to write this did to config.admins
+            const did = ssc.publicKeyToDid(exported.public)
+            const configPath = path.resolve(__dirname, '..', 'src',
+                'config.json')
+            admins.push({ did })
+
+            fs.writeFileSync(configPath, JSON.stringify({
+                admins
+            }, null, 2))
+
+            test('pin', t => {
+                pin(test, user.keys)
+                t.end()
+            })
+
+
+            // t.end()
+        })
+    })
+}
+
+module.exports = pin
+
+function pin (test, keys) {
     test('pin a message', t => {
         ssc.createMsg(keys, null, {
             type: 'pin',

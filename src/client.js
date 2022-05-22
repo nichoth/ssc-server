@@ -74,6 +74,7 @@ module.exports = function Client (_keystore) {
         createAlternateDid: function ({ newKeystore }) {
             if (!newKeystore) return Promise.reject(new Error('Missing keystore'))
 
+            // create a msg signed by the old DID
             return ssc.getDidFromKeys(keystore)
                 .then(oldDid => {
                     return ssc.getDidFromKeys(newKeystore)

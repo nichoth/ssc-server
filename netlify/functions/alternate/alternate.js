@@ -86,7 +86,10 @@ exports.handler = async function (ev, ctx) {
     )
         .then(doc => {
             console.log('doc', doc)
-            // return doc
+
+            // TODO
+            // in here, need to write the `aleternate` message to DB
+
             return {
                 statusCode: 200,
                 body: JSON.stringify(doc.data)
