@@ -2,6 +2,26 @@
     margin: 1vw;
 
     .other-dids {
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            display: inline-block;
+            margin-right: 1rem;
+
+            img {
+                border: 1px solid;
+                border-radius: 50%;
+                height: 2rem;
+                width: 2rem;
+                object-fit: cover;
+            }
+        }
+
         li {
             margin-bottom: 1rem;
 

@@ -1,6 +1,7 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { Cloudinary } from '@cloudinary/url-gen';
+import { scale } from "@cloudinary/url-gen/actions/resize";
 import { generateFromString } from 'generate-avatar'
 const ssc = require('@nichoth/ssc/web')
 const EditableTextarea = require('../components/editable-textarea')
@@ -224,7 +225,17 @@ function Whoami (props) {
         <ul class="other-dids">
             ${listOfUsers.length ? 
                 listOfUsers.map(user => {
+                    const avatarUrl = user.image ?
+                        (cld
+                            .image(encodeURIComponent(user.image))
+                            .resize( scale().width(100) )
+                            .toURL()) :
+                        ('data:image/svg+xml;utf8,' +
+                            generateFromString((me && me.did) || ''))
                     return html`<li>
+                        <span class="avatar">
+                            <img src=${avatarUrl} />
+                        </span>
                         <span>${user.username}</span>
                         <button
                             onClick=${switchProfile.bind(null, user)}
