@@ -4,6 +4,7 @@ var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
+const { admins } = require('../../../src/config.json')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
@@ -26,7 +27,6 @@ exports.handler = async function (ev, ctx) {
 
     try {
         var { publicKey } = ssc.didToPublicKey(msg.author)
-        console.log('**public key**', publicKey)
     } catch (err) {
         return {
             statusCode: 422,
@@ -36,9 +36,7 @@ exports.handler = async function (ev, ctx) {
 
     var isVal
     try {
-        console.log('*pub key*', publicKey)
         isVal = await ssc.isValidMsg(msg, null, publicKey)
-        console.log('*is val*', isVal)
     } catch (err) {
         return {
             statusCode: 422,
@@ -53,7 +51,12 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    console.log('*msg*', msg)
+    if (!msg.content.from || !msg.content.to) {
+        return {
+            statusCode: 422,
+            body: 'invalid message'
+        }
+    }
 
     const did = ssc.getAuthor(msg)
 
@@ -62,6 +65,25 @@ exports.handler = async function (ev, ctx) {
             statusCode: 400,
             body: 'invalid message'
         }
+    }
+
+    const key = ssc.getId(msg)
+
+    // if is an admin, create an alt
+    if (admins.some(el => el.did === did)) {
+        return client.query(
+            q.Create(
+                q.Collection('alternate'),
+                { data: { key, value: msg } }
+            )
+        ).then(res => {
+            res.data.value.previous = (res.data.value.previous || null)
+
+            return {
+                statusCode: 200,
+                body: JSON.stringify(res.data)
+            }
+        })
     }
 
     // check to make sure the server is following the given did
@@ -81,6 +103,9 @@ exports.handler = async function (ev, ctx) {
     // keep following the `to` field until you get no results
     // then check if `foo` is followed by this server or an _admin_
 
+
+    // if they have a profile, then we are following them
+    // so create an alt
     return client.query(
         q.Get(q.Match(q.Index('profile-by-did'), did))
     )

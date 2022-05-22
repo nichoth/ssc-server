@@ -13,6 +13,7 @@ const { admins } = require('../src/config.json')
 
 var ntl
 var keys
+var did
 
 test('setup', function (t) {
     setup(t.test, (netlify) => {
@@ -26,7 +27,8 @@ test('setup', function (t) {
             keys = _keys.keys
             ssc.exportKeys(keys).then(exported => {
                 // need to write this did to config.admins
-                const did = ssc.publicKeyToDid(exported.public)
+                const _did = ssc.publicKeyToDid(exported.public)
+                did = _did
                 const configPath = path.resolve(__dirname, '..', 'src',
                     'config.json')
                 admins.push({ did })
@@ -39,6 +41,10 @@ test('setup', function (t) {
             })
         })
     })
+})
+
+test('alternate', t => {
+    require('./alternate')(t.test, keys, did)
 })
 
 test('pin', t => {

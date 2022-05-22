@@ -7,6 +7,7 @@ const fs = require('fs')
 const { admins } = require('../src/config.json')
 const base = 'http://localhost:8888'
 
+// @TODO -- need to start the dev server before running tests
 if (require.main === module) {
     ssc.createKeys().then(user => {
         ssc.exportKeys(user.keys).then(exported => {
@@ -59,7 +60,7 @@ function pin (test, keys) {
                     .then(res => {
                         const key = ssc.getId(msg)
                         t.equal(res.data.key, key,
-                            'should return the exprected key')
+                            'should return the expected key')
                         t.equal(res.data.value.content.text, 'wooo',
                             'should return the pinned message')
                         t.end()
@@ -94,7 +95,7 @@ function pin (test, keys) {
                 }
 
                 res.text().then(text => {
-                    t.equal(res.status, 403, 'should have exprected status code')
+                    t.equal(res.status, 403, 'should have expected status code')
                     t.equal(text, 'not allowed', 'should have expected error body')
                     t.end()
                 })
