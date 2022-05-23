@@ -9,7 +9,8 @@ const fs = require('fs')
 const ssc = require('@nichoth/ssc-lambda')
 const setup = require('./setup')
 
-const { admins } = require('../src/config.json')
+const config = require('../src/config.json')
+const { admins } = config
 
 var ntl
 var keys
@@ -33,9 +34,9 @@ test('setup', function (t) {
                     'config.json')
                 admins.push({ did })
 
-                fs.writeFileSync(configPath, JSON.stringify({
-                    admins
-                }, null, 2))
+                fs.writeFileSync( configPath, JSON.stringify(
+                    Object.assign({}, config, { admins }), null, 2
+                ) )
 
                 t.end()
             })
