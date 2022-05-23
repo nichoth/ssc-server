@@ -1,4 +1,6 @@
 {
+  "appName": "ssc-demo",
+  "CLOUDINARY_CLOUD_NAME": "nichoth",
   "admins": [
     {
       "did": "did:key:z82T5XeMUNk67GZtcQ2pYnc34ZyUnMrE1YC1bHQAveSZn7oHAz2xyouSRLYo5FYsi2LD9wGmMBQcobhT3JbKPDfhVF5D4"
@@ -110,6 +112,12 @@
     },
     {
       "did": "did:key:z82T5VKorv2BCZhBsejnBfzkV9gFrjibpJZnuCAMPPreVRsXaoLxruXStGuh95TMH3WRFfkoPpzNGq2FVKHadXvhH2xZh"
+    },
+    {
+      "did": "did:key:z82T5ZDHhkkq8T3Hbz5V3EuE8uX3a3w3NBvzWqK9RkckeHjVBSt5H799ofTVtDoJUbj6S36tQJ8LtHPQmhcRoMizkczeA"
+    },
+    {
+      "did": "did:key:z82T5ZtyE4CdbAubgjw8GGoFcwWZhNMNkSvEspziZyxdgWkxwKUZdFcKTMHgDsFsS2MKXJPC4J2H2NekcA9z6VBhfxRJY"
     }
   ]
 }

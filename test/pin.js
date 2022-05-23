@@ -32,9 +32,8 @@ if (require.main === module) {
                         'config.json')
                     admins.push({ did })
 
-                    fs.writeFileSync(configPath, JSON.stringify({
-                        admins
-                    }, null, 2))
+                    fs.writeFileSync(configPath, JSON.stringify(
+                        Object.assign({}, config, { admins }), null, 2))
 
 
                     t.end()

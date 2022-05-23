@@ -1,4 +1,3 @@
-// import { spawn } from 'child_process'
 const { spawn } = require('child_process')
 
 function setup (test, cb) {

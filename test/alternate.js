@@ -6,7 +6,8 @@ const test = require('tape')
 const fs = require('fs')
 const onExit = require('signal-exit')
 const setup = require('./setup')
-const { admins } = require('../src/config.json')
+const config = require('../src/config.json')
+const { admins } = config
 const base = 'http://localhost:8888'
 
 if (require.main === module) {
@@ -33,10 +34,8 @@ if (require.main === module) {
                         'config.json')
                     admins.push({ did })
 
-                    fs.writeFileSync(configPath, JSON.stringify({
-                        admins
-                    }, null, 2))
-
+                    fs.writeFileSync( configPath, JSON.stringify(
+                        Object.assign({}, config, { admins }), null, 2) )
 
                     t.end()
                 })
