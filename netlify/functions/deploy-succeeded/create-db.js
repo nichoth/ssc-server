@@ -55,7 +55,13 @@ function createFaunaDB (key) {
             }]
         ],
 
-        ['invitations'],
+        ['invitations', [
+            {
+                name: 'invitation-by-code',
+                source: q.Collection('invitations'),
+                terms: [{ field: ['data', 'value', 'content', 'code'] }]
+            }
+        ]],
 
         // ['server-following', [
         //     {

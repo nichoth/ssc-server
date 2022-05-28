@@ -1,3 +1,4 @@
+require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
 var q = faunadb.query
@@ -44,17 +45,30 @@ exports.handler = async function (ev, ctx) {
             }
 
             // msg and DID are ok, write to DB
-            return {
-                statusCode: 200,
-                body: JSON.stringify({ msg: 'ok!' })
-            }
+            return writeInvitation({ msg })
+                .then(res => {
+                    return {
+                        statusCode: 200,
+                        body: JSON.stringify(res.data)
+                    }
+                })
         })
         .catch(err => {
-            console.log('*errrrrrr*', err)
             return {
                 statusCode: 400,
                 body: err.toString()
             }
         })
 
+}
+
+function writeInvitation ({ msg }) {
+    const key = ssc.getId(msg)
+
+    return client.query(
+        q.Create(
+            q.Collection('invitations'),
+            { data: { key, value: msg } }
+        )
+    )
 }

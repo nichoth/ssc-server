@@ -64,8 +64,8 @@ function invite (test, keys, did) {
                 })
                 .then(res => {
                     if (!res) return
-                    console.log('resssss', res)
-                    t.equal(res.msg, 'ok!', 'should return ok')
+                    t.equal(res.value.content.code, msg.content.code, 
+                        'should return the message after writing it')
                     t.end()
                 })
         })
