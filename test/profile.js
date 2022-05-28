@@ -140,8 +140,8 @@ function profileTests (test, keys, did) {
                     })
                     .then(text => {
                         if (!text) return
-                        t.equal(text, 'not allowed', 'should return ' +
-                            '"not allowed" error message')
+                        t.equal(text, 'not allowed',
+                            'should return "not allowed" error message')
                         t.end()
                     })
                 })

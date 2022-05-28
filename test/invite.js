@@ -40,7 +40,7 @@ if (require.main === module) {
 
 function invite (test, keys, did) {
     // keys here is for the 'admin' user
-    test('create an invitaion', t => {
+    test('create an invitaion as an admin', t => {
         ssc.createMsg(keys, null, {
             type: 'invitation',
             code: uuidv4()
@@ -66,6 +66,38 @@ function invite (test, keys, did) {
                     if (!res) return
                     t.equal(res.value.content.code, msg.content.code, 
                         'should return the message after writing it')
+                    t.end()
+                })
+        })
+    })
+
+    test('create an invitaion as a random person', t => {
+        ssc.createKeys().then(user => {
+
+            const { keys } = user
+
+            ssc.createMsg(keys, null, {
+                type: 'invitation',
+                code: uuidv4()
+            })
+                .then(msg => {
+                    return fetch(BASE + '/.netlify/functions/invitation', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(msg)
+                    })
+                })
+                .then(res => {
+                    if (res.ok) {
+                        t.fail('response should not be ok')
+                        t.end()
+                    }
+                    return res.text()
+                })
+                .then(res => {
+                    if (!res) return
+                    t.equal(res, 'invalid DID',
+                        'should return the expected error message')
                     t.end()
                 })
         })

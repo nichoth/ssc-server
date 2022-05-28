@@ -235,6 +235,12 @@
     },
     {
       "did": "did:key:z82T5ZZktu2UBmGWN8W4TyWjmSHvSr3a9RbWaTeQdBdteD8vTuqQnNQgbMHtChqq21FuKsvggdjLmaxqSgCoyq91C87q3"
+    },
+    {
+      "did": "did:key:z82T5aHgtUdhST5qBMLdpPPjo9y5xFvxstCoVZ8sA166aEHoux13xokAWCD6bdErdiwivFNZaKZrrokuR4GGUbKW5Bfv5"
+    },
+    {
+      "did": "did:key:z82T5XRp5WANhAbsNu2Yyk3mDBthXHQHFt4Yq4CdhHwGdec4zgA3EJELSRBq8ZWcZxfC6p4tiMWhwRqwuirHriihVY9EA"
     }
   ]
 }
