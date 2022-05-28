@@ -4,7 +4,7 @@ const ssc = require('@nichoth/ssc-lambda')
 const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
-const base = 'http://localhost:8888'
+const BASE = 'http://localhost:8888'
 var createHash = require('create-hash')
 
 if (require.main === module) {
@@ -55,7 +55,7 @@ function profileTests (test, keys, did) {
             desc: null,
             image: hash
         }).then(msg => {
-            fetch(base + '/.netlify/functions/profile', {
+            fetch(BASE + '/api/profile', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -92,7 +92,7 @@ function profileTests (test, keys, did) {
                     desc: null,
                     image: hash
                 }).then(msg => {
-                    fetch(base + '/.netlify/functions/profile', {
+                    return fetch(BASE + '/api/profile', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
