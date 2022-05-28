@@ -1,3 +1,4 @@
+require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
 var createHash = require('create-hash')
@@ -7,6 +8,7 @@ var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const { admins } = require('../../../src/config.json')
+const { SERVER_PUB_KEY } = process.env
 
 
 exports.handler = async function (ev, ctx) {
@@ -55,7 +57,14 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
-        console.log('**got a profile post req**', msg)
+        if (msg.content.type !== 'about') {
+            return {
+                statusCode: 422,
+                body: 'invalid message type'
+            }
+        }
+
+        // console.log('**got a profile POST req**', msg)
 
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
@@ -75,22 +84,31 @@ exports.handler = async function (ev, ctx) {
         // @TODO -- handle alt accounts
         // @TODO -- need to query to check if the server follows the given DID
         const isAdmin = admins.some(el => el.did === did)
-        const isAlt = false
-
-        // query goes here to check if server is following DID
-        const isFollowed = false
-
-
 
         if (isAdmin) {
             return await update({ did, pubKey, msg, file })
         }
 
+        const isAlt = false
+
         if (isAlt) {
             return await update({ did, pubKey, msg, file })
         }
 
-        if (isFollowed) {
+        // query goes here to check if server is following DID
+        // const isFollowed = false
+        const isNotFollowed = await client.query(
+            q.IsEmpty(q.Match(
+                q.Index('a_follows_b'),
+                [ssc.publicKeyToDid(SERVER_PUB_KEY), did]
+            ))
+        )
+
+
+        console.log('*is followed*', isNotFollowed)
+
+
+        if (!isNotFollowed) {
             return await update({ did, pubKey, msg, file })
         }
 
