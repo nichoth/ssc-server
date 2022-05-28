@@ -149,4 +149,13 @@ function profileTests (test, keys, did) {
 
         })
     })
+
+
+    // @TODO
+    test('follow someone then save a profile from them', t => {
+        ssc.createKeys().then(user => {
+            ssc.createMsg(user.keys, null, {
+            })
+        })
+    })
 }

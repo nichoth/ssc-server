@@ -4,7 +4,7 @@ const ssc = require('@nichoth/ssc-lambda')
 const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
-const base = 'http://localhost:8888'
+const BASE = 'http://localhost:8888'
 
 if (require.main === module) {
     var _keys
@@ -47,7 +47,7 @@ function alt (test, keys, did) {
             from: did,
             to: '123'
         }).then(msg => {
-            fetch(base + '/.netlify/functions/alternate', {
+            fetch(BASE + '/.netlify/functions/alternate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(msg)

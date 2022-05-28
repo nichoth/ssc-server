@@ -39,7 +39,7 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    // *is a post request*
+    // *is a POST request*
     var msg
     try {
         const body = JSON.parse(ev.body)
