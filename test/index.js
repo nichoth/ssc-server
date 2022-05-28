@@ -30,6 +30,10 @@ test('pin', t => {
     require('./pin')(t.test, _keys)
 })
 
+test('profile', t => {
+    require('./profile')(t.test, _keys, _did)
+})
+
 test('all done', function (t) {
     ntl.kill()
     t.end()
