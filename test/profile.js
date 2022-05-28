@@ -79,4 +79,45 @@ function profileTests (test, keys, did) {
 
         })
     })
+
+    test('save a profile as a random person', t => {
+        ssc.createKeys().then(user => {
+            ssc.exportKeys(user.keys).then(exported => {
+                const did = ssc.publicKeyToDid(exported.public)
+
+                ssc.createMsg(user.keys, null, {
+                    type: 'about',
+                    about: did,
+                    username: 'random-person',
+                    desc: null,
+                    image: hash
+                }).then(msg => {
+                    fetch(base + '/.netlify/functions/profile', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            msg,
+                            file: imgExample
+                        })
+                    }).then(res => {
+                        if (res.ok) {
+                            t.fail('should return a bad response')
+                            t.end()
+                            return
+                        }
+                        t.equal(res.status, 401, 'should return code 401')
+                        return res.text()
+                    })
+                    .then(text => {
+                        if (!text) return
+                        t.equal(text, 'not allowed', 'should return ' +
+                            '"not allowed" error message')
+                        t.end()
+                    })
+                })
+
+            })
+
+        })
+    })
 }
