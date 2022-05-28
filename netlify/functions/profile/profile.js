@@ -1,6 +1,5 @@
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-// const xtend = require('xtend')
 var createHash = require('create-hash')
 const upload = require('./upload')
 var q = faunadb.query
@@ -63,7 +62,6 @@ exports.handler = async function (ev, ctx) {
 
 
 
-
         // need to check if the request is from an either an `admin`
         // or someone in an `alternate` chain
         // or a DID that is followed by this server
@@ -74,10 +72,15 @@ exports.handler = async function (ev, ctx) {
         // or a DID that is `follow`ed by the server
 
 
-        // @TODO -- handle alt accounts and followed accounts
+        // @TODO -- handle alt accounts
+        // @TODO -- need to query to check if the server follows the given DID
         const isAdmin = admins.some(el => el.did === did)
         const isAlt = false
+
+        // query goes here to check if server is following DID
         const isFollowed = false
+
+
 
         if (isAdmin) {
             return await update({ did, pubKey, msg, file })

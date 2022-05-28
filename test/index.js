@@ -1,55 +1,33 @@
-const path = require('path')
-
 require('dotenv').config()
 require('isomorphic-fetch')
-// const base = 'http://localhost:8888'
 const test = require('tape')
 const onExit = require('signal-exit')
-const fs = require('fs')
-const ssc = require('@nichoth/ssc-lambda')
 const setup = require('./setup')
 
-const config = require('../src/config.json')
-const { admins } = config
-
 var ntl
-var keys
-var did
+var _keys
+var _did
 
 test('setup', function (t) {
-    setup(t.test, (netlify) => {
+    setup(t.test, ({ netlify, keys, did }) => {
         ntl = netlify
+        _keys = keys
+        _did = did
 
         onExit(() => {
             ntl.kill('SIGINT')
         })
 
-        ssc.createKeys().then(_keys => {
-            keys = _keys.keys
-            ssc.exportKeys(keys).then(exported => {
-                // need to write this did to config.admins
-                const _did = ssc.publicKeyToDid(exported.public)
-                did = _did
-                const configPath = path.resolve(__dirname, '..', 'src',
-                    'config.json')
-                admins.push({ did })
-
-                fs.writeFileSync( configPath, JSON.stringify(
-                    Object.assign({}, config, { admins }), null, 2
-                ) )
-
-                t.end()
-            })
-        })
+        t.end()
     })
 })
 
 test('alternate', t => {
-    require('./alternate')(t.test, keys, did)
+    require('./alternate')(t.test, _keys, _did)
 })
 
 test('pin', t => {
-    require('./pin')(t.test, keys)
+    require('./pin')(t.test, _keys)
 })
 
 test('all done', function (t) {

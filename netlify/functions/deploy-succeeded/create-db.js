@@ -73,7 +73,17 @@ function createFaunaDB (key) {
                 terms: [{ field: ['data', 'value', 'author'] }]
             },
 
-            // who is following the given user?
+            // does person-a follow person-b?
+            {
+                name: 'a_follows_b',
+                source: q.Collection('follow'),
+                terms: [
+                    { field: ['data', 'value', 'author'] },
+                    { field: ['data', 'value', 'content', 'contact'] }
+                ]
+            },
+
+            // who is the given user followed by?
             {
                 name: 'followed',
                 source: q.Collection('follow'),

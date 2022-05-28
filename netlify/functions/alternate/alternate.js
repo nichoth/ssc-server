@@ -16,8 +16,7 @@ exports.handler = async function (ev, ctx) {
 
     var msg
     try {
-        const body = JSON.parse(ev.body)
-        msg = body
+        msg = JSON.parse(ev.body)
     } catch (err) {
         return {
             statusCode: 422,
@@ -110,8 +109,6 @@ exports.handler = async function (ev, ctx) {
         q.Get(q.Match(q.Index('profile-by-did'), did))
     )
         .then(doc => {
-            console.log('doc', doc)
-
             // TODO
             // in here, need to write the `aleternate` message to DB
 

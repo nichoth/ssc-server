@@ -1,50 +1,32 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const path = require('path')
 const ssc = require('@nichoth/ssc-lambda')
 const test = require('tape')
-const fs = require('fs')
 const onExit = require('signal-exit')
 const setup = require('./setup')
-const config = require('../src/config.json')
-const { admins } = config
 const base = 'http://localhost:8888'
 
 if (require.main === module) {
-    var keys
+    var _keys
     var ntl
-    var did
+    var _did
 
     test('setup', function (t) {
-        setup(t.test, (netlify) => {
+        setup(t.test, ({ netlify, keys, did }) => {
             ntl = netlify
+            _keys = keys
+            _did = did
 
             onExit(() => {
                 ntl.kill('SIGINT')
             })
 
-            ssc.createKeys().then(user => {
-                keys = user.keys
-                ssc.exportKeys(user.keys).then(exported => {
-                    // need to write this did to config.admins
-                    const _did = ssc.publicKeyToDid(exported.public)
-                    did = _did
-                    console.log('*did*', _did)
-                    const configPath = path.resolve(__dirname, '..', 'src',
-                        'config.json')
-                    admins.push({ did })
-
-                    fs.writeFileSync( configPath, JSON.stringify(
-                        Object.assign({}, config, { admins }), null, 2) )
-
-                    t.end()
-                })
-            })
+            t.end()
         })
     })
 
     test('alternates', t => {
-        alt(t.test, keys, did)
+        alt(t.test, _keys, _did)
         t.end()
     })
 
