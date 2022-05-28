@@ -129,7 +129,6 @@ async function update ({ did, msg, pubKey, file }) {
     const isVal = await ssc.isValidMsg(msg, null, pubKey)
 
     if (!isVal) {
-        console.log('**invalid msg**', pubKey)
         return {
             statusCode: 422,
             body: 'invalid signature'

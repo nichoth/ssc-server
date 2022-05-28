@@ -80,6 +80,36 @@ function profileTests (test, keys, did) {
         })
     })
 
+
+    test('save a profile from the admin, but with a bad signature', t => {
+        ssc.createMsg(keys, null, {
+            type: 'about',
+            about: did,
+            username: 'test-user',
+            desc: null,
+            image: hash
+        }).then(msg => {
+            msg.signature = msg.signature + 'aaaa'
+
+            fetch(BASE + '/api/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    msg,
+                    file: imgExample
+                })
+            }).then(res => {
+                t.equal(res.status, 422, 'should return code 422')
+                res.text().then(text => {
+                    t.equal(text,  'invalid signature',
+                        'should have the expected error message')
+                    t.end()
+                })
+            })
+        })
+    })
+
+
     test('save a profile as a random person', t => {
         ssc.createKeys().then(user => {
             ssc.exportKeys(user.keys).then(exported => {
@@ -115,7 +145,6 @@ function profileTests (test, keys, did) {
                         t.end()
                     })
                 })
-
             })
 
         })
