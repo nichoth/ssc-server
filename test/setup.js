@@ -11,7 +11,6 @@ function setup (test, cb) {
         var ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
 
         ntl.stdout.on('data', function (d) {
-
             if (d.toString().includes('Server now ready')) {
                 ssc.createKeys().then(user => {
                     // console.log('**created keys**', user)

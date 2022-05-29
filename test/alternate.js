@@ -5,6 +5,7 @@ const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
 const BASE = 'http://localhost:8888'
+const u = require('./util')
 
 if (require.main === module) {
     var _keys
@@ -19,6 +20,7 @@ if (require.main === module) {
 
             onExit(() => {
                 ntl.kill('SIGINT')
+                // console.log('exit')
             })
 
             t.end()
@@ -94,7 +96,28 @@ function alt (test, keys, did) {
             })
     })
 
-    // test('save an alternate message as a standard user', t => {
-
-    // })
+    test('save an alternate message as a standard user', t => {
+        ssc.createKeys()
+            .then(user => {
+                return u.inviteAndFollow({ adminKeys: keys, user })
+            })
+            .then(() => {
+                return ssc.createMsg(keys, null, {
+                    type: 'alternate',
+                    from: did,
+                    to: '123'
+                })
+            })
+            .then(msg => {
+                return fetch(BASE + '/api/alternate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(msg)
+                })
+            })
+            .then(res => {
+                t.ok(res.ok, 'should return an ok response')
+                t.end()
+            })
+    })
 }
