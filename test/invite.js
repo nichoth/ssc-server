@@ -5,7 +5,7 @@ const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
 const BASE = 'http://localhost:8888'
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid')
 
 if (require.main === module) {
     var _keys

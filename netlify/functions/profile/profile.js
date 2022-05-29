@@ -8,7 +8,8 @@ var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const { admins } = require('../../../src/config.json')
-const { SERVER_PUB_KEY } = process.env
+// const { SERVER_PUB_KEY } = process.env
+const { PUBLIC_KEY, SECRET_KEY } = process.env
 
 
 exports.handler = async function (ev, ctx) {
@@ -100,13 +101,11 @@ exports.handler = async function (ev, ctx) {
         const isNotFollowed = await client.query(
             q.IsEmpty(q.Match(
                 q.Index('a_follows_b'),
-                [ssc.publicKeyToDid(SERVER_PUB_KEY), did]
+                [ssc.publicKeyToDid(PUBLIC_KEY), did]
             ))
         )
 
-
-        console.log('*is followed*', isNotFollowed)
-
+        console.log('*is NOT followed*', isNotFollowed)
 
         if (!isNotFollowed) {
             return await update({ did, pubKey, msg, file })
