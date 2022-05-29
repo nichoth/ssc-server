@@ -34,6 +34,7 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
+    const { code } = msg.content
     const key = ssc.didToPublicKey(msg.author)
 
     return ssc.isValidMsg(msg, null, key.publicKey)
@@ -65,14 +66,31 @@ exports.handler = async function (ev, ctx) {
                             })
                         })
                         .then(_msg => {
+
                             return client.query(
-                                q.Create(q.Collection('follow'), {
-                                    data: {
-                                        key: ssc.getId(_msg),
-                                        value: _msg
-                                    }
-                                })
+                                q.Do(
+                                    q.Delete(
+                                        // delete the invitation since it was
+                                        // used now
+                                        q.Select(
+                                            ["ref"],
+                                            q.Get(
+                                                q.Match(
+                                                    q.Index('invitation-by-code'),
+                                                    code
+                                                )
+                                            )
+                                        )
+                                    ),
+                                    q.Create(q.Collection('follow'), {
+                                        data: {
+                                            key: ssc.getId(_msg),
+                                            value: _msg
+                                        }
+                                    })
+                                )
                             )
+
                         })
                         .then(res => {
                             return {

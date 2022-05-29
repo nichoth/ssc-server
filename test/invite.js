@@ -148,13 +148,42 @@ function invite (test, keys, did) {
 
     test('redeem the same invitation code more than once', t => {
         // TODO
+        ssc.createKeys()
+            .then(alice => {
+                return ssc.createMsg(alice.keys, null, {
+                    type: 'redeem-invitation',
+                    code: _code
+                })
+            })
+            .then(msg => {
+                return fetch(BASE + '/.netlify/functions/redeem-invitation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(msg)
+                })
+            })
+            .then(res => {
+                if (res.ok) {
+                    t.fail('should not have an ok response')
+                    t.end()
+                    return
+                }
+
+                t.equal(res.status, 404, 'should return 404 code')
+                return res.text()
+            })
+            .then(text => {
+                if (!text) return
+                t.ok(text.includes('NotFound'),
+                    'should return a not found message')
+                t.end()
+            })
     })
 
 
     test('redeem an invitation with a bad code', t => {
         ssc.createKeys()
             .then(alice => {
-                _alice = alice
                 return ssc.createMsg(alice.keys, null, {
                     type: 'redeem-invitation',
                     code: 'abc'
@@ -187,13 +216,5 @@ function invite (test, keys, did) {
                     'should return the right message')
                 t.end()
             })
-
-
-
-
-
-
     })
-
-
 }
