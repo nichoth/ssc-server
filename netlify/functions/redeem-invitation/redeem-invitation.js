@@ -47,9 +47,6 @@ exports.handler = async function (ev, ctx) {
                 }
             }
 
-
-
-
             return client.query(
                 q.Get(
                     q.Match(q.Index('invitation-by-code'), msg.content.code)
@@ -85,16 +82,18 @@ exports.handler = async function (ev, ctx) {
                         })
                 })
                 .catch(err => {
-                    console.log('***errrrrrrrrrrr', err)
+                    if (err.toString().includes('instance not found')) {
+                        return {
+                            statusCode: 404,
+                            body: err.toString()
+                        }
+                    }
+
                     return {
                         statusCode: 500,
                         body: err.toString()
                     }
                 })
-
-
-
-
 
         })
 }
