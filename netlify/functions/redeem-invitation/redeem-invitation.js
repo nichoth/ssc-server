@@ -39,8 +39,6 @@ exports.handler = async function (ev, ctx) {
     return ssc.isValidMsg(msg, null, key.publicKey)
         .then(isVal => {
             if (!isVal) {
-                console.log('bbbbbbbbbbbbbbb', msg)
-
                 return {
                     statusCode: 422,
                     body: 'invalid message'
@@ -58,45 +56,43 @@ exports.handler = async function (ev, ctx) {
                         public: PUBLIC_KEY,
                         private: SECRET_KEY
                     })
-                        .then(keys => {
-                            return ssc.createMsg(keys, null, {
-                                type: 'follow',
-                                contact: msg.author
-                            })
-                        })
-                        .then(_msg => {
-
-                            return client.query(
-                                q.Do(
-                                    q.Delete(
-                                        // delete the invitation since it was
-                                        // used now
-                                        q.Select(
-                                            ["ref"],
-                                            q.Get(
-                                                q.Match(
-                                                    q.Index('invitation-by-code'),
-                                                    code
-                                                )
-                                            )
+                })
+                .then(keys => {
+                    return ssc.createMsg(keys, null, {
+                        type: 'follow',
+                        contact: msg.author
+                    })
+                })
+                .then(_msg => {
+                    return client.query(
+                        q.Do(
+                            q.Delete(
+                                // delete the invitation since it was
+                                // used now
+                                q.Select(
+                                    ["ref"],
+                                    q.Get(
+                                        q.Match(
+                                            q.Index('invitation-by-code'),
+                                            code
                                         )
-                                    ),
-                                    q.Create(q.Collection('follow'), {
-                                        data: {
-                                            key: ssc.getId(_msg),
-                                            value: _msg
-                                        }
-                                    })
+                                    )
                                 )
-                            )
-
-                        })
-                        .then(res => {
-                            return {
-                                statusCode: 200,
-                                body: JSON.stringify(res.data)
-                            }
-                        })
+                            ),
+                            q.Create(q.Collection('follow'), {
+                                data: {
+                                    key: ssc.getId(_msg),
+                                    value: _msg
+                                }
+                            })
+                        )
+                    )
+                })
+                .then(res => {
+                    return {
+                        statusCode: 200,
+                        body: JSON.stringify(res.data)
+                    }
                 })
                 .catch(err => {
                     if (err.toString().includes('instance not found')) {

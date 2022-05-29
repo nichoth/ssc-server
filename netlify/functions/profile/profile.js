@@ -8,8 +8,7 @@ var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const { admins } = require('../../../src/config.json')
-// const { SERVER_PUB_KEY } = process.env
-const { PUBLIC_KEY, SECRET_KEY } = process.env
+const { PUBLIC_KEY } = process.env
 
 
 exports.handler = async function (ev, ctx) {
