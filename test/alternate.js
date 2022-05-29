@@ -87,5 +87,14 @@ function alt (test, keys, did) {
                     body: JSON.stringify(msg)
                 })
             })
+            .then(res => {
+                t.notOk(res.ok, 'should not return an ok response')
+                t.equal(res.status, 403, 'should return 403 code')
+                t.end()
+            })
     })
+
+    // test('save an alternate message as a standard user', t => {
+
+    // })
 }

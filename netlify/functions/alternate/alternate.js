@@ -89,7 +89,7 @@ exports.handler = async function (ev, ctx) {
 
     // here we check if the user is somone we follow,
     // and if so, then we create the alt for them
-    client.query(
+    return client.query(
         q.If(
             q.IsEmpty(q.Match(
                 q.Index('a_follows_b'),

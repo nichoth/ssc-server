@@ -157,8 +157,8 @@ function profileTests (test, keys, did) {
     test('follow someone then save a profile from them', t => {
         const code = uuidv4()
 
-        // ssc.createKeys().then(alice => {
-        //     u.inviteAndFollow({ adminKeys: keys, user: alice })
+        // ssc.createKeys().then(user => {
+        //     u.inviteAndFollow({ adminKeys: keys, user })
         // })
 
         ssc.createMsg(keys, null, { type: 'invitation', code })
