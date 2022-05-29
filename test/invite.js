@@ -39,11 +39,15 @@ if (require.main === module) {
 
 
 function invite (test, keys, did) {
+    var _code
+
     // keys here is for the 'admin' user
     test('create an invitaion as an admin', t => {
+        const code = _code = uuidv4()
+
         ssc.createMsg(keys, null, {
             type: 'invitation',
-            code: uuidv4()
+            code
         }).then(msg => {
             fetch(BASE + '/.netlify/functions/invitation', {
                 method: 'POST',
@@ -73,7 +77,6 @@ function invite (test, keys, did) {
 
     test('create an invitaion as a random person', t => {
         ssc.createKeys().then(user => {
-
             const { keys } = user
 
             ssc.createMsg(keys, null, {
@@ -101,6 +104,46 @@ function invite (test, keys, did) {
                     t.end()
                 })
         })
+    })
+
+
+    test('redeem an invitation with a valid code', t => {
+        var _alice
+        ssc.createKeys()
+            .then(alice => {
+                _alice = alice
+                return ssc.createMsg(alice.keys, null, {
+                    type: 'redeem-invitation',
+                    code: _code
+                })
+            })
+            .then(msg => {
+                // console.log('*msg*', msg)
+                fetch(BASE + '/.netlify/functions/redeem-invitation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(msg)
+                })
+                    .then(res => {
+                        if (!res.ok) {
+                            res.text().then(text => {
+                                t.fail(text)
+                                t.end()
+                                return
+                            })
+                        }
+
+                        return res.json()
+                    })
+                    .then(res => {
+                        if (!res) return
+                        t.equal(res.value.content.type, 'follow',
+                            "should return 'follow' message")
+                        t.equal(res.value.content.contact, _alice.did,
+                            'should follow the right person')
+                        t.end()
+                    })
+            })
     })
 
 }

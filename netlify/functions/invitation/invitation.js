@@ -7,6 +7,8 @@ var client = new faunadb.Client({
 })
 const { admins } = require('../../../src/config.json')
 
+// this route is to *create* an invitation
+
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
         return {
@@ -26,6 +28,13 @@ exports.handler = async function (ev, ctx) {
     }
     const did = msg.author
 
+    if (!msg.author || !(msg.content.type === 'invitation')) {
+        return {
+            statusCode: 422,
+            body: 'invalid message'
+        }
+    }
+
     if ( !(admins.some(admin => admin.did === did)) ) {
         return {
             statusCode: 401,
@@ -39,7 +48,7 @@ exports.handler = async function (ev, ctx) {
         .then(isVal => {
             if (!isVal) {
                 return {
-                    statusCode: 400,
+                    statusCode: 422,
                     body: 'invalid message'
                 }
             }
