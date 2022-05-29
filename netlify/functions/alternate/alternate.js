@@ -5,6 +5,7 @@ var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const { admins } = require('../../../src/config.json')
+const { PUBLIC_KEY } = process.env
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
@@ -85,32 +86,35 @@ exports.handler = async function (ev, ctx) {
         })
     }
 
-    // check to make sure the server is following the given did
-    // can look for profile by DID
 
-    // if the given profile exists,
-    // then create the alternate profile from the message data
+    // here we check if the user is somone we follow,
+    // and if so, then we create the alt for them
+    client.query(
+        q.If(
+            q.IsEmpty(q.Match(
+                q.Index('a_follows_b'),
+                [ ssc.publicKeyToDid(PUBLIC_KEY), did ]
+            )),
+            // is empty, means the server doesn't follow them
+            'empty',
 
-    // need to check the lineage also
-    // check if this profile is an alternate from another that is 'original'
-
-    // the alternate messages are a linked list
-    // foo -> bar -> baz
-
-    // first get to:baz
-    // then get to:bar
-    // keep following the `to` field until you get no results
-    // then check if `foo` is followed by this server or an _admin_
-
-
-    // if they have a profile, then we are following them
-    // so create an alt
-    return client.query(
-        q.Get(q.Match(q.Index('profile-by-did'), did))
+            // is not empty, so we write the 'alternate' message to DB
+            q.Create(
+                q.Collection('alternate'),
+                { data: { key, value: msg } }
+            )
+        )
     )
         .then(doc => {
             // TODO
-            // in here, need to write the `aleternate` message to DB
+            // in here, need to write the `alternate` message to DB
+
+            if (doc === 'empty') {
+                return {
+                    statusCode: 403,
+                    body: 'not allowed'
+                }
+            }
 
             return {
                 statusCode: 200,
@@ -118,17 +122,17 @@ exports.handler = async function (ev, ctx) {
             }
         })
         .catch(err => {
-            console.log('errrrrrr in here', err)
             if (err.toString().includes('instance not found')) {
                 console.log('*not found*')
+                return {
+                    statusCode: 400,
+                    body: 'not allowed'
+                }
             }
             return {
                 statusCode: 500,
                 body: 'oh no'
             }
         })
-
-
-    // if all is ok, write the message to the collection
 
 }

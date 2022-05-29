@@ -63,10 +63,29 @@ function alt (test, keys, did) {
             }).then(res => {
                 t.equal(res.key, ssc.getId(res.value),
                     'should return the expected key')
+                t.equal(res.value.content.to, '123',
+                    'should have the right "to" in msg content')
                 t.equal(res.value.content.type, 'alternate',
                     'should return the right message type')
                 t.end()
             })
         })
+    })
+
+    test('save an alt message as a random user', t => {
+        ssc.createKeys().then(user => {
+            return ssc.createMsg(user.keys, null, {
+                type: 'alternate',
+                from: user.did,
+                to: '123'
+            })
+        })
+            .then(msg => {
+                return fetch(BASE + '/.netlify/functions/alternate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(msg)
+                })
+            })
     })
 }

@@ -28,7 +28,7 @@ exports.handler = async function (ev, ctx) {
     }
     const did = msg.author
 
-    if (!msg.author || !(msg.content.type === 'invitation')) {
+    if (!msg.author || msg.content.type !== 'invitation') {
         return {
             statusCode: 422,
             body: 'invalid message'
