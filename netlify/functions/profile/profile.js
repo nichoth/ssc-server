@@ -105,8 +105,6 @@ exports.handler = async function (ev, ctx) {
             ))
         )
 
-        console.log('*is NOT followed*', isNotFollowed)
-
         if (!isNotFollowed) {
             return await update({ did, pubKey, msg, file })
         }

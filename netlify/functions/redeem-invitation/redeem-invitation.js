@@ -27,7 +27,6 @@ exports.handler = async function (ev, ctx) {
     }
 
     if (!msg.author || msg.content.type !== 'redeem-invitation') {
-        console.log('aaaaaaaaaaaa', msg)
         return {
             statusCode: 422,
             body: 'invalid message'
