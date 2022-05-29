@@ -50,63 +50,62 @@ exports.handler = async function (ev, ctx) {
                     q.Match(q.Index('invitation-by-code'), msg.content.code)
                 )
             )
-                .then(() => {
-                    // this should be a message signed by this server
-                    return ssc.importKeys({
-                        public: PUBLIC_KEY,
-                        private: SECRET_KEY
-                    })
+        })
+            .then(() => {
+                // this should be a message signed by this server
+                return ssc.importKeys({
+                    public: PUBLIC_KEY,
+                    private: SECRET_KEY
                 })
-                .then(keys => {
-                    return ssc.createMsg(keys, null, {
-                        type: 'follow',
-                        contact: msg.author
-                    })
+            })
+            .then(keys => {
+                return ssc.createMsg(keys, null, {
+                    type: 'follow',
+                    contact: msg.author
                 })
-                .then(_msg => {
-                    return client.query(
-                        q.Do(
-                            q.Delete(
-                                // delete the invitation since it was
-                                // used now
-                                q.Select(
-                                    ["ref"],
-                                    q.Get(
-                                        q.Match(
-                                            q.Index('invitation-by-code'),
-                                            code
-                                        )
+            })
+            .then(_msg => {
+                return client.query(
+                    q.Do(
+                        q.Delete(
+                            // delete the invitation since it was
+                            // used now
+                            q.Select(
+                                ["ref"],
+                                q.Get(
+                                    q.Match(
+                                        q.Index('invitation-by-code'),
+                                        code
                                     )
                                 )
-                            ),
-                            q.Create(q.Collection('follow'), {
-                                data: {
-                                    key: ssc.getId(_msg),
-                                    value: _msg
-                                }
-                            })
-                        )
+                            )
+                        ),
+                        q.Create(q.Collection('follow'), {
+                            data: {
+                                key: ssc.getId(_msg),
+                                value: _msg
+                            }
+                        })
                     )
-                })
-                .then(res => {
+                )
+            })
+            .then(res => {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(res.data)
+                }
+            })
+            .catch(err => {
+                if (err.toString().includes('instance not found')) {
                     return {
-                        statusCode: 200,
-                        body: JSON.stringify(res.data)
-                    }
-                })
-                .catch(err => {
-                    if (err.toString().includes('instance not found')) {
-                        return {
-                            statusCode: 404,
-                            body: err.toString()
-                        }
-                    }
-
-                    return {
-                        statusCode: 500,
+                        statusCode: 404,
                         body: err.toString()
                     }
-                })
+                }
 
-        })
+                return {
+                    statusCode: 500,
+                    body: err.toString()
+                }
+            })
 }
