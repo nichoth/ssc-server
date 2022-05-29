@@ -118,7 +118,6 @@ function invite (test, keys, did) {
                 })
             })
             .then(msg => {
-                // console.log('*msg*', msg)
                 fetch(BASE + '/.netlify/functions/redeem-invitation', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -147,16 +146,12 @@ function invite (test, keys, did) {
     })
 
 
-    // test('redeem the same invitation code more than once', t => {
-    //     // TODO
-    // })
+    test('redeem the same invitation code more than once', t => {
+        // TODO
+    })
 
 
     test('redeem an invitation with a bad code', t => {
-
-
-
-
         ssc.createKeys()
             .then(alice => {
                 _alice = alice
