@@ -21,7 +21,6 @@ const cld = new Cloudinary({
 function Shell (props) {
     const { route, me, client, emit } = props
     const isAdmin = admins.some(admin => admin.did === me.did)
-    const path = route
     const { profile } = me
     const [ isResolving, setResolving ] = useState(false)
 
@@ -93,7 +92,7 @@ function Shell (props) {
 
     function active (href) {
         var baseHref = href.split('/')[1]
-        var basePath = path.split('/')[1]
+        var basePath = route.split('/')[1]
         return baseHref === basePath ? 'active' : ''
     }
 
@@ -119,7 +118,7 @@ function Shell (props) {
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
             ${isAdmin ?
-                html` <li class="${active('/create-invitation')} create-inv">
+                html`<li class="${active('/create-invitation')} create-inv">
                     <a href="/create-invitation">create an invitation</a>
                 </li>` :
                 null
