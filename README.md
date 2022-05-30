@@ -96,22 +96,6 @@ Also we are using [faunaDB](https://fauna.com/) to store messages.
 
 -------------------------------------------------
 
-
-## blocking/following
-
-Blocking a user means we don't want to save any message from them. So we will
-not replicate their content regardless of FOAF status.
-
-We may still save messages from users we are not following, because by
-default we save any message from a friend of a friend.
-
-If you _are_ following someone, then you will save all their messages, and
-all messages from their friends (your FOAFs).
-
-
------------------------------------------------
-
-
 ## start a local server
 ```
 npm start
@@ -145,27 +129,8 @@ Being on the block list means you can't do anything on this server.
 
 ------------------------------------------
 
-## util
-
-Create some keys and print them to stdout
-```
-$ ./util.js keys
-
-{
-  "curve": "ed25519",
-  "public": "B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519",
-  "private": "OpwS91tI7yXkilysrjGgnyGHm//AaxjsNnVVDYJuaAIHuC1AQgfuNOWuixwzRYl+V92/BjDDvZOGoy2jPQHntw==.ed25519",
-  "id": "@B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519"
-}
-```
-
-I'm using those keys in the `test/invitation/` file to test blocked users
-incidentally.
-
-------------------------------------------------
-
-## add invitation passwords
-You need to edit `/netlify/functions/passwords.json`, and add the hashed version of a password; the plaintext version is kept secret. You can use the script `/hash.js` to hash a password --
+## passwords
+You can use the script `/hash.js` to hash a password --
 
 ```
 $ ./hash.js myPassword
@@ -180,92 +145,6 @@ $ echo "myPassword" | ./hash.js | pbcopy
 
 ----------------------------
 
-The invite passwords are used with the `/follow-me` endpoint. You send a POST request like `{ user: userId, password }`. After doing that the server will save your posts to a DB.
-
----------------------------------
-
-## invitations
-It's like a country club -- you need to be invited by a member.
-
-### create an invitation
-Call `/.netlify/functions/create-invitation`. Send a message like this:
-
-```js
-body: JSON.stringify({
-    publicKey: keys.public,
-    msg: ssc.createMsg(keys, null, {
-        type: 'invitation',
-        from: keys.id
-    })
-})
-```
-The server will check it's DB to make sure that the given id is being followed
-by the server.
-
-Get back:
-```js
-{ code: '123' }
-```
-
-Then the person you are inviting needs to send a message like this:
-```js
-var redeemer = ssc.createKeys()
-var signature = ssc.sign(redeemer, code)
-
-body: JSON.stringify({
-    publicKey: redeemer.public,
-    code: code,
-    signature: signature
-})
-```
-
-Visit this URL to send such a message: `/invitation?code=abc`
-
-### foafs
-When the app starts, you call `/.netlify/get-relevant-posts` with a
-query parameter of `foafs=true`
-
-```js
-var foafs = ev.queryStringParameters.foafs
-if (foafs) {
-  // return posts with foafs
-}
-```
-
-
-----------------------------------------------------------------
-
-
-## start a local server, with test data
-```
-$ npm run start-test
-```
-
-This creates some functions on `window`
-
-`window.testStuff` -- will create a second user and some test data
-
-* `window.userOneKeys`
-* `window.userTwoKeys`
-
-
-## cypress tests
-Run tests with the cypress GUI
-
-```
-$ npm run cypress-test
-```
-
-## test
-Start some tests in a node environment
-
-```
-$ npm test
-```
-
---------------------------------------------------------------
-
-
 ## cloudinary API
 
 * [upload API](https://cloudinary.com/documentation/node_asset_administration#upload_api)
@@ -275,29 +154,3 @@ $ npm test
 * [assign a public ID](https://cloudinary.com/documentation/upload_images#public_id)
 
 * [cloudinary browser API](https://cloudinary.com/documentation/javascript_integration#get_started_with_the_javascript_sdk)
-
-
------------------------------------------------------------
-
-
-The plan for now is just to make something that works for basic crud and stuff
-
-
-----------------------------------------------------------------
-
-There are no invite codes because we want to follow anyone/everyone. 
-
-Another way to do it is to treat the server as a peer, & decide who they are following.
-
-On the server, could keep a list of who you are following. That lets you revoke access also.
-
-An invite system + REST would mean that we verify that a write request is from our list of allowed users before writing it to the DB.
-
-Then replication requests would happen periodically since this is not using websockets.
-
-----------------------------------------------------------------
-
-## forks
-
-What happens if you fork your feed? This server doesn not allow you to fork your feed. I could imagine implementing something like [forkdb](https://github.com/substack/forkdb), where there could be multiple 'heads' of a feed that you would then need to 'merge' into one. But for now the server will just reject any write with the wrong 'previous' message in the merkle-list. 
-
