@@ -42,7 +42,6 @@ function Whoami (props) {
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
 
     function saveDesc (desc) {
-        // postProfile: function (did, username, imgHash, image, desc) {
         return client.postProfile({
             did: me.did,
             username: me.profile.username,
@@ -225,7 +224,6 @@ function Whoami (props) {
         <ul class="other-dids">
             ${listOfUsers.length ? 
                 listOfUsers.map(user => {
-                    console.log('user', user)
                     const isAdmin = admins.some(admin => admin.did === user.did)
                     const avatarUrl = user.image ?
                         (cld
@@ -234,6 +232,7 @@ function Whoami (props) {
                             .toURL()) :
                         ('data:image/svg+xml;utf8,' +
                             generateFromString((me && me.did) || ''))
+
                     return html`<li>
                         <span class="avatar">
                             <img src=${avatarUrl} />

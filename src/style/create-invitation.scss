@@ -1,0 +1,33 @@
+.route.create-invitation {
+    dl {
+        background-color: aliceblue;
+        max-width: 30rem;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 0.2rem;
+    }
+
+    button.copy {
+        width: 1rem;
+        background: none;
+        border: none;
+        padding: 0;
+
+        svg {
+            fill: blue;
+        }
+
+        &:hover {
+            opacity: 0.4;
+        }
+
+        img {
+            max-width: 100%;
+        }
+    }
+
+    span.has-copied {
+        margin-left: 1rem;
+        color: blue;
+    }
+}

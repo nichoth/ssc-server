@@ -8,6 +8,7 @@
 @use './components';
 @use './home';
 @use './new-pin';
+@use './create-invitation.scss';
 @use "../../node_modules/@nichoth/forms/style/text-input";
 @use "../../node_modules/@nichoth/forms/style/button";
 // @use "../../node_modules/@nichoth/forms/style/index";
@@ -17,7 +18,7 @@
 }
 
 .route {
-    margin: 0 1rem;
+    margin: 1rem;
 }
 
 .icon {
@@ -71,9 +72,12 @@ a {
     padding: 1rem;
 }
 
-button {
+button, .form-stuff button {
     &:hover {
         cursor: pointer;
+    }
+    &:disabled {
+        cursor: not-allowed;
     }
 }
 

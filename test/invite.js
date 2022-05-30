@@ -38,7 +38,7 @@ if (require.main === module) {
 }
 
 
-function invite (test, keys, did) {
+function invite (test, keys) {
     var _code
 
     // keys here is for the 'admin' user

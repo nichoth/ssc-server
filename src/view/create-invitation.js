@@ -1,75 +1,75 @@
 import { html } from 'htm/preact'
+const { Button } = require('@nichoth/forms/preact')
+const { admins } = require('../config.json')
 var ssc = require('@nichoth/ssc/web')
-import { useState } from 'preact/hooks';
+const { v4: uuidv4 } = require('uuid')
+import { useState } from 'preact/hooks'
+const CopyIcon = require('./components/copy-solid.js')
 
 function CreateInvitation (props) {
-    // var { params } = props
-    // var { key } = params
+    const { me } = props
+    const [isResolving, setResolving] = useState(false)
+    const [invCode, setInvCode] = useState(null)
+    const [hasCopied, setCopied] = useState(false)
+    const isAdmin = admins.some(admin => admin.did === me.did)
 
-    // dont really need to check if we are followed in here, because
-    // the link to this route only shows if you are followed,
-    // and there is server side verification of following status when you
-    //   submit the request
-
-    // but there is the case where you have an ID, but the server is not 
-    //   following you. Do we even want to support that scenario? Since
-    //   this app is served from a certain domain, we could consider
-    //   that domain to be the source of truth
-
-    var { me } = props
-
-    var [invitation, setInv] = useState(null)
-    var [invErr, setErr] = useState(null)
+    if (!isAdmin) return html`<div class="route create-invitation">
+        <div>You must have admin status to create an invitation</div>
+    </div>`
 
     function createInv (ev) {
         ev.preventDefault()
-        var msg = ssc.createMsg(me.secrets, null, {
+        console.log('create an invitation')
+        const code = uuidv4()
+
+        ssc.createMsg(me.keys, null, {
             type: 'invitation',
-            from: me.secrets.id
-        })
-
-        console.log('msgggggggg', msg)
-
-        fetch('/.netlify/functions/create-invitation', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            // var { publicKey, msg } = req
-            body: JSON.stringify({
-                publicKey: me.secrets.public,
-                msg: msg
+            code
+        }).then(msg => {
+            setResolving(true)
+            return fetch('/api/invitation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(msg)
             })
         })
-            .then(res => {
-                if (!res.ok) {
-                    res.text().then(t => {
-                        setErr(t)
-                    })
-                    return
-                }
-                return res.json()
-            })
-            .then(res => {
-                if (res) setInv(res)
-            })
+        .then(res => {
+            setResolving(false)
+            return res.json()
+        })
+        .then(json => {
+            setInvCode(json.value.content.code)
+        })
     }
 
-    if (invitation) {
-        return html`<div class="create-invitation-route">
-            <p>Invitation code: <code>${invitation.code}</code></p>
-        </div>`
+    function copy (ev) {
+        ev.preventDefault()
+        navigator.clipboard.writeText(invCode)
+        setCopied(true)
     }
 
-    if (invErr) {
-        return html`<div class="create-invitation-route">
-            <p class="error">${invErr}</p>
-        </div>`
-    }
+    return html`<div class="route create-invitation">
+        ${invCode ?
+            html`<button class="copy" onClick=${copy} title="copy">
+                <${CopyIcon} />
+            </button>
 
-    return html`<div class="create-invitation-route">
-        <p>invite someone</p>
+            ${hasCopied ? html`<span class="has-copied">Copied!</span>` : null}
 
-        <form class="invitation" onSubmit=${createInv}>
-            <button type="submit">create an invitation</button>
+            <dl class="invitation-code">
+                <dt>Invitation code</dt>
+                <dd>${invCode}</dd>
+            </dl>` :
+            null
+        }
+
+        <form onsubmit=${createInv}>
+            <${Button} disabled=${isResolving}
+                isSpinning=${isResolving}
+                type="submit"
+            >
+                Create an invitation
+            <//>
         </form>
     </div>`
 }

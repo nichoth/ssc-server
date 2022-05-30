@@ -4,7 +4,7 @@ var Home = require('./view/home')
 var Whoami = require('./view/whoami')
 // var SingleImage = require('./view/single-image')
 // var createProfileView = require('./view/profile')
-// var CreateInvitation = require('./view/create-invitation')
+var CreateInvitation = require('./view/create-invitation')
 // var RedeemInvitation = require('./view/redeem-invitation')
 var Hello = require('./view/hello')
 const NewPin = require('./view/new-pin')
@@ -48,6 +48,13 @@ function Router () {
         }
     }
 
+    router.addRoute('/create-invitation', () => {
+        return {
+            view: CreateInvitation
+        }
+    })
+
+
     // // router.addRoute('/whoami/:subroute', match => {
     // //     var { params } = match
     // //     var { subroute } = params
@@ -62,12 +69,6 @@ function Router () {
     // router.addRoute('/post/:key', match => {
     //     return {
     //         view: SingleImage
-    //     }
-    // })
-
-    // router.addRoute('/create-invitation', () => {
-    //     return {
-    //         view: CreateInvitation
     //     }
     // })
 
