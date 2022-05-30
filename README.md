@@ -18,29 +18,6 @@ It's not ready yet though
 
 ------------------------------
 
-## admin users
-
-There are special users that are defined in the `admins` field inside the JSON file `src/config.json`.
-
-What happens if you delete the admin user from the `config.json` file?
-
-You would be using a standard 'new' user with the app. It would prompt you to input an invitation. To have admin privilege, you must copy and paste the default DID for your machine into the `config.admins` array inside `src/config.json`.
-
-
--------------------------------------
-
-## note
-Netlify *does* run the _deploy-succeeded_ function the first time you deploy. Meaning after you click the _deploy to netlify_ button.
-
-Should use that hook to create indexes and collections in the DB.
-
------------------------------------------
-
-* currently using the `test` DB in fauna
-
--------------------------------------------
-
-
 ## what is this?
 
 This is a server/social-network for hosting images. `ssc-server` because it is based on `ssb`, and c comes after b in the alphabet. `ssc` stands for nothing. 
@@ -105,42 +82,52 @@ Another key element is that it depends on Netlify's lambda functions. These are 
 
 Also we are using [faunaDB](https://fauna.com/) to store messages.
 
+## admin users
+
+There are special users that are defined in the `admins` field inside the JSON file `src/config.json`.
+
+What happens if you delete the admin user from the `config.json` file?
+
+You would be using a standard 'new' user with the app. It would prompt you to input an invitation. To have admin privilege, you must copy and paste the default DID for your machine into the `config.admins` array inside `src/config.json`.
+
+
+-------------------------------------
+
+## note
+
+Netlify *does* run the _deploy-succeeded_ function the first time you deploy. Meaning after you click the _deploy to netlify_ button.
+
+This is a good way to create indexes and collections in the DB.
+
+-----------------------------------------
+
+* currently using the `test` DB in fauna
+
 -------------------------------------------------
 
-## start a local server
+## dev instructions
+
+### start a local server
 ```
 npm start
 ```
 
-## run one test
+### run one test
+The `alternate` test:
 
-The `post` test:
 ```
-NODE_ENV=test node test/follow/ | npx tap-arc
+NODE_ENV=test node test/alternate.js | npx tap-arc
 ```
 
-## run all tests
+### run all tests
 
 ```
 $ npm test
 ```
 
-## configure things
-
-### Add passwords that can be used to make the server follow you
-Edit `/netlify/functions/passwords.json`. The value in this file should be a
-password that has been hashed with `bcrypt`. See `/hash.js` for a node CLI that
-will hash a string.
-
-### block a user ID from posting
-Edit `/netlify/functions/block.json`. This is a JSON array of public keys
-(IDs) that the server should block.
-
-Being on the block list means you can't do anything on this server.
-
 ------------------------------------------
 
-## passwords
+### passwords
 You can use the script `/hash.js` to hash a password --
 
 ```
