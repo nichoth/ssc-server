@@ -7,6 +7,7 @@ const EditableField = require('./components/editable-field')
 const evs = require('../EVENTS')
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 const { LS_NAME } = require('../constants')
+const { admins } = require('../config.json')
 
 const cld = new Cloudinary({
     cloud: {
@@ -19,6 +20,7 @@ const cld = new Cloudinary({
 
 function Shell (props) {
     const { route, me, client, emit } = props
+    const isAdmin = admins.some(admin => admin.did === me.did)
     const path = route
     const { profile } = me
     const [ isResolving, setResolving ] = useState(false)
@@ -116,9 +118,12 @@ function Shell (props) {
             </li>
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
-            <li class="${active('/create-invitation')} create-inv">
-                <a href="/create-invitation">create an invitation</a>
-            </li>
+            ${isAdmin ?
+                html` <li class="${active('/create-invitation')} create-inv">
+                    <a href="/create-invitation">create an invitation</a>
+                </li>` :
+                null
+            }
             <li class="${active('/whoami')}">
                 <a href="/whoami">whoami</a>
             </li>
