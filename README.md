@@ -16,6 +16,17 @@ website. This uses netlify lambda functions to call a faunaDB. As such, it is "s
 
 It's not ready yet though
 
+------------------------------
+
+## admin users
+
+There are special users that are defined in the `admins` field inside the JSON file `src/config.json`.
+
+What happens if you delete the admin user from the `config.json` file?
+
+You would be using a standard 'new' user with the app. It would prompt you to input an invitation. To have admin privilege, you must copy and paste the default DID for your machine into the `config.admins` array inside `src/config.json`.
+
+
 -------------------------------------
 
 ## note
