@@ -106,9 +106,6 @@ exports.handler = async function (ev, ctx) {
         )
     )
         .then(doc => {
-            // TODO
-            // in here, need to write the `alternate` message to DB
-
             if (doc === 'empty') {
                 return {
                     statusCode: 403,

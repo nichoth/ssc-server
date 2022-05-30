@@ -9,6 +9,13 @@
             align-items: center;
         }
 
+        .is-admin {
+            margin-left: 2rem;
+            border: 2px solid;
+            padding: 0.2rem 0.8rem;
+            color: blue;
+        }
+
         .avatar {
             display: inline-block;
             margin-right: 1rem;

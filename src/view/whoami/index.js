@@ -225,6 +225,8 @@ function Whoami (props) {
         <ul class="other-dids">
             ${listOfUsers.length ? 
                 listOfUsers.map(user => {
+                    console.log('user', user)
+                    const isAdmin = admins.some(admin => admin.did === user.did)
                     const avatarUrl = user.image ?
                         (cld
                             .image(encodeURIComponent(user.image))
@@ -242,6 +244,10 @@ function Whoami (props) {
                         >
                             switch to this profile
                         </button>
+                        ${isAdmin ?
+                            html`<span class="is-admin">admin</span>` :
+                            null
+                        }
                     </li>`
                 }) :
 
