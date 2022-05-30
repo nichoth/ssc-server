@@ -93,6 +93,19 @@ You would be using a standard 'new' user with the app. It would prompt you to in
 
 -------------------------------------
 
+## ipfs
+What to do about blobs?
+
+Should hash them in a good way. Meaning no characters that are bad for URLs. see https://www.npmjs.com/package/urlsafe-base64
+
+I think they use`'hex'` encoding in ssb -- see https://github.com/ssbc/multiblob/blob/master/index.js#L31
+
+-----------------------------------------------
+Or you could use IPFS — I assume that would return a good hash
+🙁 you lose the `cloudinary` functions if you use a different (ipfs) host
+
+----------------------------------------------
+
 ## note
 
 Netlify *does* run the _deploy-succeeded_ function the first time you deploy. Meaning after you click the _deploy to netlify_ button.

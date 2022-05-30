@@ -1,6 +1,5 @@
 # the log
 
-
 ## 5-20-2022
 
 ### multiple DIDs per machine
