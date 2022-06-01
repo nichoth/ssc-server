@@ -29,13 +29,14 @@ module.exports = function Client (_keystore) {
 
             return fetch(url)
                 .then(res => {
-                    return res.text()
-                    // if (!res.ok) return res.text()
-                    // res.json()
-                })
-                .then(json => {
-                    console.log('jsonnnnnnn', json)
-                    return json
+                    // return res.text()
+                    if (!res.ok) {
+                        res.text().then(text => {
+                            throw new Error(text)
+                        })
+                    }
+
+                    return res.json()
                 })
         },
 

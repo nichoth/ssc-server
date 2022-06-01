@@ -76,10 +76,9 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
             .then(([follow, profile]) => {
                 console.log('follow and profile', follow, profile)
 
-                // what does it mean if you *are* an admin but the server
+                // what does it mean if you *are an admin* but the server
                 // doesn't follow you?
                 // if you are an admin, you should have full privileges
-                if (follow) console.log('aaaaaaaaaaaaa', follow)
 
                 state.me.profile.hasFetched.set(true)
                 const { username, image } = profile.value.content
@@ -89,8 +88,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                 window.localStorage.setItem(LS_NAME, JSON.stringify(_dids))
 
                 emit(evs.identity.setProfile, profile.value.content)
-
-                // ???how to handle error in profile???
 
                 // render the app *after* you fetch the profile initially
                 render(html`<${Connector} emit=${emit} state=${state}
