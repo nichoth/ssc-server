@@ -7,6 +7,9 @@ import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 const CopyButton = require('./components/copy-button')
+const { LS_NAME } = require('../constants')
+const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+const Profile = require('../profile')
 
 const cld = new Cloudinary({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -85,7 +88,11 @@ function Hello (props) {
             .then(res => {
                 setProfileResolving(false)
                 console.log('*set profile response*', res)
+                console.log('meeeeeeee', me)
                 const { username, image } = res.db.value.content
+
+                // this is just for localStorage
+                Profile.set(res.db.value.content)
 
                 emit(evs.identity.setProfile, {
                     // desc: '',

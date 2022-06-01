@@ -12,6 +12,7 @@ appName = appName || 'ssc-demo'
 const Client = require('./client')
 const evs = require('./EVENTS')
 const { LS_NAME } = require('./constants')
+const Profile = require('./profile')
 
 console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
@@ -76,16 +77,9 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
             .then(([follow, profile]) => {
                 console.log('follow and profile', follow, profile)
 
-                // what does it mean if you *are an admin* but the server
-                // doesn't follow you?
-                // if you are an admin, you should have full privileges
-
                 state.me.profile.hasFetched.set(true)
-                const { username, image } = profile.value.content
-                const _dids = dids || {}
-                _dids[did] = { storeName, username, image, did }
-                _dids.lastUser = did
-                window.localStorage.setItem(LS_NAME, JSON.stringify(_dids))
+
+                Profile.set(profile.value.content)
 
                 emit(evs.identity.setProfile, profile.value.content)
 

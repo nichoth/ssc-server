@@ -7,7 +7,7 @@ var Shell = require('./view/shell')
 module.exports = Connector
 
 // connect preact state with observ state
-function Connector ({ emit, state, setRoute, client }) {
+function Connector ({ emit, state, setRoute, client, storeName }) {
     const [_state, setState] = useState(state())
     console.log('view render', state())
 
@@ -42,7 +42,7 @@ function Connector ({ emit, state, setRoute, client }) {
     }
 
     return html`<${Shell} setRoute=${setRoute} emit=${emit} ...${_state}
-        path=${_state.route} client=${client}
+        path=${_state.route} client=${client} 
     >
         <${routeView} emit=${emit} ...${_state} params=${params}
             setRoute=${setRoute}

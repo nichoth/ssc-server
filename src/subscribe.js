@@ -19,7 +19,9 @@ function subscribe (bus, state) {
         const isAdmin = admins.some(obj => obj.did === did)
         console.log('*is admin*', isAdmin)
         state.me.profile.set(xtend(state.me.profile(), profile))
-        state.me.isAdmin.set(isAdmin)
+        if (state.me.isAdmin() !== isAdmin) {
+            state.me.isAdmin.set(isAdmin)
+        }
         // need to re-fetch the data that the app is using
     })
 
