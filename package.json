@@ -10,7 +10,7 @@
     "build-js": "browserify -p esmify -t [ envify --NODE_ENV test ] -t uglifyify --debug src/index.js > public/bundle.js",
     "copy": "mkdir -p public && cp src/index.html public && cp src/*.svg public",
     "build-sass": "sass src/style/main.scss public/style.css",
-    "watch-js": "watchify -p esmify -t [ envify --NODE_ENV test ] -t uglifyify --debug src/index.js -o public/bundle.js",
+    "watch-js": "watchify -p esmify -t [ envify --NODE_ENV test ] -t uglifyify src/index.js -d -v -o public/bundle.js",
     "watch-sass": "sass --watch src/style/main.scss public/style.css",
     "e2e-test": "npm run build && node tests/index.js | tap-arc",
     "test-cypress": "concurrently --kill-others \"npm start\" \"npx cypress open\"",

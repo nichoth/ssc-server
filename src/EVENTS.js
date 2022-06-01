@@ -10,8 +10,9 @@ var evs = namespace({
     // profile: ['got'],
     // identity: ['setName', 'setAvatar', 'gotAvatar']
     // profile: [ 'new' ],
-    identity: ['setUsername', 'setAvatar', 'setProfile', 'setDesc', 'newDid',
-        'change']
+    // identity: ['setUsername', 'setAvatar', 'setProfile', 'setDesc', 'newDid',
+    //     'change']
+    identity: ['setProfile', 'newDid', 'change']
 })
 
 module.exports = evs

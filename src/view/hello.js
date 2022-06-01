@@ -8,7 +8,6 @@ import { Cloudinary } from '@cloudinary/url-gen';
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 
 const cld = new Cloudinary({
-    // @TODO -- use an env var or something for the cloudname
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
     url: {
       secure: true // force https, set to false to force http
@@ -93,14 +92,14 @@ function Hello (props) {
         })
             .then(res => {
                 setProfileResolving(false)
-                console.log('*json*', res)
+                console.log('*set profile response*', res)
+                const { username, image } = res.db.value.content
 
-                const id = res.db.data.value.content.image
-                emit(evs.identity.setUsername, { username: res.username })
-                emit(evs.identity.setAvatar, { image: {
-                    id,
-                    url: res.image.url
-                } })
+                emit(evs.identity.setProfile, {
+                    // desc: '',
+                    username,
+                    image: image
+                })
             })
             .catch(err => {
                 console.log('errrrrrrrrrrrr', err)

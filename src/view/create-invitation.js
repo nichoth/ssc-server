@@ -1,5 +1,5 @@
 import { html } from 'htm/preact'
-const { Button } = require('@nichoth/forms/preact')
+const { Button, TextInput } = require('@nichoth/forms/preact')
 const { admins } = require('../config.json')
 var ssc = require('@nichoth/ssc/web')
 const { v4: uuidv4 } = require('uuid')
@@ -19,11 +19,12 @@ function CreateInvitation (props) {
 
     function createInv (ev) {
         ev.preventDefault()
-        console.log('create an invitation')
         const code = uuidv4()
+        const note = ev.target.note.value
 
         ssc.createMsg(me.keys, null, {
             type: 'invitation',
+            note,
             code
         }).then(msg => {
             setResolving(true)
@@ -39,6 +40,7 @@ function CreateInvitation (props) {
         })
         .then(json => {
             setInvCode(json.value.content.code)
+            setCopied(false)
         })
     }
 
@@ -64,9 +66,12 @@ function CreateInvitation (props) {
         }
 
         <form onsubmit=${createInv}>
-            <${Button} disabled=${isResolving}
+            <${TextInput} name="note" displayName="note"
+                minlength="1" required=${false}
+            />
+
+            <${Button} disabled=${isResolving} type="submit"
                 isSpinning=${isResolving}
-                type="submit"
             >
                 Create an invitation
             <//>

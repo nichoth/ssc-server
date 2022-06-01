@@ -37,7 +37,7 @@ exports.handler = async function (ev, ctx) {
 
     if ( !(admins.some(admin => admin.did === did)) ) {
         return {
-            statusCode: 401,
+            statusCode: 403,
             body: 'invalid DID'
         }
     }
@@ -68,7 +68,6 @@ exports.handler = async function (ev, ctx) {
                 body: err.toString()
             }
         })
-
 }
 
 function writeInvitation ({ msg }) {

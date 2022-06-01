@@ -70,14 +70,17 @@ function Shell (props) {
             })
                 .then(res => {
                     setResolving(false)
-                    const id = res.db.data.value.content.image
+                    // const id = res.db.data.value.content.image
+                    const { image } = res.data.value.content
                     console.log('ressssssssssssssssss', res)
-                    console.log('*id*', id)
+                    console.log('*id*', image)
 
-                    emit(evs.identity.setAvatar, { image: {
-                        id,
-                        url: res.image.url
-                    } })
+                    emit(evs.identity.setProfile, { image })
+
+                    // emit(evs.identity.setAvatar, { image: {
+                    //     id,
+                    //     url: res.image.url
+                    // } })
                 })
                 .catch(err => {
                     setResolving(false)

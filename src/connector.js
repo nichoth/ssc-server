@@ -9,6 +9,7 @@ module.exports = Connector
 // connect preact state with observ state
 function Connector ({ emit, state, setRoute, client }) {
     const [_state, setState] = useState(state())
+    console.log('view render', state())
 
     // connect `state` to the preact state
     state(function onChange (newState) {

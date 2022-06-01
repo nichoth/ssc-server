@@ -4,7 +4,7 @@ var TextInput = require('@nichoth/forms/preact/text-input')
 var Button = require('@nichoth/forms/preact/button')
 var ssc = require('@nichoth/ssc/web')
 
-function createRedeption (code) {
+function createRedemption (code) {
 
     return function RedeemInvitation (props) {
         useEffect(() => {
@@ -86,4 +86,4 @@ function createRedeption (code) {
 }
 
 
-module.exports = createRedeption
+module.exports = createRedemption

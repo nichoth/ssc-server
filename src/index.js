@@ -17,12 +17,10 @@ console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
-// dids is a map of { username: { did, username } }
+// dids is a map of { did: { did, username, image: hash, storeName } }
+// storeName is the name for the localForage store
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const lastUser = dids ? dids.lastUser : null
-
-// console.log('LS_NAME', LS_NAME)
-// console.log('*dids*', dids)
 
 const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 

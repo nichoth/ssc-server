@@ -8,11 +8,6 @@ function subscribe (bus, state) {
         console.log('***star***', name, ev)
     })
 
-    // this event means 'there is a new DID now'
-    // bus.on(evs.identity.newDid, ev => {
-    //     state.dids.set(xtend(state.dids(), ev))
-    // })
-
     // this event means 'the app is changing to use this new DID'
     bus.on(evs.identity.change, ({ did, keystore, profile }) => {
         // this changes the "active" DID that the app is using
@@ -36,20 +31,26 @@ function subscribe (bus, state) {
         console.log('rrrrr', err)
     })
 
-    bus.on(evs.identity.setUsername, ev => {
-        const { username } = ev
-        state.me.profile.username.set(username)
-    })
+    // bus.on(evs.identity.setUsername, ev => {
+    //     const { username } = ev
+    //     state.me.profile.username.set(username)
+    // })
 
-    bus.on(evs.identity.setDesc, ev => {
-        state.me.profile.desc.set(ev.content.desc)
-    })
+    // bus.on(evs.identity.setDesc, ev => {
+    //     state.me.profile.desc.set(ev.content.desc)
+    // })
 
     bus.on(evs.identity.setProfile, ev => {
         const { username, image, desc } = ev
-        state.me.profile.username.set(username)
-        state.me.profile.image.set(image)
-        state.me.profile.desc.set(desc)
+        if (username && username !== state.me.profile().username) {
+            state.me.profile.username.set(username)
+        }
+        if (image && image !== state.me.profile().image) {
+            state.me.profile.image.set(image)
+        }
+        if (desc && desc !== state.me.profile().desc) {
+            state.me.profile.desc.set(desc)
+        }
     })
 }
 

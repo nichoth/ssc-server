@@ -190,7 +190,6 @@ function invite (test, keys) {
                 })
             })
             .then(msg => {
-                // console.log('*msg*', msg)
                 return fetch(BASE + '/.netlify/functions/redeem-invitation', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

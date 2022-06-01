@@ -90,8 +90,20 @@ What happens if you delete the admin user from the `config.json` file?
 
 You would be using a standard 'new' user with the app. It would prompt you to input an invitation. To have admin privilege, you must copy and paste the default DID for your machine into the `config.admins` array inside `src/config.json`.
 
+-------------------------------------------------------------------------
 
--------------------------------------
+## new users
+What do you see when you visit the home page as a new user?
+
+New users see the `/hello` page. It asks for an invitation code.
+
+When a user enters an invitation code, the server will start following them,
+which allows them to save posts here. And the new user will start by following
+the person who invited them, and the inviter will follow the new user.
+
+
+--------------------------------------------------------------------------
+
 
 ## ipfs
 What to do about blobs?
