@@ -167,7 +167,9 @@ function Hello (props) {
                     <code>/src/config.json</code>, in the key <code>admins</code>:
                     <pre>${me.did}</pre>
                     like this:
-                    <pre>{ "admins": [{ "did": "${me.did}" }] }</pre>
+                    <pre class="json-example">
+                        { "admins": [{ "did": "${me.did}" }] }
+                    </pre>
                     then commit & push the repository to github.
                 </p>
 

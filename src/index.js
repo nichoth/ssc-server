@@ -17,12 +17,23 @@ console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
+const env = process.env.NODE_ENV
+
 // dids is a map of { did: { did, username, image: hash, storeName } }
 // storeName is the name for the localForage store
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const lastUser = dids ? dids.lastUser : null
 
-const storeName = (dids ? dids[lastUser] : {}).storeName || appName
+function getRandomInt (max) {
+    return Math.floor(Math.random() * max);
+}
+
+// const storeName = (dids ? dids[lastUser] : {}).storeName || appName
+const storeName = env === 'cypress' ?
+    // how to get a random storeName?
+    getRandomInt(9999) :
+    (dids ? dids[lastUser] : {}).storeName || appName
+
 
 ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     console.log('keystore', keystore)
@@ -66,13 +77,16 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
 
             emit(evs.identity.setProfile, res.value.content)
 
+            // ???how to handle error in profile???
+
             // render the app *after* you fetch the profile initially
             render(html`<${Connector} emit=${emit} state=${state}
                 setRoute=${route.setRoute} client=${client}
             />`, document.getElementById('content'))
         })
         .catch(err => {
-            console.log('profile errrr', err)
+            console.log('***profile errrr***', err)
+            route.setRoute('/hello')
         })
 
     })

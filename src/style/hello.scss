@@ -15,6 +15,14 @@ body {
         padding: 1rem;
         margin-top: -1rem;
 
+        .json-example {
+            background-color: white;
+            padding: 2rem;
+            border: 1px solid gray;
+            border-radius: 8px;
+            overflow: auto;
+        }
+
         .my-avatar {
             margin-right: 0.4rem;
             padding: 0;

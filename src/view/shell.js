@@ -20,7 +20,7 @@ const cld = new Cloudinary({
 
 function Shell (props) {
     const { route, me, client, emit } = props
-    const isAdmin = admins.some(admin => admin.did === me.did)
+    const isAdmin = (admins || []).some(admin => admin.did === me.did)
     const { profile } = me
     const [ isResolving, setResolving ] = useState(false)
 
