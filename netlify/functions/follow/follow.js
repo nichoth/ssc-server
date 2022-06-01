@@ -4,6 +4,10 @@ var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
+const { admins } = require('../../../src/config.json')
+const { PUBLIC_KEY } = process.env
+
+const serverDid = ssc.publicKeyToDid(PUBLIC_KEY)
 
 // TODO -- add DB queries
 exports.handler = async function (ev, ctx) {
@@ -20,6 +24,14 @@ exports.handler = async function (ev, ctx) {
         }
 
         if (a && b) {
+            // is the server following `b`?
+            const isServer = a === serverDid
+            const isAdmin = admins.some(admin => admin.did === b)
+
+            if (isServer && isAdmin) {
+                return { statusCode: 200, body: JSON.stringify(true) }
+            }
+
             return client.query(
                 q.IsEmpty(q.Match(
                     q.Index('a_follows_b'),
@@ -27,10 +39,10 @@ exports.handler = async function (ev, ctx) {
                 ))
             )
                 .then(res => {
-                    console.log('*follows*', b)
+                    console.log('****is empty****', res)
                     return {
                         statusCode: 200,
-                        body: JSON.stringify(res)
+                        body: JSON.stringify(!res)
                     }
                 })
         }

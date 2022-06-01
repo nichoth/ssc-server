@@ -100,6 +100,9 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
             .catch(err => {
                 console.log('***profile errrr***', err)
                 route.setRoute('/hello')
+                render(html`<${Connector} emit=${emit} state=${state}
+                    setRoute=${route.setRoute} client=${client}
+                />`, document.getElementById('content'))
             })
 
     })

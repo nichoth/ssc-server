@@ -22,6 +22,7 @@ const cld = new Cloudinary({
 
 
 function Hello (props) {
+    console.log('bbbbbbbbbbbbbbbbbbbbbbbbbb')
     console.log('*hello props*', props)
     const { profile, isAdmin } = props.me
     const { emit, me, client } = props

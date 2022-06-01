@@ -10,7 +10,8 @@ body {
         background: linear-gradient(304deg,
             rgb(248, 242, 146), rgb(7, 190, 216), rgb(253, 87, 144),
             rgb(255, 168, 73), rgb(248, 242, 146)) rgb(255, 255, 255);
-        height: 150vh;
+        min-height: 150vh;
+        height: fit-content;
         margin: 0;
         padding: 1rem;
         margin-top: -1rem;
