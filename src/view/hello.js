@@ -26,7 +26,7 @@ const cld = new Cloudinary({
 function Hello (props) {
     console.log('*hello props*', props)
     const { profile, isAdmin } = props.me
-    const { emit, me, client } = props
+    const { emit, me, client, setRoute } = props
 
     useEffect(() => {
         document.body.classList.add('hello')
@@ -100,6 +100,8 @@ function Hello (props) {
                     username,
                     image: image
                 })
+
+                setRoute('/')
             })
             .catch(err => {
                 console.log('errrrrrrrrrrrr', err)
