@@ -15,14 +15,14 @@ const cld = new Cloudinary({
 })
 
 
-// this should be two options --
+// states for language
 // either you have admin status or you do not
+// or you are an admin, but have not created a profile
 
 
 
 
 function Hello (props) {
-    console.log('bbbbbbbbbbbbbbbbbbbbbbbbbb')
     console.log('*hello props*', props)
     const { profile, isAdmin } = props.me
     const { emit, me, client } = props
@@ -37,6 +37,13 @@ function Hello (props) {
     const [resolving, setResolving] = useState(false)
     const [profileResolving, setProfileResolving] = useState(false)
     const [pendingProfile, setPendingProfile] = useState(null)
+    const [hasCopied, setHasCopied] = useState(false)
+
+    function copyDid (ev) {
+        ev.preventDefault()
+        navigator.clipboard.writeText(me.did)
+        setHasCopied(true)
+    }
 
     function handleInput (ev) {
         setPendingProfile({
@@ -44,8 +51,6 @@ function Hello (props) {
             username: ev.target.value
         })
     }
-
-    console.log('*pending profile*', pendingProfile)
 
     function submitInvitation (ev) {
         ev.preventDefault()
@@ -128,7 +133,6 @@ function Hello (props) {
 
 
 
-
     // what to do if there are no `admins` in the field
     return html`<div class="hello">
         <h1>Hello</h1>
@@ -164,9 +168,14 @@ function Hello (props) {
 
             html`<h2>If you own this server</h2>
                 <p>
-                    Copy/paste the following DID into a file,
-                    <code>/src/config.json</code>, in the key <code>admins</code>:
-                    <pre>${me.did}</pre>
+                    <p>
+                        Copy/paste the following DID into a file,
+                        <code>/src/config.json</code>, in the key <code>admins</code>:
+                    </p>
+
+                    <${CopyButton} hasCopied=${hasCopied} onclick=${copyDid} />
+
+                    <pre class="my-did">${me.did}</pre>
                     like this:
                     <pre class="json-example">
                         { "admins": [{ "did": "${me.did}" }] }
@@ -233,6 +242,18 @@ function Hello (props) {
             // `
         }
     </div>`
+}
+
+function CopyButton ({ hasCopied, onclick }) {
+    return html`
+        <button class="icon" onclick=${onclick}>
+            <img class="copy-icon" src="/copy-solid.svg" title="copy" />
+        </button>
+        ${hasCopied ?
+            html`<span class="has-copied">copied!</span>` :
+            null
+        }
+    `
 }
 
 module.exports = Hello
