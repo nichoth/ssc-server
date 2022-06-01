@@ -6,6 +6,7 @@ const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
+const CopyButton = require('./components/copy-button')
 
 const cld = new Cloudinary({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -37,13 +38,6 @@ function Hello (props) {
     const [resolving, setResolving] = useState(false)
     const [profileResolving, setProfileResolving] = useState(false)
     const [pendingProfile, setPendingProfile] = useState(null)
-    const [hasCopied, setHasCopied] = useState(false)
-
-    function copyDid (ev) {
-        ev.preventDefault()
-        navigator.clipboard.writeText(me.did)
-        setHasCopied(true)
-    }
 
     function handleInput (ev) {
         setPendingProfile({
@@ -173,7 +167,7 @@ function Hello (props) {
                         <code>/src/config.json</code>, in the key <code>admins</code>:
                     </p>
 
-                    <${CopyButton} hasCopied=${hasCopied} onclick=${copyDid} />
+                    <${CopyButton} copyText=${me.did} />
 
                     <pre class="my-did">${me.did}</pre>
                     like this:
@@ -244,16 +238,5 @@ function Hello (props) {
     </div>`
 }
 
-function CopyButton ({ hasCopied, onclick }) {
-    return html`
-        <button class="icon" onclick=${onclick}>
-            <img class="copy-icon" src="/copy-solid.svg" title="copy" />
-        </button>
-        ${hasCopied ?
-            html`<span class="has-copied">copied!</span>` :
-            null
-        }
-    `
-}
 
 module.exports = Hello
