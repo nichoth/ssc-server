@@ -15,14 +15,6 @@ const cld = new Cloudinary({
     }
 })
 
-
-// states for language
-// either you have admin status or you do not
-// or you are an admin, but have not created a profile
-
-
-
-
 function Hello (props) {
     console.log('*hello props*', props)
     const { profile, isAdmin } = props.me
@@ -110,11 +102,6 @@ function Hello (props) {
         
     }
 
-    // const adminNeedsProfile = !!(isAdmin && profile.hasFetched && profile.err)
-
-    // console.log('*is admin*', isAdmin)
-    // console.log('*admin needs profile*', adminNeedsProfile)
-
     const avatarUrl = (pendingProfile && pendingProfile.image) ?
         pendingProfile.image :
         (profile.image ?
@@ -123,13 +110,6 @@ function Hello (props) {
         )
 
 
-
-    // instructions either isAdmin or is not
-    // we only show this route if you do not have profile info yet
-
-
-
-    // what to do if there are no `admins` in the field
     return html`<div class="hello">
         <h1>Hello</h1>
 
@@ -206,36 +186,6 @@ function Hello (props) {
             ` :
 
             null
-
-            // // has profile err, and is admin
-            // // this means you are an admin, but don't yet have profile data
-            // html`<p>You have admin status for this server.</p>
-            //     <p>Your DID is <code>${me.did}</code></p>
-
-            //     <p>You have not yet set a profile for this identity. You can do
-            //         that now.</p>
-                
-            //     <form class="set-profile" onSubmit=${setProfile}>
-            //         <${TextInput} name="username" required=${true}
-            //             displayName="Your display name"
-            //             onInput=${handleInput}
-            //         />
-
-            //         <${EditableImg} url=${avatarUrl} name="image"
-            //             title="set your avatar"
-            //             onSelect=${selectImg}
-            //             label="Your avatar image"
-            //         <//>
-
-            //         <${Button} isSpinning=${profileResolving}
-            //             type="submit"
-            //             disabled=${!(pendingProfile &&
-            //                 pendingProfile.username) || !pendingProfile.image}
-            //         >
-            //             Save your profile
-            //         <//>
-            //     </form>
-            // `
         }
     </div>`
 }
