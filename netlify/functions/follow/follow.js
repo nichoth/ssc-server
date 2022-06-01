@@ -20,10 +20,19 @@ exports.handler = async function (ev, ctx) {
         }
 
         if (a && b) {
-            return {
-                statusCode: 200,
-                body: 'get if a follows b'
-            }
+            return client.query(
+                q.IsEmpty(q.Match(
+                    q.Index('a_follows_b'),
+                    [ a, b ]
+                ))
+            )
+                .then(res => {
+                    console.log('*follows*', b)
+                    return {
+                        statusCode: 200,
+                        body: JSON.stringify(res)
+                    }
+                })
         }
 
         return {

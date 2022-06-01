@@ -66,28 +66,41 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
             console.log('**my did**', did)
         }
 
-        client.getProfile(did).then(res => {
-            state.me.profile.hasFetched.set(true)
 
-            const { username, image } = res.value.content
-            const _dids = dids || {}
-            _dids[did] = { storeName, username, image, did }
-            _dids.lastUser = did
-            window.localStorage.setItem(LS_NAME, JSON.stringify(_dids))
+        // @TODO -- in here, fetch the `follow` endpoint
 
-            emit(evs.identity.setProfile, res.value.content)
+        Promise.all([
+            client.serverFollows(did),
+            client.getProfile(did)
+        ])
+            .then(([follow, profile]) => {
+                console.log('follow and profile', follow, profile)
 
-            // ???how to handle error in profile???
+                // what does it mean if you *are* an admin but the server
+                // doesn't follow you?
+                // if you are an admin, you should have full privileges
+                if (follow) console.log('aaaaaaaaaaaaa', follow)
 
-            // render the app *after* you fetch the profile initially
-            render(html`<${Connector} emit=${emit} state=${state}
-                setRoute=${route.setRoute} client=${client}
-            />`, document.getElementById('content'))
-        })
-        .catch(err => {
-            console.log('***profile errrr***', err)
-            route.setRoute('/hello')
-        })
+                state.me.profile.hasFetched.set(true)
+                const { username, image } = profile.value.content
+                const _dids = dids || {}
+                _dids[did] = { storeName, username, image, did }
+                _dids.lastUser = did
+                window.localStorage.setItem(LS_NAME, JSON.stringify(_dids))
+
+                emit(evs.identity.setProfile, profile.value.content)
+
+                // ???how to handle error in profile???
+
+                // render the app *after* you fetch the profile initially
+                render(html`<${Connector} emit=${emit} state=${state}
+                    setRoute=${route.setRoute} client=${client}
+                />`, document.getElementById('content'))
+            })
+            .catch(err => {
+                console.log('***profile errrr***', err)
+                route.setRoute('/hello')
+            })
 
     })
 })

@@ -1,8 +1,9 @@
 // require('dotenv').config()
 require('isomorphic-fetch')
-var ssc = require('@nichoth/ssc/web')
-var createHash = require('create-hash')
+const ssc = require('@nichoth/ssc/web')
+const createHash = require('create-hash')
 // var Blake2s = require('blake2s')
+const { SERVER_PUB_KEY } = require('./config.json')
 
 var baseUrl = 'http://localhost:8888'
 var BASE = (process.env.NODE_ENV === 'test' ? baseUrl : '')
@@ -18,6 +19,24 @@ module.exports = function Client (_keystore) {
         setKeystore: function (ks) {
             keystore = ks
             return client
+        },
+
+        serverFollows: function (userDid) {
+            const a = ssc.publicKeyToDid(SERVER_PUB_KEY)
+            const b = userDid
+            const qs = new URLSearchParams({ a, b }).toString()
+            var url = (BASE + '/api/follow' + '?' + qs)
+
+            return fetch(url)
+                .then(res => {
+                    return res.text()
+                    // if (!res.ok) return res.text()
+                    // res.json()
+                })
+                .then(json => {
+                    console.log('jsonnnnnnn', json)
+                    return json
+                })
         },
 
         // must pass a username

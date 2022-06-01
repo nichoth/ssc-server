@@ -178,7 +178,7 @@ function Hello (props) {
                 <p>Enter your invitation code here</p>
 
                 <form onsubmit=${submitInvitation}>
-                    <${TextInput} name="code" />
+                    <${TextInput} name="code" required=${true} />
                     <${Button} isSpinning=${resolving} type="submit">
                         Redeem invitation
                     <//>
