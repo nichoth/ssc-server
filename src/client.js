@@ -21,11 +21,45 @@ module.exports = function Client (_keystore) {
             return client
         },
 
+        redeemInvitation: function ({ code, did, username, image }) {
+            let _hash = createHash('sha256')
+            _hash.update(image)
+            const hash = _hash.digest('base64')
+
+            return Promise.all([
+                ssc.createMsg(keystore, null, {
+                    type: 'redeem-invitation',
+                    code
+                }),
+
+                ssc.createMsg(keystore, null, {
+                    type: 'about',
+                    about: did,
+                    username,
+                    desc: null,
+                    image: hash
+                })
+            ])
+            .then(([redemption, profile]) => {
+                return fetch(BASE + '/api/redeem-invitation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ redemption, profile })
+                })
+            })
+            .then(res => {
+                if (res.ok) return res.json()
+                return res.text().then(text => {
+                    throw new Error(text)
+                })
+            })
+        },
+
         serverFollows: function (userDid) {
             const a = ssc.publicKeyToDid(SERVER_PUB_KEY)
             const b = userDid
             const qs = new URLSearchParams({ a, b }).toString()
-            var url = (BASE + '/api/follow' + '?' + qs)
+            const url = (BASE + '/api/follow' + '?' + qs)
 
             return fetch(url)
                 .then(res => {

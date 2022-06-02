@@ -67,6 +67,10 @@ body {
 
     .set-profile {
         margin-bottom: 2rem;
+        background-color: whitesmoke;
+        padding: 1rem;
+        border: 1px solid;
+        border-radius: 8px;
 
         .form-stuff {
             &:last-child {
@@ -74,6 +78,4 @@ body {
             }
         }
     }
-
-
 }

@@ -11,7 +11,7 @@ const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
 const { TextInput, Button } = require('@nichoth/forms/preact')
 const { LS_NAME } = require('../../constants')
 const { admins } = require('../../config.json')
-// const Client = require('../../client')
+const placeholderSvg = require('../components/placeholder-svg')
 
 console.log('LS_NAME', LS_NAME)
 
@@ -166,7 +166,6 @@ function Whoami (props) {
             })
     }
 
-    const placeholderSvg = 'data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <circle cx="50" cy="50" r="50"/> </svg>'
     const dids = (JSON.parse(ls.getItem(LS_NAME)) || {})
     const lastUser = dids ? dids.lastUser : null
 
@@ -238,9 +237,7 @@ function Whoami (props) {
                             <img src=${avatarUrl} />
                         </span>
                         <span>${user.username}</span>
-                        <button
-                            onClick=${switchProfile.bind(null, user)}
-                        >
+                        <button onClick=${switchProfile.bind(null, user)}>
                             switch to this profile
                         </button>
                         ${isAdmin ?

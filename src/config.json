@@ -5,6 +5,9 @@
   "admins": [
     {
       "did": "did:key:z82T5XeMUNk67GZtcQ2pYnc34ZyUnMrE1YC1bHQAveSZn7oHAz2xyouSRLYo5FYsi2LD9wGmMBQcobhT3JbKPDfhVF5D4"
+    },
+    {
+      "did": "did:key:z82T5WQ3gHJWgTiaLQ5hamG5NuMYkSxUqeVGJ6Rs93Z3GkBkFd7dbtzGAhgfeXdMipxeFkqtf3NQsKkizRBowHNe125So"
     }
   ]
 }

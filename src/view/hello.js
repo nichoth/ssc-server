@@ -7,9 +7,10 @@ import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 const CopyButton = require('./components/copy-button')
-const { LS_NAME } = require('../constants')
-const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+// const { LS_NAME } = require('../constants')
+// const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const Profile = require('../profile')
+const placeholderSvg = require('./components/placeholder-svg')
 
 const cld = new Cloudinary({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -34,6 +35,8 @@ function Hello (props) {
     const [profileResolving, setProfileResolving] = useState(false)
     const [pendingProfile, setPendingProfile] = useState(null)
 
+    console.log('pending profile', pendingProfile)
+
     function handleInput (ev) {
         setPendingProfile({
             image: (pendingProfile && pendingProfile.image) || null,
@@ -43,10 +46,22 @@ function Hello (props) {
 
     function submitInvitation (ev) {
         ev.preventDefault()
-        console.log('submit inv code', ev.target.elements.code.value)
+        const code = ev.target.elements.code.value
         setResolving(true)
-        // TODO -- should call our server here
-        setTimeout(() => setResolving(false), 1000)
+
+        // call our server here
+        client.redeemInvitation({ did: me.did, code, ...pendingProfile })
+            .then(res => {
+                setResolving(false)
+                console.log('redeemed invitation', res)
+                setRoute('/')
+            })
+            .catch(err => {
+                setResolving(false)
+                console.log('**invitation error**', err)
+            })
+
+        // setTimeout(() => setResolving(false), 1000)
     }
 
     function selectImg (ev) {
@@ -87,11 +102,17 @@ function Hello (props) {
         })
             .then(res => {
                 setProfileResolving(false)
+                if (!res.ok) {
+                    console.log('not ok')
+                    res.text().then(text => {
+                        throw new Error(text)
+                    })
+                }
                 console.log('*set profile response*', res)
                 console.log('meeeeeeee', me)
                 const { username, image } = res.db.value.content
 
-                // this is just for localStorage
+                // this is for localStorage
                 Profile.set(res.db.value.content)
 
                 emit(evs.identity.setProfile, {
@@ -116,6 +137,26 @@ function Hello (props) {
             ('data:image/svg+xml;utf8,' + generateFromString(me.did || ''))
         )
 
+    function selectNewAvatar (ev) {
+        ev.preventDefault()
+        // console.log('on image select', ev)
+        var file = ev.target.files[0]
+        console.log('*file*', file)
+
+        const reader = new FileReader()
+
+        reader.onloadend = () => {
+            setPendingProfile({
+                image: reader.result,
+                username: (pendingProfile && pendingProfile.username) || null
+            })
+        }
+
+        // this gives us base64
+        reader.readAsDataURL(file)
+    }
+
+    // const [pendingProfile, setPendingProfile] = useState(null)
 
     return html`<div class="hello">
         <h1>Hello</h1>
@@ -153,7 +194,7 @@ function Hello (props) {
                 <p>
                     <p>
                         Copy/paste the following DID into a file,
-                        <code>/src/config.json</code>, in the key <code>admins</code>:
+                        <code> /src/config.json</code>, in the key <code>admins</code>:
                     </p>
 
                     <${CopyButton} copyText=${me.did} />
@@ -170,9 +211,28 @@ function Hello (props) {
                 <p class="explain-server">You must be invited to use this server.</p>
                 <p>Enter your invitation code here</p>
 
-                <form onsubmit=${submitInvitation}>
-                    <${TextInput} name="code" required=${true} />
-                    <${Button} isSpinning=${resolving} type="submit">
+                <form class="set-profile" onsubmit=${submitInvitation}>
+                    <${TextInput} displayName="username" name="username"
+                        required=${true} onInput=${handleInput}
+                    />
+
+                    <${EditableImg}
+                        url=${(pendingProfile && pendingProfile.image) ||
+                            placeholderSvg}
+                        name="new-avatar-image"
+                        title="set your avatar"
+                        onSelect=${selectNewAvatar}
+                        label="New avatar image"
+                    />
+
+                    <${TextInput} displayName="invitation code" name="code"
+                        id="code" required=${true}
+                    />
+
+                    <${Button} isSpinning=${resolving} type="submit"
+                        disabled=${!(pendingProfile && pendingProfile.image &&
+                            (pendingProfile.username || '').trim() )}
+                    >
                         Redeem invitation
                     <//>
                 </form>

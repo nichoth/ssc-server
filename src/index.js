@@ -78,9 +78,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                 console.log('follow and profile', follow, profile)
 
                 state.me.profile.hasFetched.set(true)
-
                 Profile.set(profile.value.content)
-
                 emit(evs.identity.setProfile, profile.value.content)
 
                 // render the app *after* you fetch the profile initially
