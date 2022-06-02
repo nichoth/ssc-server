@@ -53,7 +53,7 @@ function Shell (props) {
         const reader = new FileReader()
 
         reader.onloadend = () => {
-            console.log('*done reading file*')
+            // console.log('*done reading file*')
             // in here, want to upload the image
 
             const username = me.profile.username

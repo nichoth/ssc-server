@@ -140,6 +140,7 @@ async function update ({ did, msg, pubKey, file }) {
     // the same file hash in the `msg.image` field, but no `file` key in
     // the request
     if (file) {
+        // console.log('file', file)
         var hash = createHash('sha256')
         hash.update(file)
         const _hash = hash.digest('base64')
