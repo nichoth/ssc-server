@@ -1,10 +1,12 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
+var createHash = require('create-hash')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
+const upload = require('../upload')
 
 const { PUBLIC_KEY, SECRET_KEY } = process.env
 
@@ -16,11 +18,12 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    var profile, redemption
+    var profile, redemption, file
     try {
         const body = JSON.parse(ev.body)
         profile = body.profile
         redemption = body.redemption
+        file = body.file
     } catch (err) {
         return {
             statusCode: 422,
@@ -28,8 +31,9 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    console.log('***msg***', redemption)
+    console.log('***redemption***', redemption)
     console.log('***profile***', profile)
+    // console.log('**file**', file)
 
     if (!redemption.author || redemption.content.type !== 'redeem-invitation' ||
     profile.author !== redemption.author) {
@@ -42,9 +46,21 @@ exports.handler = async function (ev, ctx) {
     const { code } = redemption.content
     const key = ssc.didToPublicKey(redemption.author)
 
+    const hash = createHash('sha256')
+    hash.update(file)
+    const _hash = hash.digest('base64')
+
+    if (_hash !== profile.content.image) {
+        return {
+            statusCode: 400,
+            body: "Hash doesn't match"
+        }
+    }
+
     return Promise.all([
         ssc.isValidMsg(redemption, null, key.publicKey),
-        ssc.isValidMsg(profile, null, key.publicKey)
+        ssc.isValidMsg(profile, null, key.publicKey),
+        upload(file, _hash)
     ])
         .then(([redemVal, profileVal]) => {
             if (!profileVal || ! redemVal) {
@@ -90,6 +106,7 @@ exports.handler = async function (ev, ctx) {
                             )
                         )
                     ),
+
                     q.Create(q.Collection('follow'), {
                         data: {
                             key: ssc.getId(_msg),
@@ -100,22 +117,28 @@ exports.handler = async function (ev, ctx) {
                     // also in here, save the `profile` msg
                     // to the profile collection
                     q.Create(q.Collection('profiles'), {
-                        key: ssc.getId(profile),
-                        value: profile
+                        data: {
+                            key: ssc.getId(profile),
+                            value: profile
+                        }
                     })
                 )
             )
         })
-
+        .then(res => {
+            return {
+                statusCode: 200,
+                body: JSON.stringify(res.data)
+            }
+        })
         .catch(err => {
-            console.log('errrrrrrrrr', err)
             if (err.toString().includes('instance not found')) {
                 return {
                     statusCode: 404,
                     body: 'invitation not found'
                 }
             }
-
+            
             return {
                 statusCode: 500,
                 body: 'something broke'

@@ -54,6 +54,13 @@ function Hello (props) {
             .then(res => {
                 setResolving(false)
                 console.log('redeemed invitation', res)
+                const { image, username } = res.value.content
+
+                emit(evs.identity.setProfile, { image, username })
+
+                // this is for localStorage
+                Profile.set(res.value.content)
+
                 setRoute('/')
             })
             .catch(err => {

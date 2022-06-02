@@ -26,6 +26,9 @@ module.exports = function Client (_keystore) {
             _hash.update(image)
             const hash = _hash.digest('base64')
 
+            const file = image
+            console.log('file', file)
+
             return Promise.all([
                 ssc.createMsg(keystore, null, {
                     type: 'redeem-invitation',
@@ -37,14 +40,14 @@ module.exports = function Client (_keystore) {
                     about: did,
                     username,
                     desc: null,
-                    image: hash
+                    image: hash,
                 })
             ])
             .then(([redemption, profile]) => {
                 return fetch(BASE + '/api/redeem-invitation', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ redemption, profile })
+                    body: JSON.stringify({ redemption, profile, file })
                 })
             })
             .then(res => {

@@ -70,10 +70,7 @@ function Shell (props) {
             })
                 .then(res => {
                     setResolving(false)
-                    // const id = res.db.data.value.content.image
-                    const { image } = res.data.value.content
-                    console.log('ressssssssssssssssss', res)
-                    console.log('*id*', image)
+                    const { image } = res.db.value.content
 
                     emit(evs.identity.setProfile, { image })
 

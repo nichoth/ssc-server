@@ -2,7 +2,7 @@ require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
 var createHash = require('create-hash')
-const upload = require('./upload')
+const upload = require('../upload')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
