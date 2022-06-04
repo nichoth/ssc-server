@@ -39,7 +39,7 @@ function CreateInvitation (props) {
             return res.json()
         })
         .then(json => {
-            setInvCode(json.value.content.code)
+            setInvCode(me.did + '--' + json.value.content.code)
             setCopied(false)
         })
     }

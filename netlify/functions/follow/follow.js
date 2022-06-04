@@ -39,7 +39,6 @@ exports.handler = async function (ev, ctx) {
                 ))
             )
                 .then(res => {
-                    console.log('****is empty****', res)
                     return {
                         statusCode: 200,
                         body: JSON.stringify(!res)

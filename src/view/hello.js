@@ -34,6 +34,7 @@ function Hello (props) {
     const [resolving, setResolving] = useState(false)
     const [profileResolving, setProfileResolving] = useState(false)
     const [pendingProfile, setPendingProfile] = useState(null)
+    const [codeErr, setCodeErr] = useState(null)
 
     console.log('pending profile', pendingProfile)
 
@@ -46,8 +47,13 @@ function Hello (props) {
 
     function submitInvitation (ev) {
         ev.preventDefault()
-        const code = ev.target.elements.code.value
+        const code = ev.target.elements.code.value || ''
         setResolving(true)
+
+        const els = code.split('--')
+        if (!els[0] || !els[1]) {
+            setCodeErr('invalid invitation code')
+        }
 
         // call our server here
         client.redeemInvitation({ did: me.did, code, ...pendingProfile })
@@ -67,8 +73,6 @@ function Hello (props) {
                 setResolving(false)
                 console.log('**invitation error**', err)
             })
-
-        // setTimeout(() => setResolving(false), 1000)
     }
 
     function selectImg (ev) {
@@ -217,6 +221,11 @@ function Hello (props) {
                 <h2>If you do not own this server</h2>
                 <p class="explain-server">You must be invited to use this server.</p>
                 <p>Enter your invitation code here</p>
+
+                ${codeErr ?
+                    html`<div class="err-msg">${codeErr}</div>` :
+                    null
+                }
 
                 <form class="set-profile" onsubmit=${submitInvitation}>
                     <${TextInput} displayName="username" name="username"

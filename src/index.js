@@ -36,6 +36,10 @@ const storeName = env === 'cypress' ?
     (dids ? dids[lastUser] : {}).storeName || appName
 
 
+// need to be able to start this with a new user...
+
+
+console.log('**storename**', storeName)
 ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     console.log('keystore', keystore)
     const state = State(keystore, { admins, dids })

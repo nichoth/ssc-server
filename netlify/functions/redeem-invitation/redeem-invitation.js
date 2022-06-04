@@ -18,12 +18,13 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    var profile, redemption, file
+    var profile, follow, redemption, file
     try {
         const body = JSON.parse(ev.body)
         profile = body.profile
         redemption = body.redemption
         file = body.file
+        follow = body.follow
     } catch (err) {
         return {
             statusCode: 422,
@@ -33,7 +34,14 @@ exports.handler = async function (ev, ctx) {
 
     console.log('***redemption***', redemption)
     console.log('***profile***', profile)
-    // console.log('**file**', file)
+    console.log('**follow**', follow)
+
+    if (!redemption || !follow || !profile) {
+        return {
+            statusCode: 422,
+            body: 'missing a message'
+        }
+    }
 
     if (!redemption.author || redemption.content.type !== 'redeem-invitation' ||
     profile.author !== redemption.author) {
@@ -59,11 +67,12 @@ exports.handler = async function (ev, ctx) {
 
     return Promise.all([
         ssc.isValidMsg(redemption, null, key.publicKey),
+        ssc.isValidMsg(follow, null, key.publicKey),
         ssc.isValidMsg(profile, null, key.publicKey),
         upload(file, _hash)
     ])
-        .then(([redemVal, profileVal]) => {
-            if (!profileVal || ! redemVal) {
+        .then(([redemVal, followVal, profileVal]) => {
+            if (!profileVal || !redemVal || !followVal) {
                 return {
                     statusCode: 422,
                     body: 'invalid message'
@@ -83,6 +92,7 @@ exports.handler = async function (ev, ctx) {
             })
         })
         .then(keys => {
+            // this is the server 'following' the new person
             return ssc.createMsg(keys, null, {
                 type: 'follow',
                 contact: redemption.author
@@ -111,6 +121,14 @@ exports.handler = async function (ev, ctx) {
                         data: {
                             key: ssc.getId(_msg),
                             value: _msg
+                        }
+                    }),
+
+                    // record that the new user is following the inviter
+                    q.Create(q.Collection('follow'), {
+                        data: {
+                            key: ssc.getId(follow),
+                            value: follow
                         }
                     }),
 

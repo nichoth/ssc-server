@@ -21,18 +21,28 @@ module.exports = function Client (_keystore) {
             return client
         },
 
+        // `code` here should be the format 'did--code'
+        // `did` is the user being invited
         redeemInvitation: function ({ code, did, username, image }) {
             let _hash = createHash('sha256')
             _hash.update(image)
             const hash = _hash.digest('base64')
 
             const file = image
-            console.log('file', file)
+
+            // TODO
+            const [inviterDid, invCode] = code.split('--')
 
             return Promise.all([
                 ssc.createMsg(keystore, null, {
                     type: 'redeem-invitation',
-                    code
+                    code: invCode
+                }),
+
+                // need to also follow the inviter
+                ssc.createMsg(keystore, null, {
+                    type: 'follow',
+                    contact: inviterDid
                 }),
 
                 ssc.createMsg(keystore, null, {
@@ -43,11 +53,13 @@ module.exports = function Client (_keystore) {
                     image: hash,
                 })
             ])
-            .then(([redemption, profile]) => {
+            .then(([redemption, follow, profile]) => {
+                console.log('***made msgs***', redemption, follow, profile)
+
                 return fetch(BASE + '/api/redeem-invitation', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ redemption, profile, file })
+                    body: JSON.stringify({ redemption, follow, profile, file })
                 })
             })
             .then(res => {

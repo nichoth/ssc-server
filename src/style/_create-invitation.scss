@@ -5,6 +5,10 @@
         border-radius: 8px;
         padding: 1rem;
         margin-top: 0.2rem;
+
+        dd {
+            overflow: scroll;
+        }
     }
 
     button.copy {
