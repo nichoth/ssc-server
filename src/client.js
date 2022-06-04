@@ -30,7 +30,6 @@ module.exports = function Client (_keystore) {
 
             const file = image
 
-            // TODO
             const [inviterDid, invCode] = code.split('--')
 
             return Promise.all([
@@ -54,8 +53,6 @@ module.exports = function Client (_keystore) {
                 })
             ])
             .then(([redemption, follow, profile]) => {
-                console.log('***made msgs***', redemption, follow, profile)
-
                 return fetch(BASE + '/api/redeem-invitation', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -63,7 +60,9 @@ module.exports = function Client (_keystore) {
                 })
             })
             .then(res => {
-                if (res.ok) return res.json()
+                if (res.ok) {
+                    return res.json()
+                }
                 return res.text().then(text => {
                     throw new Error(text)
                 })

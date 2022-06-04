@@ -18,13 +18,13 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    var profile, follow, redemption, file
+    var profile, followMsg, redemption, file
     try {
         const body = JSON.parse(ev.body)
         profile = body.profile
         redemption = body.redemption
         file = body.file
-        follow = body.follow
+        followMsg = body.follow
     } catch (err) {
         return {
             statusCode: 422,
@@ -32,11 +32,11 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    console.log('***redemption***', redemption)
-    console.log('***profile***', profile)
-    console.log('**follow**', follow)
+    // console.log('***redemption***', redemption)
+    // console.log('***profile***', profile)
+    // console.log('**follow**', followMsg)
 
-    if (!redemption || !follow || !profile) {
+    if (!redemption || !followMsg || !profile) {
         return {
             statusCode: 422,
             body: 'missing a message'
@@ -67,7 +67,7 @@ exports.handler = async function (ev, ctx) {
 
     return Promise.all([
         ssc.isValidMsg(redemption, null, key.publicKey),
-        ssc.isValidMsg(follow, null, key.publicKey),
+        ssc.isValidMsg(followMsg, null, key.publicKey),
         ssc.isValidMsg(profile, null, key.publicKey),
         upload(file, _hash)
     ])
@@ -101,9 +101,10 @@ exports.handler = async function (ev, ctx) {
 
         // here we delete the invitation and write a follow message
         .then(_msg => {
+            console.log('******big queryyyyyyyyyyy******')
             return client.query(
                 q.Do(
-                    q.Delete(
+                    [q.Delete(
                         // delete the invitation since it was
                         // used now
                         q.Select(
@@ -127,8 +128,8 @@ exports.handler = async function (ev, ctx) {
                     // record that the new user is following the inviter
                     q.Create(q.Collection('follow'), {
                         data: {
-                            key: ssc.getId(follow),
-                            value: follow
+                            key: ssc.getId(followMsg),
+                            value: followMsg
                         }
                     }),
 
@@ -139,17 +140,20 @@ exports.handler = async function (ev, ctx) {
                             key: ssc.getId(profile),
                             value: profile
                         }
-                    })
+                    })]
                 )
             )
         })
         .then(res => {
+            console.log('res', res)
+
             return {
                 statusCode: 200,
-                body: JSON.stringify(res.data)
+                body: JSON.stringify(res[res.length - 1].data)
             }
         })
         .catch(err => {
+            console.log('caught errrrrrrrr', err)
             if (err.toString().includes('instance not found')) {
                 return {
                     statusCode: 404,

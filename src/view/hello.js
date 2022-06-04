@@ -34,8 +34,6 @@ function Hello (props) {
     const [pendingProfile, setPendingProfile] = useState(null)
     const [codeErr, setCodeErr] = useState(null)
 
-    console.log('pending profile', pendingProfile)
-
     function handleInput (ev) {
         setPendingProfile({
             image: (pendingProfile && pendingProfile.image) || null,
@@ -58,7 +56,7 @@ function Hello (props) {
         client.redeemInvitation({ did: me.did, code, ...pendingProfile })
             .then(res => {
                 setResolving(false)
-                console.log('redeemed invitation', res)
+                console.log('**********redeemed invitation', res)
                 const { image, username } = res.value.content
 
                 emit(evs.identity.setProfile, { image, username })
@@ -74,7 +72,9 @@ function Hello (props) {
             })
             .catch(err => {
                 setResolving(false)
-                console.log('**invitation error**', err)
+                if (err.toString().includes('invitation not found')) {
+                    setCodeErr(err.toString())
+                }
             })
     }
 
@@ -155,7 +155,17 @@ function Hello (props) {
         ev.preventDefault()
         // console.log('on image select', ev)
         var file = ev.target.files[0]
+
+        // ----------------------
+        // TODO -- check file size. should have a limit
+        // file.size
         console.log('*file*', file)
+
+        // 300kb limit
+        if (file.size > 300000) {
+            console.log('its too big')
+        }
+        // ----------------------
 
         const reader = new FileReader()
 
