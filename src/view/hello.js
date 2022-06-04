@@ -7,8 +7,6 @@ import { generateFromString } from 'generate-avatar'
 import { Cloudinary } from '@cloudinary/url-gen';
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 const CopyButton = require('./components/copy-button')
-// const { LS_NAME } = require('../constants')
-// const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const Profile = require('../profile')
 const placeholderSvg = require('./components/placeholder-svg')
 
@@ -52,7 +50,8 @@ function Hello (props) {
 
         const els = code.split('--')
         if (!els[0] || !els[1]) {
-            setCodeErr('invalid invitation code')
+            setResolving(false)
+            return setCodeErr('invalid invitation code')
         }
 
         // call our server here
@@ -66,6 +65,10 @@ function Hello (props) {
 
                 // this is for localStorage
                 Profile.set(res.value.content)
+
+                if (codeErr !== null) {
+                    setCodeErr(null)
+                }
 
                 setRoute('/')
             })
@@ -167,8 +170,6 @@ function Hello (props) {
         reader.readAsDataURL(file)
     }
 
-    // const [pendingProfile, setPendingProfile] = useState(null)
-
     return html`<div class="hello">
         <h1>Hello</h1>
 
@@ -222,11 +223,6 @@ function Hello (props) {
                 <p class="explain-server">You must be invited to use this server.</p>
                 <p>Enter your invitation code here</p>
 
-                ${codeErr ?
-                    html`<div class="err-msg">${codeErr}</div>` :
-                    null
-                }
-
                 <form class="set-profile" onsubmit=${submitInvitation}>
                     <${TextInput} displayName="username" name="username"
                         required=${true} onInput=${handleInput}
@@ -244,6 +240,11 @@ function Hello (props) {
                     <${TextInput} displayName="invitation code" name="code"
                         id="code" required=${true}
                     />
+
+                    ${codeErr ?
+                        html`<div class="err-msg">${codeErr}</div>` :
+                        null
+                    }
 
                     <${Button} isSpinning=${resolving} type="submit"
                         disabled=${!(pendingProfile && pendingProfile.image &&
