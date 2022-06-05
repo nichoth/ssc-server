@@ -63,6 +63,14 @@ function createFaunaDB (key) {
             }
         ]],
 
+        ['redemptions', [
+            {
+                name: 'redemption-by-inviter',
+                source: q.Collection('redeemed-invitations'),
+                terms: [{ field: ['data', 'value', 'content', 'inviter'] }]
+            }
+        ]],
+
         // ['server-following', [
         //     {
         //         name: 'server-following-who',

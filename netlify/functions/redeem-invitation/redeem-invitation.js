@@ -43,7 +43,7 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    if (!redemption.author || redemption.content.type !== 'redeem-invitation' ||
+    if (!redemption.author || redemption.content.type !== 'redemption' ||
     profile.author !== redemption.author) {
         return {
             statusCode: 422,
@@ -101,7 +101,6 @@ exports.handler = async function (ev, ctx) {
 
         // here we delete the invitation and write a follow message
         .then(_msg => {
-            console.log('******big queryyyyyyyyyyy******')
             return client.query(
                 q.Do(
                     [q.Delete(
@@ -117,6 +116,13 @@ exports.handler = async function (ev, ctx) {
                             )
                         )
                     ),
+
+                    q.Create(q.Collection('redemption'), {
+                        data: {
+                            key: ssc.getId(redemption),
+                            value: redemption
+                        }
+                    }),
 
                     q.Create(q.Collection('follow'), {
                         data: {
@@ -145,7 +151,7 @@ exports.handler = async function (ev, ctx) {
             )
         })
         .then(res => {
-            console.log('res', res)
+            // console.log('res', res[res.length - 1].data)
 
             return {
                 statusCode: 200,
@@ -153,7 +159,6 @@ exports.handler = async function (ev, ctx) {
             }
         })
         .catch(err => {
-            console.log('caught errrrrrrrr', err)
             if (err.toString().includes('instance not found')) {
                 return {
                     statusCode: 404,

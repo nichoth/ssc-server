@@ -5,6 +5,111 @@
   "admins": [
     {
       "did": "did:key:z82T5XeMUNk67GZtcQ2pYnc34ZyUnMrE1YC1bHQAveSZn7oHAz2xyouSRLYo5FYsi2LD9wGmMBQcobhT3JbKPDfhVF5D4"
+    },
+    {
+      "did": "did:key:z82T5WRGcQoTxwXFe3fL3aQU9tqxf3WYaMY85zZeZyAtKoGJVJocPGdHhHqC1XDhJP3Ak1p3UzTuRUqkUrcM79Jo9JpEE"
+    },
+    {
+      "did": "did:key:z82T5XogKoP9oG7cncwJwX4gKFDCcqoUetYzwoHmhVLuaba84MEe7ZTBtisxHpM9fLBc6T2ajcviuMug9ScGdDhLDRFmU"
+    },
+    {
+      "did": "did:key:z82T5XozskxFWy6nEfGZ4ojMAd2kPYMdCDgohncvCRZhyNAHrLExN8TvZFsb4UtVspMTtjwgDmzCjCM8HsxLLUwoWVDmp"
+    },
+    {
+      "did": "did:key:z82T5YcuVcXf1W7UEaRm3LejTpsRfnLQYjuoFg6H5L1bCWUatFHpVPq5A11y9bixuRpJAB1uQq3djfzWsznEgBYFimdye"
+    },
+    {
+      "did": "did:key:z82T5YijcGnEPDvfGeDNXHvBcpAHKKNAvGu9apiwYF5e2KZ1QSpJZwkfDfzCpj5ufFK8d8svf73V8qYgXYNgC2bu8WDgh"
+    },
+    {
+      "did": "did:key:z82T5WQhnqukYmFeSLag8ZCG98gSxfVEnEvMCsfVLQiBoZubY32kEcTqJKTuU35Cbjj534azzNNLG82s3YSRkyWH9Y9hQ"
+    },
+    {
+      "did": "did:key:z82T5ZKSg2jrHFSxG3c11VZnZnvPS12MTk5S7yAVXoyjCJGBQAHiLUkHjgpwWTTikYoGnytR15VMEXPjSXjVdJd6v9qz7"
+    },
+    {
+      "did": "did:key:z82T5YBkfES7FridrAwff68MkBfuEJM313yHzwxMmgxQ4RGYZkoAN4YxdRqxD1wi2wk4ywADsempNq3sHCakpAgsY88L9"
+    },
+    {
+      "did": "did:key:z82T5WcHFbWVtnGDzyA7RyAzRenSQB6eA9xL5iFKf8xbYqKBwq6Ag9MyU2fw6XoFd5zFzatt8ye1buQdgT9Xg4Kg8aPke"
+    },
+    {
+      "did": "did:key:z82T5XG1TUrjc9M5t8aqnBatvPFhbFiDD3T9YHmQanEUfbLerxm9vgyEMdkUhH7k7Dt9ZmJJhjEjvCEiiEiBbjA4ZXBsD"
+    },
+    {
+      "did": "did:key:z82T5YogDLP3Bnbpk5MiLSCKemiq7DRxgZ9DGE3qkaMH76x5UthGPKT7FF3rUDLr4qQjt1FS2V2YYZbnrxnyQWetubUjJ"
+    },
+    {
+      "did": "did:key:z82T5WhRN1ivYW5NgmxTk7ZDnsR6SEsmgcLr4yxrUZmgMBpNPrkWttZ2j9sBHsHkdxw6rjXXrTDxGq7Pzq5kXa8ujzcHD"
+    },
+    {
+      "did": "did:key:z82T5XxK2BdvMhuFs8xJYaHS2hhRkNgAAtiVvWzCUF9snsnaUEaxRc6dX9mB3JLzUo1EKy8JFz3tsS7rXFSrkVSUPrUFz"
+    },
+    {
+      "did": "did:key:z82T5ZgkCj1XHxJpNDS7FpmucaUMVkFeyJ4AvVe9Cxw7xhZdb5DL1a5xyy7tYYtQvYqCzdx63C4CGxMaLq4xYhUBBsuCk"
+    },
+    {
+      "did": "did:key:z82T5WdiCzV6Gprt82tqP5pzcKAvLqnY8YXJzx1VSz5r5yCB4TPPBrGZrYaSSFJQ38uHZb8p6f4oZ882snViE18MdtAM7"
+    },
+    {
+      "did": "did:key:z82T5Vvy97LkSQPEWzdpCucf9NFBkm9AgHbTAxoy42Eaiwe5YVZvuUekyabsfWUVCi5rVGm8dFQemrsa6Qdwem81nNsQX"
+    },
+    {
+      "did": "did:key:z82T5XzEVGBg8yPMQnhEobkQfSYJvR7EEKzNbzVwDnsa3k7jJB6Z2oxJur3qUDWoaPY3cf15ZYbGio67WAbGr7AyoDaGL"
+    },
+    {
+      "did": "did:key:z82T5XLjtEy9RTaKb9nFrskfBkqX9TWTbvJPEPmcmK9wDAFEJ9cxtDMgi2iKwY7HfKTNTgbBzEujNH9btp2vqrykTzerr"
+    },
+    {
+      "did": "did:key:z82T5X3sqLi8WJe6khNu74u931APdVgsgtdxfvsL5iPm3ciDFXFvH3fFFuhV63Ui9z8JeFQQLDg88oZtUwg4VkCUzJdWJ"
+    },
+    {
+      "did": "did:key:z82T5Wvp5Q5MH4npA8igiBws1FVuF3db1Mqkvxzxi9zraXM1bfu4sKyRDEbMztvqmbACxAKwmcXZavGLzTN9Bt5SL8f8y"
+    },
+    {
+      "did": "did:key:z82T5W919Swb4XHxqP8D5bDStxWoh2HVLo5JxrQuYkFR9Xz4jQpVzRN2ws2erNYmxxs91gThHcUMj1yHbJqtjjNsZPReB"
+    },
+    {
+      "did": "did:key:z82T5WncSvsQJ4HBCU52KTJWUs5gGZiUJk3dbmrTf4JADSomA9WKGrLfGVdVCHnc8z7qMx9RrtvPxTpNafyxTd6oBHg8h"
+    },
+    {
+      "did": "did:key:z82T5YREjZ3hpwpE61dUmgQxa2sMPLcurEsvUZqQrAYJdk3HW452QgiTvTRRZdvDa1X4hidS27eoZynHGXVQdob3WrmVe"
+    },
+    {
+      "did": "did:key:z82T5ZHkULFpL9rDeP5mDPjUqDs6WhFedXrE4b6YEa51FU6gXueDchd5FEeAyvmmXKRDFBwAU38MXeCgzgRnJqKLqjhNT"
+    },
+    {
+      "did": "did:key:z82T5Y857B7A1h5YDgFyVkKykgi3dfe1FtXCG1naV3aS3Wdr4CUcAxtx8jJJPPKoe3wnzxpbD7oZcjUToAEEYuy9RVBbc"
+    },
+    {
+      "did": "did:key:z82T5VZkucXfALWMX1RCxxS93ckML4tsHjqdrwsUbcHzpHsbLMHkQeFDY5FZ7wCQCn7NpfG784FQNtErnFkyz7WKgsY31"
+    },
+    {
+      "did": "did:key:z82T5YVy92jXoVpGyVEUyWsoxPN9rk1nNo4R3szpyPETXy9uJ9F6W2i3fnXfP4Dy58bWyUvuK53aE6KanXSK7hmfWAYj2"
+    },
+    {
+      "did": "did:key:z82T5Yjk3TzWsgtXRBAQyGbfjro4ZwzEECJvdwbDjPLv38kcwjkd1sD8LTsC2YrP9SU8J4dRir37VwU8NEP8i5Akv66d2"
+    },
+    {
+      "did": "did:key:z82T5X6Ghg9UTWXkwCGwKKdXfqBuFxSckZK7WdJW9gCUqrBtGht6zcBu6QuoYA6fLTji8D99LdKNB7WDuLrqP1qKc9YDB"
+    },
+    {
+      "did": "did:key:z82T5YUUuUYUBay9TkvsydjuRcrwGQ2Gg399TM2YkLmEHebQhPv7i38i1H83CjQR6KvSiBxpPkHS5tC4TE4xmbFbYiDoX"
+    },
+    {
+      "did": "did:key:z82T5Y79fcyWfYGRV4krB4T7h6PLpU9f4c7iCZAYo1qpFCRSmZsBKAXE3q7UhsgpWQBzGTswf2rFKJYc4H5L5MGjQqagV"
+    },
+    {
+      "did": "did:key:z82T5WK5pLR93fPu4G4o3i99vwzPAP1sK5MjNpqJLWVc8rT8iChQUcupWZcGXhCwF6MLkA796ZgPV73Hgs9SPxR137qH3"
+    },
+    {
+      "did": "did:key:z82T5YXQtuUWcdiLQ7i1nkMUaGb44Rr7pdqk8iJVf8jeGCrGig3kKQUGaqwqa6zmR2AvJ1smzdCoULssVd3Qn2jMatP1a"
+    },
+    {
+      "did": "did:key:z82T5YBrq2zKg8V86GaXTHYjTdbnfScPN6Xt4uFJBMyaXTWhH6XVKGeJw5W3PkHgdPorbfmjxYYvY8NU8FSVpAfy5NRTD"
+    },
+    {
+      "did": "did:key:z82T5WnKjhyTqvCseyE4PPaRSqqVTZVNZv6aFw1wNA2ib1zmrdg2CK1exEcaepd8xfw6gqtNTFKvvdG3yQydLKHYw4mvS"
     }
   ]
 }

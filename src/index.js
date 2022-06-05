@@ -71,8 +71,25 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
             console.log('**my did**', did)
         }
 
+        const isAdmin = (admins || []).find(user => user.did === did)
+        // now get any pending invitees that may be in the DB
+        if (isAdmin) {
+            client.getRedemptions(did)
+                .then(res => {
+                    console.log('redemptionssssssssssssss', res)
+                })
+                .catch(err => {
+                    if (err.toString().includes('no redemptions waiting')) {
+                        // do nothing
+                        return console.log('you dont have to do anything')
+                    }
 
-        // @TODO -- in here, fetch the `follow` endpoint
+                    throw err
+                })
+        }
+
+        // @TODO -- in here, fetch the `follow` endpoint -- see who you are
+        //   following
 
         Promise.all([
             client.serverFollows(did),

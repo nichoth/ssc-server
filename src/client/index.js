@@ -4,6 +4,7 @@ const ssc = require('@nichoth/ssc/web')
 const createHash = require('create-hash')
 // var Blake2s = require('blake2s')
 const { SERVER_PUB_KEY } = require('./config.json')
+const getRedemptions = require('./get-redemptions')
 
 var baseUrl = 'http://localhost:8888'
 var BASE = (process.env.NODE_ENV === 'test' ? baseUrl : '')
@@ -21,6 +22,8 @@ module.exports = function Client (_keystore) {
             return client
         },
 
+        getRedemptions: getRedemptions,
+
         // `code` here should be the format 'did--code'
         // `did` is the user being invited
         redeemInvitation: function ({ code, did, username, image }) {
@@ -34,7 +37,8 @@ module.exports = function Client (_keystore) {
 
             return Promise.all([
                 ssc.createMsg(keystore, null, {
-                    type: 'redeem-invitation',
+                    type: 'redemption',
+                    inviter: inviterDid,
                     code: invCode
                 }),
 
@@ -232,3 +236,4 @@ function _getProfile (did) {
             return res.json()
         })
 }
+
