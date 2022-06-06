@@ -3,7 +3,7 @@ require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc/web')
 const createHash = require('create-hash')
 // var Blake2s = require('blake2s')
-const { SERVER_PUB_KEY } = require('./config.json')
+const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
 
 var baseUrl = 'http://localhost:8888'

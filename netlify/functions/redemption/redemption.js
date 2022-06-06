@@ -18,12 +18,15 @@ exports.handler = async function (ev, ctx) {
     const did = ev.queryStringParameters.did
 
     return client.query(
-        q.Get(q.Match(q.Index('redemption-by-inviter'), did))
+        q.Map(
+            q.Paginate(q.Match(q.Index('redemption-by-inviter'), did)),
+            q.Lambda(x => q.Get(x))
+        )
     )
-        .then(doc => {
+        .then(docs => {
             return {
                 statusCode: 200,
-                body: JSON.stringify(doc.data)
+                body: JSON.stringify(docs.data.map(doc => doc.data))
             }
         })
         .catch(err => {
