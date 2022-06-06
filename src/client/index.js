@@ -22,6 +22,22 @@ module.exports = function Client (_keystore) {
             return client
         },
 
+        follow: function (dids) {
+            return Promise.all(dids.map(did => {
+                return ssc.createMsg(keystore, null, {
+                    type: 'follow',
+                    contact: did
+                })
+            }))
+                .then(msgs => {
+                    return fetch(BASE + '/api/follow', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(msgs)
+                    })
+                })
+        },
+
         getRedemptions: getRedemptions,
 
         // `code` here should be the format 'did--code'

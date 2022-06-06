@@ -10,7 +10,7 @@ const upload = require('../upload')
 
 const { PUBLIC_KEY, SECRET_KEY } = process.env
 
-exports.handler = async function (ev, ctx) {
+exports.handler = function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -71,8 +71,8 @@ exports.handler = async function (ev, ctx) {
         ssc.isValidMsg(profile, null, key.publicKey),
         upload(file, _hash)
     ])
-        .then(([redemVal, followVal, profileVal]) => {
-            if (!profileVal || !redemVal || !followVal) {
+        .then(([redeemVal, followVal, profileVal]) => {
+            if (!profileVal || !redeemVal || !followVal) {
                 return {
                     statusCode: 422,
                     body: 'invalid message'
@@ -100,6 +100,7 @@ exports.handler = async function (ev, ctx) {
         })
 
         // here we delete the invitation and write a follow message
+        // from server to new user
         .then(_msg => {
             return client.query(
                 q.Do(

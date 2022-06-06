@@ -73,10 +73,16 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
 
         const isAdmin = (admins || []).find(user => user.did === did)
         if (isAdmin) {
+            // you can only invite people if you are an *admin*
+            // that may change in the future
             client.getRedemptions(did)
                 .then(res => {
                     console.log('redemptionssssssssssssss', res)
+
                     // TODO -- follow people here
+                    const didsToFollow = res.map(msg => msg.value.author)
+                    console.log('dids to follow', didsToFollow)
+
                 })
                 .catch(err => {
                     if (err.toString().includes('no redemptions waiting')) {

@@ -5,6 +5,33 @@
   "admins": [
     {
       "did": "did:key:z82T5XeMUNk67GZtcQ2pYnc34ZyUnMrE1YC1bHQAveSZn7oHAz2xyouSRLYo5FYsi2LD9wGmMBQcobhT3JbKPDfhVF5D4"
+    },
+    {
+      "did": "did:key:z82T5Z4otqe15N5mcDWCiLsDBrrAm1Ud8MpmeydNEg58aumGye2Qgsb2BnZo2gGrG9SfbmU4vaJkjBqEFyLwLCGkfnDoL"
+    },
+    {
+      "did": "did:key:z82T5VypNfSPEY8sfH6KKuTLs9nQ2aihfmtipfgYYHFvUW18pjqCQUNyqFMPipFmgQiTY1KbfWbcvcWxzY5qjwtuiCvrL"
+    },
+    {
+      "did": "did:key:z82T5ZUVzLpyvrnRN4te8T1RPnSpsCP9NDVhGMcNpkzafG3dJFkgUZRRVRV9G58pShJ49aVetTVaqrwrpRXWkPJYLsKUz"
+    },
+    {
+      "did": "did:key:z82T5X63Si1giHiCqiRRnYjdjCy8mP66if9QvF2Dtu1RbAhR6UWjpJ2sdENp1xAmUGMUeWKjD8XL2icf2zWV1Mhffewax"
+    },
+    {
+      "did": "did:key:z82T5Ve6RfXyQBHLQ5WWk2xz6nyUYvdtMhsV7jeGvm4d8mDPA67YDUQHW7gQpka7QTjAcdqQmgVrFP4iCURRjjRDMfGtX"
+    },
+    {
+      "did": "did:key:z82T5ZBkDzxuHexrMrDdayyP69g5mHEhdGaLywLxFS2YoH1crbiWjdwqrCNgqvXbnBh13RnnoESHZERxHhkLy5atSiJcM"
+    },
+    {
+      "did": "did:key:z82T5YvRM1x1MoCi8SJqcerX86AM1L4oYMo9yLpPkP2Cno92u3R8VbmKku7u8mjF3VsqUFJx7vQ6qJnAKCai5at8YVyiP"
+    },
+    {
+      "did": "did:key:z82T5ZizqFMj4y51EfkduAVYyw8eLPy9wWghsr4QXs5wRZZjTyA89AZmtxnKtLChJvk3w81BLqxmgkAAVdA4tQPHwhenT"
+    },
+    {
+      "did": "did:key:z82T5VFAsayeJTBKmAf7QU9f3sz7jC3K1s4CpDhRfdMKEvYQFRdAhT4TA9rAEcSgCcKefSuEHJZACJdS7XXhtCekkeMAB"
     }
   ]
 }

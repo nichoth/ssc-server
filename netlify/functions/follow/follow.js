@@ -60,28 +60,99 @@ exports.handler = async function (ev, ctx) {
     }
 
     // *is a POST request*
-    var msg
+    // var msg
+    var msgs
     try {
-        const body = JSON.parse(ev.body)
-        msg = body.msg
-    } catch (err) {
+        msgs = JSON.parse(body)
+    } catch(err) {
         return {
             statusCode: 422,
             body: 'invalid json'
         }
     }
 
-    const badMsg = (msg.content.type !== 'follow' || !msg.content.contact ||
-        !msg.author)
+    if (!Array.isArray(msgs)) return {
+        statusCode: 422,
+        body: 'invalid messages'
+    }
 
-    if (badMsg) {
+    const isValids = await Promise.all(msgs.map(msg => {
+        const pubKey = ssc.didToPublicKey(msg.author)
+        return ssc.isValidMsg(msg, null, pubKey)
+    }))
+
+    console.log('is valids', isValids)
+
+    const isOk = isValids.every(Boolean)
+
+    if (!isOk) {
         return {
-            statusCode: 400,
+            statusCode: 422,
             body: 'invalid message'
         }
     }
 
-    const pubKey = ssc.didToPublicKey(msg.author)
+    const formattedMsgs = msgs.map(msg => {
+        return { key: ssc.getId(msg), value: msg }
+    })
+
+    return client.query(
+        q.Map(formattedMsgs),
+        q.Lambda(["msg"], q.Create(q.Collection('follow'), {
+            data: q.Var("msg")
+        }))
+    )
+
+
+
+
+
+    // return Promise.all(msgs.map(msg => {
+    //     if (msg.content.type !== 'follow' || !msg.content.contact ||
+    //         !msg.author) {
+    //             return Promise.reject(new Error('invalid message'))
+    //     }
+
+    //     const pubKey = ssc.didToPublicKey(msg.author)
+    //     return ssc.isValidMsg(msg, null, pubKey)
+    // }))
+    //     .then(vals => {
+    //         return vals.some(val => (!val))
+    //     })
+    //     .then(writes => {
+
+    //     })
+    //     .catch(err => {
+    //         return {
+    //             statusCode: 422,
+    //             body: err.toString()
+    //         }
+    //     })
+
+
+
+
+    // try {
+    //     const body = JSON.parse(ev.body)
+    //     msg = body.msg
+    // } catch (err) {
+    //     return {
+    //         statusCode: 422,
+    //         body: 'invalid json'
+    //     }
+    // }
+
+    // const badMsg = (msg.content.type !== 'follow' || !msg.content.contact ||
+    //     !msg.author)
+
+    // if (badMsg) {
+    //     return {
+    //         statusCode: 400,
+    //         body: 'invalid message'
+    //     }
+    // }
+
+    // const pubKey = ssc.didToPublicKey(msg.author)
 
     // validate the given message
     return ssc.isValidMsg(msg, null, pubKey).then(isVal => {

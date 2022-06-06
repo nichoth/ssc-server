@@ -201,6 +201,7 @@ function invite (test, keys, did) {
                 return Promise.all([
                     ssc.createMsg(alice.keys, null, {
                         type: 'redemption',
+                        inviter: inviterDid,
                         code: _code
                     }),
 

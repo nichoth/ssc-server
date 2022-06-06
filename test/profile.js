@@ -8,6 +8,11 @@ const BASE = 'http://localhost:8888'
 var createHash = require('create-hash')
 const { v4: uuidv4 } = require('uuid')
 
+const file = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
+let _hash = createHash('sha256')
+_hash.update(file)
+const hash = _hash.digest('base64')
+
 if (require.main === module) {
     // keys here is admin
     var _keys
@@ -45,10 +50,10 @@ function profileTests (test, keys, did) {
     // keys here is admin
     const imgExample = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
 
-    var hash
-    let _hash = createHash('sha256')
-    _hash.update(imgExample)
-    hash = _hash.digest('base64')
+    // var hash
+    // let _hash = createHash('sha256')
+    // _hash.update(imgExample)
+    // hash = _hash.digest('base64')
 
     test('save a profile as an admin', t => {
         ssc.createMsg(keys, null, {
@@ -154,8 +159,9 @@ function profileTests (test, keys, did) {
     })
 
 
-    test('follow someone then save a profile from them', t => {
+    test('follow someone then save a profile for them', t => {
         const code = uuidv4()
+        var alice
 
         ssc.createMsg(keys, null, { type: 'invitation', code })
             .then(msg => {
@@ -168,20 +174,44 @@ function profileTests (test, keys, did) {
                     t.ok(res.ok, 'should create an invitation')
                     return ssc.createKeys()
                 })
-                .then(alice => {
-                    _alice = alice
-                    return ssc.createMsg(alice.keys, null, {
-                        type: 'redeem-invitation',
-                        code
-                    })
+                .then(_alice => {
+                    alice = _alice
+                    return ssc.exportKeys(_alice.keys)
                 })
-                // now redeem the invitation
-                // so the server follows the new user
-                .then(msg => {
+                .then(exported => {
+                    const aliceDid = ssc.publicKeyToDid(exported.public)
+
+                    return Promise.all([
+                        ssc.createMsg(alice.keys, null, {
+                            type: 'redemption',
+                            inviter: did,
+                            code
+                        }),
+
+                        ssc.createMsg(alice.keys, null, {
+                            type: 'follow',
+                            contact: did
+                        }),
+
+                        ssc.createMsg(alice.keys, null, {
+                            type: 'about',
+                            about: aliceDid,
+                            username: 'alice',
+                            desc: null,
+                            image: hash
+                        })
+                    ])
+                })
+                .then(([redemption, follow, profile]) => {
                     return fetch(BASE + '/api/redeem-invitation', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(msg)
+                        body: JSON.stringify({
+                            redemption,
+                            follow,
+                            profile,
+                            file
+                        })
                     })
                 })
                 .then(res => {
@@ -191,32 +221,37 @@ function profileTests (test, keys, did) {
                         return
                     }
 
-                    return ssc.createMsg(_alice.keys, null, {
+                    return ssc.createMsg(alice.keys, null, {
                         type: 'about',
-                        about: _alice.did,
-                        username: 'alice-test',
+                        about: alice.did,
+                        username: 'test-save-profile',
                         desc: null,
                         image: hash
                     })
                 })
-                .then(_msg => {
-                    // now save a profile for the new user
+                .then(profileMsg => {
                     return fetch(BASE + '/api/profile', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            msg: _msg,
-                            file: imgExample
+                            msg: profileMsg,
+                            file
                         })
                     })
                 })
                 .then(res => {
-                    t.ok(res.ok, 'should return an ok response')
-                    res.json().then(json => {
-                        t.equal(json.db.value.content.username, 'alice-test',
-                            'should set the correct username')
+                    if (!res.ok) {
+                        t.fail()
                         t.end()
-                    })
+                    }
+                    return res.json()
+                })
+                .then(json => {
+                    const { db } = json
+                    // console.log('response from db', db)
+                    t.equal(db.value.content.username, 'test-save-profile',
+                        'should update a profile for a user')
+                    t.end()
                 })
             })
     })
