@@ -61,9 +61,12 @@ exports.handler = async function (ev, ctx) {
 
     // *is a POST request*
     // var msg
+    // takes a stringified array of 'follow' msgs as a body
+    // must be a list b/c we need may need to follow
+    // multiple people when we deal with the pending queue of redemptions
     var msgs
     try {
-        msgs = JSON.parse(body)
+        msgs = JSON.parse(ev.body)
     } catch(err) {
         return {
             statusCode: 422,
@@ -77,11 +80,13 @@ exports.handler = async function (ev, ctx) {
     }
 
     const isValids = await Promise.all(msgs.map(msg => {
-        const pubKey = ssc.didToPublicKey(msg.author)
-        return ssc.isValidMsg(msg, null, pubKey)
+        // const pubKey = ssc.didToPublicKey(msg.author)
+        const { publicKey } = ssc.didToPublicKey(msg.author)
+        // return ssc.isValidMsg(msg, null, pubKey)
+        return ssc.isValidMsg(msg, null, publicKey)
     }))
 
-    console.log('is valids', isValids)
+    // console.log('is valids', isValids)
 
     const isOk = isValids.every(Boolean)
 
@@ -92,16 +97,51 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
+    // check that the author is the same for all messages
+    const authorDid = msgs[0].author
+    const authorOk = msgs.every(msg => (msg.author === authorDid))
+    if (!authorOk) {
+        return {
+            statusCode: 422,
+            body: 'invalid author'
+        }
+    }
+
+    // all msgs are valid at this point
+    // should check if the server is following the author
+    const isAdmin = admins.some(admin => admin.did === authorDid)
+    const serverIsFollowing = !(await client.query(
+        q.IsEmpty(q.Match(
+            q.Index('a_follows_b'),
+            [ serverDid, authorDid ]
+        ))
+    ))
+
+    if (!serverIsFollowing && !isAdmin) {
+        return {
+            statusCode: 403,
+            body: 'not following you'
+        }
+    }
+
     const formattedMsgs = msgs.map(msg => {
         return { key: ssc.getId(msg), value: msg }
     })
 
     return client.query(
-        q.Map(formattedMsgs),
-        q.Lambda(["msg"], q.Create(q.Collection('follow'), {
-            data: q.Var("msg")
-        }))
+        q.Map(
+            formattedMsgs,
+            q.Lambda(["msg"], q.Create(q.Collection('follow'), {
+                data: q.Var("msg")
+            }))
+        )
     )
+        .then(res => {
+            return {
+                statusCode: 200,
+                body: JSON.stringify(res.map(item => item.data))
+            }
+        })
 
 
 
@@ -155,32 +195,32 @@ exports.handler = async function (ev, ctx) {
     // const pubKey = ssc.didToPublicKey(msg.author)
 
     // validate the given message
-    return ssc.isValidMsg(msg, null, pubKey).then(isVal => {
-        if (!isVal) {
-            return {
-                statusCode: 400,
-                body: 'invalid message'
-            }
-        }
+    // return ssc.isValidMsg(msg, null, pubKey).then(isVal => {
+    //     if (!isVal) {
+    //         return {
+    //             statusCode: 400,
+    //             body: 'invalid message'
+    //         }
+    //     }
 
-        // a query that writes the given 'follow' message to the DB
-        return client.query(
-            q.Create(q.Collection('follow'), {
-                data: {
-                    key: ssc.getId(msg),
-                    value: msg
-                }
-            })
-        )
-            .then(res => {
-                return {
-                    statusCode: 200,
-                    body: JSON.stringify(res.data)
-                }
-            })
-            .catch(err => {
-                console.log('oh no', err)
-                throw err
-            })
-    })
+    //     // a query that writes the given 'follow' message to the DB
+    //     return client.query(
+    //         q.Create(q.Collection('follow'), {
+    //             data: {
+    //                 key: ssc.getId(msg),
+    //                 value: msg
+    //             }
+    //         })
+    //     )
+    //         .then(res => {
+    //             return {
+    //                 statusCode: 200,
+    //                 body: JSON.stringify(res.data)
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.log('oh no', err)
+    //             throw err
+    //         })
+    // })
 }
