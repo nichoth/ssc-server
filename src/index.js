@@ -77,12 +77,16 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
             // that may change in the future
             client.getRedemptions(did)
                 .then(res => {
-                    console.log('redemptionssssssssssssss', res)
+                    // console.log('redemptionssssssssssssss', res)
 
-                    // TODO -- follow people here
                     const didsToFollow = res.map(msg => msg.value.author)
                     console.log('dids to follow', didsToFollow)
 
+                    return client.follow(didsToFollow)
+                })
+                .then(followResponse => {
+                    console.log('follow response', followResponse)
+                    // should set state here
                 })
                 .catch(err => {
                     if (err.toString().includes('no redemptions waiting')) {

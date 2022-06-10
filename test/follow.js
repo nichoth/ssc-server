@@ -5,7 +5,6 @@ const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
 const BASE = 'http://localhost:8888'
-// const u = require('./util')
 
 if (require.main === module) {
     var _keys
@@ -74,8 +73,6 @@ function followTests (test, keys, did) {
         // the author of the follow msgs **must be either an admin, or
         // someone the server follows**
     })
-
-
 
 
     test('follow multiple DIDs', t => {

@@ -36,6 +36,15 @@ module.exports = function Client (_keystore) {
                         body: JSON.stringify(msgs)
                     })
                 })
+                .then(res => {
+                    if (res.ok) {
+                        return res.json()
+                    }
+
+                    res.text().then(text => {
+                        throw new Error(text)
+                    })
+                })
         },
 
         getRedemptions: getRedemptions,
