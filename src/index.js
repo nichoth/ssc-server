@@ -80,7 +80,11 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                     const didsToFollow = res.map(msg => msg.value.author)
                     console.log('dids to follow', didsToFollow)
 
-                    return client.follow(didsToFollow)
+                    // here, make a function, like `followViaInvitation`
+                    // that will follow them, and also delete the redemption msg
+                    // return client.follow(didsToFollow)
+
+                    return client.followViaInvitation(didsToFollow)
                 })
                 .then(followResponse => {
                     console.log('follow response', followResponse)

@@ -1,3 +1,4 @@
+require('dotenv').config()
 const faunadb = require('faunadb')
 const ssc = require('@nichoth/ssc-lambda')
 var q = faunadb.query

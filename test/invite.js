@@ -316,12 +316,56 @@ function invite (test, keys, did) {
             })
     })
 
+    var redemptions
     test('the admin gets redemptions', t => {
         getRedemptions(did).then(res => {
-            t.equal(res.value.content.code, _code, 'should have the right code')
-            t.equal(res.value.content.inviter, did,
+            redemptions = res
+            t.ok(Array.isArray(res), 'should return an array')
+            t.equal(res[0].value.content.code, _code, 'should have the right code')
+            t.equal(res[0].value.content.inviter, did,
                 'should have the right inviter')
             t.end()
         })
+    })
+
+    // this is when an admin follows someone because the new person has
+    // redeemed an invitation made by the admin
+    test('follow someone via a pending redemption message', t => {
+        const invitedPerson = redemptions[0].value.author
+
+        ssc.createMsg(keys, null, {
+            type: 'follow',
+            contact: invitedPerson
+        })
+            .then(msg => {
+                return fetch(BASE + '/api/follow-via-invitation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: [
+                        JSON.stringify([msg])
+                    ]
+                })
+            })
+            .then(res => {
+                if (res.ok) return res.json()
+                res.text().then(text => {
+                    t.fail(text)
+                    t.end()
+                })
+            })
+            .then(json => {
+                const { followMsgs, redemptionMsgs } = json
+                t.equal(
+                    followMsgs[0].value.content.contact,
+                    redemptionMsgs[0].value.author,
+                    'should have the correct graph of follow & redemption'
+                )
+
+                return getRedemptions(did).then(res => {
+                    t.equal(res.length, 0,
+                        'should delete the pending redemption message')
+                    t.end()
+                })
+            })
     })
 }

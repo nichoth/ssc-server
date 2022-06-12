@@ -1,5 +1,5 @@
 // require('dotenv').config()
-require('isomorphic-fetch')
+// require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc/web')
 const createHash = require('create-hash')
 // var Blake2s = require('blake2s')
@@ -20,6 +20,29 @@ module.exports = function Client (_keystore) {
         setKeystore: function (ks) {
             keystore = ks
             return client
+        },
+
+        followViaInvitation: function (did) {
+            return Promise.all(did.map(did => {
+                return ssc.createMsg(keystore, null, {
+                    type: 'follow',
+                    contact: did
+                })
+            }))
+                .then(msgs => {
+                    return fetch(BASE + '/api/follow-via-invitation', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(msgs)
+                    })
+                })
+                .then(res => {
+                    if (res.ok) return res.json()
+
+                    res.text().then(text => {
+                        throw new Error(text)
+                    })
+                })
         },
 
         follow: function (dids) {

@@ -105,8 +105,7 @@ exports.handler = function (ev, ctx) {
             return client.query(
                 q.Do(
                     [q.Delete(
-                        // delete the invitation since it was
-                        // used now
+                        // delete the invitation since it was used now
                         q.Select(
                             ["ref"],
                             q.Get(
