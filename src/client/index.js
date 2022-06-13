@@ -6,8 +6,7 @@ const createHash = require('create-hash')
 const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
 
-var baseUrl = 'http://localhost:8888'
-var BASE = (process.env.NODE_ENV === 'test' ? baseUrl : '')
+const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
 // this is a client-side file that calls our API
 

@@ -62,8 +62,6 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
-        // console.log('**got a profile POST req**', msg)
-
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
 
