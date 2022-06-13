@@ -25,11 +25,13 @@ const env = process.env.NODE_ENV
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const lastUser = dids ? dids.lastUser : null
 
+console.log('*dids*', dids)
+// TODO -- should fetch the alternate DIDs, not load them from localStorage
+
 function getRandomInt (max) {
     return Math.floor(Math.random() * max);
 }
 
-// const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 const storeName = env === 'cypress' ?
     // how to get a random storeName?
     getRandomInt(9999) :
@@ -40,11 +42,10 @@ const storeName = env === 'cypress' ?
 
 console.log('**storename**', storeName)
 ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
-    console.log('keystore', keystore)
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
     const client = Client(keystore)
-    subscribe(bus, state)
+    subscribe(bus, state, client)
 
     state(function onChange (newState) {
         console.log('change', newState)
@@ -83,11 +84,15 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                     // that will follow them, and also delete the redemption msg
                     // return client.follow(didsToFollow)
 
+                    if (!didsToFollow.length) return
+
                     return client.followViaInvitation(didsToFollow)
                 })
                 .then(followResponse => {
-                    console.log('follow response', followResponse)
-                    // should set state here
+                    if (followResponse) {
+                        // should set state here
+                        console.log('follow response', followResponse)
+                    }
                 })
                 .catch(err => {
                     if (err.toString().includes('no redemptions waiting')) {
@@ -98,9 +103,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                     throw err
                 })
         }
-
-        // @TODO -- in here, fetch the `follow` endpoint -- see who you are
-        //   following
 
         Promise.all([
             client.serverFollows(did),

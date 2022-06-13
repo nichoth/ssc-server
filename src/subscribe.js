@@ -3,7 +3,7 @@ var evs = require('./EVENTS')
 const xtend = require('xtend')
 const { admins } = require('./config.json')
 
-function subscribe (bus, state) {
+function subscribe (bus, state, client) {
     bus.on('*', (name, ev) => {
         console.log('***star***', name, ev)
     })
@@ -13,6 +13,7 @@ function subscribe (bus, state) {
         // this changes the "active" DID that the app is using
         console.log('identity change', did, profile)
         // const { username, image } = profile
+        client.setKeystore(keystore)
         state.me.keys.set(keystore)
         state.me.did.set(did)
         console.log('admins', admins)
@@ -22,7 +23,6 @@ function subscribe (bus, state) {
         if (state.me.isAdmin() !== isAdmin) {
             state.me.isAdmin.set(isAdmin)
         }
-        // need to re-fetch the data that the app is using
     })
 
     bus.on(evs.pin.post, ev => {

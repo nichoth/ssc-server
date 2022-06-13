@@ -78,16 +78,27 @@ function Whoami (props) {
                     // event[newDid] = { username, did: newDid, image, keystore }
 
                     // then sign a message setting the profile for the new DID
+                    // @TODO -- here, create a profile message too, and
+                    //   update them both in one call
                     return client.createAlternateDid({
-                        newKeystore: keystore
+                        newKeystore: keystore,
+                        profile: {
+                            username,
+                            did: newDid,
+                            image,
+                            desc: null
+                        }
                     })
-                        .then(() => {
+                        .then(res => {
+                            console.log('rrrrrressssssssssss from client', res)
                             // now set the profile data (image and username) for the 
                             // new DID
                             client.setKeystore(keystore)
 
-                            // now need to create profile info for that DID
-                            return client.postProfile({ username, image })
+                            return { db: res.profile }
+
+                            // now need to create profile info for the new DID
+                            // return client.postProfile({ username, image })
                         })
                         .then(res => {
                             const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
