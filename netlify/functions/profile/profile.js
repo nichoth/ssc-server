@@ -76,8 +76,11 @@ exports.handler = async function (ev, ctx) {
         // if there is no `to` message, then this _must_ be an `admin` DID,
         // or a DID that is `follow`ed by the server
 
-
+        // console.log('msg', msg)
         const isAdmin = admins.some(el => el.did === did)
+
+        console.log('admins', admins)
+        console.log('is admin???????', isAdmin)
 
         if (isAdmin) {
             return await update({ did, pubKey, msg, file })

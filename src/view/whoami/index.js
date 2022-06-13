@@ -74,8 +74,8 @@ function Whoami (props) {
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
                 return ssc.getDidFromKeys(keystore).then(newDid => {
-                    const event = {}
-                    event[newDid] = { username, did: newDid, image, keystore }
+                    // const event = {}
+                    // event[newDid] = { username, did: newDid, image, keystore }
 
                     // then sign a message setting the profile for the new DID
                     return client.createAlternateDid({
@@ -113,8 +113,6 @@ function Whoami (props) {
                             })
                             setPendingProfile(null)
                             setResolving(false)
-
-                            // need to re-fetch the data that the app is using...
                         })
                 })
             })
