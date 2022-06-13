@@ -230,7 +230,7 @@ function Whoami (props) {
                             .resize( scale().width(100) )
                             .toURL()) :
                         ('data:image/svg+xml;utf8,' +
-                            generateFromString((me && me.did) || ''))
+                            generateFromString((user.did) || ''))
 
                     return html`<li>
                         <span class="avatar">

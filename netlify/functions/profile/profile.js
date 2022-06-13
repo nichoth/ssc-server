@@ -77,14 +77,13 @@ exports.handler = async function (ev, ctx) {
         // or a DID that is `follow`ed by the server
 
 
-        // @TODO -- handle alt accounts
-        // @TODO -- need to query to check if the server follows the given DID
         const isAdmin = admins.some(el => el.did === did)
 
         if (isAdmin) {
             return await update({ did, pubKey, msg, file })
         }
 
+        // @TODO -- handle alt accounts
         const isAlt = false
 
         if (isAlt) {

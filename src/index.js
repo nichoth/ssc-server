@@ -36,7 +36,6 @@ const storeName = env === 'cypress' ?
     (dids ? dids[lastUser] : {}).storeName || appName
 
 
-// need to be able to start this with a new user...
 
 
 console.log('**storename**', storeName)
