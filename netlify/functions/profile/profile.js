@@ -93,14 +93,15 @@ exports.handler = async function (ev, ctx) {
 
         // query goes here to check if server is following DID
         // const isFollowed = false
-        const isNotFollowed = await client.query(
+        // const isNotFollowed = await client.query(
+        const isFollowed = !(await client.query(
             q.IsEmpty(q.Match(
                 q.Index('a_follows_b'),
                 [ssc.publicKeyToDid(PUBLIC_KEY), did]
             ))
-        )
+        ))
 
-        if (!isNotFollowed) {
+        if (isFollowed) {
             return await update({ did, pubKey, msg, file })
         }
 

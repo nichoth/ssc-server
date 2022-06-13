@@ -12,6 +12,10 @@ const { admins } = require('../../../src/config.json')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
+        return {
+            statusCode: 200,
+            body: 'ok'
+        }
     }
 
     if (ev.httpMethod !== 'POST') return {
