@@ -111,9 +111,9 @@ function Whoami (props) {
                             // emit(evs.identity.newDid, event)
                             // the new keystore is in effect now
                             emit(evs.identity.change, {
-                                did: newDid,
                                 keystore,
-                                profile
+                                did: newDid,
+                                profile: _profile
                             })
                             setPendingProfile(null)
                             setResolving(false)

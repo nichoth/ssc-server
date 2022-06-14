@@ -116,14 +116,7 @@ function Hello (props) {
         })
             .then(res => {
                 setProfileResolving(false)
-                if (!res.ok) {
-                    console.log('not ok')
-                    res.text().then(text => {
-                        throw new Error(text)
-                    })
-                }
                 console.log('*set profile response*', res)
-                console.log('meeeeeeee', me)
                 const { username, image } = res.db.value.content
 
                 // this is for localStorage

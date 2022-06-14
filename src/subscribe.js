@@ -9,7 +9,7 @@ function subscribe (bus, state, client) {
     })
 
     // this event means 'the app is changing to use this new DID'
-    bus.on(evs.identity.change, ({ did, keystore, profile }) => {
+    bus.on(evs.identity.change, ({ keystore, did, profile }) => {
         // this changes the "active" DID that the app is using
         console.log('identity change', did, profile)
         // const { username, image } = profile

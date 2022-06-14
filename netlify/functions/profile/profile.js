@@ -31,7 +31,7 @@ exports.handler = async function (ev, ctx) {
                 if (err.toString().includes('not found')) {
                     return {
                         statusCode: 400,
-                        body: 'invalid DID'
+                        body: 'invalid DID ' + did
                     }
                 }
 
@@ -64,8 +64,6 @@ exports.handler = async function (ev, ctx) {
 
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
-
-
 
         // need to check if the request is from an either an `admin`
         // or someone in an `alternate` chain

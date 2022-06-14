@@ -42,6 +42,9 @@ function Shell (props) {
                 window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
                 setResolving(false)
             })
+            .catch(err => {
+                console.log('err in here', err)
+            })
     }
 
     function selectImg (ev) {
