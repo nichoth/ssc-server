@@ -60,7 +60,7 @@ function Shell (props) {
             const image = reader.result
 
             setResolving(true)
-            // (did, username, imgHash, image)
+            
             client.postProfile({
                 did: me.did,
                 username,
@@ -71,13 +71,10 @@ function Shell (props) {
                 .then(res => {
                     setResolving(false)
                     const { image } = res.db.value.content
-
+                    const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+                    dids[me.did] = Object.assign({}, dids[me.did], { image })
+                    window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
                     emit(evs.identity.setProfile, { image })
-
-                    // emit(evs.identity.setAvatar, { image: {
-                    //     id,
-                    //     url: res.image.url
-                    // } })
                 })
                 .catch(err => {
                     setResolving(false)

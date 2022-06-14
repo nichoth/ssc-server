@@ -74,12 +74,6 @@ function Whoami (props) {
         ssc.createKeys(ssc.keyTypes.ECC, { storeName: username })
             .then(keystore => {
                 return ssc.getDidFromKeys(keystore).then(newDid => {
-                    // const event = {}
-                    // event[newDid] = { username, did: newDid, image, keystore }
-
-                    // then sign a message setting the profile for the new DID
-                    // @TODO -- here, create a profile message too, and
-                    //   update them both in one call
                     return client.createAlternateDid({
                         newKeystore: keystore,
                         profile: {
@@ -90,21 +84,20 @@ function Whoami (props) {
                         }
                     })
                         .then(res => {
-                            console.log('rrrrrressssssssssss from client', res)
                             // now set the profile data (image and username) for the 
                             // new DID
                             client.setKeystore(keystore)
 
-                            return { db: res.profile }
+                            return res.profile
 
                             // now need to create profile info for the new DID
                             // return client.postProfile({ username, image })
                         })
-                        .then(res => {
+                        .then(profile => {
                             const dids = JSON.parse(ls.getItem(LS_NAME)) || {}
 
-                            const imgId = res.db.value.content.image
-                            const profile = {
+                            const imgId = profile.value.content.image
+                            const _profile = {
                                 username,
                                 image: imgId,
                                 storeName: username,
@@ -113,7 +106,7 @@ function Whoami (props) {
                             // update the localStorage object,
                             // then switch to the new ID
                             dids.lastUser = newDid
-                            dids[newDid] = profile
+                            dids[newDid] = _profile
                             ls.setItem(LS_NAME, JSON.stringify(dids))
                             // emit(evs.identity.newDid, event)
                             // the new keystore is in effect now
