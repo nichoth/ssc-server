@@ -44,7 +44,7 @@ function Shell (props) {
                 setResolving(false)
             })
             .catch(err => {
-                console.log('err in here', err)
+                console.log('err in shell', err)
                 setResolving(false)
             })
     }
