@@ -22,6 +22,9 @@ if (require.main === module) {
 
 function resolveAlt (did) {
     return client.query(q.Call('resolve-alt', [did]))
+        .then(doc => {
+            return doc.data
+        })
 
     // Query(
     //     Lambda(

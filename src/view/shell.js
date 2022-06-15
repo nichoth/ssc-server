@@ -32,6 +32,7 @@ function Shell (props) {
             imgHash: me.profile.image
         })
             .then(res => {
+                console.log('got a response', res)
                 const { username } = res.db.value.content
                 emit(evs.identity.setUsername, { username })
                 // update localStorage with the new profile info
@@ -44,6 +45,7 @@ function Shell (props) {
             })
             .catch(err => {
                 console.log('err in here', err)
+                setResolving(false)
             })
     }
 

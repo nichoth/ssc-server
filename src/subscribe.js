@@ -33,10 +33,10 @@ function subscribe (bus, state, client) {
         console.log('rrrrr', err)
     })
 
-    // bus.on(evs.identity.setUsername, ev => {
-    //     const { username } = ev
-    //     state.me.profile.username.set(username)
-    // })
+    bus.on(evs.identity.setUsername, ev => {
+        const { username } = ev
+        state.me.profile.username.set(username)
+    })
 
     // bus.on(evs.identity.setDesc, ev => {
     //     state.me.profile.desc.set(ev.content.desc)

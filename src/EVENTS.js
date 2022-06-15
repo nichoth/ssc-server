@@ -12,7 +12,7 @@ var evs = namespace({
     // profile: [ 'new' ],
     // identity: ['setUsername', 'setAvatar', 'setProfile', 'setDesc', 'newDid',
     //     'change']
-    identity: ['setProfile', 'newDid', 'change']
+    identity: ['setProfile', 'newDid', 'change', 'setUsername']
 })
 
 module.exports = evs

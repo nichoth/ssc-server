@@ -86,14 +86,14 @@ exports.handler = async function (ev, ctx) {
         var resolvedAlt 
         try {
             resolvedAlt = await resolveAlt(did)
+            isAlt = resolvedAlt.value.content.about !== did
         } catch (err) {
             console.log('ooooohhhhh no', err)
             throw err
         }
 
-        console.log('**resolved alt**', resolvedAlt)
-
         if (isAlt) {
+            console.log('updating...')
             return await update({ did, pubKey, msg, file })
         }
 
