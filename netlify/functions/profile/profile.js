@@ -77,15 +77,12 @@ exports.handler = async function (ev, ctx) {
 
         const isAdmin = admins.some(el => el.did === did)
 
-        console.log('admins', admins)
-        console.log('is admin???????', isAdmin)
-
         if (isAdmin) {
             return await update({ did, pubKey, msg, file })
         }
 
         // @TODO -- handle alt accounts
-        const isAlt = false
+        var isAlt = false
         var resolvedAlt 
         try {
             resolvedAlt = await resolveAlt(did)

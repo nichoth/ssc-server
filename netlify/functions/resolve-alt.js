@@ -8,9 +8,15 @@ const client = new faunadb.Client({
 
 if (require.main === module) {
     // is running from CLI
-    resolveAlt("did:key:z82T5YVdoVvXC5apcTHeZFTGAprLCr54fwSVGwZBt37GagZcPoByHkb3nGeziEf73Jvdc59EfthnHBL9AiZWTE5Gxt72c")
+    resolveAlt("did:key:z82T5ZZpeVK7rYyRHsrjhQcxnGnL5hjux5aUQ251wDSuF1Mn3qMmUkvueqsKP3zbgHRvuHvSdR5wqmyRcZpbE9DLxnXH2")
         .then(res => {
             console.log('*resolved*', JSON.stringify(res, null, 2))
+        })
+        .catch(err => {
+            if (err.requestResult.responseRaw.includes('instance not found')) {
+                console.log('***that DID does not exist!!!***')
+            }
+            console.log('errrrrrrrrr', err)
         })
 }
 
