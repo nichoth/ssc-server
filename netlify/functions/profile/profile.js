@@ -1,14 +1,15 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-var createHash = require('create-hash')
+const createHash = require('create-hash')
 const upload = require('../upload')
-var q = faunadb.query
-var client = new faunadb.Client({
+const q = faunadb.query
+const client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
+const resolveAlt = require('../resolve-alt')
 
 
 exports.handler = async function (ev, ctx) {
@@ -74,7 +75,6 @@ exports.handler = async function (ev, ctx) {
         // if there is no `to` message, then this _must_ be an `admin` DID,
         // or a DID that is `follow`ed by the server
 
-        // console.log('msg', msg)
         const isAdmin = admins.some(el => el.did === did)
 
         console.log('admins', admins)
@@ -86,6 +86,15 @@ exports.handler = async function (ev, ctx) {
 
         // @TODO -- handle alt accounts
         const isAlt = false
+        var resolvedAlt 
+        try {
+            resolvedAlt = await resolveAlt(did)
+        } catch (err) {
+            console.log('ooooohhhhh no', err)
+            throw err
+        }
+
+        console.log('**resolved alt**', resolvedAlt)
 
         if (isAlt) {
             return await update({ did, pubKey, msg, file })
@@ -139,7 +148,6 @@ async function update ({ did, msg, pubKey, file }) {
     // the same file hash in the `msg.image` field, but no `file` key in
     // the request
     if (file) {
-        // console.log('file', file)
         var hash = createHash('sha256')
         hash.update(file)
         const _hash = hash.digest('base64')
@@ -154,8 +162,6 @@ async function update ({ did, msg, pubKey, file }) {
         return upload(file, _hash)
             .then(res => {
                 // then write the profile message to the DB
-
-                // writeMsg (did, key, msg) {
                 const key = ssc.getId(msg)
                 return writeMsg(did, key, msg).then(_res => {
                     return {
