@@ -5,9 +5,8 @@ import { Cloudinary } from '@cloudinary/url-gen';
 const EditableImg = require('./components/editable-img')
 const EditableField = require('./components/editable-field')
 const evs = require('../EVENTS')
-const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
+const { CLOUDINARY_CLOUD_NAME, admins } = require('../config.json')
 const { LS_NAME } = require('../constants')
-const { admins } = require('../config.json')
 
 const cld = new Cloudinary({
     cloud: {

@@ -128,7 +128,6 @@ function Whoami (props) {
 
     function selectNewAvatar (ev) {
         ev.preventDefault()
-        // console.log('on image select', ev)
         var file = ev.target.files[0]
         console.log('*file*', file)
 

@@ -1,6 +1,6 @@
 var _router = require('ruta3')
 var Home = require('./view/home')
-// var New = require('./view/new')
+var New = require('./view/new')
 var Whoami = require('./view/whoami')
 // var SingleImage = require('./view/single-image')
 // var createProfileView = require('./view/profile')
@@ -26,11 +26,11 @@ function Router () {
         return { view: Hello }
     })
 
-    // router.addRoute('/new', (match) => {
-    //     return {
-    //         view: New
-    //     }
-    // })
+    router.addRoute('/new', (match) => {
+        return {
+            view: New
+        }
+    })
 
     router.addRoute('/whoami', match => {
         return { view: Whoami }
