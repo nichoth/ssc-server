@@ -1,6 +1,38 @@
 @use './media' as media;
 
-// @include media.mobile {
-//     margin: 0;
-//     width: initial;
-// }
+.hamburger {
+    display: inline-block;
+
+    #hamburger-check {
+        display: none;
+    }
+
+    .line {
+        height: 2px;
+        border-radius: 3px;
+        background: black;
+        width: 17px;
+        transition: transform 0.2s ease-in-out;
+
+        &.top {
+            transform: translateY(-3px) scaleX(.88235)
+        }
+
+        &.bottom {
+            transform: translateY(3px) scaleX(.88235)
+        }
+    }
+
+    input:checked {
+        + label {
+            .line.bottom {
+                transform: rotateZ(45deg);
+            }
+
+            .line.top {
+                transform: rotateZ(-45deg);
+            }
+            // color: red;
+        }
+    }
+}

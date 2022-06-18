@@ -21,6 +21,16 @@
             border-bottom: 4px solid gray;
         }
     }
+
+    .mobile-nav {
+        display: none;
+        text-align: right;
+        padding-right: 1rem;
+
+        @include media.mobile {
+            display: block;
+        }
+    }
 }
 
 .nav-part {

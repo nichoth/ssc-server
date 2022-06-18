@@ -7,6 +7,7 @@ const EditableField = require('./components/editable-field')
 const evs = require('../EVENTS')
 const { CLOUDINARY_CLOUD_NAME, admins } = require('../config.json')
 const { LS_NAME } = require('../constants')
+const Hamburger = require('./components/hamburger')
 
 const cld = new Cloudinary({
     cloud: {
@@ -117,16 +118,22 @@ function Shell (props) {
             </li>
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
+
             ${isAdmin ?
                 html`<li class="${active('/create-invitation')} create-inv">
                     <a href="/create-invitation">create an invitation</a>
                 </li>` :
                 null
             }
+
             <li class="${active('/whoami')}">
                 <a href="/whoami">whoami</a>
             </li>
         </ul>
+
+        <div class="mobile-nav">
+            <${Hamburger} />
+        </div>
 
         <hr />
 
