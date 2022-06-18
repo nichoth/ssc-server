@@ -1,12 +1,19 @@
 import { html } from 'htm/preact'
 
 
-function Hamburger (props) {
+function Hamburger ({ onClick }) {
+
     return html`<div class="hamburger">
-        <input id="hamburger-check" type="checkbox" />
-        <label class="burger" for="hamburger-check">
-            <div class="line top"></div>
-            <div class="line bottom"></div>
+        <input type="checkbox" id="checkbox" />
+        <label class="burger" for="checkbox" onclick=${onClick}>
+            <button onclick=${onClick}>
+                <div class="container top">
+                    <div class="line top"></div>
+                </div>
+                <div class="container bottom">
+                    <div class="line bottom"></div>
+                </div>
+            </button>
         </label>
     </div>`
 }

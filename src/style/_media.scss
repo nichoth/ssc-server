@@ -4,8 +4,6 @@
     }
 }
 
-// 643 width flower
-
 @mixin tablet {
     @media (max-width: 768px) {
         @content

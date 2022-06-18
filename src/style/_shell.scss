@@ -1,5 +1,12 @@
 @use './media' as media;
 
+$nav-opacity: 0.6;
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: $nav-opacity; }
+}
+
 .shell {
     hr {
         border: 1px solid black
@@ -29,6 +36,33 @@
 
         @include media.mobile {
             display: block;
+        }
+
+        &.open {
+            .burger {
+                .line {
+                    background-color: white;
+                }
+            }
+        }
+    }
+
+    .mobile-nav-list {
+        display: none;
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        // opacity: 0;
+        // transition: opacity 0.2s;
+        animation: fadeIn 1s;
+
+        &.open {
+            opacity: $nav-opacity;
+            display: initial;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
     }
 }

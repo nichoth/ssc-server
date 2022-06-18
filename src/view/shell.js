@@ -23,6 +23,7 @@ function Shell (props) {
     const isAdmin = (admins || []).some(admin => admin.did === me.did)
     const { profile } = me
     const [ isResolving, setResolving ] = useState(false)
+    const [ mobileNav, setMobileNav ] = useState(false)
 
     async function saveName (me, newName) {
         setResolving(true)
@@ -97,6 +98,12 @@ function Shell (props) {
         return baseHref === basePath ? 'active' : ''
     }
 
+    function mobileNavHandler (ev) {
+        // ev.preventDefault()
+        console.log('click')
+        setMobileNav(!mobileNav)
+    }
+
     const avatarUrl = me.profile.image ?
         cld.image(encodeURIComponent(me.profile.image)).toURL() :
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
@@ -131,11 +138,15 @@ function Shell (props) {
             </li>
         </ul>
 
-        <div class="mobile-nav">
-            <${Hamburger} />
+        <div class="mobile-nav${mobileNav ? ' open' : ''}">
+            <${Hamburger} onClick=${mobileNavHandler} />
         </div>
 
         <hr />
+
+        <div class="mobile-nav-list${mobileNav ? ' open' : ''}">
+            got the mobile nav
+        </div>
 
         ${props.children}
     </div>`
