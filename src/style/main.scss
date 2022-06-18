@@ -11,10 +11,10 @@ $main-blue: #4285f4;
 @use './components';
 @use './home';
 @use './new-pin';
+@use './new-post';
 @use './create-invitation.scss';
 @use "../../node_modules/@nichoth/forms/style/text-input";
 @use "../../node_modules/@nichoth/forms/style/button";
-// @use "../../node_modules/@nichoth/forms/style/index";
 
 @keyframes spinner {
     to {transform: rotate(360deg);}

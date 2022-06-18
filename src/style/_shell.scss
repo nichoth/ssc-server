@@ -1,3 +1,4 @@
+@use './media' as media;
 
 .shell {
     hr {
@@ -30,6 +31,10 @@
     justify-content: space-between;
     position: relative;
     align-items: center;
+
+    @include media.mobile {
+        display: none;
+    }
 
     li {
         a {

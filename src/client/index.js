@@ -5,6 +5,7 @@ const createHash = require('create-hash')
 // var Blake2s = require('blake2s')
 const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
+const { getHash } = require('@nichoth/multihash')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -19,6 +20,12 @@ module.exports = function Client (_keystore) {
         setKeystore: function (ks) {
             keystore = ks
             return client
+        },
+
+        createPost: function ({ file, prev, content }) {
+            const mentions = [getHash(file)]
+            return ssc.createMsg(keystore, (prev || null),
+                Object.assign({ mentions }, content))
         },
 
         followViaInvitation: function (did) {

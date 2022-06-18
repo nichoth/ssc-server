@@ -31,6 +31,7 @@
     "@cloudinary/url-gen": "^1.8.0",
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^1.0.0",
+    "@nichoth/multihash": "^0.0.4",
     "@nichoth/ssc": "^0.11.0",
     "@nichoth/ssc-fauna": "^0.0.42",
     "@nichoth/ssc-lambda": "^0.0.8",

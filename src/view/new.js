@@ -1,39 +1,40 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
-var evs = require('../EVENTS')
-var ssc = require('@nichoth/ssc/web')
+// var ssc = require('@nichoth/ssc/web')
 const dragDrop = require('drag-drop')
-var createHash = require('create-hash')
-const EditableImg = require('./components/editable-img')
-const placeholderSvg = require('./components/placeholder-svg')
+// const { getHash } = require('@nichoth/multihash')
+var evs = require('../EVENTS')
+// const EditableImg = require('./components/editable-img')
+// const placeholderSvg = require('./components/placeholder-svg')
 
 function NewPost (props) {
-    const [pendingPost, setPendingPost] = useState(null)
+    console.log('props in new post', props)
+    // const { client } = props
+    // const [pendingPost, setPendingPost] = useState(null)
 
-    function submitPost (ev) {
-        ev.preventDefault()
-        console.log('submitting post', pendingPost)
-    }
+    // function submitPost (ev) {
+    //     ev.preventDefault()
+    //     console.log('submitting post', pendingPost)
+    // }
 
-    function selectPostImg (ev) {
-        var file = ev.target.files[0]
-        console.log('*file*', file)
+    // function selectPostImg (ev) {
+    //     var file = ev.target.files[0]
+    //     console.log('*file*', file)
 
-        const reader = new FileReader()
+    //     const reader = new FileReader()
 
-        reader.onloadend = () => {
-            setPendingPost(Object.assign({}, pendingPost, {
-                image: reader.result
-            }))
-        }
+    //     reader.onloadend = () => {
+    //         setPendingPost(Object.assign({}, pendingPost, {
+    //             image: reader.result
+    //         }))
+    //     }
 
-        // this gives us base64
-        reader.readAsDataURL(file)
-    }
+    //     // this gives us base64
+    //     reader.readAsDataURL(file)
+    // }
 
     return html`<div class="route new-post">
-        <p>new post form</p>
-        <${FilePicker} />
+        <${FilePicker} ...${props} />
     </div>`
 }
 
@@ -46,7 +47,7 @@ function FilePicker (props) {
     var [isValid, setValid] = useState(false)
     // var [err, setErr] = useState(null)
     // var [res, setRes] = useState(null)
-    var { me, emit } = props
+    var { me, client, emit } = props
 
     // setup drag & drop
     useEffect(function didMount () {
@@ -60,14 +61,17 @@ function FilePicker (props) {
         })
     }, [])
 
-    // function formChange () {
-    //     console.log('change')
-    //     checkIsValid()
-    // }
-
-    function formInput () {
-        console.log('input')
+    function formInput (ev) {
+        console.log('input', ev)
         checkIsValid()
+    }
+
+    function nevermind (ev) {
+        ev.preventDefault()
+        document.getElementById('image-input').value = ''
+        document.getElementById('caption').value = ''
+        checkIsValid()
+        setPendingImage(null)
     }
 
     function checkIsValid () {
@@ -76,31 +80,31 @@ function FilePicker (props) {
         if (_isValid !== isValid) setValid(_isValid)
     }
 
-
-
-    function handleSubmit (me, feed, setErr, setRes, ev) {
+    function handleSubmit (ev) {
         ev.preventDefault()
         const file = ev.target.elements.image.files[0]
-        // const fileList = ev.target.elements.image.files
-        // const file = fileList[0]
         const text = ev.target.elements.text.value
-
-        var hash = createHash('sha256').update(file).digest('hex')
-
+        console.log('file', file)
         console.log('text***', text)
 
         const reader = new FileReader()
 
         reader.onloadend = () => {
-            upload(me, reader.result, text, feed)
+            console.log('result', reader.result)
+
+            client.createPost({
+                file: reader.result,
+                content: {
+                    type: 'post',
+                    text
+                }
+            })
                 .then(res => {
-                    console.log('**success**', res)
-                    setRes(res)
+                    console.log('server response', res)
                 })
                 .catch(err => {
-                    console.log('errrrrrrr', err)
-                    setErr(err)
-                });
+                    console.log('err', err)
+                })
         }
 
         // this gives us base64
@@ -109,13 +113,15 @@ function FilePicker (props) {
 
     function chooseFile (ev) {
         var file = ev.target.files[0]
-        console.log('****file****', file)
+        console.log('****choose file****', file)
         setPendingImage(file)
     }
 
+    const err = null
+    const res = null
+
     return html`<form class="file-preview" id="new-post-form"
-        onchange=${formChange} oninput=${formInput}
-        onsubmit="${handleSubmit.bind(null, me, feed, setErr, setRes)}"
+        oninput=${formInput} onsubmit="${handleSubmit}"
     >
 
         ${err ?
@@ -150,8 +156,8 @@ function FilePicker (props) {
         ><//>
 
         <div class="controls">
-            <button onClick=${nevermind}>Nevermind</button>
             <button type="submit" disabled=${!isValid}>Save</button>
+            <button onClick=${nevermind}>Nevermind</button>
         </div>
 
         ${res ?
