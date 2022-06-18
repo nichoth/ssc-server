@@ -3,54 +3,57 @@
 .hamburger {
     display: inline-block;
 
-    /* The important stuff */
-    .container.top {
-        transform: translateY(-3px) scaleX(.88235);
-    }
-    
-    .container.bottom {
-        transform: translateY(3px) scaleX(.88235);
-    }
-    
-    input:checked + label .container .line.bottom {
-        transform: rotateZ(45deg);
-    }
-    
-    input:checked + label .container .line.top {
-        transform: rotateZ(-45deg);
-    }
-    
-    input:checked + label .container.bottom {
-        transform: none;
-    }
-    
-    input:checked + label .container.top {
-        transform: none;
-    }
-    
-    input:checked + label .line.bottom {
-        transform: none;
-        transition-delay: 0.1s;
-    }
-    
-    input:checked + label .line.top {
-        transform: none;
-        transition-delay: 0.1s;
-    }
-    
-    .container {
-        transition: transform 0.2s ease-in-out 0.1s;
-    }
-    
-    input:checked + label .container {
-        transition-delay: 0s;
-    }
-    
+    /* --------------- The important stuff --------------------------- */
     .line {
         transition: transform 0.2s ease-in-out;
     }
+
+    .container {
+        transition: transform 0.2s ease-in-out 0.1s;
+
+        &.top {
+            transform: translateY(-3px) scaleX(.88235);
+        }
+        &.bottom {
+            transform: translateY(3px) scaleX(.88235);
+        }
+    }
+
+    &.open {
+        .line {
+            &.bottom {
+                transform: none;
+                transition-delay: 0.1s;
+            }
+            &.top {
+                transform: none;
+                transition-delay: 0.1s;
+            }
+        }
+
+        .container {
+            transition-delay: 0s;
+
+            .line {
+                &.bottom {
+                    transform: rotateZ(45deg);
+                }
+                &.top {
+                    transform: rotateZ(-45deg);
+                }
+            }
+
+            &.bottom {
+                transform: none;
+            }
+            &.top {
+                transform: none;
+            }
+        }
+    }
     
-    /* The boilerplate stuff */
+    
+    /* ----------------- The boilerplate stuff --------------------- */
     button {
         all: unset;
         cursor: pointer;

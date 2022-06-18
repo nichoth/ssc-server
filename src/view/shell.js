@@ -99,11 +99,11 @@ function Shell (props) {
     }
 
     function mobileNavHandler (ev) {
-        // ev.preventDefault()
         setMobileNav(!mobileNav)
     }
 
     function navClick () {
+        console.log('nav click***************')
         setMobileNav(false)
     }
 
@@ -149,19 +149,21 @@ function Shell (props) {
 
         <div class="mobile-nav-list${mobileNav ? ' open' : ' closed'}">
             <ul>
-                <li onclick=${navClick} class="${active('/')}">
-                    <a href="/">home</a>
+                <li class="${active('/')}">
+                    <a onclick=${navClick} href="/">home</a>
                 </li>
 
                 <li onclick=${navClick} class="${active('/new')}">
-                    <a href="/new">new</a>
+                    <a onclick=${navClick} href="/new">new</a>
                 </li>
 
                 ${isAdmin ?
                     html`<li onclick=${navClick}
                         class="${active('/create-invitation')} create-inv"
                     >
-                        <a href="/create-invitation">create an invitation</a>
+                        <a onclick=${navClick} href="/create-invitation">
+                            create an invitation
+                        </a>
                     </li>` :
                     null
                 }

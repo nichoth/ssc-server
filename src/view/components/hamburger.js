@@ -2,8 +2,10 @@ import { html } from 'htm/preact'
 
 
 function Hamburger ({ onClick, isOpen }) {
-    return html`<div class="hamburger">
-        <input type="checkbox" id="checkbox" value=${isOpen}/>
+    console.log('*****rendering the burger*****', isOpen)
+
+    return html`<div class="hamburger${isOpen ? ' open' : ''}">
+        <input type="checkbox" id="checkbox" checked=${isOpen} />
         <label class="burger" for="checkbox" onclick=${onClick}>
             <button onclick=${onClick}>
                 <div class="container top">
