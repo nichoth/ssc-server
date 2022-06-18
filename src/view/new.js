@@ -51,7 +51,7 @@ function FilePicker (props) {
 
     // setup drag & drop
     useEffect(function didMount () {
-        dragDrop('.file-inputs', (files, pos, fileList, directories) => {
+        dragDrop('.file-inputs', (files, _, fileList) => {
             console.log('files', files)
             document.getElementById('image-input').files = fileList
             setPendingImage(files[0])

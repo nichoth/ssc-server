@@ -7,11 +7,16 @@
         display: none;
     }
 
+    .burger {
+        position: relative;
+        bottom: 2px;
+    }
+
     .line {
-        height: 2px;
+        height: 1px;
         border-radius: 3px;
         background: black;
-        width: 17px;
+        width: 22px;
         transition: transform 0.2s ease-in-out;
 
         &.top {
