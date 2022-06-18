@@ -1,11 +1,16 @@
 @use './media' as media;
 
-$nav-opacity: 0.6;
+$nav-opacity: 0.8;
 
 @keyframes fadeIn {
     0% { opacity: 0; }
     100% { opacity: $nav-opacity; }
 }
+
+// @keyframes fadeOut {
+//     0% { opacity: initial; }
+//     100% { opacity: 0;}
+// }
 
 .shell {
     hr {
@@ -53,16 +58,34 @@ $nav-opacity: 0.6;
         width: 100vw;
         height: 100vh;
         background-color: black;
-        // opacity: 0;
-        // transition: opacity 0.2s;
         animation: fadeIn 1s;
 
         &.open {
             opacity: $nav-opacity;
-            display: initial;
+            // display: initial;
             top: 0;
             left: 0;
             z-index: 1;
+
+            display: flex;
+            justify-content: center;
+
+            ul {
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin: 0;
+                margin-bottom: 30vh;
+
+                li {
+                    margin-bottom: 2rem;
+
+                    a {
+                        color: white;
+                    }
+                }
+            }
         }
     }
 }

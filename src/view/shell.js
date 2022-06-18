@@ -100,8 +100,11 @@ function Shell (props) {
 
     function mobileNavHandler (ev) {
         // ev.preventDefault()
-        console.log('click')
         setMobileNav(!mobileNav)
+    }
+
+    function navClick () {
+        setMobileNav(false)
     }
 
     const avatarUrl = me.profile.image ?
@@ -139,13 +142,34 @@ function Shell (props) {
         </ul>
 
         <div class="mobile-nav${mobileNav ? ' open' : ''}">
-            <${Hamburger} onClick=${mobileNavHandler} />
+            <${Hamburger} isOpen=${mobileNav} onClick=${mobileNavHandler} />
         </div>
 
         <hr />
 
-        <div class="mobile-nav-list${mobileNav ? ' open' : ''}">
-            got the mobile nav
+        <div class="mobile-nav-list${mobileNav ? ' open' : ' closed'}">
+            <ul>
+                <li onclick=${navClick} class="${active('/')}">
+                    <a href="/">home</a>
+                </li>
+
+                <li onclick=${navClick} class="${active('/new')}">
+                    <a href="/new">new</a>
+                </li>
+
+                ${isAdmin ?
+                    html`<li onclick=${navClick}
+                        class="${active('/create-invitation')} create-inv"
+                    >
+                        <a href="/create-invitation">create an invitation</a>
+                    </li>` :
+                    null
+                }
+
+                <li class="${active('/whoami')}">
+                    <a onclick=${navClick} href="/whoami">whoami</a>
+                </li>
+            </ul>
         </div>
 
         ${props.children}

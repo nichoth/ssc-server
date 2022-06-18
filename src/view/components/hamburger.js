@@ -1,10 +1,9 @@
 import { html } from 'htm/preact'
 
 
-function Hamburger ({ onClick }) {
-
+function Hamburger ({ onClick, isOpen }) {
     return html`<div class="hamburger">
-        <input type="checkbox" id="checkbox" />
+        <input type="checkbox" id="checkbox" value=${isOpen}/>
         <label class="burger" for="checkbox" onclick=${onClick}>
             <button onclick=${onClick}>
                 <div class="container top">
