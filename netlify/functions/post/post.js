@@ -1,13 +1,13 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
-// const faunadb = require('faunadb')
+const faunadb = require('faunadb')
 const { getLatest } = require('./feed')
 // var createHash = require('create-hash')
 // const upload = require('../upload')
-// var q = faunadb.query
-// var client = new faunadb.Client({
-//     secret: process.env.FAUNADB_SERVER_SECRET
-// })
+var q = faunadb.query
+var client = new faunadb.Client({
+    secret: process.env.FAUNADB_SERVER_SECRET
+})
 const { admins } = require('../../../src/config.json')
 
 
@@ -30,17 +30,60 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    const msgAuthor = ssc.getAuthor(msg)
+    const did = ssc.getAuthor(msg)
 
-    getLatest(author).then(lastMsg => {
+    // validate the message sig with the given author
+    const pubKey = ssc.didToPublicKey(did).publicKey
+    // var isVal
+    var lastMsg
 
-    })
-    
-    // need to get the `prev` message from the DB, and check it against the
-    // new message
+    // console.log('*incoming msg*', msg)
+    // console.log('pub key', pubKey)
 
-    return {
-        statusCode: 400,
-        body: 'aaa'
+    try {
+        lastMsg = (await getLatest(did)).value
+    } catch (err) {
+        if (err.toString().includes('instance not found')) {
+            lastMsg = null
+        } else {
+            throw err
+        }
     }
+
+    return ssc.isValidMsg(msg, lastMsg, pubKey).then(isVal => {
+        if (!isVal) {
+            return {
+                statusCode: 400,
+                body: 'invalid signature'
+            }
+        }
+
+        // msg is valid, so add it to the DB
+        if (admins.some(admin => admin.did === did)) {
+            // req is from an admin, add it to DB
+            const key = ssc.getId(msg)
+
+            return client.query(
+                q.Create(
+                    q.Collection('posts'),
+                    { data: { key, value: msg } },
+                )
+            )
+                .then(res => {
+                    return {
+                        statusCode: 200,
+                        body: JSON.stringify(res.data)
+                    }
+                })
+        }
+
+        // check if server is following the user
+    })
+        .catch(() => {
+            return {
+                statusCode: 400,
+                body: 'invalid signature'
+            }
+        })
+
 }

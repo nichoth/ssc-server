@@ -66,6 +66,12 @@ exports.handler = async function (ev, ctx) {
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
 
+        // TODO
+        // here, check the msg sig
+
+
+
+
         // need to check if the request is from an either an `admin`
         // or someone in an `alternate` chain
         // or a DID that is followed by this server
