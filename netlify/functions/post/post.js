@@ -2,6 +2,7 @@ require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
 const { getLatest } = require('./feed')
+const serverFollows = require('../server-follows')
 // var createHash = require('create-hash')
 // const upload = require('../upload')
 var q = faunadb.query
@@ -58,32 +59,53 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
-        // msg is valid, so add it to the DB
+        // msg is valid, so check if the server follows this user
         if (admins.some(admin => admin.did === did)) {
             // req is from an admin, add it to DB
             const key = ssc.getId(msg)
 
-            return client.query(
-                q.Create(
-                    q.Collection('posts'),
-                    { data: { key, value: msg } },
-                )
-            )
+            return writePost(key, msg)
                 .then(res => {
                     return {
-                        statusCode: 200,
+                        statusCode: 201,
                         body: JSON.stringify(res.data)
                     }
                 })
         }
 
-        // check if server is following the user
+        return serverFollows(did)
+            .then(follows => {
+                if (follows) {
+                    // server does follow them, write the post
+                    const key = ssc.getId(msg)
+                    return writePost(key, msg)
+                        .then(res => {
+                            return {
+                                statusCode: 200,
+                                body: JSON.stringify(res.data)
+                            }
+                        })
+                }
+
+                return {
+                    statusCode: 403,
+                    body: 'not allowed'
+                }
+            })
     })
-        .catch(() => {
+        .catch((err) => {
             return {
                 statusCode: 400,
                 body: 'invalid signature'
             }
         })
+}
 
+function writePost (key, msg) {
+    return client.query(
+        q.Create(
+            q.Collection('posts'),
+            { data: { key, value: msg } },
+        )
+    )
 }

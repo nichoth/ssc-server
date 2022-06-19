@@ -10,8 +10,6 @@ module.exports = {
         return client.query(
             q.Get(q.Match(q.Index('post_by_author'), did))
         )
-            .then(res => {
-                return res.data
-            })
+            .then(res => res.data)
     }
 }

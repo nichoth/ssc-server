@@ -101,4 +101,38 @@ function postTest (test, keys) {
                 })
             })
     })
+
+    test('a valid message from a random user', t => {
+        ssc.createKeys().then(alice => {
+            return ssc.createMsg(alice.keys, null, {
+                type: 'post',
+                mentions: ['123'],
+                text: 'random user message'
+            })
+        }).then(msg => {
+            fetch(BASE + '/api/post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ files: [file], msg })
+            }).then(res => {
+                if (res.ok) {
+                    t.fail('should return an error code')
+                    t.end()
+                    return
+                }
+
+                t.equal(res.status, 403, 'should return code 403')
+
+                res.text().then(text => {
+                    t.equal(text, 'not allowed', 'should return expected error')
+                    t.end()
+                })
+            })
+        })
+        .catch(err => {
+            console.log('errrrrrrrr', err)
+            t.end()
+        })
+
+    })
 }

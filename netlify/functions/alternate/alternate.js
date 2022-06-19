@@ -117,10 +117,6 @@ exports.handler = async function (ev, ctx) {
                 }
             })
 
-
-
-
-
     }
 
 
