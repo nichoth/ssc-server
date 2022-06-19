@@ -36,4 +36,8 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
+    return {
+        statusCode: 400,
+        body: 'aaa'
+    }
 }
