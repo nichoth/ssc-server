@@ -6,6 +6,7 @@ const Post = require('../src/client/post')
 const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
+const BASE = 'http://localhost:8888'
 
 if (require.main === module) {
     var _keys
@@ -61,7 +62,6 @@ function postTest (test, keys) {
     test('create a second valid post from the same admin user', t => {
         Post.create(ssc, keys, [file], { text: 'test post 2' }, firstPost)
             .then(res => {
-                // console.log('post twooooooo', res)
                 t.equal(res.value.content.text, 'test post 2',
                     'should return the new message')
                 t.end()
@@ -69,6 +69,36 @@ function postTest (test, keys) {
             .catch(err => {
                 t.fail(err)
                 t.end()
+            })
+    })
+
+    test('post an invalid message from a valid user', t => {
+        ssc.createMsg(keys, null, {
+            type: 'post',
+            text: 'bad merkle sequence'
+        }).then(msg => {
+            fetch(BASE + '/api/post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ files: [file], msg })
+            })
+                .then(res => {
+                    if (res.ok) {
+                        t.fail('response should not be ok')
+                        t.end()
+                    }
+
+                    res.text().then(text => {
+                        t.equal(text, 'invalid signature',
+                            'should return the expected error message')
+                        t.end()
+                    })
+                })
+                .catch(err => {
+                    console.log('errrrrr', err)
+                    t.fail('err')
+                    t.end()
+                })
             })
     })
 }
