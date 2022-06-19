@@ -10,6 +10,10 @@ const upload = require('../upload')
 
 const { PUBLIC_KEY, SECRET_KEY } = process.env
 
+
+// redeeming an invitation will cause the server to 'follow' the user redeeming
+
+
 exports.handler = function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
         return {
@@ -31,10 +35,6 @@ exports.handler = function (ev, ctx) {
             body: 'invalid json'
         }
     }
-
-    // console.log('***redemption***', redemption)
-    // console.log('***profile***', profile)
-    // console.log('**follow**', followMsg)
 
     if (!redemption || !followMsg || !profile) {
         return {

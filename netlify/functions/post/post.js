@@ -35,11 +35,7 @@ exports.handler = async function (ev, ctx) {
 
     // validate the message sig with the given author
     const pubKey = ssc.didToPublicKey(did).publicKey
-    // var isVal
     var lastMsg
-
-    // console.log('*incoming msg*', msg)
-    // console.log('pub key', pubKey)
 
     try {
         lastMsg = (await getLatest(did)).value
@@ -61,7 +57,7 @@ exports.handler = async function (ev, ctx) {
 
         // msg is valid, so check if the server follows this user
         if (admins.some(admin => admin.did === did)) {
-            // req is from an admin, add it to DB
+            // is an admin, so add it to DB
             const key = ssc.getId(msg)
 
             return writePost(key, msg)

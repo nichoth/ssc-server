@@ -1,12 +1,13 @@
 // require('dotenv').config()
 // require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc/web')
-const createHash = require('create-hash')
+// const createHash = require('create-hash')
 const { getHash } = require('@nichoth/multihash')
-// var Blake2s = require('blake2s')
 const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
 const Post = require('./post')
+const Invitation = require('./invitation')
+const { v4: uuidv4 } = require('uuid')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -77,22 +78,26 @@ module.exports = function Client (_keystore) {
 
         getRedemptions: getRedemptions,
 
+        createInvitation: function (keys, content) {
+            const did = ssc.getDidFromKeys(keys)
+            return Invitation.create(ssc, keys, Object.assign({}, content, {
+                code: '' 
+            }))
+        },
+
         // `code` here should be the format 'did--code'
         // `did` is the user being invited
         redeemInvitation: function ({ code, did, username, image }) {
-            let _hash = createHash('sha256')
-            _hash.update(image)
-            const hash = _hash.digest('base64')
-
+            const hash = getHash(image)
             const file = image
 
-            const [inviterDid, invCode] = code.split('--')
+            const [ inviterDid ] = code.split('--')
 
             return Promise.all([
                 ssc.createMsg(keystore, null, {
                     type: 'redemption',
                     inviter: inviterDid,
-                    code: invCode
+                    code
                 }),
 
                 // need to also follow the inviter
@@ -160,9 +165,10 @@ module.exports = function Client (_keystore) {
             var hash = imgHash
             if (image) {
                 // let _hash = new Blake2s()
-                let _hash = createHash('sha256')
-                _hash.update(image)
-                hash = _hash.digest('base64')
+                // let _hash = createHash('sha256')
+                // _hash.update(image)
+                hash = getHash(image)
+                // hash = _hash.digest('base64')
                 // hash = _hash.digest()
             }
             
@@ -207,10 +213,11 @@ module.exports = function Client (_keystore) {
             )
 
             // if we are passed an image, set _hash to the right hash
-            var hash = null
-            let _hash = createHash('sha256')
-            _hash.update(image)
-            hash = _hash.digest('base64')
+            // var hash = null
+            // let _hash = createHash('sha256')
+            // _hash.update(image)
+            // hash = _hash.digest('base64')
+            const hash = getHash(image)
 
             // create a msg signed by the old DID
             return ssc.getDidFromKeys(keystore)

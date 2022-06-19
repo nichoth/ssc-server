@@ -14,6 +14,8 @@ let _hash = createHash('sha256')
 _hash.update(file)
 const hash = _hash.digest('base64')
 
+const Invitation = require('../src/client/invitation')
+
 if (require.main === module) {
     var _keys
     var ntl
@@ -48,9 +50,21 @@ if (require.main === module) {
 function invite (test, keys, did) {
     var _code
 
+    test('client.createInvitation', t => {
+        // create: async function createInvitation (ssc, keys, msgContent) {
+        Invitation.create(ssc, keys, { note: 'testing' })
+            .then(inv => {
+                t.ok(inv.value.content.code.includes(did),
+                    'should embed the DID of the inviter')
+                t.equal(inv.value.content.note, 'testing',
+                    'should return the message we just created')
+                t.end()
+            })
+    })
+
     // keys here is for the 'admin' user
     test('create an invitaion as an admin', t => {
-        const code = _code = uuidv4()
+        const code = _code =  did + '--' + uuidv4()
 
         ssc.createMsg(keys, null, {
             type: 'invitation',
