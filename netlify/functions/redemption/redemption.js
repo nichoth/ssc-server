@@ -15,8 +15,6 @@ exports.handler = async function (ev, ctx) {
 
     const did = ev.queryStringParameters.did
 
-    console.log("!!!! in get redemption !!!!!!", did)
-
     return client.query(
         q.Map(
             q.Paginate(q.Match(q.Index('redemption-by-inviter'), did)),
