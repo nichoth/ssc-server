@@ -1,16 +1,14 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-const { getLatest } = require('./feed')
-const serverFollows = require('../server-follows')
-// var createHash = require('create-hash')
-// const upload = require('../upload')
 const { getHash } = require('@nichoth/multihash')
+const { admins } = require('../../../src/config.json')
+const serverFollows = require('../server-follows')
+const { getLatest } = require('./feed')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
-const { admins } = require('../../../src/config.json')
 const upload = require('../upload')
 
 
@@ -39,7 +37,6 @@ exports.handler = async function (ev, ctx) {
     const pubKey = ssc.didToPublicKey(did).publicKey
     var lastMsg
 
-
     if (!msg.content.mentions){
         return {
             statusCode: 400,
@@ -61,8 +58,6 @@ exports.handler = async function (ev, ctx) {
             body: 'invalid file hash'
         }
     }
-
-
 
     try {
         lastMsg = (await getLatest(did)).value
