@@ -4,12 +4,12 @@ const faunadb = require('faunadb')
 const { getHash } = require('@nichoth/multihash')
 const { admins } = require('../../../src/config.json')
 const serverFollows = require('../server-follows')
+const upload = require('../upload')
 const { getLatest } = require('./feed')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
-const upload = require('../upload')
 
 
 exports.handler = async function (ev, ctx) {
