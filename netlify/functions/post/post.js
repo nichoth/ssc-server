@@ -11,6 +11,7 @@ var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const { admins } = require('../../../src/config.json')
+const upload = require('../upload')
 
 
 exports.handler = async function (ev, ctx) {
@@ -86,11 +87,11 @@ exports.handler = async function (ev, ctx) {
             // is an admin, so add it to DB
             const key = ssc.getId(msg)
 
-            return writePost(key, msg)
-                .then(res => {
+            return writePost(key, msg, files)
+                .then((writes) => {
                     return {
                         statusCode: 201,
-                        body: JSON.stringify(res.data)
+                        body: JSON.stringify(writes[writes.length - 1])
                     }
                 })
         }
@@ -100,11 +101,11 @@ exports.handler = async function (ev, ctx) {
                 if (follows) {
                     // server does follow them, write the post
                     const key = ssc.getId(msg)
-                    return writePost(key, msg)
-                        .then(res => {
+                    return writePost(key, msg, files)
+                        .then((writes) => {
                             return {
                                 statusCode: 200,
-                                body: JSON.stringify(res.data)
+                                body: JSON.stringify(writes[writes.length - 1])
                             }
                         })
                 }
@@ -123,11 +124,20 @@ exports.handler = async function (ev, ctx) {
         })
 }
 
-function writePost (key, msg) {
-    return client.query(
-        q.Create(
-            q.Collection('posts'),
-            { data: { key, value: msg } },
-        )
+
+
+
+function writePost (key, msg, files) {
+    return Promise.all(
+        msg.content.mentions.map((mention, i) => {
+            return upload(files[i], mention)
+        }).concat([
+            client.query(
+                q.Create(
+                    q.Collection('posts'),
+                    { data: { key, value: msg } },
+                )
+            ).then(res => res.data)
+        ])
     )
 }
