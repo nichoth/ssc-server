@@ -5,14 +5,16 @@ const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
 const { v4: uuidv4 } = require('uuid')
-const createHash = require('create-hash')
+// const createHash = require('create-hash')
 const getRedemptions = require('../src/client/get-redemptions')
 const BASE = 'http://localhost:8888'
+const { getHash } = require('@nichoth/multihash')
 
 const file = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
-let _hash = createHash('sha256')
-_hash.update(file)
-const hash = _hash.digest('base64')
+const hash = getHash(file)
+// let _hash = createHash('sha256')
+// _hash.update(file)
+// const hash = _hash.digest('base64')
 
 const Invitation = require('../src/client/invitation')
 
@@ -48,16 +50,47 @@ if (require.main === module) {
 
 
 function invite (test, keys, did) {
+    var _inv
     var _code
 
     test('client.createInvitation', t => {
-        // create: async function createInvitation (ssc, keys, msgContent) {
         Invitation.create(ssc, keys, { note: 'testing' })
             .then(inv => {
+                _inv = inv
                 t.ok(inv.value.content.code.includes(did),
-                    'should embed the DID of the inviter')
+                    'should embed the DID of the inviter in the message code')
                 t.equal(inv.value.content.note, 'testing',
                     'should return the message we just created')
+                t.equal(inv.value.content.type, 'invitation',
+                    'should add the `type` field to the message')
+                t.end()
+            })
+    })
+
+    // var _alice
+    test('client.redeemInvitation', t => {
+        const file = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
+
+        ssc.createKeys()
+            .then(alice => {
+                _alice = alice
+                const { code } = _inv.value.content
+                const content = {
+                    did: alice.did,
+                    username: 'alice',
+                    file
+                }
+
+                return Invitation.redeem(ssc, alice.keys, code, content)
+            })
+            .then(res => {
+                t.equal(res.value.content.type, 'about',
+                    'should return the profile for the new user')
+                t.equal(res.value.content.username, 'alice',
+                    'should set the username')
+                t.equal(res.value.content.image,
+                    'GmuzSvBeEBT5tvt1vhtRkhl1a7V8MkTqCxT4Z4jFz_s.sha256',
+                    'should set the right hash for the avatar')
                 t.end()
             })
     })
@@ -129,12 +162,13 @@ function invite (test, keys, did) {
 
 
     test('redeem an invitation with a valid code', t => {
-        var _alice
+        // var _alice
         const inviterDid = did
 
-        let _hash = createHash('sha256')
-        _hash.update(file)
-        const hash = _hash.digest('base64')
+        let hash = getHash(file)
+        // let _hash = createHash('sha256')
+        // _hash.update(file)
+        // const hash = _hash.digest('base64')
 
         ssc.createKeys()
             .then(alice => {
@@ -335,7 +369,10 @@ function invite (test, keys, did) {
         getRedemptions(did).then(res => {
             redemptions = res
             t.ok(Array.isArray(res), 'should return an array')
-            t.equal(res[0].value.content.code, _code, 'should have the right code')
+            t.ok(res.some(msg => {
+                return msg.value.content.code === _code
+            }), 'should return the redeemed invitation')
+            // t.equal(res[0].value.content.code, _code, 'should have the right code')
             t.equal(res[0].value.content.inviter, did,
                 'should have the right inviter')
             t.end()
@@ -375,11 +412,16 @@ function invite (test, keys, did) {
                     'should have the correct graph of follow & redemption'
                 )
 
-                return getRedemptions(did).then(res => {
-                    t.equal(res.length, 0,
-                        'should delete the pending redemption message')
-                    t.end()
-                })
+                return getRedemptions(did)
+            })
+            .then(redemptions => {
+                // earlier in this test, we created two invitations,
+                // and called `follow-via-inviation` on one of them,
+                // so 1 is still waiting to be redeemed
+                t.equal(redemptions.length, 1,
+                    'should delete the pending redemption message')
+
+                t.end()
             })
     })
 }

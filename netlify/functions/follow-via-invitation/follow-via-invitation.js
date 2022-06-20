@@ -70,6 +70,8 @@ exports.handler = async function (ev, ctx) {
         return { key: ssc.getId(msg), value: msg }
     })
 
+    console.log('**formatted msgs****', JSON.stringify(formattedMsgs, null, 2))
+
     return client.query(
         q.Do(
             // write 'follow' msgs

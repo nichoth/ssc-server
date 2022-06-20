@@ -7,7 +7,7 @@ const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
 const Post = require('./post')
 const Invitation = require('./invitation')
-const { v4: uuidv4 } = require('uuid')
+// const { v4: uuidv4 } = require('uuid')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -85,50 +85,9 @@ module.exports = function Client (_keystore) {
             }))
         },
 
-        // `code` here should be the format 'did--code'
-        // `did` is the user being invited
-        redeemInvitation: function ({ code, did, username, image }) {
-            const hash = getHash(image)
-            const file = image
-
-            const [ inviterDid ] = code.split('--')
-
-            return Promise.all([
-                ssc.createMsg(keystore, null, {
-                    type: 'redemption',
-                    inviter: inviterDid,
-                    code
-                }),
-
-                // need to also follow the inviter
-                ssc.createMsg(keystore, null, {
-                    type: 'follow',
-                    contact: inviterDid
-                }),
-
-                ssc.createMsg(keystore, null, {
-                    type: 'about',
-                    about: did,
-                    username,
-                    desc: null,
-                    image: hash,
-                })
-            ])
-            .then(([redemption, follow, profile]) => {
-                return fetch(BASE + '/api/redeem-invitation', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ redemption, follow, profile, file })
-                })
-            })
-            .then(res => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return res.text().then(text => {
-                    throw new Error(text)
-                })
-            })
+        // redeem: function redeemInvitation (ssc, keys, code, content) {
+        redeemInvitation: function (keys, code, content) {
+            return Invitation.redeem(ssc, keys, code, content)
         },
 
         serverFollows: function (userDid) {

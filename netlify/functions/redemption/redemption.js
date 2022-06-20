@@ -1,7 +1,5 @@
 require('dotenv').config()
-// const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-// var createHash = require('create-hash')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
@@ -16,6 +14,8 @@ exports.handler = async function (ev, ctx) {
     }
 
     const did = ev.queryStringParameters.did
+
+    console.log("!!!! in get redemption !!!!!!", did)
 
     return client.query(
         q.Map(

@@ -7,6 +7,7 @@ const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
 const BASE = 'http://localhost:8888'
+const Invitation = require('../src/client/invitation')
 
 if (require.main === module) {
     var _keys
@@ -39,6 +40,7 @@ if (require.main === module) {
 }
 
 function postTest (test, keys) {
+    // `keys` here is an admin user
     var firstPost
     const pic = fs.readFileSync(__dirname + '/caracal.jpg')
     const file = Buffer.from(pic).toString('base64')
@@ -133,6 +135,16 @@ function postTest (test, keys) {
             console.log('errrrrrrrr', err)
             t.end()
         })
+    })
 
+    // * create an invitation
+    // * have a new user redeem the invitation
+    // * post a message from the new user
+    test("post a message from a 'followed' user", t => {
+        Invitation.create(ssc, keys, { note: 'test' })
+            .then(inv => {
+                console.log('created invitation', inv)
+                t.end()
+            })
     })
 }

@@ -1,12 +1,13 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-var createHash = require('create-hash')
+// var createHash = require('create-hash')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const upload = require('../upload')
+const { getHash } = require('@nichoth/multihash')
 
 const { PUBLIC_KEY, SECRET_KEY } = process.env
 
@@ -14,7 +15,7 @@ const { PUBLIC_KEY, SECRET_KEY } = process.env
 // redeeming an invitation will cause the server to 'follow' the user redeeming
 
 
-exports.handler = function (ev, ctx) {
+exports.handler = async function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -36,7 +37,7 @@ exports.handler = function (ev, ctx) {
         }
     }
 
-    if (!redemption || !followMsg || !profile) {
+    if (!redemption || !followMsg || !profile || !file) {
         return {
             statusCode: 422,
             body: 'missing a message'
@@ -54,9 +55,10 @@ exports.handler = function (ev, ctx) {
     const { code } = redemption.content
     const key = ssc.didToPublicKey(redemption.author)
 
-    const hash = createHash('sha256')
-    hash.update(file)
-    const _hash = hash.digest('base64')
+    const _hash = await getHash(file)
+    // const hash = createHash('sha256')
+    // hash.update(file)
+    // const _hash = hash.digest('base64')
 
     if (_hash !== profile.content.image) {
         return {
@@ -124,6 +126,7 @@ exports.handler = function (ev, ctx) {
                         }
                     }),
 
+                    // make the server follow the user
                     q.Create(q.Collection('follow'), {
                         data: {
                             key: ssc.getId(_msg),
@@ -151,8 +154,6 @@ exports.handler = function (ev, ctx) {
             )
         })
         .then(res => {
-            // console.log('res', res[res.length - 1].data)
-
             return {
                 statusCode: 200,
                 body: JSON.stringify(res[res.length - 1].data)
