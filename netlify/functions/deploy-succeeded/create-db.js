@@ -16,12 +16,12 @@ function createFaunaDB (key) {
     const collections = [
         // [ collectionName, indices ]
         ['posts', [{
-                name: 'post-by-author',
+                name: 'post_by_author',
                 source: q.Collection('posts'),
                 terms: [ { field: ['data', 'value', 'author'] } ]
             },
             {
-                name: 'post-by-key',
+                name: 'post_by_key',
                 source: q.Collection('posts'),
                 terms: [{ field: ['data', 'key'] }]
             }]
