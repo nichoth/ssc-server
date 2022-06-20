@@ -8,13 +8,13 @@ const { getHash } = require('@nichoth/multihash')
 // gets all pending redemptions
 // this means, get all invitees that you need to follow
 module.exports = {
-    create: async function createPost (ssc, keys, files, msgContent, prev) {
+    create: async function createPost (ssc, keys, { files, content, prev }) {
         const mentions = files.map(file => {
             return getHash(file)
         })
 
         const msg = await ssc.createMsg(keys, (prev || null),
-            Object.assign({ type: 'post', mentions }, msgContent))
+            Object.assign({ type: 'post', mentions }, content))
         
         return fetch(BASE + '/api/post', {
             method: 'POST',

@@ -46,7 +46,10 @@ function postTest (test, keys) {
     const file = Buffer.from(pic).toString('base64')
 
     test('save a valid post from an admin', t => {
-        Post.create(ssc, keys, [file], { text: 'a test post' })
+        Post.create(ssc, keys, {
+            files: [file],
+            content: { text: 'a test post' }
+        })
             .then(res => {
                 firstPost = res.value
                 t.equal(res.value.content.type, 'post',
@@ -62,7 +65,11 @@ function postTest (test, keys) {
     })
 
     test('create a second valid post from the same admin user', t => {
-        Post.create(ssc, keys, [file], { text: 'test post 2' }, firstPost)
+        Post.create(ssc, keys, {
+            files: [file],
+            content: { text: 'test post 2' },
+            prev: firstPost
+        })
             .then(res => {
                 t.equal(res.value.content.text, 'test post 2',
                     'should return the new message')
@@ -166,6 +173,19 @@ function postTest (test, keys) {
                 t.equal(type, 'about', 'should return the new profile message')
                 t.equal(about, newUser.did,
                     'should set profile as the new user')
+                return newUser
+            })
+            .then((newUser) => {
+                // now post a 'post' from the new user
+    // create: async function createPost (ssc, keys, { files, content, prev }) {
+                return Post.create(ssc, newUser.keys, {
+                    files: [file],
+                    content: { text: 'a test post' },
+                    prev: null
+                })
+            })
+            .then(res => {
+                console.log('new poooooooooost', res)
                 t.end()
             })
     })

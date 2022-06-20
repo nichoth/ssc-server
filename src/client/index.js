@@ -25,7 +25,7 @@ module.exports = function Client (_keystore) {
         },
 
         createPost: function ({ files, content, prev }) {
-            return Post.create(keystore, ssc, files, content, prev)
+            return Post.create(ssc, keystore, { files, content, prev })
         },
 
         followViaInvitation: function (did) {
