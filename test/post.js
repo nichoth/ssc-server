@@ -9,6 +9,15 @@ const Invitation = require('../src/client/invitation')
 const Post = require('../src/client/post')
 const BASE = 'http://localhost:8888'
 
+const { CLOUDINARY_CLOUD_NAME } = require('../src/config.json')
+const { Cloudinary } = require('@cloudinary/url-gen')
+const cld = new Cloudinary({
+    cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
+    url: {
+      secure: true // force https, set to false to force http
+    }
+})
+
 if (require.main === module) {
     var _keys
     var ntl
@@ -198,6 +207,8 @@ function postTest (test, keys) {
             })
     })
 
+    var mention
+
     test('a second post from the same user', t => {
         const file = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
 
@@ -207,6 +218,7 @@ function postTest (test, keys) {
             prev: _post.value
         })
             .then(res => {
+                mention = res.value.content.mentions[0]
                 t.equal(res.value.sequence, 2, 'should have the right sequence')
                 t.equal(res.value.content.text, 'sequence two post',
                     'should return the right message')
@@ -216,6 +228,18 @@ function postTest (test, keys) {
             })
             .catch(err => {
                 console.log('errrrrrrrrrrrrrr', err)
+                t.end()
+            })
+    })
+
+    test('image was uploaded', t => {
+        const url = (cld
+            .image(encodeURIComponent(mention))
+            .toURL())
+
+        fetch(url)
+            .then(res => {
+                t.equal(res.status, 200, 'should have 200 response for image')
                 t.end()
             })
     })
