@@ -173,19 +173,21 @@ function postTest (test, keys) {
                 t.equal(type, 'about', 'should return the new profile message')
                 t.equal(about, newUser.did,
                     'should set profile as the new user')
-                return newUser
+                return Promise.all([
+                    Promise.resolve(newUser),
+                    Post.create(ssc, newUser.keys, {
+                        files: [file],
+                        content: { text: 'a test post' },
+                        prev: null
+                    })
+                ])
             })
-            .then((newUser) => {
-                // now post a 'post' from the new user
-    // create: async function createPost (ssc, keys, { files, content, prev }) {
-                return Post.create(ssc, newUser.keys, {
-                    files: [file],
-                    content: { text: 'a test post' },
-                    prev: null
-                })
-            })
-            .then(res => {
-                console.log('new poooooooooost', res)
+            .then(([newUser, post]) => {
+                const { type, text } = post.value.content
+                t.equal(post.value.author, newUser.did,
+                    'should create the message with the right author')
+                t.equal(type, 'post', 'should create the right type message')
+                t.equal(text, 'a test post', 'should return the new message')
                 t.end()
             })
     })
