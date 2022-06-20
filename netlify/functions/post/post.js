@@ -48,7 +48,8 @@ exports.handler = async function (ev, ctx) {
 
     const { mentions } = msg.content
 
-    // test that each mention is the hash for a file, in order of `files`
+    // test that each mention is the hash for a file
+    // (file and mention arrays need to be in the same order)
     const hashesOk = mentions.reduce((isOk, mention, i) => {
         return (isOk && (getHash(files[i]) === mention))
     }, true)
