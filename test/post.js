@@ -1,13 +1,13 @@
 require('dotenv').config()
 require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc-lambda')
-const Post = require('../src/client/post')
+const { getHash } = require('@nichoth/multihash')
 const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
-const BASE = 'http://localhost:8888'
 const Invitation = require('../src/client/invitation')
-const { getHash } = require('@nichoth/multihash')
+const Post = require('../src/client/post')
+const BASE = 'http://localhost:8888'
 
 if (require.main === module) {
     var _keys
