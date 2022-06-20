@@ -5,6 +5,7 @@ const { getLatest } = require('./feed')
 const serverFollows = require('../server-follows')
 // var createHash = require('create-hash')
 // const upload = require('../upload')
+const { getHash } = require('@nichoth/multihash')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
@@ -36,6 +37,30 @@ exports.handler = async function (ev, ctx) {
     // validate the message sig with the given author
     const pubKey = ssc.didToPublicKey(did).publicKey
     var lastMsg
+
+
+    if (!msg.content.mentions){
+        return {
+            statusCode: 400,
+            body: 'you need to send `mentions` in the message'
+        }
+    }
+
+    const { mentions } = msg.content
+
+    // test that each mention is the hash for a file, in order of `files`
+    const hashesOk = mentions.reduce((isOk, mention, i) => {
+        return (isOk && (getHash(files[i]) === mention))
+    }, true)
+
+    if (!hashesOk) {
+        return {
+            statusCode: 422,
+            body: 'invalid file hash'
+        }
+    }
+
+
 
     try {
         lastMsg = (await getLatest(did)).value

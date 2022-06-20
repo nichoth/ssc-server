@@ -8,6 +8,7 @@ const onExit = require('signal-exit')
 const setup = require('./setup')
 const BASE = 'http://localhost:8888'
 const Invitation = require('../src/client/invitation')
+const { getHash } = require('@nichoth/multihash')
 
 if (require.main === module) {
     var _keys
@@ -84,7 +85,8 @@ function postTest (test, keys) {
     test('post an invalid message from a valid user', t => {
         ssc.createMsg(keys, null, {
             type: 'post',
-            text: 'bad merkle sequence'
+            text: 'bad merkle sequence',
+            mentions: [getHash(file)]
         }).then(msg => {
             fetch(BASE + '/api/post', {
                 method: 'POST',
@@ -115,7 +117,7 @@ function postTest (test, keys) {
         ssc.createKeys().then(alice => {
             return ssc.createMsg(alice.keys, null, {
                 type: 'post',
-                mentions: ['123'],
+                mentions: [getHash(file)],
                 text: 'random user message'
             })
         }).then(msg => {
