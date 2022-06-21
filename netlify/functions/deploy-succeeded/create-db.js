@@ -140,6 +140,42 @@ function createFaunaDB (key) {
     }))
         .then((res) => {
             console.log('*created collections*', res)
+
+            return client.query(
+                q.CreateFunction({
+                    name: 'resolve-alt',
+                    body: q.Query(
+                        q.Lambda(
+                            ["to"],
+                            q.Let(
+                                {
+                                    altDoc: q.Match(
+                                        q.Index("alternate-to"),
+                                        q.Var("to")
+                                    )
+                                },
+                                q.If(
+                                    q.IsEmpty(q.Var("altDoc")),
+                                    q.Get(q.Match(
+                                        q.Index("profile-by-did"),
+                                        q.Var("to")
+                                    )),
+                                    q.Call(
+                                        "resolve-alt",
+                                        q.Select(
+                                            ["data", "value", "content", "from"],
+                                            q.Get(q.Var("altDoc"))
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                })
+            )
+        })
+        .then(res => {
+            console.log('*created functions*')
             return res
         })
         .catch(err => console.log('errr', err))
