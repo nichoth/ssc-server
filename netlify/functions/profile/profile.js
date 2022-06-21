@@ -10,6 +10,7 @@ const client = new faunadb.Client({
 const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
 const resolveAlt = require('../resolve-alt')
+const { getHash } = require('@nichoth/multihash')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
@@ -158,9 +159,7 @@ async function update ({ did, msg, pubKey, file }) {
     // the same file hash in the `msg.image` field, but no `file` key in
     // the request
     if (file) {
-        var hash = createHash('sha256')
-        hash.update(file)
-        const _hash = hash.digest('base64')
+        const _hash = getHash(file)
 
         if (_hash !== msg.content.image) {
             return {

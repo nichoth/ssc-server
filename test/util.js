@@ -13,8 +13,6 @@ const file = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34
 function inviteAndFollow ({ adminKeys, user, userProfile }) {
     return Invitation.create(ssc, adminKeys, { note: 'testing' })
         .then(inv => {
-            console.log('invvvvvvvvvvvvv', inv)
-
             const content = {
                 did: user.did,
                 username: userProfile.username,
