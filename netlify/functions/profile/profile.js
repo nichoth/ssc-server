@@ -11,7 +11,6 @@ const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
 const resolveAlt = require('../resolve-alt')
 
-
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         const did = ev.queryStringParameters.did
@@ -90,7 +89,6 @@ exports.handler = async function (ev, ctx) {
         // @TODO -- handle alt accounts
         var isAlt = false
         var resolvedAlt 
-        console.log('*did*', did)
 
         try {
             resolvedAlt = await resolveAlt(did)
@@ -103,7 +101,6 @@ exports.handler = async function (ev, ctx) {
                 isAlt = false
             } else {
                 console.log('ooooohhhhh no', err)
-                console.log('aaaaaaaaaaaaaa', err.toString())
                 throw err
             }
         }
