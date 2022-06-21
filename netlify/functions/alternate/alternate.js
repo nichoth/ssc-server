@@ -27,9 +27,6 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    console.log('**new profile**', newProfile)
-
-
     try {
         var { publicKey } = ssc.didToPublicKey(altMsg.author)
     } catch (err) {
@@ -109,7 +106,6 @@ exports.handler = async function (ev, ctx) {
             )
         })
             .then(res => {
-                console.log('create response*** ', res)
                 return {
                     statusCode: 200,
                     body: JSON.stringify({

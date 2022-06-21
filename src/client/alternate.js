@@ -18,10 +18,6 @@ function createAlternate ({ ssc, keystore, newKeystore, profile }) {
     )
 
     // if we are passed an image, set _hash to the right hash
-    // var hash = null
-    // let _hash = createHash('sha256')
-    // _hash.update(image)
-    // hash = _hash.digest('base64')
     const hash = getHash(image)
 
     // create a msg signed by the old DID
@@ -29,7 +25,6 @@ function createAlternate ({ ssc, keystore, newKeystore, profile }) {
         .then(oldDid => {
             return ssc.getDidFromKeys(newKeystore)
                 .then(newDid => {
-                    console.log('old, new', { oldDid, newDid })
                     return { oldDid, newDid }
                 })
         })

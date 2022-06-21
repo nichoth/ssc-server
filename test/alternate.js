@@ -4,8 +4,7 @@ const ssc = require('@nichoth/ssc-lambda')
 const test = require('tape')
 const onExit = require('signal-exit')
 const setup = require('./setup')
-// const BASE = 'http://localhost:8888'
-// const u = require('./util')
+const u = require('./util')
 const Alternate = require('../src/client/alternate')
 
 if (require.main === module) {
@@ -70,88 +69,64 @@ function alt (test, keys, did) {
                 t.end()
             })
     })
+
+    test('save an alt message as a random user', t => {
+        ssc.createKeys().then(async user => {
+            const newerUser = await ssc.createKeys()
+
+            // here, call Alternate with this user as `from`
+            return Alternate.create({
+                ssc,
+                keystore: user.keys,
+                newKeystore: newerUser.keys,
+                profile: {
+                    username: 'test-user',
+                    image: file
+                }
+            })
+        })
+            .then(() => {
+                t.fail('should get an error')
+                t.end()
+            })
+            .catch(err => {
+                t.ok(err.toString().includes('not allowed'),
+                    'should get the expected error message')
+                t.end()
+            })
+    })
+
+    test('save an alternate message as a standard user', t => {
+        // const did = user.did
+
+        ssc.createKeys()
+            .then(user => {
+                return Promise.all([
+                    Promise.resolve(user),
+                    u.inviteAndFollow({ adminKeys: keys, user })
+                ])
+            })
+            .then(async ([user]) => {
+                const newUser = await ssc.createKeys()
+
+                return Alternate.create({
+                    ssc,
+                    keystore: user.keys,
+                    newKeystore: newUser.keys,
+                    profile: {
+                        username: 'test-user',
+                        image: file
+                    }
+                })
+            })
+            .then(res => {
+                t.fail('should not allow normal users to create an alt yet')
+                t.end()
+            })
+            .catch(err => {
+                t.ok(err.toString().includes('not allowed'), 
+                    'should return the right error message')
+                t.end()
+            })
+    })
 }
-
-
-
-// function alt (test, keys, did) {
-//     // keys here is for the 'admin' user
-//     // (the one creating an alt)
-//     test('save an alt message as an admin', t => {
-//         ssc.createMsg(keys, null, {
-//             type: 'alternate',
-//             from: did,
-//             to: '123'
-//         }).then(msg => {
-//             fetch(BASE + '/.netlify/functions/alternate', {
-//                 method: 'POST',
-//                 headers: { 'Content-Type': 'application/json' },
-//                 body: JSON.stringify({ altMsg: msg })
-//             }).then(res => {
-//                 if (!res.ok) {
-//                     res.text().then(text => {
-//                         console.log('errrrrrrrrrrr', text)
-//                         t.fail()
-//                         return t.end()
-//                     })
-//                 }
-//                 return res.json()
-//             }).then(res => {
-//                 t.equal(res.key, ssc.getId(res.value),
-//                     'should return the expected key')
-//                 t.equal(res.value.content.to, '123',
-//                     'should have the right "to" in msg content')
-//                 t.equal(res.value.content.type, 'alternate',
-//                     'should return the right message type')
-//                 t.end()
-//             })
-//         })
-//     })
-
-//     test('save an alt message as a random user', t => {
-//         ssc.createKeys().then(user => {
-//             return ssc.createMsg(user.keys, null, {
-//                 type: 'alternate',
-//                 from: user.did,
-//                 to: '123'
-//             })
-//         })
-//             .then(msg => {
-//                 return fetch(BASE + '/.netlify/functions/alternate', {
-//                     method: 'POST',
-//                     headers: { 'Content-Type': 'application/json' },
-//                     body: JSON.stringify(msg)
-//                 })
-//             })
-//             .then(res => {
-//                 t.notOk(res.ok, 'should not return an ok response')
-//                 t.equal(res.status, 403, 'should return 403 code')
-//                 t.end()
-//             })
-//     })
-
-//     test('save an alternate message as a standard user', t => {
-//         ssc.createKeys()
-//             .then(user => {
-//                 return u.inviteAndFollow({ adminKeys: keys, user })
-//             })
-//             .then(() => {
-//                 return ssc.createMsg(keys, null, {
-//                     type: 'alternate',
-//                     from: did,
-//                     to: '123'
-//                 })
-//             })
-//             .then(msg => {
-//                 return fetch(BASE + '/api/alternate', {
-//                     method: 'POST',
-//                     headers: { 'Content-Type': 'application/json' },
-//                     body: JSON.stringify(msg)
-//                 })
-//             })
-//             .then(res => {
-//                 t.ok(res.ok, 'should return an ok response')
-//                 t.end()
-//             })
-//     })
-// }
