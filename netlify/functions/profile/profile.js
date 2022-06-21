@@ -90,12 +90,22 @@ exports.handler = async function (ev, ctx) {
         // @TODO -- handle alt accounts
         var isAlt = false
         var resolvedAlt 
+        console.log('*did*', did)
+
         try {
             resolvedAlt = await resolveAlt(did)
+            // not equal b/c `resolveAlt` will return the 'root' profile
+            // that the given profile resolves to
             isAlt = resolvedAlt.value.content.about !== did
         } catch (err) {
-            console.log('ooooohhhhh no', err)
-            throw err
+            if (err.toString().includes('BadRequest: call error')) {
+                // this means it is a DID that does not exist
+                isAlt = false
+            } else {
+                console.log('ooooohhhhh no', err)
+                console.log('aaaaaaaaaaaaaa', err.toString())
+                throw err
+            }
         }
 
         if (isAlt) {

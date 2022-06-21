@@ -26,28 +26,29 @@ function resolveAlt (did) {
             return doc.data
         })
 
-    // Query(
-    //     Lambda(
-    //         ["to"],
-    //         Let(
-    //             {
-    //                 altDoc: Match(Index("alternate-to"),
-    //                 Var("to"))
-    //             },
-    //             If(
-    //                 IsEmpty(Var("altDoc")),
-    //                 Get( Match(Index("profile-by-did"), Var("to")) ),
-    //             Call(
-    //                 "resolve-alt",
-    //                 Select(
-    //                     ["data", "value", "content", "from"],
-    //                     Get(Var("altDoc"))
-    //                 )
-    //             )
-    //             )
-    //         )
-    //     )
-    // )
+//     Query(
+//         Lambda(
+//             ["to"],
+//             Let(
+//                 {
+//                     altDoc: Match( Index("alternate-to"), Var("to") )
+//                 },
+//                 If(
+//                     IsEmpty(Var("altDoc")),
+//                      it fails here if there is no profile for the did
+//                     Get( Match(Index("profile-by-did"), Var("to")) ),
+//                     Call(
+//                         "resolve-alt",
+//                         Select(
+//                             ["data", "value", "content", "from"],
+//                             Get(Var("altDoc"))
+//                         )
+//                     )
+//                 )
+//             )
+//         )
+//     )
+
 
 }
 
