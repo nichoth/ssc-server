@@ -187,120 +187,18 @@ function profileTests (test, keys, did) {
                 })
             })
             .then(res => {
-                console.log('respnseeeeeeeeeeeeeee', res)
+                t.equal(res.status, 200, 'should have 200 response')
+                if (res.ok) return res.json()
+                res.text().then(text => {
+                    console.log('boooo', text)
+                    t.end()
+                })
+            })
+            .then(json => {
+                const msgContent = json.db.value.content
+                t.equal(msgContent.username, 'alice',
+                    'should set the username')
                 t.end()
             })
     })
-
-//     test('follow someone then save a profile for them', t => {
-//         const code = did + '--' + uuidv4()
-//         var alice
-
-//         // ssc.createMsg(keys, null, { type: 'invitation', code })
-//         //     .then(msg => {
-//         //         return fetch(BASE + '/.netlify/functions/invitation', {
-//         //             method: 'POST',
-//         //             headers: { 'Content-Type': 'application/json' },
-//         //             body: JSON.stringify(msg)
-//         //         })
-//         //         .then(res => {
-//         //             t.ok(res.ok, 'should create an invitation')
-//         //             return ssc.createKeys()
-//         //         })
-//         //         .then(_alice => {
-//         //             alice = _alice
-//         //             return ssc.exportKeys(_alice.keys)
-//         //         })
-//         //         .then(exported => {
-//         //             const aliceDid = ssc.publicKeyToDid(exported.public)
-
-//         //             return Promise.all([
-//         //                 ssc.createMsg(alice.keys, null, {
-//         //                     type: 'redemption',
-//         //                     inviter: did,
-//         //                     code
-//         //                 }),
-
-//         //                 ssc.createMsg(alice.keys, null, {
-//         //                     type: 'follow',
-//         //                     contact: did
-//         //                 }),
-
-//         //                 ssc.createMsg(alice.keys, null, {
-//         //                     type: 'about',
-//         //                     about: aliceDid,
-//         //                     username: 'alice',
-//         //                     desc: null,
-//         //                     image: hash
-//         //                 })
-//         //             ])
-//         //         })
-//         //         .then(([redemption, follow, profile]) => {
-//         //             return fetch(BASE + '/api/redeem-invitation', {
-//         //                 method: 'POST',
-//         //                 headers: { 'Content-Type': 'application/json' },
-//         //                 body: JSON.stringify({
-//         //                     redemption,
-//         //                     follow,
-//         //                     profile,
-//         //                     file
-//         //                 })
-//         //             })
-//         //         })
-//         //         .then(res => {
-//         //             if (!res.ok) {
-//         //                 t.fail()
-//         //                 t.end()
-//         //                 return
-//         //             }
-
-//         //             return ssc.createMsg(alice.keys, null, {
-//         //                 type: 'about',
-//         //                 about: alice.did,
-//         //                 username: 'test-save-profile',
-//         //                 desc: null,
-//         //                 image: hash
-//         //             })
-//         //         })
-
-//         ssc.createKeys().then(user => {
-
-//             // u.inviteAndFollow({ adminKeys: keys, user })
-//             //     .then(res => {
-//             //         console.log('profilemsg*****', res)
-//             //         if (res.ok) {
-//             //             return res.json()
-//             //         }
-//             //         return res.text().then(text => console.log('text', text))
-//             //     })
-//             //     .then(profileMsg => {
-//             //         return fetch(BASE + '/api/profile', {
-//             //             method: 'POST',
-//             //             headers: { 'Content-Type': 'application/json' },
-//             //             body: JSON.stringify({
-//             //                 msg: profileMsg,
-//             //                 file
-//             //             })
-//             //         })
-//             //     })
-//             //     .then(res => {
-//             //         console.log('statussssssssss', res.status)
-//             //         if (!res.ok) {
-//             //             return res.text().then(text => {
-//             //                 t.fail(text)
-//             //                 return t.end()
-//             //             })
-//             //         }
-//             //         return res.json()
-//             //     })
-//             //     .then(json => {
-//             //         const { db } = json
-//             //         // console.log('response from db', db)
-//             //         t.equal(db.value.content.username, 'test-save-profile',
-//             //             'should update a profile for a user')
-//             //         t.end()
-//             //     })
-
-//         })
-//     })
 }
