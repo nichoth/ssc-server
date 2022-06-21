@@ -4,16 +4,16 @@ import { useEffect, useState } from 'preact/hooks';
 const { TextInput, Button } = require('@nichoth/forms/preact')
 const EditableImg = require('./components/editable-img')
 import { generateFromString } from 'generate-avatar'
-import { Cloudinary } from '@cloudinary/url-gen';
+const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 const CopyButton = require('./components/copy-button')
 const Profile = require('../profile')
 const placeholderSvg = require('./components/placeholder-svg')
 
-const cld = new Cloudinary({
+const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
     url: {
-      secure: true // force https, set to false to force http
+        secure: true // force https, set to false to force http
     }
 })
 

@@ -4,17 +4,17 @@ const ssc = require('@nichoth/ssc-lambda')
 const { getHash } = require('@nichoth/multihash')
 const test = require('tape')
 const onExit = require('signal-exit')
+const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const setup = require('./setup')
 const Invitation = require('../src/client/invitation')
 const Post = require('../src/client/post')
 const BASE = 'http://localhost:8888'
-
 const { CLOUDINARY_CLOUD_NAME } = require('../src/config.json')
-const { Cloudinary } = require('@cloudinary/url-gen')
-const cld = new Cloudinary({
+
+const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
     url: {
-      secure: true // force https, set to false to force http
+        secure: true // force https, set to false to force http
     }
 })
 

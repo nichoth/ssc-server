@@ -1,7 +1,7 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
-import { Cloudinary } from '@cloudinary/url-gen';
+const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const EditableImg = require('./components/editable-img')
 const EditableField = require('./components/editable-field')
 const evs = require('../EVENTS')
@@ -9,12 +9,10 @@ const { CLOUDINARY_CLOUD_NAME, admins } = require('../config.json')
 const { LS_NAME } = require('../constants')
 const Hamburger = require('./components/hamburger')
 
-const cld = new Cloudinary({
-    cloud: {
-        cloudName: CLOUDINARY_CLOUD_NAME
-    },
+const cld = cloudinaryUrl({
+    cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
     url: {
-      secure: true // force https, set to false to force http
+        secure: true // force https, set to false to force http
     }
 })
 

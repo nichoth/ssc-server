@@ -1,6 +1,6 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
-import { Cloudinary } from '@cloudinary/url-gen';
+const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 import { generateFromString } from 'generate-avatar'
 const ssc = require('@nichoth/ssc/web')
@@ -17,10 +17,10 @@ console.log('LS_NAME', LS_NAME)
 
 const ls = window.localStorage
 
-const cld = new Cloudinary({
+const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
     url: {
-      secure: true // force https, set to false to force http
+        secure: true // force https, set to false to force http
     }
 })
 
