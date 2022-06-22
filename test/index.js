@@ -26,8 +26,20 @@ test('alternate', t => {
     require('./alternate')(t.test, _keys, _did)
 })
 
+test('follow', t => {
+    require('./follow')(t.test, _keys, _did)
+})
+
+test('invite', t => {
+    require('./invite')(t.test, _keys, _did)
+})
+
 test('pin', t => {
-    require('./pin')(t.test, _keys)
+    require('./pin')(t.test, _keys, _did)
+})
+
+test('post', t => {
+    require('./post')(t.test, _keys, _did)
 })
 
 test('profile', t => {
