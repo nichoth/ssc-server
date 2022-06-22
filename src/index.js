@@ -28,14 +28,16 @@ const lastUser = dids ? dids.lastUser : null
 console.log('*dids*', dids)
 // TODO -- should fetch the alternate DIDs, not load them from localStorage
 
-function getRandomInt (max) {
-    return Math.floor(Math.random() * max);
-}
+// function getRandomInt (max) {
+//     return Math.floor(Math.random() * max);
+// }
 
-const storeName = env === 'cypress' ?
-    // how to get a random storeName?
-    getRandomInt(9999) :
-    (dids ? dids[lastUser] : {}).storeName || appName
+// const storeName = env === 'cypress' ?
+//     // how to get a random storeName?
+//     getRandomInt(9999) :
+//     (dids ? dids[lastUser] : {}).storeName || appName
+
+const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 
 

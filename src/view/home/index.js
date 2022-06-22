@@ -23,7 +23,7 @@ function Home (props) {
                     ${pin ?
                         html`<div dangerouslySetInnerHTML=${{
                             __html: marked(pin)
-                        }}></div>` :
+                        }} class="pin-content"></div>` :
                         null
                     }
                 </div>
