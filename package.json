@@ -65,6 +65,7 @@
     "browserify": "^17.0.0",
     "concurrently": "^6.1.0",
     "cypress": "^9.6.1",
+    "cypress-file-upload": "^5.0.8",
     "envify": "^4.1.0",
     "eslint-config-minlint": "^2.0.0",
     "esmify": "^2.1.1",

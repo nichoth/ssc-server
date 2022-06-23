@@ -18,7 +18,7 @@ console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
-const env = process.env.NODE_ENV
+// const env = process.env.NODE_ENV
 
 // dids is a map of { did: { did, username, image: hash, storeName } }
 // storeName is the name for the localForage store
@@ -26,7 +26,6 @@ const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const lastUser = dids ? dids.lastUser : null
 
 console.log('*dids*', dids)
-// TODO -- should fetch the alternate DIDs, not load them from localStorage
 
 // function getRandomInt (max) {
 //     return Math.floor(Math.random() * max);
