@@ -113,13 +113,14 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
         Promise.all([
             client.serverFollows(did),
             client.getProfile(did),
-            client.getFeed(did)
+            // TODO -- paginate the feed
+            client.getFeed(did),
+            client.getRelevantPosts(did)
         ])
-            .then(([follow, profile, feed]) => {
-                console.log('follow and profile', follow, profile)
+            .then(([follow, profile, feed, posts]) => {
+                console.log('initial fetch', follow, profile, feed, posts)
 
-                console.log('feeeeeeeeeeeeeeeed', feed)
-
+                state.relevantPosts.set(posts)
                 state.me.profile.hasFetched.set(true)
                 Profile.set(profile.value.content)
                 emit(evs.identity.setProfile, profile.value.content)

@@ -11,6 +11,7 @@ function State (keystore, { admins, dids }) {
         pin: observ(null),
         dids: observ(dids),
         singlePost: observ(null),
+        relevantPosts: observ([]),
         me: struct({
             did: observ(null),
             isAdmin: observ(false),

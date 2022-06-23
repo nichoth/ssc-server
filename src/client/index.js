@@ -45,6 +45,23 @@ module.exports = function Client (_keystore) {
                 })
         },
 
+        getRelevantPosts: function (did) {
+            const qs = new URLSearchParams({ did }).toString()
+            const url = (BASE + '/api/relevant-posts' + '?' + qs)
+
+            return fetch(url)
+                .then(res => {
+                    if (res.ok) {
+                        return res.json()
+                    }
+
+                    return res.text().then(text => {
+                        console.log('relevnt errrrrrrrrrrr', text)
+                        throw new Error(text)
+                    })
+                })
+        },
+
         followViaInvitation: function (did) {
             return Promise.all(did.map(did => {
                 return ssc.createMsg(keystore, null, {
