@@ -37,6 +37,15 @@ function Home (props) {
                 }
             </div>`
         }
+
+        ${props.relevantPosts ? 
+            html`<ul class="main-feed">${props.relevantPosts.map(post => {
+                return html`<li class="post">
+                    <p>${post.value.content.text}</p>
+                </li>`
+            })}</ul>` :
+            null
+        }
     </div>`
 }
 
