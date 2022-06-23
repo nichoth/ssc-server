@@ -3,6 +3,9 @@
   functions = "netlify/functions"
   publish = "public"
 
+[context.branch-deploy]
+  environment = { NODE_VERSION = ">=15" }
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
