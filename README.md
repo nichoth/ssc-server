@@ -177,3 +177,4 @@ $ echo "myPassword" | ./hash.js | pbcopy
 * [assign a public ID](https://cloudinary.com/documentation/upload_images#public_id)
 
 * [cloudinary browser API](https://cloudinary.com/documentation/javascript_integration#get_started_with_the_javascript_sdk)
+
