@@ -37,12 +37,14 @@ function Post (props) {
     if (!singlePost || singlePost.key !== key) return null
 
     const { mentions } = singlePost.value.content
+    // @TODO -- show multiple images if they exist for this post
     const url = cld.image(mentions[0]).toURL()
 
     return html`<div class="route post-view">
         <div class="post-image-wrapper">
             <img src=${url} />
         </div>
+
         <p>${singlePost.value.content.text}</p>
     </div>`
 }

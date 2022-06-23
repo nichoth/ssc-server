@@ -112,10 +112,13 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
 
         Promise.all([
             client.serverFollows(did),
-            client.getProfile(did)
+            client.getProfile(did),
+            client.getFeed(did)
         ])
-            .then(([follow, profile]) => {
+            .then(([follow, profile, feed]) => {
                 console.log('follow and profile', follow, profile)
+
+                console.log('feeeeeeeeeeeeeeeed', feed)
 
                 state.me.profile.hasFetched.set(true)
                 Profile.set(profile.value.content)

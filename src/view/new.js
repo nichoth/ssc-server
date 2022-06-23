@@ -66,17 +66,21 @@ function FilePicker (props) {
                 content: {
                     type: 'post',
                     text
-                }
+                },
+                // @TODO -- get previous post
+                prev: ''
             })
                 .then(res => {
                     console.log('server response', res)
                     console.log('key', res.key)
+                    setRoute('/post/' + res.key)
                     // @TODO
                     // here, show some kind of confirmation that a post has
                     // been created
                     // redirect to post by ID
                 })
                 .catch(err => {
+                    // @TODO -- show error to user
                     console.log('err', err)
                 })
         }
