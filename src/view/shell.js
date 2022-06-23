@@ -1,6 +1,7 @@
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
+import { scale } from "@cloudinary/url-gen/actions/resize";
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const EditableImg = require('./components/editable-img')
 const EditableField = require('./components/editable-field')
@@ -106,7 +107,9 @@ function Shell (props) {
     }
 
     const avatarUrl = me.profile.image ?
-        cld.image(encodeURIComponent(me.profile.image)).toURL() :
+        (cld.image(encodeURIComponent(me.profile.image))
+            // .resize( scale().width(100) )
+            .toURL()) :
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
     
     return html`<div class="shell">

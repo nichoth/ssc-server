@@ -12,6 +12,7 @@ function upload (file, hash) {
     return new Promise(function (resolve, reject) {
         cloudinary.uploader.upload(file, {
             public_id: slugifiedHash,
+            resource_type: 'auto',
             overwrite: true
         }, function (err, res) {
             if (err) return reject(err)

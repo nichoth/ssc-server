@@ -142,8 +142,6 @@ exports.handler = async function (ev, ctx) {
 }
 
 
-
-
 function writePost (key, msg, files) {
     return Promise.all(
         msg.content.mentions.map((mention, i) => {

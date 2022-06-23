@@ -11,6 +11,18 @@ const cld = cloudinaryUrl({
     }
 })
 
+
+
+
+// <picture>
+//   <source type="image/avif" srcset="dog.avif" />
+//   <source type="image/webp" srcset="dog.webp" />
+//   <img src="dog.jpg" alt="A dog chasing a ball." />
+// </picture>
+
+
+
+
 function Post (props) {
     console.log('props in post', props)
     const { emit, params, client, singlePost } = props
