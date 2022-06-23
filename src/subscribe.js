@@ -9,6 +9,7 @@ function subscribe (bus, state, client) {
     })
 
     bus.on(evs.post.got, post => {
+        console.log('got post', post)
         state.singlePost.set(post)
     })
 

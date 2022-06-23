@@ -16,7 +16,6 @@ function Post (props) {
     const { emit, params, client, singlePost } = props
     const { key } = params
 
-
     useEffect(() => {
         client.getPost(key).then(res => {
             emit(evs.post.got, res)
@@ -29,8 +28,9 @@ function Post (props) {
     const url = cld.image(mentions[0]).toURL()
 
     return html`<div class="route post-view">
-        <p>view of a single post</p>
-        <img src=${url} />
+        <div class="post-image-wrapper">
+            <img src=${url} />
+        </div>
         <p>${singlePost.value.content.text}</p>
     </div>`
 }

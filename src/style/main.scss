@@ -11,6 +11,7 @@ $main-blue: #4285f4;
 @use './new-post';
 @use './create-invitation.scss';
 @use './hamburger';
+@use './post';
 @use "../../node_modules/@nichoth/forms/style/text-input";
 @use "../../node_modules/@nichoth/forms/style/button";
 
@@ -53,7 +54,8 @@ $main-blue: #4285f4;
 
 body {
     // background-color: pink;
-    background-color: lightgray;
+    // background-color: lightgray;
+    background: linear-gradient(246deg,#6566663d,#878787a3) white;
     // margin-left: 0;
     // margin-right: 0;
     // margin-bottom: 6rem;
