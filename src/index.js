@@ -123,6 +123,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                 state.me.profile.hasFetched.set(true)
                 Profile.set(profile.value.content)
                 emit(evs.identity.setProfile, profile.value.content)
+                emit(evs.feed.got, feed)
 
                 // render the app *after* you fetch the profile initially
                 render(html`<${Connector} emit=${emit} state=${state}

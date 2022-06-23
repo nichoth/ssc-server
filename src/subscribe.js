@@ -13,6 +13,12 @@ function subscribe (bus, state, client) {
         state.singlePost.set(post)
     })
 
+    bus.on(evs.post.new, post => {
+        const postList = state.me.feed()
+        postList.unshift(post)
+        state.me.feed.set([].concat(postList))
+    })
+
     // this event means 'the app is changing to use this new DID'
     bus.on(evs.identity.change, ({ keystore, did, profile }) => {
         // this changes the "active" DID that the app is using
@@ -57,6 +63,10 @@ function subscribe (bus, state, client) {
         if (desc && desc !== state.me.profile().desc) {
             state.me.profile.desc.set(desc)
         }
+    })
+
+    bus.on(evs.feed.got, ev => {
+        state.me.feed.set(ev)
     })
 }
 

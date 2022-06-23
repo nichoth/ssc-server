@@ -1,7 +1,7 @@
 import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
 const dragDrop = require('drag-drop')
-// var evs = require('../EVENTS')
+var evs = require('../EVENTS')
 
 function NewPost (props) {
     console.log('props in new post', props)
@@ -18,7 +18,8 @@ function FilePicker (props) {
     var [isValid, setValid] = useState(false)
     // var [err, setErr] = useState(null)
     // var [res, setRes] = useState(null)
-    var { me, client, emit, setRoute } = props
+    const { me, client, emit, setRoute } = props
+    const { feed } = me
 
     // setup drag & drop
     useEffect(function didMount () {
@@ -61,23 +62,20 @@ function FilePicker (props) {
         const reader = new FileReader()
 
         reader.onloadend = () => {
+            const prev = feed.length ?
+                (feed[0]).value :
+                null
+
             client.createPost({
                 files: [reader.result],
-                content: {
-                    type: 'post',
-                    text
-                },
-                // @TODO -- get previous post
-                prev: ''
+                content: { text },
+                prev
             })
                 .then(res => {
                     console.log('server response', res)
                     console.log('key', res.key)
-                    setRoute('/post/' + res.key)
-                    // @TODO
-                    // here, show some kind of confirmation that a post has
-                    // been created
-                    // redirect to post by ID
+                    emit(evs.post.new, res)
+                    setRoute('/post/' + encodeURIComponent(res.key))
                 })
                 .catch(err => {
                     // @TODO -- show error to user

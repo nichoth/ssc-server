@@ -8,7 +8,7 @@ var client = new faunadb.Client({
 module.exports = {
     getLatest: function (did) {
         return client.query(
-            q.Get(q.Match(q.Index('post_by_author'), did))
+            q.Get(q.Reverse( q.Match(q.Index('post_by_author'), did) ))
         )
             .then(res => res.data)
     }

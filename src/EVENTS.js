@@ -7,12 +7,13 @@ var evs = namespace({
     keys: ['got'],
     pin: ['post', 'got', 'error'],
     following: ['got', 'start', 'stop', 'err'],
-    post: ['got'],
+    post: ['got', 'new'],
     // profile: ['got'],
     // identity: ['setName', 'setAvatar', 'gotAvatar']
     // profile: [ 'new' ],
     // identity: ['setUsername', 'setAvatar', 'setProfile', 'setDesc', 'newDid',
     //     'change']
+    feed: ['got'],
     identity: ['setProfile', 'newDid', 'change', 'setUsername']
 })
 
