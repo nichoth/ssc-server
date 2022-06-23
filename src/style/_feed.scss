@@ -1,0 +1,36 @@
+.main-feed {
+    list-style: none;
+    display: grid;
+    padding: 0;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    // grid-auto-rows: max-content;
+    grid-auto-rows: 50vh;
+
+    .post {
+        border: 1px solid black;
+        backdrop-filter: brightness(0.4);
+
+        img {
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+        }
+
+        p {
+            color: white;
+            letter-spacing: 0.02em;
+            text-overflow: ellipsis;
+            margin: 0rem 0.5rem;
+            height: 20%;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        a {
+            &:hover {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
+    }
+}

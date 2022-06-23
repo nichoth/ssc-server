@@ -5,6 +5,16 @@ const { marked } = require('marked')
 // var Client = require('../../client')
 // var FollowIcon = require('../follow-btn')
 // var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
+const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
+import { scale } from "@cloudinary/url-gen/actions/resize";
+const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
+
+const cld = cloudinaryUrl({
+    cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
+    url: {
+        secure: true // force https, set to false to force http
+    }
+})
 
 function Home (props) {
     console.log('home props', props)
@@ -40,7 +50,14 @@ function Home (props) {
 
         ${props.relevantPosts ? 
             html`<ul class="main-feed">${props.relevantPosts.map(post => {
+                const url = (cld
+                    .image(post.value.content.mentions[0])
+                    .resize( scale().width(600) )
+                    .format('auto')
+                    .toURL())
+
                 return html`<li class="post">
+                    <img src=${url} />
                     <p>${post.value.content.text}</p>
                 </li>`
             })}</ul>` :
