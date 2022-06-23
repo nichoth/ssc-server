@@ -7,6 +7,7 @@ var evs = namespace({
     keys: ['got'],
     pin: ['post', 'got', 'error'],
     following: ['got', 'start', 'stop', 'err'],
+    post: ['got'],
     // profile: ['got'],
     // identity: ['setName', 'setAvatar', 'gotAvatar']
     // profile: [ 'new' ],

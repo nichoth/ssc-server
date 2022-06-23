@@ -1,9 +1,9 @@
 require('dotenv').config()
 require('isomorphic-fetch')
+const { getHash } = require('@nichoth/multihash')
 const BASE = (process.env.NODE_ENV === 'test' ?
     'http://localhost:8888' :
     '')
-const { getHash } = require('@nichoth/multihash')
 
 // gets all pending redemptions
 // this means, get all invitees that you need to follow
@@ -23,12 +23,26 @@ module.exports = {
         })
             .then(res => {
                 if (!res.ok) {
-                    res.text().then(text => {
+                    return res.text().then(text => {
                         throw new Error(text)
                     })
                 }
 
                 return res.json()
+            })
+    },
+
+    get: function getPost (key) {
+        const qs = new URLSearchParams({ key }).toString()
+        const url = (BASE + '/api/post' + '?' + qs)
+
+        return fetch(url)
+            .then(res => {
+                if (res.ok) return res.json()
+
+                return res.text().then(text => {
+                    throw new Error(text)
+                })
             })
     }
 }

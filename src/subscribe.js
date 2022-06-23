@@ -8,6 +8,10 @@ function subscribe (bus, state, client) {
         console.log('***star***', name, ev)
     })
 
+    bus.on(evs.post.got, post => {
+        state.singlePost.set(post)
+    })
+
     // this event means 'the app is changing to use this new DID'
     bus.on(evs.identity.change, ({ keystore, did, profile }) => {
         // this changes the "active" DID that the app is using

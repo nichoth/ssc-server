@@ -1,7 +1,8 @@
 import { useState } from 'preact/hooks';
 var raf = require('raf')
 import { html } from 'htm/preact'
-var router = require('./router')()
+var Router = require('./router')
+// var router = require('./router')()
 var Shell = require('./view/shell')
 
 module.exports = Connector
@@ -10,6 +11,7 @@ module.exports = Connector
 function Connector ({ emit, state, setRoute, client, storeName }) {
     const [_state, setState] = useState(state())
     console.log('view render', state())
+    const router = Router(client)
 
     // connect `state` to the preact state
     state(function onChange (newState) {

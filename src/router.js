@@ -1,23 +1,15 @@
 var _router = require('ruta3')
-var Home = require('./view/home')
-var New = require('./view/new')
-var Whoami = require('./view/whoami')
-// var SingleImage = require('./view/single-image')
-// var createProfileView = require('./view/profile')
+const Home = require('./view/home')
+const New = require('./view/new')
+const Whoami = require('./view/whoami')
 var CreateInvitation = require('./view/create-invitation')
-// var RedeemInvitation = require('./view/redeem-invitation')
 var Hello = require('./view/hello')
 const NewPin = require('./view/new-pin')
+const PostView = require('./view/post')
+var router = _router()
 
-// var tabs = {
-//     save: require('./view/whoami/save'),
-//     create: require('./view/whoami/create'),
-//     import: require('./view/whoami/import')
-// }
 
-function Router () {
-    var router = _router()
-
+function Router (client) {
     router.addRoute('/', () => {
         return { view: Home, getContent: newPinContent }
     })
@@ -51,6 +43,26 @@ function Router () {
     router.addRoute('/create-invitation', () => {
         return {
             view: CreateInvitation
+        }
+    })
+
+    router.addRoute('/post/:key', (match) => {
+        // const { key } = match.params
+        return {
+            // getContent: function (state) {
+            //     const post = state.singlePost()
+            //     if (!post || (post.key !== key)) {
+            //         console.log('getting content', state())
+            //         console.log('**************get that blub')
+
+            //         client.getPost(key).then(res => {
+            //             console.log('got post', res)
+            //             // emit(evs.post.got, res)
+            //         })
+            //     }
+            // },
+
+            view: PostView
         }
     })
 

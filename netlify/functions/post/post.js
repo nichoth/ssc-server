@@ -13,12 +13,34 @@ var client = new faunadb.Client({
 
 
 exports.handler = async function (ev, ctx) {
+    if (ev.httpMethod === 'GET') {
+        const postKey = ev.queryStringParameters.key
+        console.log('*post key*', postKey)
+
+        return client.query(q.Get(q.Match(
+            q.Index("post_by_key"),
+            postKey
+        )))
+            .then(res => {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(res.data)
+                }
+            })
+            .catch(err => {
+                return {
+                    statusCode: 500,
+                    body: err.toString()
+                }
+            })
+    }
+
     if (ev.httpMethod !== 'POST') return {
         statusCode: 405,
         body: 'bad http method'
     }
 
-    // is a POST request
+    // **is a POST request**
     var msg, files
     try {
         const body = JSON.parse(ev.body)
@@ -85,7 +107,7 @@ exports.handler = async function (ev, ctx) {
             return writePost(key, msg, files)
                 .then((writes) => {
                     return {
-                        statusCode: 201,
+                        statusCode: 200,
                         body: JSON.stringify(writes[writes.length - 1])
                     }
                 })

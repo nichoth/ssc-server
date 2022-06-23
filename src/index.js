@@ -40,13 +40,18 @@ const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 
 
-
 console.log('**storename**', storeName)
 ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     const state = State(keystore, { admins, dids })
     var bus = Bus({ memo: true })
     const client = Client(keystore)
     subscribe(bus, state, client)
+
+
+    if (process.env.NODE_ENV === 'test') {
+        window.client = client
+    }
+
 
     state(function onChange (newState) {
         console.log('change', newState)
