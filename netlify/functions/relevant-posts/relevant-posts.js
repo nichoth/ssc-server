@@ -18,7 +18,6 @@ exports.handler = function (ev, ctx) {
 
     return getWithFoafs(did)
         .then(res => {
-            console.log('got with foafs', res)
             return {
                 statusCode: 200,
                 body: JSON.stringify(res)
@@ -53,11 +52,9 @@ function getWithFoafs (id) {
     return getFollowing(id)
         // first we get everyone that `id` is following
         .then(res => {
-            console.log('*got following*', res)
             return res.data.map(d => d.data)
         })
         .then(arr => {
-            console.log('bbbbbbbbbbbbbbbbb', arr)
             // arr is everyone I'm following
             // if (!arr.length) return Promise.resolve([ {}, {} ])
 
@@ -79,7 +76,6 @@ function getWithFoafs (id) {
                 )
             )
                 .then(res => {
-                    console.log('aaaaaaaaaaaaaaaaaaaaaaa', res)
                     return res
                 })
 

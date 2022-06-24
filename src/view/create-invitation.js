@@ -7,7 +7,7 @@ import { useState } from 'preact/hooks'
 const CopyIcon = require('./components/copy-solid.js')
 
 function CreateInvitation (props) {
-    const { me } = props
+    const { me, client } = props
     const [isResolving, setResolving] = useState(false)
     const [invCode, setInvCode] = useState(null)
     const [hasCopied, setCopied] = useState(false)
@@ -19,29 +19,33 @@ function CreateInvitation (props) {
 
     function createInv (ev) {
         ev.preventDefault()
-        const code = uuidv4()
         const note = ev.target.note.value
 
-        ssc.createMsg(me.keys, null, {
-            type: 'invitation',
-            note,
-            code
-        }).then(msg => {
-            setResolving(true)
-            return fetch('/api/invitation', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(msg)
+
+
+        client.createInvitation(me.keys, { note })
+            .then(res => {
+                setResolving(false)
+                setCopied(false)
+                setInvCode(res.value.content.code)
             })
-        })
-        .then(res => {
-            setResolving(false)
-            return res.json()
-        })
-        .then(json => {
-            setInvCode(me.did + '--' + json.value.content.code)
-            setCopied(false)
-        })
+
+        // ssc.createMsg(me.keys, null, { type: 'invitation', note }).then(msg => {
+        //     setResolving(true)
+        //     return fetch('/api/invitation', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify(msg)
+        //     })
+        // })
+        // .then(res => {
+        //     setResolving(false)
+        //     return res.json()
+        // })
+        // .then(json => {
+        //     setInvCode(me.did + '--' + json.value.content.code)
+        //     setCopied(false)
+        // })
     }
 
     function copy (ev) {

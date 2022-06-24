@@ -44,6 +44,19 @@ exports.handler = async function (ev, ctx) {
 
     const key = ssc.didToPublicKey(msg.author)
 
+    const { code } = msg.content
+    const [_did] = code.split('--')
+
+    if (_did !== msg.author) {
+        console.log('code', code)
+        console.log('naaaaaaaaaaaaa')
+        console.log('_did', _did)
+        return {
+            statusCode: 422,
+            body: 'invalid message'
+        }
+    }
+
     return ssc.isValidMsg(msg, null, key.publicKey)
         .then(isVal => {
             if (!isVal) {

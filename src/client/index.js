@@ -128,10 +128,7 @@ module.exports = function Client (_keystore) {
         getRedemptions: getRedemptions,
 
         createInvitation: function (keys, content) {
-            const did = ssc.getDidFromKeys(keys)
-            return Invitation.create(ssc, keys, Object.assign({}, content, {
-                code: '' 
-            }))
+            return Invitation.create(ssc, keys, content)
         },
 
         // redeem: function redeemInvitation (ssc, keys, code, content) {

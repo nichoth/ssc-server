@@ -33,12 +33,13 @@ module.exports = {
 
     // redeemInvitation: function ({ code, did, username, image }) {
     redeem: function redeemInvitation (ssc, keys, code, content) {
-        const { did, username, file } = content
-        if (!did || !username || !file) {
+        const { did, username, image } = content
+        console.log('in here', content)
+        if (!did || !username || !image) {
             return Promise.reject(new Error('missing an argument'))
         }
 
-        const hash = getHash(file)
+        const hash = getHash(image)
         const [ inviterDid ] = code.split('--')
 
         return Promise.all([
@@ -67,7 +68,12 @@ module.exports = {
             return fetch(BASE + '/api/redeem-invitation', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ redemption, follow, profile, file })
+                body: JSON.stringify({
+                    redemption,
+                    follow,
+                    profile,
+                    file: image
+                })
             })
         })
         .then(res => {

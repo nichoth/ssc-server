@@ -53,7 +53,12 @@ function Hello (props) {
         }
 
         // call our server here
-        client.redeemInvitation({ did: me.did, code, ...pendingProfile })
+        // redeemInvitation: function (keys, code, content) {
+        client.redeemInvitation(me.keys, code, {
+            did: me.did,
+            ...pendingProfile
+        })
+        // client.redeemInvitation({ did: me.did, code, ...pendingProfile })
             .then(res => {
                 setResolving(false)
                 console.log('**********redeemed invitation', res)
@@ -72,6 +77,7 @@ function Hello (props) {
             })
             .catch(err => {
                 setResolving(false)
+                console.log('errrrrrrrrrr', err)
                 if (err.toString().includes('invitation not found')) {
                     setCodeErr(err.toString())
                 }

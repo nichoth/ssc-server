@@ -154,6 +154,7 @@ exports.handler = async function (ev, ctx) {
             )
         })
         .then(res => {
+            console.log('oh nooooooooooo', res)
             return {
                 statusCode: 200,
                 body: JSON.stringify(res[res.length - 1].data)
@@ -161,6 +162,7 @@ exports.handler = async function (ev, ctx) {
         })
         .catch(err => {
             if (err.toString().includes('instance not found')) {
+                console.log('errrrrrrrrrrrr', err)
                 return {
                     statusCode: 404,
                     body: 'invitation not found'
