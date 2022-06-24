@@ -66,6 +66,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     route(function onRoute (path) {
         console.log('**on route**', path)
         state.route.set(path)
+        window.scrollTo(0, 0)
     })
 
     // don't show anything before your username has returned
