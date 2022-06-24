@@ -17,13 +17,18 @@
             object-fit: cover;
         }
 
+        &:hover {
+            // filter: drop-shadow(2px 4px 6px black);
+            filter: drop-shadow(4px 10px 8px black);
+        }
+
         p {
             color: white;
             // white-space: nowrap;
             letter-spacing: 0.02em;
             text-overflow: ellipsis;
             margin: 0rem 0.5rem;
-            height: 18%;
+            height: 17%;
             overflow: hidden;
             margin-top: 0.5rem;
 
@@ -39,10 +44,10 @@
 
         }
 
-        a {
-            &:hover {
-                filter: drop-shadow(2px 4px 6px black);
-            }
-        }
+        // a {
+        //     &:hover {
+        //         filter: drop-shadow(2px 4px 6px black);
+        //     }
+        // }
     }
 }
