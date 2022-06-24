@@ -25,10 +25,16 @@ const cld = cloudinaryUrl({
 
 function Post (props) {
     console.log('props in post', props)
-    const { emit, params, client, singlePost } = props
+    const { emit, params, client, singlePost, relevantPosts } = props
     const { key } = params
 
     useEffect(() => {
+        const existingPost = relevantPosts.find(post => post.key === key)
+        if (existingPost) {
+            emit(evs.post.got, existingPost)
+            return
+        }
+
         client.getPost(key).then(res => {
             emit(evs.post.got, res)
         })
