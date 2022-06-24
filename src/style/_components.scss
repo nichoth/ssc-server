@@ -26,16 +26,11 @@
 .avatar-label {
     vertical-align: middle;
     display: inline-block;
-    // height: 4rem;
-    // width: 4rem;
     margin-right: 1rem;
     padding: 0;
     background: none;
     border: none;
     cursor: pointer;
-
-    // display: flex;
-    // align-items: center;
 
     img {
         height: 4rem;
@@ -43,6 +38,12 @@
         border: 1px solid;
         border-radius: 50%;
         object-fit: cover;
+        transition: outline 0.2s;
+        outline: 0px solid;
+
+        &:hover {
+            outline: 3px solid;
+        }
     }
 }
 
