@@ -8,5 +8,6 @@ describe('make a post', () => {
         cy.get('#caption').type('hello testing')
 
         cy.get('.controls button[type="submit"]').click()
+        cy.url().should('include', '/post')
     })
 })
