@@ -85,6 +85,21 @@ module.exports = function Client (_keystore) {
                 })
         },
 
+        // get a list of who this user is following
+        getFollowing: function (did) {
+            const qs = new URLSearchParams({ did }).toString()
+            const url = (BASE + '/api/following' + '?' + qs)
+
+            return fetch(url)
+                .then(res => {
+                    if (res.ok) return res.json()
+
+                    res.text().then(text => {
+                        throw new Error(text)
+                    })
+                })
+        },
+
         follow: function (dids) {
             return Promise.all(dids.map(did => {
                 return ssc.createMsg(keystore, null, {

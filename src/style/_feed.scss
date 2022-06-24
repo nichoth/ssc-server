@@ -11,15 +11,16 @@
     .post {
         border: 2px solid black;
         backdrop-filter: brightness(0.4);
-        outline: 0px solid;
-        transition: outline 0.4s;
 
         a {
             display: block;
             height: 100%;
+            outline: 0px solid;
+            transition: outline 0.2s;
+
             &:hover {
                 filter: drop-shadow(4px 10px 8px black);
-                outline: 3px solid;
+                outline: 3px solid black;
             }
         }
 

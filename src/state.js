@@ -17,6 +17,7 @@ function State (keystore, { admins, dids }) {
             isAdmin: observ(false),
             keys: observ(keystore || null),
             feed: observ(null),
+            following: observ(null),
             profile: struct({
                 err: observ(null),
                 hasFetched: observ(false),

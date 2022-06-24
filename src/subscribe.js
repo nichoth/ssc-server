@@ -1,5 +1,4 @@
 var evs = require('./EVENTS')
-// const { LS_NAME } = require('./constants')
 const xtend = require('xtend')
 const { admins } = require('./config.json')
 
@@ -17,6 +16,10 @@ function subscribe (bus, state, client) {
         const postList = state.me.feed()
         postList.unshift(post)
         state.me.feed.set([].concat(postList))
+    })
+
+    bus.on(evs.following.got, followList => {
+        state.me.following.set(followList)
     })
 
     // this event means 'the app is changing to use this new DID'

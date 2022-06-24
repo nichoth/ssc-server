@@ -10,19 +10,10 @@ const { PUBLIC_KEY } = process.env
 
 const serverDid = ssc.publicKeyToDid(PUBLIC_KEY)
 
-// TODO -- add DB queries
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
-        const author = ev.queryStringParameters.author
         const a = ev.queryStringParameters.a
         const b = ev.queryStringParameters.b
-
-        if (author) {
-            return {
-                statusCode: 200,
-                body: 'get who this author is following'
-            }
-        }
 
         if (a && b) {
             // is the server following `b`?
@@ -144,84 +135,4 @@ exports.handler = async function (ev, ctx) {
             }
         })
 
-
-
-
-
-    // return Promise.all(msgs.map(msg => {
-    //     if (msg.content.type !== 'follow' || !msg.content.contact ||
-    //         !msg.author) {
-    //             return Promise.reject(new Error('invalid message'))
-    //     }
-
-    //     const pubKey = ssc.didToPublicKey(msg.author)
-    //     return ssc.isValidMsg(msg, null, pubKey)
-    // }))
-    //     .then(vals => {
-    //         return vals.some(val => (!val))
-    //     })
-    //     .then(writes => {
-
-    //     })
-    //     .catch(err => {
-    //         return {
-    //             statusCode: 422,
-    //             body: err.toString()
-    //         }
-    //     })
-
-
-
-
-    // try {
-    //     const body = JSON.parse(ev.body)
-    //     msg = body.msg
-    // } catch (err) {
-    //     return {
-    //         statusCode: 422,
-    //         body: 'invalid json'
-    //     }
-    // }
-
-    // const badMsg = (msg.content.type !== 'follow' || !msg.content.contact ||
-    //     !msg.author)
-
-    // if (badMsg) {
-    //     return {
-    //         statusCode: 400,
-    //         body: 'invalid message'
-    //     }
-    // }
-
-    // const pubKey = ssc.didToPublicKey(msg.author)
-
-    // validate the given message
-    // return ssc.isValidMsg(msg, null, pubKey).then(isVal => {
-    //     if (!isVal) {
-    //         return {
-    //             statusCode: 400,
-    //             body: 'invalid message'
-    //         }
-    //     }
-
-    //     // a query that writes the given 'follow' message to the DB
-    //     return client.query(
-    //         q.Create(q.Collection('follow'), {
-    //             data: {
-    //                 key: ssc.getId(msg),
-    //                 value: msg
-    //             }
-    //         })
-    //     )
-    //         .then(res => {
-    //             return {
-    //                 statusCode: 200,
-    //                 body: JSON.stringify(res.data)
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log('oh no', err)
-    //             throw err
-    //         })
-    // })
 }
