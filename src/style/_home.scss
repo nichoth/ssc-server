@@ -16,3 +16,100 @@
         margin-bottom: 4rem;
     }
 }
+
+.main-feed {
+    list-style: none;
+    display: grid;
+    padding: 0;
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-rows: 42vh;
+    // grid-auto-rows: minmax(42vh, auto);
+    row-gap: 6rem;
+
+    .author-image {
+        display: inline-block;
+        height: 2rem;
+        width: 2rem;
+        margin-right: 1rem;
+
+        img {
+            width: 100%!important;
+            height: 100%!important;
+            border-radius: 50%;
+            border: 1px solid black;
+        }
+    }
+
+    .author-name {
+        display: inline-block;
+        // this is width - margin of .author-image
+        max-width: calc(100% - 3rem);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .post {
+        border: 2px solid black;
+        backdrop-filter: brightness(0.4);
+
+        a {
+            display: block;
+            height: 100%;
+            outline: 0px solid;
+            transition: outline 0.2s;
+
+            &:hover {
+                filter: drop-shadow(4px 10px 8px black);
+                outline: 3px solid black;
+            }
+        }
+
+        hr {
+            margin: 0.5rem 0;
+            border-top: 1px solid black;
+            border-bottom: 0;
+        }
+
+        .user-info {
+            display: inline-block;
+            max-width: 100%;
+            // overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        img {
+            width: 100%;
+            height: 79%;
+            object-fit: cover;
+        }
+
+        // &:hover {
+        //     filter: drop-shadow(4px 10px 8px black);
+        //     outline: 3px solid;
+        // }
+
+        p {
+            color: white;
+            letter-spacing: 0.02em;
+            text-overflow: ellipsis;
+            margin: 0rem 0.5rem;
+            height: 17%;
+            overflow: hidden;
+            margin-top: 0.5rem;
+
+            &:before {
+                content:'';
+                width:100%;
+                height:100%;    
+                position:absolute;
+                left:0;
+                top:0;
+                // background:linear-gradient(transparent 150px, black);
+            }
+
+        }
+    }
+}

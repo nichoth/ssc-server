@@ -56,16 +56,36 @@ function Home (props) {
                     .format('auto')
                     .toURL())
 
+                const authorProfile = post.value.author === me.did ?
+                    me.profile :
+                    // TODO -- multiple users
+                    null
+
+                const authorImg = authorProfile ?
+                    (cld
+                        .image(encodeURIComponent(authorProfile.image))
+                        .resize( scale().width(100) )
+                        .format('auto')
+                        .toURL()) :
+                    ''
+
                 return html`<li class="post">
                     <a href="/post/${encodeURIComponent(post.key)}">
                         <img src=${url} />
-                        <p>${post.value.content.text + ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '}</p>
+                        <p>${post.value.content.text}</p>
                     </a>
 
-                    <div class="user-info">
-                        <hr />
+                    <hr />
 
-                        ${post.value.author}
+                    <div class="user-info">
+
+                        <span class="author-image">
+                            <img src=${authorImg}
+                                alt="user avatar"
+                            />
+                        </span>
+
+                        <span class="author-name">${post.value.author}</span>
                     </div>
                 </li>`
             })}</ul>` :
