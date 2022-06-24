@@ -17,6 +17,10 @@
         a {
             display: block;
             height: 100%;
+            &:hover {
+                filter: drop-shadow(4px 10px 8px black);
+                outline: 3px solid;
+            }
         }
 
         .user-info {
@@ -37,14 +41,13 @@
             object-fit: cover;
         }
 
-        &:hover {
-            filter: drop-shadow(4px 10px 8px black);
-            outline: 3px solid;
-        }
+        // &:hover {
+        //     filter: drop-shadow(4px 10px 8px black);
+        //     outline: 3px solid;
+        // }
 
         p {
             color: white;
-            // white-space: nowrap;
             letter-spacing: 0.02em;
             text-overflow: ellipsis;
             margin: 0rem 0.5rem;
