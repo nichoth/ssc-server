@@ -2,29 +2,41 @@
     list-style: none;
     display: grid;
     padding: 0;
-    gap: 2rem;
+    gap: 3rem;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     // grid-auto-rows: max-content;
     grid-auto-rows: 50vh;
 
     .post {
-        border: 1px solid black;
+        border: 2px solid black;
         backdrop-filter: brightness(0.4);
 
         img {
             width: 100%;
-            height: 80%;
+            height: 79%;
             object-fit: cover;
         }
 
         p {
             color: white;
+            // white-space: nowrap;
             letter-spacing: 0.02em;
             text-overflow: ellipsis;
             margin: 0rem 0.5rem;
-            height: 20%;
+            height: 18%;
             overflow: hidden;
             margin-top: 0.5rem;
+
+            &:before {
+                content:'';
+                width:100%;
+                height:100%;    
+                position:absolute;
+                left:0;
+                top:0;
+                // background:linear-gradient(transparent 150px, black);
+            }
+
         }
 
         a {
