@@ -80,12 +80,12 @@ function Home (props) {
                     <div class="user-info">
 
                         <span class="author-image">
-                            <img src=${authorImg}
-                                alt="user avatar"
-                            />
+                            <img src=${authorImg} alt="user avatar" />
                         </span>
 
-                        <span class="author-name">${post.value.author}</span>
+                        <span class="author-name">
+                            ${authorProfile.username}
+                        </span>
                     </div>
                 </li>`
             })}</ul>` :
