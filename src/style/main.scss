@@ -56,7 +56,10 @@ $main-blue: #4285f4;
 body {
     // background-color: pink;
     // background-color: lightgray;
-    background: linear-gradient(246deg,#6566663d,#878787a3) white;
+    // background: linear-gradient(246deg,#6566663d,#878787a3) white;
+    // background: linear-gradient(228deg, hsl(0deg 0% 24%), hsl(0deg 0% 58%), #646464, #6c6c6c, #565656);
+    // background: linear-gradient(228deg, #959595, #949494, #959595, #929292, #6f6f6f);
+    background: linear-gradient(228deg, #959595, #bababa, #bdbdbd, #d2d2d2, #b9b9b9);
     // margin-left: 0;
     // margin-right: 0;
     // margin-bottom: 6rem;
@@ -66,6 +69,26 @@ body {
     margin-top: 0;
     font-family: sans-serif;
 }
+
+
+// background: linear-gradient(to left, lime 28px, red 77%, cyan);
+
+
+// background-image: radial-gradient(circle at top right, #ff8a00, #e52e71);
+
+// .gradient {
+//     background-image:
+//       linear-gradient(
+//         to right, 
+//         red, 
+//         #f06d06, 
+//         rgb(255, 255, 0), 
+//         green
+//     );
+// }
+
+
+
 
 h1 {
     font-size: 1.2rem;

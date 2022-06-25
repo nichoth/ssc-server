@@ -33,7 +33,14 @@ exports.handler = function (ev, ctx) {
         })
 }
 
-// todo -- need to be sure to get *your own* posts in this request
+
+// @TODO -- need to be sure to get *your own* posts in this request
+// right now it gets posts from who you are following & who they are following
+// so if you are friends with someone (meaning you follow them and they follow
+// you), then you get your own posts.
+// if you *only follow people*, and don't have any 'friends',
+// then you wouldn't get your own posts in the response.
+
 
 function getWithFoafs (did) {
 

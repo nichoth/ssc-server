@@ -2,7 +2,7 @@ import { html } from 'htm/preact'
 const { Button, TextInput } = require('@nichoth/forms/preact')
 const { admins } = require('../config.json')
 var ssc = require('@nichoth/ssc/web')
-const { v4: uuidv4 } = require('uuid')
+// const { v4: uuidv4 } = require('uuid')
 import { useState } from 'preact/hooks'
 const CopyIcon = require('./components/copy-solid.js')
 
@@ -29,23 +29,6 @@ function CreateInvitation (props) {
                 setCopied(false)
                 setInvCode(res.value.content.code)
             })
-
-        // ssc.createMsg(me.keys, null, { type: 'invitation', note }).then(msg => {
-        //     setResolving(true)
-        //     return fetch('/api/invitation', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify(msg)
-        //     })
-        // })
-        // .then(res => {
-        //     setResolving(false)
-        //     return res.json()
-        // })
-        // .then(json => {
-        //     setInvCode(me.did + '--' + json.value.content.code)
-        //     setCopied(false)
-        // })
     }
 
     function copy (ev) {
@@ -68,6 +51,12 @@ function CreateInvitation (props) {
             </dl>` :
             null
         }
+
+        <p>
+            This server is usable by invitation only. Create a new invitation here.
+        </p>
+
+        <p>This code should be copied and pasted to whoever you want to invite.</p>
 
         <form onsubmit=${createInv}>
             <${TextInput} name="note" displayName="note"
