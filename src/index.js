@@ -124,7 +124,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                     posts, following)
 
                 console.log('feed', feed)
-                console.log('posts', posts)
+                console.log('postssssssssssssssssss', posts)
                 console.log('follllllllllllll', following)
 
                 state.relevantPosts.set(posts)
