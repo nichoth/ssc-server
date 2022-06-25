@@ -25,7 +25,7 @@ console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
 const lastUser = dids ? dids.lastUser : null
 
-console.log('*dids*', dids)
+console.log('*alternate dids*', dids)
 
 // function getRandomInt (max) {
 //     return Math.floor(Math.random() * max);
@@ -121,14 +121,17 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
         ])
             .then(([serverFollows, profile, feed, posts, following]) => {
                 console.log('initial fetch', serverFollows, profile, feed,
-                    posts)
+                    posts, following)
 
                 state.relevantPosts.set(posts)
                 state.me.profile.hasFetched.set(true)
                 Profile.set(profile.value.content)
                 emit(evs.identity.setProfile, profile.value.content)
                 emit(evs.feed.got, feed)
-                emit(evs.following.got, following)
+                emit(evs.following.got, following.reduce((obj, msg) => {
+                    obj[msg.value.author] = msg.value.content
+                    return obj
+                }, {}))
 
                 // render the app *after* you fetch the profile initially
                 render(html`<${Connector} emit=${emit} state=${state}

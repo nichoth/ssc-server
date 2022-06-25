@@ -94,7 +94,7 @@ module.exports = function Client (_keystore) {
                 .then(res => {
                     if (res.ok) return res.json()
 
-                    res.text().then(text => {
+                    return res.text().then(text => {
                         throw new Error(text)
                     })
                 })
@@ -115,9 +115,7 @@ module.exports = function Client (_keystore) {
                     })
                 })
                 .then(res => {
-                    if (res.ok) {
-                        return res.json()
-                    }
+                    if (res.ok) return res.json()
 
                     res.text().then(text => {
                         throw new Error(text)

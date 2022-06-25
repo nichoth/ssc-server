@@ -59,7 +59,7 @@ function Home (props) {
                 const authorProfile = post.value.author === me.did ?
                     me.profile :
                     // TODO -- multiple users
-                    null
+                    me.following[post.value.author]
 
                 const authorImg = authorProfile ?
                     (cld

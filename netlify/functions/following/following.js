@@ -19,12 +19,6 @@ exports.handler = async function (ev, ctx) {
         body: 'need the DID in a query parameter'
     }
 
-
-
-
-
-
-
     // working stuff
     return client.query(
         q.Map(
@@ -35,60 +29,20 @@ exports.handler = async function (ev, ctx) {
                 )
             ),
             
-            q.Lambda( "profile", Get(Var("profile")) )
+            q.Lambda( "profile", q.Get(q.Var("profile")) )
         )
     )
-      
-      
-        
-      
-      
-
-
-
-
-
-    // return client.query(q.Map(
-    //     q.Paginate(
-
-    //         // new stuff
-    //         q.Join(
-    //             // who are we following?
-    //             // should be an array of refs to follow msgs
-    //             q.Match(q.Index('following_contact'), did),
-
-    //             // need to match on an index 'profile_by_followRef'
-
-    //             // select the 'data.value.content.contact' value
-
-    //             q.Index("profile_by_did")
-
-    //             // then get 'about' messages by did
-
-    //             // TODO
-    //             // `profile_by_followRef` doesn't work b/c
-    //             // the profiles are created before follows
-    //             // needs to be `follow_by_profileRef`
-    //             // q.Index('profile_by_followRef')
-    //         )
-
-
-    //         // old stuff
-    //         // these are 'follow' messages, need 'profile' msgs
-    //         // q.Match(q.Index('following'), did)
-    //     ),
-
-    //     q.Lambda(
-    //         "msg",
-    //         q.Get(q.Var("msg"))
-    //     )
-
-    // ))
-    //     .then(res => {
-    //         console.log('foloooooooooooowing', JSON.stringify(res.data))
-    //         return {
-    //             statusCode: 200,
-    //             body: JSON.stringify(res.data.map(msg => msg.data))
-    //         }
-    //     })
+        .then(res => {
+            return {
+                statusCode: 200,
+                body: JSON.stringify(res.data.map(doc => doc.data))
+            }
+        })
+        .catch(err => {
+            console.log('errrrrrrrrrrrrrr', err)
+            return {
+                statusCode: 500,
+                body: err.toString()
+            }
+        })
 }
