@@ -58,18 +58,41 @@ function getWithFoafs (id) {
             // arr is everyone I'm following
             // if (!arr.length) return Promise.resolve([ {}, {} ])
 
+            console.log('arrrrrrrrrrrr', JSON.stringify(arr, null, 2))
+
+            // "value": {
+                // "sequence": 1,
+                // "author": "did:key:z82T5ZZpeVK7rYyRHsrjhQcxnGnL5hjux5aUQ251wDSuF1Mn3qMmUkvueqsKP3zbgHRvuHvSdR5wqmyRcZpbE9DLxnXH2",
+                // "timestamp": 1656122845847,
+                // "hash": "sha256",
+                // "content": {
+                    // "type": "follow",
+                    // "contact": "did:key:z82T5VbUheY9iVJv26ZEXnH5Rn8vsgTZQmyfojJjqKVUG1AQxFi53JtooN1hAwfLcdnqjg7EQxpMQzdvwGUPmwsLPuhYd"
+                // },
+                // "signature": "flH22jGWkveKFrTsjA3yMJX6UVqm7hiE7+JCfxK7CDtI/FqpcQxiJdOKWx8BuyDzvDmZtzyc99+xnGY+4QD1Ow=="
+            // }
+
+
+            // for each contact in the follow messages above,
+            // need to get *their contacts* (who they are following)
+
+
             var postProm = client.query(
                 q.Map(
                     q.Paginate(
                         q.Union(
                             // get the posts for the follow array
                             // include your own id
-                            [q.Reverse(q.Match(q.Index('post_by_author'), id))].concat(
-                                arr.map(post => {
-                                    return q.Reverse(q.Match(q.Index('post_by_author'),
-                                        post.value.content.contact))
-                                })
-                            )
+                            [q.Reverse(
+                                q.Match(q.Index('post_by_author'), id)
+                            )].concat(arr.map(followMsg => {
+                                return q.Reverse(
+                                    q.Match(
+                                        q.Index('post_by_author'),
+                                        followMsg.value.content.contact
+                                    )
+                                )
+                            }))
                         )
                     ),
                     q.Lambda('post', q.Get(q.Var('post')))
@@ -79,26 +102,39 @@ function getWithFoafs (id) {
                     return res
                 })
 
+
+
+
+
             // here we have an array of people you're following
             // the follwed id is
             // [{ value: { content: { contact } }}]
             // we are getting everyone they're following
-            var foafProm = (arr.length ?
-                client.query(
-                    q.Map(
-                        q.Paginate(
-                            q.Union(
-                                arr.map(folMsg => {
-                                    return q.Reverse( q.Match(q.Index('following'),
-                                        folMsg.value.content.contact) )
-                                })
-                            )
-                        ),
-                        q.Lambda('followMsg', q.Get(q.Var('followMsg')))
-                    )
-                ) :
-                Promise.resolve(null)
-            )
+            // var foafProm = (arr.length ?
+            //     client.query(
+            //         q.Map(
+            //             q.Paginate(
+            //                 q.Union(
+            //                     arr.map(folMsg => {
+            //                         console.log('folll msggggg', folMsg)
+            //                         return q.Reverse(
+            //                             q.Match(
+            //                                 q.Index('post_by_author'),
+            //                                 folMsg.value.content.contact
+            //                             )
+            //                         )
+            //                         // return q.Reverse( q.Match(q.Index('following'),
+            //                         //     folMsg.value.content.contact) )
+            //                     })
+            //                 )
+            //             ),
+            //             q.Lambda('followMsg', q.Get(q.Var('followMsg')))
+            //         )
+            //     ) :
+            //     Promise.resolve(null)
+            // )
+
+            const foafProm = Promise.resolve([])
 
             return Promise.all([postProm, foafProm])
         })
@@ -110,31 +146,35 @@ function getWithFoafs (id) {
         })
         .then(([postArr, foafArr]) => {
             // get posts in here
+            console.log('foaffffffffff', JSON.stringify(foafArr, null, 2))
             if (!foafArr.length) {
                 return postArr
             }
 
-            return client.query(
-                q.Map(
-                    q.Paginate(
-                        q.Union(
-                            // get the posts from people in the foaf array
-                            foafArr.map(followMsg => {
-                                return q.Reverse(q.Match(q.Index('post_by_author'),
-                                    followMsg.value.content.contact))
-                            })
-                        )
-                    ),
-                    q.Lambda('post', q.Get(q.Var('post')))
-                )
-            )
-                // concat the posts from 1 hop out with the foaf posts
-                .then(res => (postArr || []).concat(res.data.map(d => {
-                    return xtend(d.data, {
-                        value: xtend(d.data.value, {
-                            previous: d.data.value.previous || null
-                        })
-                    })
-                })))
+            // return (postArr || []).concat(foafArr)
+            return postArr
+
+            // return client.query(
+            //     q.Map(
+            //         q.Paginate(
+            //             q.Union(
+            //                 // get the posts from people in the foaf array
+            //                 foafArr.map(followMsg => {
+            //                     return q.Reverse(q.Match(q.Index('post_by_author'),
+            //                         followMsg.value.content.contact))
+            //                 })
+            //             )
+            //         ),
+            //         q.Lambda('post', q.Get(q.Var('post')))
+            //     )
+            // )
+            //     // concat the posts from 1 hop out with the foaf posts
+            //     .then(res => (postArr || []).concat(res.data.map(d => {
+            //         return xtend(d.data, {
+            //             value: xtend(d.data.value, {
+            //                 previous: d.data.value.previous || null
+            //             })
+            //         })
+            //     })))
         })
 }
