@@ -65,7 +65,6 @@ exports.handler = async function (ev, ctx) {
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
 
-        // TODO
         // here, check the msg sig
         try {
             var isVal = await ssc.isValidMsg(msg, null, pubKey)
@@ -107,6 +106,8 @@ exports.handler = async function (ev, ctx) {
             resolvedAlt = await resolveAlt(did)
             // not equal b/c `resolveAlt` will return the 'root' profile
             // that the given profile resolves to
+            // so if this is a 'root' did, then it will be returned
+            //   by `resolveAlt`
             isAlt = resolvedAlt.value.content.about !== did
         } catch (err) {
             if (err.toString().includes('BadRequest: call error')) {
