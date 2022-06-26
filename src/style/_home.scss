@@ -58,7 +58,7 @@
             opacity: 0.6;
         }
 
-        a {
+        > a {
             display: block;
             height: 100%;
             outline: 0px solid;
@@ -79,9 +79,22 @@
         .user-info {
             display: inline-block;
             max-width: 100%;
-            // overflow: hidden;
-            display: flex;
-            align-items: center;
+
+            a.user-link {
+                display: flex;
+                align-items: center;
+                color: black;
+
+                &:hover {
+                    // padding-bottom: 6px;
+                    // border-bottom: 1px solid;
+                    text-decoration: underline;
+
+                    img {
+                        filter: drop-shadow(2px 4px 6px black);
+                    }
+                }
+            }
         }
 
         img {

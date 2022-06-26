@@ -78,20 +78,21 @@ function Home (props) {
                     <hr />
 
                     <div class="user-info">
-
-                        <span class="author-image">
-                            <img src=${authorImg} alt="user avatar" />
-                        </span>
-
-                        <span class="author-name">
-                            ${authorProfile.username}
-                            <span class="is-you">
-                                ${post.value.author === me.did ?
-                                    ' (you)' :
-                                    null
-                                }
+                        <a class="user-link" href="/person/${post.value.author}">
+                            <span class="author-image">
+                                <img src=${authorImg} alt="user avatar" />
                             </span>
-                        </span>
+
+                            <span class="author-name">
+                                ${authorProfile.username}
+                                <span class="is-you">
+                                    ${post.value.author === me.did ?
+                                        ' (you)' :
+                                        null
+                                    }
+                                </span>
+                            </span>
+                        </a>
                     </div>
                 </li>`
             })}</ul>` :
