@@ -18,8 +18,8 @@ function FilePicker (props) {
     const [pendingImage, setPendingImage] = useState(null)
     const [isValid, setValid] = useState(false)
     const [isResolving, setResolving] = useState(false)
-    const { me, client, emit, setRoute } = props
-    const { feed } = me
+    const { me, feeds, client, emit, setRoute } = props
+    const feed = feeds[me.did]
 
     // setup drag & drop
     useEffect(function didMount () {

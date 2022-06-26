@@ -89,7 +89,9 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                 state.me.profile.hasFetched.set(true)
                 Profile.set(profile.value.content)
                 emit(evs.identity.setProfile, profile.value.content)
-                emit(evs.feed.got, feed)
+                const feedEv = {}
+                feedEv[did] = feed
+                emit(evs.feed.got, feedEv)
                 emit(evs.following.got, following.reduce((obj, msg) => {
                     obj[msg.value.author] = msg.value.content
                     return obj

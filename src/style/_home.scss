@@ -1,3 +1,5 @@
+@use './media' as media;
+
 .click-new {
     background: none;
     border: none;
@@ -17,7 +19,7 @@
     }
 }
 
-.main-feed {
+.main-feed, .user-feed {
     list-style: none;
     display: grid;
     padding: 0;
@@ -26,6 +28,10 @@
     grid-auto-rows: 42vh;
     // grid-auto-rows: minmax(42vh, auto);
     row-gap: 6rem;
+
+    @include media.mobile {
+        row-gap: 3rem;
+    }
 
     .author-image {
         display: inline-block;
@@ -53,6 +59,10 @@
     .post {
         border: 2px solid black;
         backdrop-filter: brightness(0.4);
+
+        @include media.mobile {
+            margin-bottom: 1rem;
+        }
 
         .is-you {
             opacity: 0.6;

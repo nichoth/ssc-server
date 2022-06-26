@@ -12,11 +12,12 @@ function State (keystore, { admins, dids }) {
         dids: observ(dids),
         singlePost: observ(null),
         relevantPosts: observ([]),
+        feeds: observ([]),
         me: struct({
             did: observ(null),
             isAdmin: observ(false),
             keys: observ(keystore || null),
-            feed: observ(null),
+            // feed: observ(null),
             following: observ(null),
             profile: struct({
                 err: observ(null),

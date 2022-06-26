@@ -1,7 +1,13 @@
+@use './media' as media;
+
 .route.post-view {
     width: fit-content;
     max-width: 40rem;
     margin: 0 auto;
+
+    @include media.mobile {
+        margin: 0 1rem;
+    }
 
     img {
         max-width: 100%;

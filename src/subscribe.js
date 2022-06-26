@@ -69,7 +69,7 @@ function subscribe (bus, state, client) {
     })
 
     bus.on(evs.feed.got, ev => {
-        state.me.feed.set(ev)
+        state.feeds.set(Object.assign({}, (state.feeds() || {}), ev))
     })
 }
 
