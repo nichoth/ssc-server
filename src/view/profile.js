@@ -1,20 +1,64 @@
 import { html } from 'htm/preact'
+import { useState } from 'preact/hooks';
+const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
+const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 
+const cld = cloudinaryUrl({
+    cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
+    url: {
+        secure: true // force https, set to false to force http
+    }
+})
 
 function Profile (props) {
     console.log('profile props', props)
-    const { me, splats } = props
+    const { me, splats, profiles } = props
+    const [copied, setCopied] = useState(false)
 
     const userDid = 'did:key:' + splats[0]
 
-    const profile = (me.following || {})[userDid] ?
+    var profile = (me.following || {})[userDid] ?
         me.following[userDid] :
         {}
+
+    profile = profile || profiles[userDid]
+
+    const avatarUrl = (cld
+        .image(profile.image)
+        .format('auto')
+        .toURL()
+    )
+
+    function copyDid (ev) {
+        ev.preventDefault()
+        navigator.clipboard.writeText(me.did)
+        setCopied(true)
+    }
 
     console.log('profile!!!!!!!!!!!!!!!!!!!!!!!!', profile)
 
     return html`<div class="route profile">
-        profile view
+        <div class="user-info">
+            <div class="user-text-info">
+                <h2>${profile.username}</h2>
+
+                <p>
+                    ${'DID '}
+                    <button class="icon" onclick=${copyDid}>
+                        <img class="copy-icon" src="/copy-solid.svg" title="copy" />
+                    </button>
+                    ${copied ?
+                        html`<span class="has-copied">copied!</span>` :
+                        null
+                    }
+                    <pre><code>${me.did}</code></pre>
+                </p>
+            </div>
+
+            <div class="profile-image">
+                <img src=${avatarUrl} alt="user's avatar" />
+            </div>
+        </div>
     </div>`
 }
 

@@ -38,6 +38,7 @@ function Whoami (props) {
         navigator.clipboard.writeText(me.did)
         setCopied(true)
     }
+
     const avatarUrl = me.profile.image ?
         cld.image(encodeURIComponent(me.profile.image)).toURL() :
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
