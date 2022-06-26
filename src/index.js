@@ -135,11 +135,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                     return client.followViaInvitation(didsToFollow)
                 })
                 .then(followResponse => {
-                    if (followResponse) {
-                        // should set state here
-                        console.log('follow response', followResponse)
-                    }
-
+                    console.log('follow response', followResponse)
                     return getFirstData(did)
                 })
                 .catch(err => {
@@ -153,6 +149,5 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
         } else {
             getFirstData(did)
         }
-
     })
 })

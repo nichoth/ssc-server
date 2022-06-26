@@ -85,6 +85,12 @@ function Home (props) {
 
                         <span class="author-name">
                             ${authorProfile.username}
+                            <span class="is-you">
+                                ${post.value.author === me.did ?
+                                    ' (you)' :
+                                    null
+                                }
+                            </span>
                         </span>
                     </div>
                 </li>`
