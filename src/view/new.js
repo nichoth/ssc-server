@@ -2,6 +2,7 @@ import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
 const dragDrop = require('drag-drop')
 var evs = require('../EVENTS')
+const { Button, TextInput } = require('@nichoth/forms/preact')
 
 function NewPost (props) {
     console.log('props in new post', props)
@@ -14,10 +15,9 @@ function NewPost (props) {
 module.exports = NewPost
 
 function FilePicker (props) {
-    var [pendingImage, setPendingImage] = useState(null)
-    var [isValid, setValid] = useState(false)
-    // var [err, setErr] = useState(null)
-    // var [res, setRes] = useState(null)
+    const [pendingImage, setPendingImage] = useState(null)
+    const [isValid, setValid] = useState(false)
+    const [isResolving, setResolving] = useState(false)
     const { me, client, emit, setRoute } = props
     const { feed } = me
 
@@ -61,6 +61,8 @@ function FilePicker (props) {
 
         const reader = new FileReader()
 
+        setResolving(true)
+
         reader.onloadend = () => {
             const prev = feed.length ?
                 (feed[0]).value :
@@ -75,6 +77,7 @@ function FilePicker (props) {
                     console.log('server response', res)
                     console.log('key', res.key)
                     emit(evs.post.new, res)
+                    setResolving(false)
                     setRoute('/post/' + encodeURIComponent(res.key))
                 })
                 .catch(err => {
@@ -127,13 +130,15 @@ function FilePicker (props) {
         </div>
 
         <label for="caption">caption</label>
-        <textarea name="text" placeholder=" "
-            id="caption"
-        ><//>
+        <textarea name="text" placeholder=" " id="caption"><//>
 
         <div class="controls">
-            <button type="submit" disabled=${!isValid}>Save</button>
-            <button onClick=${nevermind}>Nevermind</button>
+            <${Button} isSpinning=${isResolving} type="submit"
+                disabled=${!isValid}
+            >
+                Save
+            <//>
+            <${Button} onClick=${nevermind}>Nevermind<//>
         </div>
 
         ${res ?

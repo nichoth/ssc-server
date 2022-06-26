@@ -69,52 +69,10 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
         window.scrollTo(0, 0)
     })
 
-    // don't show anything before your username has returned
-
-    ssc.getDidFromKeys(keystore).then(did => {
-        state.me.did.set(did)
-
-        if (process.env.NODE_ENV === 'test') {
-            console.log('**my did**', did)
-        }
-
-        const isAdmin = (admins || []).find(user => user.did === did)
-        if (isAdmin) {
-            // you can only invite people if you are an *admin*
-            // that rule may change in the future
-            client.getRedemptions(did)
-                .then(res => {
-                    const didsToFollow = res.map(msg => msg.value.author)
-                    console.log('dids to follow', didsToFollow)
-
-                    // here, make a function, like `followViaInvitation`
-                    // that will follow them, and also delete the redemption msg
-                    // return client.follow(didsToFollow)
-
-                    if (!didsToFollow.length) return
-
-                    return client.followViaInvitation(didsToFollow)
-                })
-                .then(followResponse => {
-                    if (followResponse) {
-                        // should set state here
-                        console.log('follow response', followResponse)
-                    }
-                })
-                .catch(err => {
-                    if (err.toString().includes('no redemptions waiting')) {
-                        // do nothing
-                        return console.log('you dont have to follow anyone')
-                    }
-
-                    throw err
-                })
-        }
-
-        Promise.all([
+    function getFirstData (did) {
+        return Promise.all([
             client.serverFollows(did),
             client.getProfile(did),
-            // TODO -- paginate the feed
             client.getFeed(did),
             client.getRelevantPosts(did),
             client.getFollowing(did)
@@ -149,6 +107,52 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                     setRoute=${route.setRoute} client=${client}
                 />`, document.getElementById('content'))
             })
+    }
+
+    // don't show anything before your username has returned
+    ssc.getDidFromKeys(keystore).then(did => {
+        state.me.did.set(did)
+
+        if (process.env.NODE_ENV === 'test') {
+            console.log('**my did**', did)
+        }
+
+        const isAdmin = (admins || []).find(user => user.did === did)
+        if (isAdmin) {
+            // you can only invite people if you are an *admin*
+            // that rule may change in the future
+            client.getRedemptions(did)
+                .then(res => {
+                    const didsToFollow = res.map(msg => msg.value.author)
+                    console.log('dids to follow', didsToFollow)
+
+                    // here, make a function, like `followViaInvitation`
+                    // that will follow them, and also delete the redemption msg
+                    // return client.follow(didsToFollow)
+
+                    if (!didsToFollow.length) return null
+
+                    return client.followViaInvitation(didsToFollow)
+                })
+                .then(followResponse => {
+                    if (followResponse) {
+                        // should set state here
+                        console.log('follow response', followResponse)
+                    }
+
+                    return getFirstData(did)
+                })
+                .catch(err => {
+                    if (err.toString().includes('no redemptions waiting')) {
+                        // do nothing
+                        return console.log('you dont have to follow anyone')
+                    }
+
+                    throw err
+                })
+        } else {
+            getFirstData(did)
+        }
 
     })
 })
