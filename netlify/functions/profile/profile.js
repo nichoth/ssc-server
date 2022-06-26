@@ -67,8 +67,21 @@ exports.handler = async function (ev, ctx) {
 
         // TODO
         // here, check the msg sig
+        try {
+            var isVal = await ssc.isValidMsg(msg, null, pubKey)
+        } catch (err) {
+            return {
+                statusCode: 403,
+                body: 'invalid signature'
+            }
+        }
 
-
+        if (!isVal) {
+            return {
+                statusCode: 403,
+                body: 'invalid signature'
+            }
+        }
 
 
         // need to check if the request is from an either an `admin`
