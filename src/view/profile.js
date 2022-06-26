@@ -21,10 +21,12 @@ function Profile (props) {
         me.following[userDid] :
         {}
 
-    profile = profile || profiles[userDid]
+    if (me.did === userDid) {
+        profile = me.profile
+    }
 
     const avatarUrl = (cld
-        .image(profile.image)
+        .image(encodeURIComponent(profile.image))
         .format('auto')
         .toURL()
     )
