@@ -26,7 +26,7 @@ function Connector ({ emit, state, setRoute, client, storeName }) {
         console.log('not match')
         return null
     }
-    const { params } = match
+    const { params, splats } = match
     const route = match ? match.action(match) : null
     const routeView = route ? route.view : null
     const getContent = route.getContent
@@ -47,6 +47,7 @@ function Connector ({ emit, state, setRoute, client, storeName }) {
         path=${_state.route} client=${client} 
     >
         <${routeView} emit=${emit} ...${_state} params=${params}
+            splats=${splats}
             setRoute=${setRoute}
             path=${_state.route}
             client=${client}

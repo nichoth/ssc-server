@@ -6,12 +6,20 @@ var CreateInvitation = require('./view/create-invitation')
 var Hello = require('./view/hello')
 const NewPin = require('./view/new-pin')
 const PostView = require('./view/post')
+const ProfileView = require('./view/profile')
 var router = _router()
 
 
-function Router (client) {
+function Router () {
     router.addRoute('/', () => {
         return { view: Home, getContent: newPinContent }
+    })
+
+    // view a user's feed/profile
+    // at a route like /<did-here>
+    router.addRoute('/did\:key\:*', (match) => {
+        // console.log('user id*****', 'did:key:' + match.splats[0])
+        return { view: ProfileView }
     })
 
     router.addRoute('/hello', () => {
@@ -35,6 +43,7 @@ function Router (client) {
     function newPinContent (state, client) {
         if (!state.pin()) {
             client.getPin().then(pin => {
+                console.log('got new pin content', pin)
                 state.pin.set(pin.value.content.text)
             })
         }

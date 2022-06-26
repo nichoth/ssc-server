@@ -78,7 +78,7 @@ function Home (props) {
                     <hr />
 
                     <div class="user-info">
-                        <a class="user-link" href="/person/${post.value.author}">
+                        <a class="user-link" href="/${post.value.author}">
                             <span class="author-image">
                                 <img src=${authorImg} alt="user avatar" />
                             </span>

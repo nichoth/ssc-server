@@ -19,8 +19,8 @@ exports.handler = function (ev, ctx) {
         .then(res => {
             return {
                 statusCode: 200,
-                body: JSON.stringify(res.data.map(_doc => {
-                    return _doc.data
+                body: JSON.stringify(res.data.map(doc => {
+                    return doc.data
                 }))
             }
         })
@@ -51,8 +51,8 @@ function getWithFoafs (did) {
             q.Paginate(
                 q.Reverse(
                     q.Union(
-                        // this gets posts from everyone *you are following*,
-                        // 1 hop out
+                        // this gets posts from everyone *you are following*
+                        // (1 hop out)
                         q.Join(
                             q.Match("following_contact", did),
                             q.Index("post_by_author")
