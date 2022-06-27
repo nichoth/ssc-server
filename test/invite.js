@@ -73,11 +73,10 @@ function invite (test, keys, did) {
                 const { code } = _inv.value.content
                 const content = {
                     did: alice.did,
-                    username: 'alice',
-                    file
+                    username: 'alice'
                 }
 
-                return Invitation.redeem(ssc, alice.keys, code, content)
+                return Invitation.redeem(ssc, alice.keys, code, content, file)
             })
             .then(res => {
                 t.equal(res.value.content.type, 'about',

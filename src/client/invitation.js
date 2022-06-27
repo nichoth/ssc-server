@@ -32,13 +32,13 @@ module.exports = {
     },
 
     // redeemInvitation: function ({ code, did, username, image }) {
-    redeem: function redeemInvitation (ssc, keys, code, content) {
-        const { did, username, image } = content
-        if (!did || !username || !image) {
+    redeem: function redeemInvitation (ssc, keys, code, content, file) {
+        const { did, username } = content
+        if (!did || !username) {
             return Promise.reject(new Error('missing an argument'))
         }
 
-        const hash = getHash(image)
+        const hash = getHash(file)
         const [ inviterDid ] = code.split('--')
 
         return Promise.all([
@@ -71,7 +71,7 @@ module.exports = {
                     redemption,
                     follow,
                     profile,
-                    file: image
+                    file
                 })
             })
         })

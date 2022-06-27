@@ -31,7 +31,7 @@ if (require.main === module) {
 
 function feedTests (test, keys) {
     // keys here is admin
-    test('first save a profile for the new user', t => {
-
+    test('create a user with a profile', t => {
+        
     })
 }
