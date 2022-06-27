@@ -12,26 +12,43 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    const did = ev.queryStringParameters.did
+    const { did, username } = ev.queryStringParameters.did
 
-    if (!did) return {
+    if (!did && !username) return {
         statusCode: 422,
-        body: 'need the DID in a query parameter'
+        body: 'missing a query param'
     }
 
-    // working stuff
-    return client.query(
-        q.Map(
-            q.Paginate(
-                q.Join(
-                    q.Match( q.Index("following_contact"), did ),
-                    q.Index("profile_by_did")
-                )
-            ),
-            
-            q.Lambda( "profile", q.Get(q.Var("profile")) )
+    var prom
+    if (did) {
+        prom = client.query(
+            q.Map(
+                q.Paginate(
+                    q.Join(
+                        q.Match( q.Index("following_contact"), did ),
+                        q.Index("profile_by_did")
+                    )
+                ),
+                
+                q.Lambda( "profile", q.Get(q.Var("profile")) )
+            )
         )
-    )
+    } else if (username) {
+        prom = client.query(
+            q.Map(
+                q.Paginate(
+                    q.Join(
+                        q.Match( q.Index("following_contact"), did ),
+                        q.Index("profile_by_did")
+                    )
+                ),
+                
+                q.Lambda( "profile", q.Get(q.Var("profile")) )
+            )
+        )
+    }
+
+    prom
         .then(res => {
             return {
                 statusCode: 200,
