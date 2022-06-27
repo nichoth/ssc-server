@@ -80,7 +80,7 @@ function profileTests (test, keys, did) {
                 })
             })
             .then(res => {
-                console.log('ressssssssss', res)
+                // console.log('ressssssssss', res)
                 const { image, db } = res
                 t.equal(db.value.author, did, 'should a good response from DB')
                 t.ok(image.asset_id, 'should have the image in response')
@@ -207,7 +207,12 @@ function profileTests (test, keys, did) {
     test('get a profile by username', t => {
         Profile.getByName('alice')
             .then(res => {
-                console.log('got aliceeeeeeeeeeeeeee', res)
+                const match = res.find(profile => {
+                    return profile.value.author === _user.did
+                })
+                t.ok(match, 'should contain the new user')
+                t.equal(res[res.length - 1].value.author, _user.did,
+                    'should have the expected did at the end of the array')
                 t.end()
             })
             .catch(err => {

@@ -29,7 +29,12 @@ exports.handler = async function (ev, ctx) {
             )
         } else if (username) {
             prom = client.query(
-                q.Get(q.Match(q.Index('profile_by_name'), username))
+                q.Map(
+                    q.Paginate(
+                        q.Match(q.Index('profile_by_name'), username)
+                    ),
+                    q.Lambda("msg", q.Get(q.Var("msg")))
+                )
             )
         }
 
@@ -37,7 +42,12 @@ exports.handler = async function (ev, ctx) {
             .then(doc => {
                 return {
                     statusCode: 200,
-                    body: JSON.stringify(doc.data)
+                    body: JSON.stringify(
+                        did ?
+                            doc.data :
+                            // query by name returns a list
+                            doc.data.map(_doc => _doc.data)
+                    )
                 }
             })
             .catch(err => {
