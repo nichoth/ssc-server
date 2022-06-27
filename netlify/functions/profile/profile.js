@@ -70,14 +70,14 @@ exports.handler = async function (ev, ctx) {
             var isVal = await ssc.isValidMsg(msg, null, pubKey)
         } catch (err) {
             return {
-                statusCode: 403,
+                statusCode: 422,
                 body: 'invalid signature'
             }
         }
 
         if (!isVal) {
             return {
-                statusCode: 403,
+                statusCode: 422,
                 body: 'invalid signature'
             }
         }

@@ -34,7 +34,6 @@ module.exports = {
     // redeemInvitation: function ({ code, did, username, image }) {
     redeem: function redeemInvitation (ssc, keys, code, content) {
         const { did, username, image } = content
-        console.log('in here', content)
         if (!did || !username || !image) {
             return Promise.reject(new Error('missing an argument'))
         }

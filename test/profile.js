@@ -157,8 +157,8 @@ function profileTests (test, keys, did) {
         })
     })
 
+    var _user
     test('follow someone then save a profile for them', t => {
-        var _user
         ssc.createKeys()
             .then(user => {
                 _user = user
@@ -167,7 +167,6 @@ function profileTests (test, keys, did) {
                 } })
             })
             .then(() => {
-                // console.log('respondingggggggggggg', res)
                 return ssc.createMsg(_user.keys, null, {
                     type: 'about',
                     about: _user.did,
@@ -177,6 +176,7 @@ function profileTests (test, keys, did) {
                 })
             })
             .then(profileMsg => {
+                // then we update the profile for the new user
                 return fetch(BASE + '/api/profile', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -200,5 +200,9 @@ function profileTests (test, keys, did) {
                     'should set the username')
                 t.end()
             })
+    })
+
+    test('get a profile by username', t => {
+        t.end()
     })
 }

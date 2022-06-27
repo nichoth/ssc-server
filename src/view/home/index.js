@@ -18,7 +18,7 @@ const cld = cloudinaryUrl({
 
 function Home (props) {
     console.log('home props', props)
-    const { me, pin } = props
+    const { me, pin, relevantPosts } = props
     const { isAdmin } = me
 
     return html`<div class="route home">
@@ -48,7 +48,7 @@ function Home (props) {
             </div>`
         }
 
-        ${props.relevantPosts ? 
+        ${relevantPosts ? 
             html`<ul class="main-feed">${props.relevantPosts.map(post => {
                 const url = (cld
                     .image(post.value.content.mentions[0])
@@ -96,6 +96,7 @@ function Home (props) {
                     </div>
                 </li>`
             })}</ul>` :
+
             null
         }
     </div>`

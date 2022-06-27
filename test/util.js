@@ -16,7 +16,7 @@ function inviteAndFollow ({ adminKeys, user, userProfile }) {
             const content = {
                 did: user.did,
                 username: userProfile.username,
-                file
+                image: file
             }
 
             return Invitation.redeem(ssc, user.keys, inv.value.content.code,

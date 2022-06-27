@@ -13,9 +13,10 @@ function subscribe (bus, state, client) {
     })
 
     bus.on(evs.post.new, post => {
-        const postList = state.me.feed()
+        const myDid = state.me().did
+        const postList = state.feeds()[myDid]
         postList.unshift(post)
-        state.me.feed.set([].concat(postList))
+        state.feeds[myDid].set([].concat(postList))
     })
 
     bus.on(evs.following.got, followList => {
@@ -69,6 +70,7 @@ function subscribe (bus, state, client) {
     })
 
     bus.on(evs.feed.got, ev => {
+        // extend the existing state object with new feeds { did: [] }
         state.feeds.set(Object.assign({}, (state.feeds() || {}), ev))
     })
 }
