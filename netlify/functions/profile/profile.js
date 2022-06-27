@@ -13,33 +13,48 @@ const { getHash } = require('@nichoth/multihash')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
-        const did = ev.queryStringParameters.did
+        const { did, username } = ev.queryStringParameters
 
-        return client.query(
-            q.Get(q.Match(q.Index('profile_by_did'), did))
-        )
-            .then(doc => {
+        if (!did && !username) {
+            return {
+                statusCode: 422,
+                body: 'missing a query param'
+            }
+        }
+
+        var prom
+        if (did) {
+            prom = client.query(
+                q.Get(q.Match(q.Index('profile_by_did'), did))
+            )
+        } else if (username) {
+            prom = client.query(
+                q.Get(q.Match(q.Index('profile_by_did'), did))
+            )
+        }
+
+        prom.then(doc => {
+            return {
+                statusCode: 200,
+                body: JSON.stringify(doc.data)
+            }
+        })
+        .catch(err => {
+            console.log('errrrr', err)
+            console.log('*did*', did)
+
+            if (err.toString().includes('not found')) {
                 return {
-                    statusCode: 200,
-                    body: JSON.stringify(doc.data)
+                    statusCode: 400,
+                    body: 'invalid DID ' + did
                 }
-            })
-            .catch(err => {
-                console.log('errrrr', err)
-                console.log('*did*', did)
+            }
 
-                if (err.toString().includes('not found')) {
-                    return {
-                        statusCode: 400,
-                        body: 'invalid DID ' + did
-                    }
-                }
-
-                return {
-                    statusCode: 500,
-                    body: err.toString()
-                }
-            })
+            return {
+                statusCode: 500,
+                body: err.toString()
+            }
+        })
     }
 
     if (ev.httpMethod === 'POST') {
