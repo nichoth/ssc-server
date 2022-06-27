@@ -119,7 +119,7 @@ function alt (test, keys, did) {
                     }
                 })
             })
-            .then(res => {
+            .then(() => {
                 t.fail('should not allow normal users to create an alt yet')
                 t.end()
             })

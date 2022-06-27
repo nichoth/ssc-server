@@ -95,13 +95,24 @@ function profileTests (test, keys, did) {
                 const user = { did, keys }
                 const profile = { username: 'client-user' }
 
-                return Profile.save(ssc, user, null, profile, file)
+                return Promise.all([
+                    Promise.resolve(did),
+                    // save: function (ssc, user, prev, profile, file) {
+                    Profile.save(ssc, user, null, profile, file)
+                ])
             })
-            .then((res) => {
+            .then(([did, res]) => {
                 const { content } = res.db.value
                 t.equal(content.username, 'client-user',
                     'should set the right username')
-                t.end()
+
+                const pubKey = ssc.didToPublicKey(did).publicKey
+
+                ssc.isValidMsg(res.db.value, null, pubKey)
+                    .then(isVal => {
+                        t.equal(isVal, true, 'should return a valid message')
+                        t.end()
+                    })
             })
             .catch(err => {
                 console.log('err', err)

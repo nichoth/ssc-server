@@ -82,6 +82,8 @@ exports.handler = async function (ev, ctx) {
             }
         }
 
+        msg.previous = (msg.previous || null)
+
         if (msg.content.type !== 'about') {
             return {
                 statusCode: 422,
@@ -217,9 +219,14 @@ async function update ({ did, msg, pubKey, file }) {
                         statusCode: 200,
                         body: JSON.stringify({
                             image: res,
+                            // this is b/c the DB I think strips out `null`
+                            // values from the message objects
                             db: Object.assign(_res.data, {
                                 value: Object.assign(_res.data.value, {
-                                    previous: _res.data.value.previous || null
+                                    previous: _res.data.value.previous || null,
+                                    content: Object.assign(_res.data.value.content, {
+                                        desc: _res.data.value.content.desc || null
+                                    })
                                 })
                             })
                         })
