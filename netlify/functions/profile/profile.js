@@ -1,15 +1,15 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
+const { getHash } = require('@nichoth/multihash')
 const upload = require('../upload')
 const q = faunadb.query
 const client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
+const resolveAlt = require('../resolve-alt')
 const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
-const resolveAlt = require('../resolve-alt')
-const { getHash } = require('@nichoth/multihash')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
@@ -29,32 +29,33 @@ exports.handler = async function (ev, ctx) {
             )
         } else if (username) {
             prom = client.query(
-                q.Get(q.Match(q.Index('profile_by_did'), did))
+                q.Get(q.Match(q.Index('profile_by_name'), username))
             )
         }
 
-        prom.then(doc => {
-            return {
-                statusCode: 200,
-                body: JSON.stringify(doc.data)
-            }
-        })
-        .catch(err => {
-            console.log('errrrr', err)
-            console.log('*did*', did)
-
-            if (err.toString().includes('not found')) {
+        return prom
+            .then(doc => {
                 return {
-                    statusCode: 400,
-                    body: 'invalid DID ' + did
+                    statusCode: 200,
+                    body: JSON.stringify(doc.data)
                 }
-            }
+            })
+            .catch(err => {
+                console.log('errrrr', err)
+                console.log('*did*', did)
 
-            return {
-                statusCode: 500,
-                body: err.toString()
-            }
-        })
+                if (err.toString().includes('not found')) {
+                    return {
+                        statusCode: 400,
+                        body: 'invalid DID ' + did
+                    }
+                }
+
+                return {
+                    statusCode: 500,
+                    body: err.toString()
+                }
+            })
     }
 
     if (ev.httpMethod === 'POST') {
