@@ -8,8 +8,8 @@ const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const setup = require('./setup')
 const Invitation = require('../src/client/invitation')
 const Post = require('../src/client/post')
-const BASE = 'http://localhost:8888'
 const { CLOUDINARY_CLOUD_NAME } = require('../src/config.json')
+const BASE = 'http://localhost:8888'
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },

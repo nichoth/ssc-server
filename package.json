@@ -33,7 +33,7 @@
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^1.0.0",
     "@nichoth/multihash": "^0.0.6",
-    "@nichoth/ssc": "^0.11.1",
+    "@nichoth/ssc": "^0.11.3",
     "@nichoth/ssc-fauna": "^0.0.42",
     "@nichoth/ssc-lambda": "^0.0.12",
     "@sindresorhus/slugify": "^2.1.0",

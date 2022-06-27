@@ -10,6 +10,7 @@ const client = new faunadb.Client({
 const resolveAlt = require('../resolve-alt')
 const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
+// var stringify = require('json-stable-stringify')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
@@ -216,7 +217,11 @@ async function update ({ did, msg, pubKey, file }) {
                         statusCode: 200,
                         body: JSON.stringify({
                             image: res,
-                            db: _res.data
+                            db: Object.assign(_res.data, {
+                                value: Object.assign(_res.data.value, {
+                                    previous: _res.data.value.previous || null
+                                })
+                            })
                         })
                     }
                 })
