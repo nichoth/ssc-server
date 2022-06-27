@@ -6,6 +6,9 @@ const { admins } = config
 // const ssc = require('@nichoth/ssc')
 const ssc = require('@nichoth/ssc-lambda')
 
+const configPath = path.resolve(__dirname, '..', 'src',
+    'config.json')
+
 function setup (test, cb) {
     test('setup the server', function (t) {
         var ntl = spawn('npx', ['netlify', 'dev', '--port=8888'])
@@ -28,8 +31,6 @@ function setup (test, cb) {
                         // need to write this did to config.admins
                         const did = ssc.publicKeyToDid(exported.public)
                         // did = _did
-                        const configPath = path.resolve(__dirname, '..', 'src',
-                            'config.json')
                         admins.push({ did })
 
                         fs.writeFileSync( configPath, JSON.stringify(
@@ -62,5 +63,14 @@ function setup (test, cb) {
     })
 }
 
+function allDone (ntl) {
+    ntl.kill()
+    admins.pop()
+
+    fs.writeFileSync( configPath, JSON.stringify(
+        Object.assign({}, config, { admins }), null, 2
+    ) )
+}
+
 // export default setup
-module.exports = setup
+module.exports = { setup, allDone }

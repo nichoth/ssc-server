@@ -2,7 +2,7 @@ require('dotenv').config()
 require('isomorphic-fetch')
 const test = require('tape')
 const onExit = require('signal-exit')
-const setup = require('./setup')
+const { setup, allDone } = require('./setup')
 
 var ntl
 var _keys
@@ -47,6 +47,6 @@ test('profile', t => {
 })
 
 test('all done', function (t) {
-    ntl.kill()
+    allDone(ntl)
     t.end()
 })

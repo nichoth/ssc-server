@@ -7,7 +7,7 @@ const test = require('tape')
 const onExit = require('signal-exit')
 // const { admins } = require('../src/config.json')
 const base = 'http://localhost:8888'
-const setup = require('./setup')
+const { setup, allDone } = require('./setup')
 
 
 // @TODO -- need to start the dev server before running tests
@@ -25,23 +25,6 @@ if (require.main === module) {
             })
 
             t.end()
-
-            // ssc.createKeys().then(user => {
-            //     keys = user.keys
-            //     ssc.exportKeys(user.keys).then(exported => {
-            //         // need to write this did to config.admins
-            //         const did = ssc.publicKeyToDid(exported.public)
-            //         const configPath = path.resolve(__dirname, '..', 'src',
-            //             'config.json')
-            //         admins.push({ did })
-
-            //         fs.writeFileSync(configPath, JSON.stringify(
-            //             Object.assign({}, config, { admins }), null, 2))
-
-
-            //         t.end()
-            //     })
-            // })
         })
     })
 
@@ -51,7 +34,7 @@ if (require.main === module) {
     })
 
     test('all done', function (t) {
-        ntl.kill()
+        allDone(ntl)
         t.end()
     })
 }

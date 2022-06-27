@@ -3,7 +3,7 @@ require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc-lambda')
 const test = require('tape')
 const onExit = require('signal-exit')
-const setup = require('./setup')
+const { setup, allDone } = require('./setup')
 const u = require('./util')
 const Alternate = require('../src/client/alternate')
 
@@ -33,7 +33,7 @@ if (require.main === module) {
     })
 
     test('all done', function (t) {
-        ntl.kill()
+        allDone(ntl)
         t.end()
     })
 }

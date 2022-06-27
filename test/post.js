@@ -5,7 +5,7 @@ const { getHash } = require('@nichoth/multihash')
 const test = require('tape')
 const onExit = require('signal-exit')
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
-const setup = require('./setup')
+const { setup, allDone } = require('./setup')
 const Invitation = require('../src/client/invitation')
 const Post = require('../src/client/post')
 const { CLOUDINARY_CLOUD_NAME } = require('../src/config.json')
@@ -43,7 +43,7 @@ if (require.main === module) {
     })
 
     test('all done', function (t) {
-        ntl.kill()
+        allDone(ntl)
         t.end()
     })
 }
