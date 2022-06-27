@@ -179,3 +179,11 @@ $ echo "myPassword" | ./hash.js | pbcopy
 * [cloudinary browser API](https://cloudinary.com/documentation/javascript_integration#get_started_with_the_javascript_sdk)
 
 
+------------------------------------------
+
+## sotrage
+
+* [storj](https://www.storj.io/)
+* [cloudinary](https://cloudinary.com/)
+* [web3.storage](https://web3.storage/)
+
