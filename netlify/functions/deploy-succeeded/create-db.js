@@ -44,7 +44,7 @@ function createFaunaDB (key) {
         ['pin'],
 
         ['profiles', [{
-                name: 'profile-by-did',
+                name: 'profile_by_did',
                 source: q.Collection('profiles'),
                 terms: [ { field: ['data', 'value', 'content', 'about'] } ],
             },
@@ -164,7 +164,7 @@ function createFaunaDB (key) {
                                 q.If(
                                     q.IsEmpty(q.Var("altDoc")),
                                     q.Get(q.Match(
-                                        q.Index("profile-by-did"),
+                                        q.Index("profile_by_did"),
                                         q.Var("to")
                                     )),
                                     q.Call(

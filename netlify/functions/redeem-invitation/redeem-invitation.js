@@ -154,7 +154,7 @@ exports.handler = async function (ev, ctx) {
             )
         })
         .then(res => {
-            console.log('oh nooooooooooo', res)
+            // console.log('oh nooooooooooo', res)
             return {
                 statusCode: 200,
                 body: JSON.stringify(res[res.length - 1].data)

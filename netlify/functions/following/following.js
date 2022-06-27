@@ -25,7 +25,7 @@ exports.handler = async function (ev, ctx) {
             q.Paginate(
                 q.Join(
                     q.Match( q.Index("following_contact"), did ),
-                    q.Index("profile-by-did")
+                    q.Index("profile_by_did")
                 )
             ),
             

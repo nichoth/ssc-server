@@ -190,11 +190,13 @@ function profileTests (test, keys, did) {
                 t.equal(res.status, 200, 'should have 200 response')
                 if (res.ok) return res.json()
                 res.text().then(text => {
+                    console.log('status', res.status)
                     console.log('boooo', text)
                     t.end()
                 })
             })
             .then(json => {
+                console.log('jsonnnnnnnnnnnnnnnnnn', json)
                 const msgContent = json.db.value.content
                 t.equal(msgContent.username, 'alice',
                     'should set the username')

@@ -16,7 +16,7 @@ exports.handler = async function (ev, ctx) {
         const did = ev.queryStringParameters.did
 
         return client.query(
-            q.Get(q.Match(q.Index('profile-by-did'), did))
+            q.Get(q.Match(q.Index('profile_by_did'), did))
         )
             .then(doc => {
                 return {
@@ -220,7 +220,7 @@ function writeMsg (did, key, msg) {
     return client.query(
         q.If(
             q.IsEmpty(
-                q.Match(q.Index('profile-by-did'), did)
+                q.Match(q.Index('profile_by_did'), did)
             ),
             q.Create(
                 q.Collection('profiles'),
@@ -228,7 +228,7 @@ function writeMsg (did, key, msg) {
             ),
             q.Replace(
                 q.Select('ref', q.Get(
-                    q.Match(q.Index('profile-by-did'), did)
+                    q.Match(q.Index('profile_by_did'), did)
                 )),
                 { data: { key: key, value: msg } }
             )
