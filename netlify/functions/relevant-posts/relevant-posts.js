@@ -14,8 +14,6 @@ exports.handler = function (ev, ctx) {
 
     const did = ev.queryStringParameters.did
 
-    console.log('**geting relevant posts**', did)
-
     return getWithFoafs(did)
         .then(res => {
             return {

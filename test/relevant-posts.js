@@ -4,6 +4,7 @@ const onExit = require('signal-exit')
 const ssc = require('@nichoth/ssc-lambda')
 const Post = require('../src/client/post')
 const RelevantPosts = require('../src/client/relevant-posts')
+const Follow = require('../src/client/follow')
 const u = require('./util')
 const { setup, allDone } = require('./setup')
 
@@ -42,12 +43,12 @@ if (require.main === module) {
 
 function relevantTests (test, keys, did) {
     // keys here is admin
-    var _user
+    var crob
     // var postOne
     test('first create a user with a profile, and create a post', t => {
         ssc.createKeys()
             .then(user => {
-                _user = user
+                crob = user  // this is `crob`
                 return u.inviteAndFollow({
                     adminKeys: keys,
                     user,
@@ -68,13 +69,72 @@ function relevantTests (test, keys, did) {
             })
     })
 
-    // now admin is following `crob`
+    // now `crob` is following the admin
     test('get relevant posts', t => {
-        RelevantPosts.get(_user.did)
+        RelevantPosts.get(crob.did)
             .then(res => {
-                console.log('got relevants', res)
+                // console.log('got relevants', res)
                 t.equal(res.length, 1, 'should get 1 post')
+                t.equal(res[0].value.content.text, 'wooo',
+                    'should have the expected message text')
                 t.end()
+            })
+            .catch(err => {
+                t.fail(err)
+                t.end()
+            })
+    })
+
+    test('get a post that is 2 hops out', t => {
+        // first make a new user and post
+        // this user also follows the admin
+        // dod -> admin <- crob
+        // we should be able to see posts from the admin
+
+        // need to make an arrow from admin to `crob`
+        // dod -> admin <-> crob
+        // then get relevant posts to dod
+
+
+        var dod
+        ssc.createKeys()
+            .then(_dod => {
+                dod = _dod
+                // there is now a line from dod to admin
+                return u.inviteAndFollow({
+                    adminKeys: keys,
+                    user: _dod,
+                    userProfile: { username: 'dod' }
+                })
+            })
+            .then(res => {
+                console.log('following', res)
+                // this makes admin follow crob
+                return Follow.post(ssc, keys, crob.did)
+            })
+            .then(res => {
+                console.log('fol from admin to crob', res)
+                // now make a post from crob
+                return Post.create(ssc, crob.keys, {
+                    files: [file],
+                    content: { text: 'from crob' },
+                    prev: null
+                })
+            })
+            .then(() => {
+                // now need to check that dod can see posts from crob
+                RelevantPosts.get(dod.did)
+                    .then(res => {
+                        const msg = res.find(msg => {
+                            return msg.value.content.text === 'from crob'
+                        })
+                        t.ok(msg, 'dod should get messages from crob')
+                        t.end()
+                    })
+                    .catch(err => {
+                        t.fail(err)
+                        t.end()
+                    })
             })
             .catch(err => {
                 t.fail(err)
