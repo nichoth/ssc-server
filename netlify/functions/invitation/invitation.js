@@ -49,7 +49,6 @@ exports.handler = async function (ev, ctx) {
 
     if (_did !== msg.author) {
         console.log('code', code)
-        console.log('naaaaaaaaaaaaa')
         console.log('_did', _did)
         return {
             statusCode: 422,

@@ -143,7 +143,8 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                 .catch(err => {
                     if (err.toString().includes('no redemptions waiting')) {
                         // do nothing
-                        return console.log('you dont have to follow anyone')
+                        console.log('you dont have to follow anyone')
+                        return getFirstData(did)
                     }
 
                     throw err

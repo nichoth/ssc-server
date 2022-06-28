@@ -24,7 +24,15 @@ exports.handler = function (ev, ctx) {
     ).then(res => {
         return {
             statusCode: 200,
-            body: JSON.stringify(res.data.map(doc => doc.data))
+            body: JSON.stringify(res.data.map(doc => {
+                // this is b/c the DB I think strips out `null`
+                // values from the message objects
+                return Object.assign(doc.data, {
+                    value: Object.assign(doc.data.value, {
+                        previous: doc.data.value.previous || null
+                    })
+                })
+            }))
         }
     })
 

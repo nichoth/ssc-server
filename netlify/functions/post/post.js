@@ -59,7 +59,7 @@ exports.handler = async function (ev, ctx) {
     const pubKey = ssc.didToPublicKey(did).publicKey
     var lastMsg
 
-    if (!msg.content.mentions){
+    if (!msg.content.mentions) {
         return {
             statusCode: 400,
             body: 'you need to send `mentions` in the message'
@@ -152,7 +152,13 @@ function writePost (key, msg, files) {
                     q.Collection('posts'),
                     { data: { key, value: msg } },
                 )
-            ).then(res => res.data)
+            ).then(res => {
+                return Object.assign(res.data, {
+                    value: Object.assign(res.data.value, {
+                        previous: (res.data.value.previous || null)
+                    })
+                })
+            })
         ])
     )
 }

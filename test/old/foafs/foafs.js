@@ -78,7 +78,6 @@ module.exports = function foafTests (test, ks) {
                 t.end()
             })
             .catch(err => {
-                console.log('aaaaaa errrrr', err)
                 t.error(err)
                 t.end()
             })

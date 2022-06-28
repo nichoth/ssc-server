@@ -7,6 +7,7 @@ const getRedemptions = require('./get-redemptions')
 const Post = require('./post')
 const Invitation = require('./invitation')
 const Alternate = require('./alternate')
+const Feed = require('./feed')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -32,18 +33,22 @@ module.exports = function Client (_keystore) {
         },
 
         getFeed: function (did) {
-            const qs = new URLSearchParams({ did }).toString()
-            const url = (BASE + '/api/feed' + '?' + qs)
-
-            return fetch(url)
-                .then(res => {
-                    if (res.ok) return res.json()
-
-                    return res.text().then(text => {
-                        throw new Error(text)
-                    })
-                })
+            return Feed.get(did)
         },
+
+        // getFeed: function (did) {
+        //     const qs = new URLSearchParams({ did }).toString()
+        //     const url = (BASE + '/api/feed' + '?' + qs)
+
+        //     return fetch(url)
+        //         .then(res => {
+        //             if (res.ok) return res.json()
+
+        //             return res.text().then(text => {
+        //                 throw new Error(text)
+        //             })
+        //         })
+        // },
 
         getRelevantPosts: function (did) {
             const qs = new URLSearchParams({ did }).toString()
