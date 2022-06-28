@@ -40,11 +40,15 @@ exports.handler = function (ev, ctx) {
 
     if (username) {
         // return query by name
+        return Promise.resolve({
+            statusCode: 200,
+            body: JSON.stringify({booo: 'get things'})
+        })
     }
 
     // no username or did
-    return {
+    return Promise.resolve({
         statusCode: 422,
         body: 'missing query param'
-    }
+    })
 }

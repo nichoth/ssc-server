@@ -18,5 +18,19 @@ module.exports = {
                     throw new Error(text)
                 })
             })
+    },
+
+    getByName: function (username) {
+        const qs = new URLSearchParams({ username }).toString()
+        const url = (BASE + '/api/feed' + '?' + qs)
+
+        return fetch(url)
+            .then(res => {
+                if (res.ok) return res.json()
+
+                return res.text().then(text => {
+                    throw new Error(text)
+                })
+            })
     }
 }

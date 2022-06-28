@@ -81,6 +81,20 @@ function feedTests (test, keys) {
             })
     })
 
+
+    test("get the user's feed by name", t => {
+        Feed.getByName('flob')
+            .then(feed => {
+                console.log('got feeeeeeeeeeeeeeeeeeeeeeeed by name', feed)
+                t.end()
+            })
+            .catch(err => {
+                t.fail(err)
+                t.end()
+            })
+    })
+
+
     test('post a second message', t => {
         Post.create(ssc, _user.keys, {
             files: [file],
