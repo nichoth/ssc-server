@@ -17,7 +17,6 @@ exports.handler = async function (ev, ctx) {
         const { did, username } = ev.queryStringParameters
 
         if (!did && !username) {
-            console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
             return {
                 statusCode: 422,
                 body: 'missing a query param'
