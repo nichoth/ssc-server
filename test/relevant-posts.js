@@ -3,7 +3,7 @@ const test = require('tape')
 const onExit = require('signal-exit')
 const ssc = require('@nichoth/ssc-lambda')
 const Post = require('../src/client/post')
-const Feed = require('../src/client/feed')
+const RelevantPosts = require('../src/client/relevant-posts')
 const u = require('./util')
 const { setup, allDone } = require('./setup')
 
@@ -29,7 +29,7 @@ if (require.main === module) {
     })
 
     test('feed', t => {
-        feedTests(t.test, _keys, _did)
+        relevantTests(t.test, _keys, _did)
         t.end()
     })
 
@@ -39,10 +39,11 @@ if (require.main === module) {
     })
 }
 
-function feedTests (test, keys) {
+
+function relevantTests (test, keys, did) {
     // keys here is admin
     var _user
-    var postOne
+    // var postOne
     test('first create a user with a profile', t => {
         ssc.createKeys()
             .then(user => {
@@ -50,64 +51,29 @@ function feedTests (test, keys) {
                 return u.inviteAndFollow({
                     adminKeys: keys,
                     user,
-                    userProfile: { username: 'flob' }
+                    userProfile: { username: 'crob' }
                 })
             })
             .then(() => {
                 return Post.create(ssc, _user.keys, {
                     files: [file],
-                    content: { text: 'a test post' },
+                    content: { text: 'wooo' },
                     prev: null
                 })
             }).then(res => {
-                postOne = res
+                // postOne = res
                 t.equal(res.value.author, _user.did,
                     'should have the expected post author')
                 t.end()
             })
     })
 
-    test("get the user's feed by DID", t => {
-        Feed.get(_user.did)
-            .then(feed => {
-                t.equal(feed[0].value.content.text, 'a test post',
-                    "should return the user's feed")
-                t.end()
-            })
-            .catch(err => {
-                console.log('rrrrrrrrr', err)
-                t.fail(err)
-                t.end()
-            })
-    })
-
-
-    test("get the user's feed by name", t => {
-        Feed.getByName('flob')
-            .then(feed => {
-                // console.log('got feeeeeeeeeeeeeeeeeeeeeeeed by name',
-                //     JSON.stringify(feed, null, 2))
-                t.equal(feed.length, 2, 'only returns a feed for 1 person')
-                t.equal(feed[0].value.sequence, 2,
-                    'should return feed in the right order')
-                t.end()
-            })
-            .catch(err => {
-                t.fail(err)
-                t.end()
-            })
-    })
-
-
-    test('post a second message', t => {
-        Post.create(ssc, _user.keys, {
-            files: [file],
-            content: { text: 'a test post' },
-            prev: postOne.value
-        })
+    // now admin is following `crob`
+    test('get relevant posts', t => {
+        RelevantPosts.get(did)
             .then(res => {
-                t.equal(postOne.key, res.value.previous,
-                    'should create a message with the right `previous`')
+                console.log('got relevants', res)
+                t.equal(res.length, 1, 'should get 1 post')
                 t.end()
             })
             .catch(err => {
@@ -115,20 +81,6 @@ function feedTests (test, keys) {
                 t.end()
             })
     })
-
-    test("get the user's feed again", t => {
-        Feed.get(_user.did)
-            .then(feed => {
-                t.equal(feed[0].value.previous, postOne.key,
-                    'should return the feed with newest first')
-                t.end()
-            })
-            .catch(err => {
-                t.fail(err)
-                t.end()
-            })
-    })
-
 }
 
-module.exports = feedTests
+module.exports = relevantTests

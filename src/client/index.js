@@ -8,6 +8,7 @@ const Post = require('./post')
 const Invitation = require('./invitation')
 const Alternate = require('./alternate')
 const Feed = require('./feed')
+const RelevantPosts = require('./relevant-posts')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -36,36 +37,24 @@ module.exports = function Client (_keystore) {
             return Feed.get(did)
         },
 
-        // getFeed: function (did) {
+        getRelevantPosts: RelevantPosts.get,
+
+        // getRelevantPosts: function (did) {
         //     const qs = new URLSearchParams({ did }).toString()
-        //     const url = (BASE + '/api/feed' + '?' + qs)
+        //     const url = (BASE + '/api/relevant-posts' + '?' + qs)
 
         //     return fetch(url)
         //         .then(res => {
-        //             if (res.ok) return res.json()
+        //             if (res.ok) {
+        //                 return res.json()
+        //             }
 
         //             return res.text().then(text => {
+        //                 console.log('relevnt errrrrrrrrrrr', text)
         //                 throw new Error(text)
         //             })
         //         })
         // },
-
-        getRelevantPosts: function (did) {
-            const qs = new URLSearchParams({ did }).toString()
-            const url = (BASE + '/api/relevant-posts' + '?' + qs)
-
-            return fetch(url)
-                .then(res => {
-                    if (res.ok) {
-                        return res.json()
-                    }
-
-                    return res.text().then(text => {
-                        console.log('relevnt errrrrrrrrrrr', text)
-                        throw new Error(text)
-                    })
-                })
-        },
 
         followViaInvitation: function (did) {
             return Promise.all(did.map(did => {
