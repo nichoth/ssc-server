@@ -85,7 +85,11 @@ function feedTests (test, keys) {
     test("get the user's feed by name", t => {
         Feed.getByName('flob')
             .then(feed => {
-                console.log('got feeeeeeeeeeeeeeeeeeeeeeeed by name', feed)
+                // console.log('got feeeeeeeeeeeeeeeeeeeeeeeed by name',
+                //     JSON.stringify(feed, null, 2))
+                t.equal(feed.length, 2, 'only returns a feed for 1 person')
+                t.equal(feed[0].value.sequence, 2,
+                    'should return feed in the right order')
                 t.end()
             })
             .catch(err => {
