@@ -44,7 +44,7 @@ function relevantTests (test, keys, did) {
     // keys here is admin
     var _user
     // var postOne
-    test('first create a user with a profile', t => {
+    test('first create a user with a profile, and create a post', t => {
         ssc.createKeys()
             .then(user => {
                 _user = user
@@ -55,14 +55,14 @@ function relevantTests (test, keys, did) {
                 })
             })
             .then(() => {
-                return Post.create(ssc, _user.keys, {
+                return Post.create(ssc, keys, {
                     files: [file],
                     content: { text: 'wooo' },
                     prev: null
                 })
             }).then(res => {
                 // postOne = res
-                t.equal(res.value.author, _user.did,
+                t.equal(res.value.author, did,
                     'should have the expected post author')
                 t.end()
             })
@@ -70,7 +70,7 @@ function relevantTests (test, keys, did) {
 
     // now admin is following `crob`
     test('get relevant posts', t => {
-        RelevantPosts.get(did)
+        RelevantPosts.get(_user.did)
             .then(res => {
                 console.log('got relevants', res)
                 t.equal(res.length, 1, 'should get 1 post')
