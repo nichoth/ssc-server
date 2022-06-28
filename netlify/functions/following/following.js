@@ -12,11 +12,13 @@ exports.handler = async function (ev, ctx) {
         }
     }
 
-    const { did, username } = ev.queryStringParameters.did
+    const { did, username } = ev.queryStringParameters
 
-    if (!did && !username) return {
-        statusCode: 422,
-        body: 'missing a query param'
+    if (!did && !username) {
+        return {
+            statusCode: 422,
+            body: 'missing a query param'
+        }
     }
 
     var prom
@@ -48,11 +50,13 @@ exports.handler = async function (ev, ctx) {
         )
     }
 
-    prom
+    return prom
         .then(res => {
             return {
                 statusCode: 200,
-                body: JSON.stringify(res.data.map(doc => doc.data))
+                body: JSON.stringify(res.data.map(doc => {
+                    return doc.data
+                }))
             }
         })
         .catch(err => {
