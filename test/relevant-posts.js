@@ -44,7 +44,6 @@ if (require.main === module) {
 function relevantTests (test, keys, did) {
     // keys here is admin
     var crob
-    // var postOne
     test('first create a user with a profile, and create a post', t => {
         ssc.createKeys()
             .then(user => {
@@ -138,6 +137,15 @@ function relevantTests (test, keys, did) {
             })
             .catch(err => {
                 t.fail(err)
+                t.end()
+            })
+    })
+
+    test('crob can see thier own messages', t => {
+        // should get 2 messages -- one by crob, one by admin
+        RelevantPosts.get(crob.did)
+            .then(posts => {
+                t.equal(posts.length, 2, 'should show two posts')
                 t.end()
             })
     })
