@@ -53,7 +53,7 @@ function getWithFoafs (did) {
                         // this gets posts from everyone *you are following*
                         // (1 hop out)
                         q.Join(
-                            q.Match("following_contact", did),
+                            q.Match(q.Index("following_contact"), did),
                             q.Index("post_by_author")
                         ),
                         // this gets the foaf posts
@@ -66,7 +66,10 @@ function getWithFoafs (did) {
                             ),
                             // then get posts from foafs
                             q.Index("post_by_author")
-                        )
+                        ),
+
+                        // be sure to get *your own posts*
+                        q.Match( q.Index("post_by_author"), did )
                     )
                 )
             ),

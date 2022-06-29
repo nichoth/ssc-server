@@ -166,22 +166,24 @@ function relevantTests (test, keys, did) {
         // we have dod -> admin <-> crob,
         Post.create(ssc, dod.keys, {
             files: [file],
-            content: { text: 'from crob' },
+            content: { text: 'from dod' },
             prev: null
         })
             .then(() => {
                 return RelevantPosts.get(dod.did)
             })
             .then(posts => {
-                console.log('popppppoooooooooooooooosts',
-                    JSON.stringify(posts, null, 2))
-                // const crobPost = posts.find(post => {
-                //     return post.value.content.text === 'from crob'
-                // })
+                // console.log('popppppoooooooooooooooosts',
+                //     JSON.stringify(posts, null, 2))
+
                 t.ok(posts.find(post => post.value.content.text === 'from crob'),
                     "should see the post from crob")
                 t.ok(posts.find(post => post.value.content.text === 'wooo'),
                     "should see the admin's post")
+
+                t.ok(posts.find(post => post.value.content.text === 'from dod'),
+                    "should see your own posts, regardless of following graph")
+
                 t.end()
             })
             .catch(err => {
