@@ -27,7 +27,7 @@ function FilePicker (props) {
             console.log('files', files)
             document.getElementById('image-input').files = fileList
             setPendingImage(files[0])
-            // emit a 'change' event for form validation
+            // emit an 'input' event for form validation
             var event = new Event('input');
             document.getElementById('new-post-form').dispatchEvent(event);
         })

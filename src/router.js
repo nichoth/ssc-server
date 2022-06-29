@@ -12,13 +12,12 @@ var router = _router()
 
 function Router () {
     router.addRoute('/', () => {
-        return { view: Home, getContent: newPinContent }
+        return { view: Home, getContent: pinContent }
     })
 
     // view a user's feed/profile
     // at a route like /<did-here>
     router.addRoute('/did\:key\:*', (match) => {
-        // console.log('user id*****', 'did:key:' + match.splats[0])
         return { view: ProfileView }
     })
 
@@ -37,13 +36,12 @@ function Router () {
     })
 
     router.addRoute('/new-pin', match => {
-        return { view: NewPin, getContent: newPinContent }
+        return { view: NewPin, getContent: pinContent }
     })
 
-    function newPinContent (state, client) {
+    function pinContent (state, client) {
         if (!state.pin()) {
             client.getPin().then(pin => {
-                console.log('got new pin content', pin)
                 state.pin.set(pin.value.content.text)
             })
         }
@@ -56,21 +54,7 @@ function Router () {
     })
 
     router.addRoute('/post/:key', (match) => {
-        // const { key } = match.params
         return {
-            // getContent: function (state) {
-            //     const post = state.singlePost()
-            //     if (!post || (post.key !== key)) {
-            //         console.log('getting content', state())
-            //         console.log('**************get that blub')
-
-            //         client.getPost(key).then(res => {
-            //             console.log('got post', res)
-            //             // emit(evs.post.got, res)
-            //         })
-            //     }
-            // },
-
             view: PostView
         }
     })
