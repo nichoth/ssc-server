@@ -23,7 +23,7 @@ function FilePicker (props) {
 
     // setup drag & drop
     useEffect(function didMount () {
-        dragDrop('.file-inputs', (files, _, fileList) => {
+        const cleanup = dragDrop('.file-inputs', (files, _, fileList) => {
             console.log('files', files)
             document.getElementById('image-input').files = fileList
             setPendingImage(files[0])
@@ -31,6 +31,8 @@ function FilePicker (props) {
             var event = new Event('input');
             document.getElementById('new-post-form').dispatchEvent(event);
         })
+
+        return cleanup
     }, [])
 
     function formInput (ev) {
