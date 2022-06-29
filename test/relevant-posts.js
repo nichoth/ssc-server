@@ -173,14 +173,13 @@ function relevantTests (test, keys, did) {
                 return RelevantPosts.get(dod.did)
             })
             .then(posts => {
-                // console.log('popppppoooooooooooooooosts',
-                //     JSON.stringify(posts, null, 2))
+                t.equal(posts.length, 3,
+                    'should get 3 posts -- yours, admin, and crob')
 
                 t.ok(posts.find(post => post.value.content.text === 'from crob'),
                     "should see the post from crob")
                 t.ok(posts.find(post => post.value.content.text === 'wooo'),
                     "should see the admin's post")
-
                 t.ok(posts.find(post => post.value.content.text === 'from dod'),
                     "should see your own posts, regardless of following graph")
 
