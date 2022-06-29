@@ -13,6 +13,12 @@
         max-width: 100%;
     }
 
+    hr {
+        margin: 0.5rem 0;
+        border-top: 1px solid black;
+        border-bottom: 0;
+    }
+
     .post-image-wrapper {
         margin-top: 2rem;
     }

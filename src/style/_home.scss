@@ -33,29 +33,6 @@
         row-gap: 3rem;
     }
 
-    .author-image {
-        display: inline-block;
-        height: 2rem;
-        width: 2rem;
-        margin-right: 1rem;
-
-        img {
-            width: 100%!important;
-            height: 100%!important;
-            border-radius: 50%;
-            border: 1px solid black;
-        }
-    }
-
-    .author-name {
-        display: inline-block;
-        // this is width - margin of .author-image
-        max-width: calc(100% - 3rem);
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-
     .post {
         border: 2px solid black;
         backdrop-filter: brightness(0.4);
@@ -84,27 +61,6 @@
             margin: 0.5rem 0;
             border-top: 1px solid black;
             border-bottom: 0;
-        }
-
-        .user-info {
-            display: inline-block;
-            max-width: 100%;
-
-            a.user-link {
-                display: flex;
-                align-items: center;
-                color: black;
-
-                &:hover {
-                    // padding-bottom: 6px;
-                    // border-bottom: 1px solid;
-                    text-decoration: underline;
-
-                    img {
-                        filter: drop-shadow(2px 4px 6px black);
-                    }
-                }
-            }
         }
 
         img {

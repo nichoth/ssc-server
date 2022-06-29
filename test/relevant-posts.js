@@ -143,14 +143,7 @@ function relevantTests (test, keys, did) {
     })
 
     test('crob can see thier own messages', t => {
-
-        // in this case, since we have dod -> admin <-> crob,
-        // crob is within the 2-hops range.
-        //   is it possible to be out of your own 2-hop radius?
-
-        //   if you have dod -> admin <- crob, then you wouldn't see your posts
-        //     when crob redeems the invitation, they follow admin, but not
-        //     the other way
+        // in this case, we have `dod -> admin <-> crob`
 
         // should check here if dod can see their own posts
 
@@ -163,7 +156,9 @@ function relevantTests (test, keys, did) {
     })
 
     test('dod can see their own messages', t => {
-        // we have dod -> admin <-> crob,
+        // the graph is now:
+        // dod -> admin <-> crob,
+
         Post.create(ssc, dod.keys, {
             files: [file],
             content: { text: 'from dod' },
@@ -174,7 +169,7 @@ function relevantTests (test, keys, did) {
             })
             .then(posts => {
                 t.equal(posts.length, 3,
-                    'should get 3 posts -- yours, admin, and crob')
+                    "should get 3 posts -- dod's, admin, and crob")
 
                 t.ok(posts.find(post => post.value.content.text === 'from crob'),
                     "should see the post from crob")
