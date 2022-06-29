@@ -84,6 +84,7 @@ function relevantTests (test, keys, did) {
             })
     })
 
+    var dod
     test('get a post that is 2 hops out', t => {
         // first make a new user and post
         // this user also follows the admin
@@ -95,7 +96,6 @@ function relevantTests (test, keys, did) {
         // then get relevant posts to dod
 
 
-        var dod
         ssc.createKeys()
             .then(_dod => {
                 dod = _dod
@@ -106,8 +106,9 @@ function relevantTests (test, keys, did) {
                     userProfile: { username: 'dod' }
                 })
             })
-            .then(res => {
-                console.log('following', res)
+            // .then(res => {
+            .then(() => {
+                // console.log('following', res)
                 // this makes admin follow crob
                 return Follow.post(ssc, keys, crob.did)
             })
@@ -142,10 +143,49 @@ function relevantTests (test, keys, did) {
     })
 
     test('crob can see thier own messages', t => {
+
+        // in this case, since we have dod -> admin <-> crob,
+        // crob is within the 2-hops range.
+        //   is it possible to be out of your own 2-hop radius?
+
+        //   if you have dod -> admin <- crob, then you wouldn't see your posts
+        //     when crob redeems the invitation, they follow admin, but not
+        //     the other way
+
+        // should check here if dod can see their own posts
+
         // should get 2 messages -- one by crob, one by admin
         RelevantPosts.get(crob.did)
             .then(posts => {
                 t.equal(posts.length, 2, 'should show two posts')
+                t.end()
+            })
+    })
+
+    test('dod can see their own messages', t => {
+        // we have dod -> admin <-> crob,
+        Post.create(ssc, dod.keys, {
+            files: [file],
+            content: { text: 'from crob' },
+            prev: null
+        })
+            .then(() => {
+                return RelevantPosts.get(dod.did)
+            })
+            .then(posts => {
+                console.log('popppppoooooooooooooooosts',
+                    JSON.stringify(posts, null, 2))
+                // const crobPost = posts.find(post => {
+                //     return post.value.content.text === 'from crob'
+                // })
+                t.ok(posts.find(post => post.value.content.text === 'from crob'),
+                    "should see the post from crob")
+                t.ok(posts.find(post => post.value.content.text === 'wooo'),
+                    "should see the admin's post")
+                t.end()
+            })
+            .catch(err => {
+                t.fail(err)
                 t.end()
             })
     })
