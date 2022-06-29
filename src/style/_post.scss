@@ -9,10 +9,6 @@
         margin: 0 1rem;
     }
 
-    img {
-        max-width: 100%;
-    }
-
     hr {
         margin: 0.5rem 0;
         border-top: 1px solid black;
@@ -21,5 +17,13 @@
 
     .post-image-wrapper {
         margin-top: 2rem;
+        height: 90vh;
+        width: 100%;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+        }
     }
 }

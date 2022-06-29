@@ -15,7 +15,6 @@ const cld = cloudinaryUrl({
 
 
 
-
 // <picture>
 //   <source type="image/avif" srcset="dog.avif" />
 //   <source type="image/webp" srcset="dog.webp" />
@@ -43,10 +42,15 @@ function Post (props) {
         })
     }, [key])
 
+    if (!singlePost) return null
     if (!singlePost || singlePost.key !== key) return null
 
     // TODO -- get the profile for given user if they don't exist
-    const profile = me.following[singlePost.value.author]
+    const { author } = singlePost.value
+    const profile = author === me.did ?
+        me.profile :
+        me.following[author]
+
     if (!profile) return null
 
     const { mentions } = singlePost.value.content
@@ -54,7 +58,7 @@ function Post (props) {
     const url = cld.image(mentions[0]).toURL()
 
     const avatarUrl = (cld
-        .image(profile.image)
+        .image(encodeURIComponent(profile.image))
         .resize( scale().width(100) )
         .format('auto')
         .toURL())
