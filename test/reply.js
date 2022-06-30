@@ -141,4 +141,22 @@ function replyTest (test, keys) {
                 t.end()
             })
     })
+
+    test('admins can reply to posts', t => {
+        Reply.post(ssc, keys, null, {
+            replyTo: rootPost.key,
+            text: 'reply from admin'
+        })
+            .then(res => {
+                console.log('got admin reply ', res)
+                t.equal(res.value.author, rootPost.value.author,
+                    'should save the reply')
+                t.end()
+            })
+            .catch(err => {
+                console.log('errr', err)
+                t.fail(err)
+                t.end()
+            })
+    })
 }
