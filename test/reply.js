@@ -142,19 +142,36 @@ function replyTest (test, keys) {
             })
     })
 
+    var adminReply
     test('admins can reply to posts', t => {
         Reply.post(ssc, keys, null, {
             replyTo: rootPost.key,
             text: 'reply from admin'
         })
             .then(res => {
-                console.log('got admin reply ', res)
+                adminReply = res
+                // console.log('got admin reply ', res)
                 t.equal(res.value.author, rootPost.value.author,
                     'should save the reply')
+                t.equal(res.value.content.replyTo, rootPost.key,
+                    'replyTo points to the root post')
                 t.end()
             })
             .catch(err => {
                 console.log('errr', err)
+                t.fail(err)
+                t.end()
+            })
+    })
+
+    test('gets all replies in the right order', t => {
+        Post.getWithReplies(rootPost.key)
+            .then(posts => {
+                t.equal(posts[posts.length - 1].key, adminReply.key,
+                    'should return the newest reply last')
+                t.end()
+            })
+            .catch(err => {
                 t.fail(err)
                 t.end()
             })
