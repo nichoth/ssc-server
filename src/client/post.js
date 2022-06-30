@@ -44,5 +44,19 @@ module.exports = {
                     throw new Error(text)
                 })
             })
+    },
+
+    getWithReplies: function withReplies (key) {
+        const qs = new URLSearchParams({ replies: true, key }).toString()
+        const url = (BASE + '/api/post' + '?' + qs)
+
+        return fetch(url)
+            .then(res => {
+                if (res.ok) return res.json()
+
+                return res.text().then(text => {
+                    throw new Error(text)
+                })
+            })
     }
 }

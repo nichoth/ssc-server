@@ -15,7 +15,42 @@ var client = new faunadb.Client({
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         const postKey = ev.queryStringParameters.key
-        console.log('*post key*', postKey)
+        const withReplies = !!ev.queryStringParameters.replies
+
+        if (!postKey) {
+            return {
+                statusCode: 422,
+                body: 'missing the `key` query param'
+            }
+        }
+
+        if (withReplies) {
+            return client.query(
+                q.Map(
+                    q.Paginate(
+                        q.Union(
+                            q.Match( q.Index("post_by_key"), postKey ),
+                            q.Match( q.Index("reply_to"), postKey )
+                        )
+                    ),
+
+                    q.Lambda("post", q.Get(q.Var("post")))
+                )
+            )
+                .then(res => {
+                    return {
+                        statusCode: 200,
+                        body: JSON.stringify(res.data.map(doc => doc.data))
+                    }
+                })
+                .catch(err => {
+                    console.log('errr', err)
+                    return {
+                        statusCode: 500,
+                        body: err.toString()
+                    }
+                })
+        }
 
         return client.query(q.Get(q.Match(
             q.Index("post_by_key"),

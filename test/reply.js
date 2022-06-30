@@ -110,4 +110,35 @@ function replyTest (test, keys) {
             })
     })
 
+
+    test('can get the root message with all replies', t => {
+        Post.getWithReplies(rootPost.key)
+            .then(res => {
+                t.equal(res[0].key, rootPost.key,
+                    'should return the root post first')
+                t.equal(res[1].value.content.type, 'reply',
+                    'should return the reply after the root post')
+                t.end()
+            })
+            .catch(err => {
+                t.fail(err)
+                t.end()
+            })
+    })
+
+    test('get a post with multiple replies', t => {
+        Reply.post(ssc, user.keys, null, {
+            replyTo: rootPost.key,
+            text: 'another reply'
+        })
+            .then(() => {
+                return Post.getWithReplies(rootPost.key)
+            })
+            .then(res => {
+                t.equal(res.length, 3, 'should return 2 posts total')
+                t.equal(res[2].value.content.text, 'another reply',
+                    'should return the replies with oldest first')
+                t.end()
+            })
+    })
 }
