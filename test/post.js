@@ -172,9 +172,8 @@ function postTest (test, keys) {
                 return Promise.all([
                     Invitation.redeem(ssc, newUser.keys, code, {
                         did: newUser.did,
-                        username: 'alice',
-                        file
-                    }),
+                        username: 'alice'
+                    }, file),
 
                     Promise.resolve(newUser)
                 ])

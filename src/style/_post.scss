@@ -26,4 +26,11 @@
             object-fit: contain;
         }
     }
+
+    .post-reply {
+        p.editable-textarea {
+            border: 1px solid;
+            padding: 1rem;
+        }
+    }
 }

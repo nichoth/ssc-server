@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 var { Button } = require('@nichoth/forms/preact')
 
 function EditableTextarea (props) {
-    const { value, onSave, name } = props
+    const { value, onSave, name, placeholder } = props
     var [isEditing, setEditing] = useState(false)
     var [isResolving, setResolving] = useState(false)
 
@@ -64,7 +64,8 @@ function EditableTextarea (props) {
 
     return html`
         <${EditPencil} onClick=${_setEditing} />
-        <p class="editable-textarea">${value || html`<em>none</em>`}</p>
+        <p class="editable-textarea">${
+            value || placeholder || html`<em>none</em>`}</p>
     `
 }
 

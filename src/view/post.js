@@ -1,10 +1,11 @@
 import { html } from 'htm/preact'
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 // import post from '../client/post';
 const evs = require('../EVENTS')
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 import { scale } from "@cloudinary/url-gen/actions/resize";
+const EditableTextarea = require('./components/editable-textarea')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -63,6 +64,30 @@ function Post (props) {
         .format('auto')
         .toURL())
 
+    function saveReply (replyText) {
+        console.log('replyyyyyyyyyyyy', replyText)
+
+        // in here,
+        // call & return client.reply
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                console.log('yay')
+                resolve('yay')
+            }, 3000);
+        });
+
+        // need to call the server
+        // then when you get a response, append it to an array in
+        //   `feeds[thisUser]`
+
+
+        // `feeds[userDID] = { profile, feed }`
+
+        // each msg in `feeds[userDID].feed` should be an array of
+        // [rootMsg, ...replies]
+    }
+
     return html`<div class="route post-view">
         <div class="post-image-wrapper">
             <img src=${url} />
@@ -79,6 +104,12 @@ function Post (props) {
                 </span>
                 <span class="author-name">${profile.username}</span>
             </a>
+        </div>
+
+        <div class="post-reply">
+            <${EditableTextarea} onSave=${saveReply} name="reply"
+                placeholder=${html`<p>Write a reply...</p>`}
+            />
         </div>
     </div>`
 }

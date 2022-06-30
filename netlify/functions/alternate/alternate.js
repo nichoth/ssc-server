@@ -159,7 +159,7 @@ exports.handler = async function (ev, ctx) {
             }
             return {
                 statusCode: 500,
-                body: 'oh no'
+                body: err.toString()
             }
         })
 

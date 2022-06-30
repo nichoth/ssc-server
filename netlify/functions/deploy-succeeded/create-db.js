@@ -27,6 +27,13 @@ function createFaunaDB (key) {
             }]
         ],
 
+        ['reply', [{
+                name: 'reply_by_root',
+                source: q.Collection('reply'),
+                terms: [ { field: ['data', 'value', 'content', 'replyTo'] } ]
+            }]
+        ],
+
         // get all profiles created by the given DID
         ['alternate', [{
                 name: 'alternate-from',
