@@ -123,7 +123,7 @@ function Post (props) {
 
                     return html`<li class="reply">
                         <${Profile} profile=${replier}
-                            href=${'/@'+profile.username}
+                            href=${'/@' + replier.username}
                             className="replier-info"
                         />
 

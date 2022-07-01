@@ -3,7 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
-const evs = require('../../EVENTS')
+// const evs = require('../../EVENTS')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -14,28 +14,8 @@ const cld = cloudinaryUrl({
 
 function Profile (props) {
     console.log('profile props', props)
-    const { me,/* splats, emit, client, feeds, */ profile, feed } = props
+    const { me, profile, feed } = props
     const [copied, setCopied] = useState(false)
-
-    // const userDid = 'did:key:' + splats[0]
-
-    // var profile = (me.following || {})[userDid] ?
-    //     me.following[userDid] :
-    //     (profiles || {})[userDid]
-
-    // if (me.did === userDid) {
-    //     profile = me.profile
-    // }
-
-    // useEffect(() => {
-    //     if (feeds[userDid]) return
-    //     client.getFeed(userDid)
-    //         .then(res => {
-    //             const ev = {}
-    //             ev[userDid] = res
-    //             emit(evs.feed.got, ev)
-    //         })
-    // }, [userDid])
 
     if (!profile) return null
 
@@ -50,8 +30,6 @@ function Profile (props) {
         navigator.clipboard.writeText(me.did)
         setCopied(true)
     }
-
-    // const feed = feeds[userDid]
 
     if (!feed) return null
 
