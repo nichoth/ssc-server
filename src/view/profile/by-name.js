@@ -12,23 +12,16 @@ function byName (props) {
     // have this username
     // const isMe = (me && me.profile.username === username)
 
-    console.log('feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeds', feeds)
-
     const userFeedKey = feeds && Object.keys(feeds).find(key => {
         const feed  = feeds[key]
-        console.log('feeeeed aaa', feed)
         return feed && feed.profile.username === username
     })
 
     const userFeed = userFeedKey && feeds[userFeedKey]
 
-    console.log('user feed', userFeed)
-
     const userProfile = userFeed && userFeed.profile
 
     // we just put everything in `feeds` state
-
-    console.log('user feeeeeeeeeeeeed', userFeed)
 
     useEffect(() => {
         if (userProfile) return

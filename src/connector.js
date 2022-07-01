@@ -22,8 +22,6 @@ function Connector ({ emit, state, setRoute, client, storeName }) {
 
     var match = router.match(_state.route)
 
-    console.log('state route******', _state.route)
-
     if (!match) {
         console.log('not match')
         return null
