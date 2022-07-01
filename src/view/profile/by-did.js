@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
+import { html } from 'htm/preact';
 const ProfileView = require('./index')
+const evs = require('../../EVENTS')
 
 function byDID (props) {
     const { me, splats, feeds, emit, client } = props
@@ -8,10 +10,19 @@ function byDID (props) {
 
     console.log('feeeeeeeeeeeeeeds', feeds)
 
-    const userFeed = feeds && feeds.find(feed => {
-        return !!(feed[userDid])
-        // return feed.profile.username === username
+    const userFeedKey = feeds && Object.keys(feeds).find(key => {
+        return key === userDid
+        // const feed  = feeds[key]
+        // console.log('feeeeed aaa', feed)
+        // return feed && feed.profile.username === username
     })
+
+    const userFeed = userFeedKey && feeds[userFeedKey]
+
+    // const userFeed = feeds && feeds.find(feed => {
+    //     return !!(feed[userDid])
+    //     // return feed.profile.username === username
+    // })
 
     if (me && me.did === userDid) {
         profile = me.profile
@@ -19,15 +30,27 @@ function byDID (props) {
 
     useEffect(() => {
         if (feeds[userDid]) return
-        client.getFeed(userDid)
-            .then(res => {
+        Promise.all([
+            client.getFeed(userDid),
+            client.getProfile(userDid)
+        ])
+            .then(([feed, profile]) => {
                 const ev = {}
-                ev[userDid] = res
+                ev[feed[0].value.author] = {
+                    posts: feed,
+                    profile: profile.value.content
+                }
                 emit(evs.feed.got, ev)
             })
     }, [userDid])
 
-    return html`<${ProfileView} ...${props} profile=${userFeed.profile} />`
+    if (!userFeed) return null
+
+    console.log('user feed', userFeed)
+
+    return html`<${ProfileView} ...${props} feed=${userFeed.posts}
+        profile=${userFeed.profile}
+    />`
 }
 
 module.exports = byDID
