@@ -17,8 +17,9 @@
 
     .post-image-wrapper {
         margin-top: 2rem;
-        height: 90vh;
+        max-height: 90vh;
         width: 100%;
+        margin-bottom: 4rem;
 
         img {
             height: 100%;
