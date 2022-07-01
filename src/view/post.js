@@ -1,6 +1,5 @@
 import { html } from 'htm/preact'
-import { useEffect, useState } from 'preact/hooks';
-// import post from '../client/post';
+import { useEffect } from 'preact/hooks';
 const evs = require('../EVENTS')
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')

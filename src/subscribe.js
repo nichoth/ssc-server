@@ -103,6 +103,7 @@ function subscribe (bus, state, client) {
 
     bus.on(evs.feed.got, ev => {
         // extend the existing state object with new feeds { did: [] }
+        console.log('got feed', ev)
         state.feeds.set(Object.assign({}, (state.feeds() || {}), ev))
     })
 }

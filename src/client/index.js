@@ -10,6 +10,7 @@ const Alternate = require('./alternate')
 const Feed = require('./feed')
 const RelevantPosts = require('./relevant-posts')
 const Reply = require('./reply')
+const Profile = require('./profile')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -20,6 +21,10 @@ module.exports = function Client (_keystore) {
 
     const client = {
         getProfile: _getProfile,
+
+        getProfileByName: function (username) {
+            return Profile.getByName(username)
+        },
 
         setKeystore: function (ks) {
             keystore = ks
@@ -40,6 +45,10 @@ module.exports = function Client (_keystore) {
 
         getFeed: function (did) {
             return Feed.get(did)
+        },
+
+        getFeedByName: function (username) {
+            return Feed.getByName(username)
         },
 
         postReply: function ({ text, replyTo }, prev) {

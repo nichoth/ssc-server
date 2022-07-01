@@ -2,8 +2,8 @@ import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
-const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
-const evs = require('../EVENTS')
+const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
+const evs = require('../../EVENTS')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -14,28 +14,30 @@ const cld = cloudinaryUrl({
 
 function Profile (props) {
     console.log('profile props', props)
-    const { me, splats, profiles, feeds, emit, client } = props
+    const { me,/* splats, emit, client, feeds, */ profile, feed } = props
     const [copied, setCopied] = useState(false)
 
-    const userDid = 'did:key:' + splats[0]
+    // const userDid = 'did:key:' + splats[0]
 
-    var profile = (me.following || {})[userDid] ?
-        me.following[userDid] :
-        (profiles || {})[userDid]
+    // var profile = (me.following || {})[userDid] ?
+    //     me.following[userDid] :
+    //     (profiles || {})[userDid]
 
-    if (me.did === userDid) {
-        profile = me.profile
-    }
+    // if (me.did === userDid) {
+    //     profile = me.profile
+    // }
 
-    useEffect(() => {
-        if (feeds[userDid]) return
-        client.getFeed(userDid)
-            .then(res => {
-                const ev = {}
-                ev[userDid] = res
-                emit(evs.feed.got, ev)
-            })
-    }, [userDid])
+    // useEffect(() => {
+    //     if (feeds[userDid]) return
+    //     client.getFeed(userDid)
+    //         .then(res => {
+    //             const ev = {}
+    //             ev[userDid] = res
+    //             emit(evs.feed.got, ev)
+    //         })
+    // }, [userDid])
+
+    if (!profile) return null
 
     const avatarUrl = (cld
         .image(encodeURIComponent(profile.image))
@@ -49,7 +51,7 @@ function Profile (props) {
         setCopied(true)
     }
 
-    const feed = feeds[userDid]
+    // const feed = feeds[userDid]
 
     if (!feed) return null
 

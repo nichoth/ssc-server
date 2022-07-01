@@ -6,7 +6,8 @@ var CreateInvitation = require('./view/create-invitation')
 var Hello = require('./view/hello')
 const NewPin = require('./view/new-pin')
 const PostView = require('./view/post')
-const ProfileView = require('./view/profile')
+const ProfileViewByDID = require('./view/profile/by-did')
+const ProfileViewByUsername = require('./view/profile/by-name')
 var router = _router()
 
 
@@ -18,7 +19,11 @@ function Router () {
     // view a user's feed/profile
     // at a route like /<did-here>
     router.addRoute('/did\:key\:*', (match) => {
-        return { view: ProfileView }
+        return { view: ProfileViewByDID }
+    })
+
+    router.addRoute('/@:username', () => {
+        return { view: ProfileViewByUsername }
     })
 
     router.addRoute('/hello', () => {
