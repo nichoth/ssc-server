@@ -33,13 +33,13 @@ function Post (props) {
     const { key } = params
 
     useEffect(() => {
-        // this would optimize the fetching of posts,
-        // however, you *still* need to get the replies to the post
-        // const existingPost = relevantPosts.find(post => post.key === key)
 
         client.getPostWithReplies(key).then(res => {
             emit(evs.post.gotWithReplies, res)
         })
+        // this would optimize the fetching of posts,
+        // however, you *still* need to get the replies to the post
+        // const existingPost = relevantPosts.find(post => post.key === key)
 
         // if (existingPost) {
         //     emit(evs.post.got, existingPost)

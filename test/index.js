@@ -46,6 +46,14 @@ test('profile', t => {
     require('./profile')(t.test, _keys, _did)
 })
 
+test('relevant posts', t => {
+    require('./relevant-posts')(t.test, _keys, _did)
+})
+
+test('replies', t => {
+    require('./reply')(t.test, _keys, _did)
+})
+
 test('all done', function (t) {
     allDone(ntl)
     t.end()
