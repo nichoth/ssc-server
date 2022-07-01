@@ -70,7 +70,6 @@ exports.handler = function (ev, ctx) {
             )
         )
             .then(res => {
-                console.log('*********res*************', res)
                 return {
                     statusCode: 200,
                     body: JSON.stringify(res[0].data.map(doc => {

@@ -47,7 +47,7 @@ function Profile (props) {
                         html`<span class="has-copied">copied!</span>` :
                         null
                     }
-                    <pre><code>${me.did}</code></pre>
+                    <pre><code>${profile.about}</code></pre>
                 </p>
             </div>
 
