@@ -1,7 +1,7 @@
 @use './media' as media;
 
 .route.post-view {
-    width: fit-content;
+    // width: fit-content;
     max-width: 40rem;
     margin: 0 auto;
 
@@ -31,6 +31,54 @@
         p.editable-textarea {
             border: 1px solid;
             padding: 1rem;
+        }
+    }
+}
+
+.post-replies {
+    list-style: none;
+    padding: 0;
+
+    li {
+        border: 1px solid;
+        border-radius: 10px;
+        background-color: white;
+
+        p {
+            margin: 1rem;
+        }
+    }
+
+    .reply {
+        hr {
+            margin: 0.5rem;
+            border-top: 1px solid lightgray;
+        }
+    }
+
+    a.profile-link {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        transition: opacity 0.3s;
+        opacity: 0.6;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .replier-info {
+        margin: 0.2rem 1rem;
+        margin-top: 0.5rem;
+
+        img {
+            width: 2rem;
+            height: 2rem;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 1px solid;
+            margin-right: 1rem;
         }
     }
 }

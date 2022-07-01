@@ -7,14 +7,15 @@ var evs = namespace({
     keys: ['got'],
     pin: ['post', 'got', 'error'],
     following: ['got', 'start', 'stop', 'err'],
-    post: ['got', 'new'],
+    post: ['got', 'new', 'gotWithReplies'],
     // profile: ['got'],
     // identity: ['setName', 'setAvatar', 'gotAvatar']
     // profile: [ 'new' ],
     // identity: ['setUsername', 'setAvatar', 'setProfile', 'setDesc', 'newDid',
     //     'change']
     feed: ['got'],
-    identity: ['setProfile', 'newDid', 'change', 'setUsername']
+    identity: ['setProfile', 'newDid', 'change', 'setUsername'],
+    reply: ['created']
 })
 
 module.exports = evs

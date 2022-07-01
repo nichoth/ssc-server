@@ -8,6 +8,7 @@ const BASE = (process.env.NODE_ENV === 'test' ?
 // gets all pending redemptions
 // this means, get all invitees that you need to follow
 module.exports = {
+    // `prev` is the key of the message that we are replying to
     post: async function postReply (ssc, keys, prev, content) {
 
         if (!content.replyTo) {

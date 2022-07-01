@@ -6,6 +6,7 @@ const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const EditableTextarea = require('./components/editable-textarea')
+const Profile = require('./components/profile')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -28,33 +29,43 @@ const cld = cloudinaryUrl({
 function Post (props) {
     console.log('**props in post**', props)
 
-    const { me, emit, params, client, singlePost, relevantPosts } = props
+    const { me, feeds, emit, params, client, singlePost } = props
     const { key } = params
 
     useEffect(() => {
-        const existingPost = relevantPosts.find(post => post.key === key)
-        if (existingPost) {
-            emit(evs.post.got, existingPost)
-            return
-        }
+        // this would optimize the fetching of posts,
+        // however, you *still* need to get the replies to the post
+        // const existingPost = relevantPosts.find(post => post.key === key)
 
-        client.getPost(key).then(res => {
-            emit(evs.post.got, res)
+        client.getPostWithReplies(key).then(res => {
+            emit(evs.post.gotWithReplies, res)
         })
+
+        // if (existingPost) {
+        //     emit(evs.post.got, existingPost)
+        //     client.getPostWithReplies(key).then(res => {
+        //         emit(evs.replies.got, res)
+        //     })
+        //     return
+        // }
+
+        // client.getPostWithReplies(key).then(res => {
+        //     emit(evs.post.gotWithReplies, res)
+        // })
     }, [key])
 
-    if (!singlePost) return null
-    if (!singlePost || singlePost.key !== key) return null
+    if (!singlePost.msg) return null
+    if (!singlePost.msg || singlePost.msg.key !== key) return null
 
     // TODO -- get the profile for given user if they don't exist
-    const { author } = singlePost.value
+    const { author } = singlePost.msg.value
     const profile = author === me.did ?
         me.profile :
         me.following[author]
 
     if (!profile) return null
 
-    const { mentions } = singlePost.value.content
+    const { mentions } = singlePost.msg.value.content
     // @TODO -- show multiple images if they exist for this post
     const url = cld.image(mentions[0]).toURL()
 
@@ -65,17 +76,14 @@ function Post (props) {
         .toURL())
 
     function saveReply (replyText) {
-        console.log('replyyyyyyyyyyyy', replyText)
-
-        // in here,
-        // call & return client.reply
-
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                console.log('yay')
-                resolve('yay')
-            }, 3000);
-        });
+        return client.postReply({
+            replyTo: singlePost.msg.key,
+            text: replyText
+        })
+            .then(res => {
+                emit(evs.reply.created, res)
+                return res
+            })
 
         // need to call the server
         // then when you get a response, append it to an array in
@@ -93,18 +101,44 @@ function Post (props) {
             <img src=${url} />
         </div>
 
-        <p>${singlePost.value.content.text}</p>
+        <p>${singlePost.msg.value.content.text}</p>
 
         <hr />
 
         <div class="user-info">
-            <a class="user-link" href=${'/' + singlePost.value.author}>
+            <a class="user-link" href=${'/' + singlePost.msg.value.author}>
                 <span class="author-image">
                     <img class="author-image" src=${avatarUrl} />
                 </span>
                 <span class="author-name">${profile.username}</span>
             </a>
         </div>
+
+        ${singlePost.replies && singlePost.replies.length ?
+            html`<ul class="post-replies">
+                ${singlePost.replies.map(reply => {
+                    // todo -- populate the `feeds` key in state
+                    const replier = reply.value.author === me.did ?
+                        me.profile :
+                        feeds[reply.author] && feeds[reply.author].profile
+
+                    return html`<li class="reply">
+                        <${Profile} profile=${replier}
+                            href=${'/@'+profile.username}
+                            className="replier-info"
+                        />
+
+                        <hr />
+
+                        <p>
+                            ${reply.value.content.text}
+                        </p>
+                    </li>`
+                })}
+            </ul>` :
+
+            null
+        }
 
         <div class="post-reply">
             <${EditableTextarea} onSave=${saveReply} name="reply"

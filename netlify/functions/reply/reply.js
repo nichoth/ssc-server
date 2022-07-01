@@ -38,7 +38,7 @@ exports.handler = function (ev, ctx) {
                 body: 'invalid message'
             }
 
-            // if they are an admin, the write the reply
+            // if they are an admin, then write the reply
             if (admins.some(admin => admin.did === did)) {
                 return writeMsg(ssc.getId(msg), msg)
                     .then(res => {
@@ -52,8 +52,6 @@ exports.handler = function (ev, ctx) {
             return serverFollows(did)
                 .then(follows => {
                     if (!follows) {
-                        console.log('followwwwwwwwwwwws', follows, did)
-
                         return {
                             statusCode: 403,
                             body: 'not allowed'

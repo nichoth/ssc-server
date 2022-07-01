@@ -10,7 +10,10 @@ function State (keystore, { admins, dids }) {
         admins: observ(admins),
         pin: observ(null),
         dids: observ(dids),
-        singlePost: observ(null),
+        singlePost: observ({
+            msg: null,
+            replies: null
+        }),
         relevantPosts: observ([]),
 
         // an object, indexed by DID

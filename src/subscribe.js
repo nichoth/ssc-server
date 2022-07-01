@@ -9,7 +9,11 @@ function subscribe (bus, state, client) {
 
     bus.on(evs.post.got, post => {
         console.log('got post', post)
-        state.singlePost.set(post)
+        // TODO -- replies
+        state.singlePost.set({
+            msg: post,
+            replies: state.singlePost().replies || null
+        })
     })
 
     bus.on(evs.post.new, post => {
@@ -67,6 +71,34 @@ function subscribe (bus, state, client) {
         if (desc && desc !== state.me.profile().desc) {
             state.me.profile.desc.set(desc)
         }
+    })
+
+    bus.on(evs.reply.created, ev => {
+        console.log('subscription', ev)
+        const key = ev.value.content.replyTo
+
+        if (state.singlePost().msg.key === key) {
+            state.singlePost.set({
+                msg: state.singlePost().msg,
+                replies: state.singlePost().replies.concat([ev])
+            }) 
+        }
+    })
+
+    // bus.on(evs.replies.got, msgs => {
+    //     console.log('got them in subscribe', msgs)
+    //     const root = msgs[0]
+    //     const replies = msgs.slice(1)
+    //     state.singlePost.set({
+    //         msg: root,
+    //         replies
+    //     })
+    // })
+
+    bus.on(evs.post.gotWithReplies, msgs => {
+        const root = msgs[0]
+        const replies = msgs.slice(1)
+        state.singlePost.set({ msg: root, replies })
     })
 
     bus.on(evs.feed.got, ev => {

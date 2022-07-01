@@ -9,6 +9,7 @@ const Invitation = require('./invitation')
 const Alternate = require('./alternate')
 const Feed = require('./feed')
 const RelevantPosts = require('./relevant-posts')
+const Reply = require('./reply')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -29,6 +30,10 @@ module.exports = function Client (_keystore) {
             return Post.get(key)
         },
 
+        getPostWithReplies: function (key) {
+            return Post.getWithReplies(key)
+        },
+
         createPost: function ({ files, content, prev }) {
             return Post.create(ssc, keystore, { files, content, prev })
         },
@@ -37,24 +42,13 @@ module.exports = function Client (_keystore) {
             return Feed.get(did)
         },
 
+        postReply: function ({ text, replyTo }, prev) {
+            // post: async function postReply (ssc, keys, prev, content) {
+            prev = prev || null
+            return Reply.post(ssc, keystore, prev, { replyTo, text })
+        },
+
         getRelevantPosts: RelevantPosts.get,
-
-        // getRelevantPosts: function (did) {
-        //     const qs = new URLSearchParams({ did }).toString()
-        //     const url = (BASE + '/api/relevant-posts' + '?' + qs)
-
-        //     return fetch(url)
-        //         .then(res => {
-        //             if (res.ok) {
-        //                 return res.json()
-        //             }
-
-        //             return res.text().then(text => {
-        //                 console.log('relevnt errrrrrrrrrrr', text)
-        //                 throw new Error(text)
-        //             })
-        //         })
-        // },
 
         followViaInvitation: function (did) {
             return Promise.all(did.map(did => {
