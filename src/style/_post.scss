@@ -17,11 +17,17 @@
 
     .post-image-wrapper {
         margin-top: 2rem;
-        max-height: 90vh;
+        // max-height: 90vh;
+        height: 90vh;
         width: 100%;
         margin-bottom: 4rem;
 
+        @include media.portrait {
+            height: initial;
+        }
+
         img {
+            // height: 90vh;
             height: 100%;
             width: 100%;
             object-fit: contain;
@@ -63,6 +69,10 @@
         width: fit-content;
         transition: opacity 0.3s;
         opacity: 0.6;
+
+        @include media.touch {
+            opacity: 1;
+        }
 
         &:hover {
             opacity: 1;

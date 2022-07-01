@@ -6,6 +6,18 @@
 
 @mixin tablet {
     @media (max-width: 768px) {
-        @content
+        @content;
+    }
+}
+
+@mixin touch {
+    @media (hover: none) {
+        @content;
+    } 
+}
+
+@mixin portrait {
+    @media (orientation: portrait) {
+        @content;
     }
 }
