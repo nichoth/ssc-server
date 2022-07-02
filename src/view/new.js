@@ -6,8 +6,6 @@ var evs = require('../EVENTS')
 const { Button } = require('@nichoth/forms/preact')
 
 function NewPost (props) {
-    console.log('props in new post', props)
-
     return html`<div class="route new-post">
         <${FilePicker} ...${props} />
     </div>`
@@ -25,7 +23,6 @@ function FilePicker (props) {
     // setup drag & drop
     useEffect(function didMount () {
         const cleanup = dragDrop('.file-inputs', (files, _, fileList) => {
-            console.log('files', files)
             document.getElementById('image-input').files = fileList
             setPendingImage(files[0])
             // emit an 'input' event for form validation
@@ -37,7 +34,6 @@ function FilePicker (props) {
     }, [])
 
     function formInput (ev) {
-        // console.log('input', ev)
         checkIsValid()
     }
 
@@ -59,8 +55,6 @@ function FilePicker (props) {
         ev.preventDefault()
         const file = ev.target.elements.image.files[0]
         const text = ev.target.elements.text.value
-        console.log('file', file)
-        console.log('text***', text)
 
         const reader = new FileReader()
 
@@ -71,17 +65,12 @@ function FilePicker (props) {
                 (feed.posts[0]).value :
                 null
 
-            console.log('prevvvvvvvvvvvvvvv', prev)
-            console.log('feeeeeeeeeeeeeeed', feed)
-
             client.createPost({
                 files: [reader.result],
                 content: { text },
                 prev
             })
                 .then(res => {
-                    console.log('server response', res)
-                    console.log('key', res.key)
                     emit(evs.post.new, res)
                     setResolving(false)
                     setRoute('/post/' + encodeURIComponent(res.key))
@@ -98,7 +87,6 @@ function FilePicker (props) {
 
     function chooseFile (ev) {
         var file = ev.target.files[0]
-        console.log('****choose file****', file)
         setPendingImage(file)
     }
 
