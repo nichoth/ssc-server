@@ -8,7 +8,7 @@ var client = new faunadb.Client({
 const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
 const upload = require('../upload')
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../../../src/util')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod !== 'POST') {
@@ -76,7 +76,8 @@ exports.handler = async function (ev, ctx) {
         // var hash = createHash('sha256')
         // hash.update(file)
         // const _hash = hash.digest('base64')
-        const _hash = getHash(file)
+        // const _hash = '&' + getHash(file)
+        const _hash = blobHash(file)
 
         if (_hash !== newProfile.content.image) {
             return {

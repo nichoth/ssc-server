@@ -7,7 +7,7 @@ var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
 const upload = require('../upload')
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../../../src/util')
 
 const { PUBLIC_KEY, SECRET_KEY } = process.env
 
@@ -55,7 +55,7 @@ exports.handler = async function (ev, ctx) {
     const { code } = redemption.content
     const key = ssc.didToPublicKey(redemption.author)
 
-    const _hash = await getHash(file)
+    const _hash = blobHash(file)
     // const hash = createHash('sha256')
     // hash.update(file)
     // const _hash = hash.digest('base64')

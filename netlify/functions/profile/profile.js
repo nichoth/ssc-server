@@ -1,7 +1,7 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../../../src/util')
 const upload = require('../upload')
 const q = faunadb.query
 const client = new faunadb.Client({
@@ -201,7 +201,7 @@ async function update ({ did, msg, pubKey, file }) {
     // the same file hash in the `msg.image` field, but no `file` key in
     // the request
     if (file) {
-        const _hash = getHash(file)
+        const _hash = blobHash(file)
 
         if (_hash !== msg.content.image) {
             return {

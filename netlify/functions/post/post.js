@@ -1,7 +1,7 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../../../src/util')
 const { admins } = require('../../../src/config.json')
 const serverFollows = require('../server-follows')
 const upload = require('../upload')
@@ -106,7 +106,7 @@ exports.handler = async function (ev, ctx) {
     // test that each mention is the hash for a file
     // (file and mention arrays need to be in the same order)
     const hashesOk = mentions.reduce((isOk, mention, i) => {
-        return (isOk && (getHash(files[i]) === mention))
+        return (isOk && (blobHash(files[i]) === mention))
     }, true)
 
     if (!hashesOk) {

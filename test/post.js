@@ -1,13 +1,13 @@
 require('dotenv').config()
 require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc-lambda')
-const { getHash } = require('@nichoth/multihash')
 const test = require('tape')
 const onExit = require('signal-exit')
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const { setup, allDone } = require('./setup')
 const Invitation = require('../src/client/invitation')
 const Post = require('../src/client/post')
+const { blobHash } = require('../src/util')
 const { CLOUDINARY_CLOUD_NAME } = require('../src/config.json')
 const BASE = 'http://localhost:8888'
 
@@ -94,7 +94,7 @@ function postTest (test, keys) {
         ssc.createMsg(keys, null, {
             type: 'post',
             text: 'bad merkle sequence',
-            mentions: [getHash(file)]
+            mentions: [blobHash(file)]
         }).then(msg => {
             fetch(BASE + '/api/post', {
                 method: 'POST',
@@ -125,7 +125,7 @@ function postTest (test, keys) {
         ssc.createKeys().then(alice => {
             return ssc.createMsg(alice.keys, null, {
                 type: 'post',
-                mentions: [getHash(file)],
+                mentions: [blobHash(file)],
                 text: 'random user message'
             })
         }).then(msg => {

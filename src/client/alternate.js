@@ -1,4 +1,4 @@
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../util')
 const BASE = 'http://localhost:8888'
 
 module.exports = {
@@ -18,7 +18,7 @@ function createAlternate ({ ssc, keystore, newKeystore, profile }) {
     )
 
     // if we are passed an image, set _hash to the right hash
-    const hash = getHash(image)
+    const hash = blobHash(image)
 
     // create a msg signed by the old DID
     return ssc.getDidFromKeys(keystore)

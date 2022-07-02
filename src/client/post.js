@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../util')
 const BASE = (process.env.NODE_ENV === 'test' ?
     'http://localhost:8888' :
     '')
@@ -10,7 +10,7 @@ const BASE = (process.env.NODE_ENV === 'test' ?
 module.exports = {
     create: async function createPost (ssc, keys, { files, content, prev }) {
         const mentions = files.map(file => {
-            return getHash(file)
+            return blobHash(file)
         })
 
         console.log('mentionssssssssss', mentions)

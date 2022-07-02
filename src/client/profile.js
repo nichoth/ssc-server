@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../util')
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
             about: user.did,
             username: profile.username,
             desc: profile.desc || null,
-            image: getHash(file)
+            image: blobHash(file)
         })
             .then(msg => {
                 return fetch(BASE + '/api/profile', {

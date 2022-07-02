@@ -1,7 +1,7 @@
 require('dotenv').config()
 require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc/web')
-const { getHash } = require('@nichoth/multihash')
+const { blobHash } = require('../util')
 const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
 const Post = require('./post')
@@ -167,7 +167,7 @@ module.exports = function Client (_keystore) {
                 // let _hash = new Blake2s()
                 // let _hash = createHash('sha256')
                 // _hash.update(image)
-                hash = getHash(image)
+                hash = blobHash(image)
                 // hash = _hash.digest('base64')
                 // hash = _hash.digest()
             }

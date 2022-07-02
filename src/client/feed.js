@@ -1,6 +1,5 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-// const { getHash } = require('@nichoth/multihash')
 const BASE = (process.env.NODE_ENV === 'test' ?
     'http://localhost:8888' :
     '')
