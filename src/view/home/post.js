@@ -15,8 +15,6 @@ const cld = cloudinaryUrl({
     }
 })
 
-
-
 function Post (props) {
     const { me, post, authorProfile } = props
 

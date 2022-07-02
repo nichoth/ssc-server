@@ -1,11 +1,6 @@
 import { html } from 'htm/preact'
 const { marked } = require('marked')
 const Post = require('./post')
-// import { generateFromString } from 'generate-avatar'
-// var evs = require('../../EVENTS')
-// var Client = require('../../client')
-// var FollowIcon = require('../follow-btn')
-// var { getFollowing, /*getRelevantPosts,*/ getPostsWithFoafs } = Client()
 
 function Home (props) {
     console.log('home props', props)
