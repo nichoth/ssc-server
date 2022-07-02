@@ -10,7 +10,6 @@ const client = new faunadb.Client({
 const resolveAlt = require('../resolve-alt')
 const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
-// var stringify = require('json-stable-stringify')
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {

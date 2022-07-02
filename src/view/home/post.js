@@ -1,12 +1,5 @@
 import { html } from 'htm/preact'
 import Markdown from 'preact-markdown'
-const remark = require('remark')
-// import cidToUrl from 'remark-image-cid-to-url/browser'
-import remarkParse from 'remark-parse'
-// import { remark } from 'remark'
-// import remarkGfm from 'remark-gfm'
-
-
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
@@ -37,21 +30,11 @@ function Post (props) {
             .format('auto')
             .toURL())
 
-        const mdContent = remark()
-            .use(remarkParse, { commonMark: true })
-            .processSync(post.value.content.text).contents
-
-    // ${post.value.content.text}
-    // <p>
-    //     ${post.value.content.text}
-    //     <${Markdown} markdown=${mdContent}
-    // </p></$>
-
     return html`<li class="post">
         <a href="/post/${encodeURIComponent(post.key)}">
             <img src=${url} />
             <p>
-                <${Markdown} markdown=${mdContent} />
+                <${Markdown} markdown=${post.value.content.text} />
             </p>
         </a>
 

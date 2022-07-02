@@ -1,6 +1,5 @@
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-var createHash = require('create-hash')
 var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
