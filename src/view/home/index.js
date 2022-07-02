@@ -52,7 +52,7 @@ function Home (props) {
             html`<ul class="main-feed">${props.relevantPosts.map(post => {
                 const url = (cld
                     .image(encodeURIComponent(post.value.content.mentions[0]))
-                    .resize( scale().width(600) )
+                    .resize( scale().width(400) )
                     .format('auto')
                     .toURL())
 
