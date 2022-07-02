@@ -67,9 +67,12 @@ function FilePicker (props) {
         setResolving(true)
 
         reader.onloadend = () => {
-            const prev = feed.length ?
-                (feed[0]).value :
+            const prev = feed.posts.length ?
+                (feed.posts[0]).value :
                 null
+
+            console.log('prevvvvvvvvvvvvvvv', prev)
+            console.log('feeeeeeeeeeeeeeed', feed)
 
             client.createPost({
                 files: [reader.result],
