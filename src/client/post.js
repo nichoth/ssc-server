@@ -13,6 +13,8 @@ module.exports = {
             return getHash(file)
         })
 
+        console.log('mentionssssssssss', mentions)
+
         const msg = await ssc.createMsg(keys, (prev || null),
             Object.assign({ type: 'post', mentions }, content))
         

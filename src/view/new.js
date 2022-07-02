@@ -37,7 +37,7 @@ function FilePicker (props) {
     }, [])
 
     function formInput (ev) {
-        console.log('input', ev)
+        // console.log('input', ev)
         checkIsValid()
     }
 

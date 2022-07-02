@@ -66,7 +66,7 @@ function Post (props) {
 
     const { mentions } = singlePost.msg.value.content
     // @TODO -- show multiple images if they exist for this post
-    const url = cld.image(mentions[0]).toURL()
+    const url = cld.image(encodeURIComponent(mentions[0])).toURL()
 
     const avatarUrl = (cld
         .image(encodeURIComponent(profile.image))

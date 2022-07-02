@@ -109,7 +109,7 @@ function Shell (props) {
     const avatarUrl = me.profile.image ?
         (cld.image(encodeURIComponent(me.profile.image))
             .format('auto')
-            // .resize( scale().width(100) )
+            .resize( scale().width(100) )
             .toURL()) :
         ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
     
