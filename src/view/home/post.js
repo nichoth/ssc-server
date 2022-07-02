@@ -1,8 +1,11 @@
 import { html } from 'htm/preact'
 import Markdown from 'preact-markdown'
 const remark = require('remark')
-import cidToUrl from 'remark-image-cid-to-url/browser'
+// import cidToUrl from 'remark-image-cid-to-url/browser'
 import remarkParse from 'remark-parse'
+// import { remark } from 'remark'
+// import remarkGfm from 'remark-gfm'
+
 
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
@@ -14,6 +17,8 @@ const cld = cloudinaryUrl({
         secure: true // force https, set to false to force http
     }
 })
+
+// this is the little post that you see in the list on the home page
 
 function Post (props) {
     const { me, post, authorProfile } = props
@@ -32,10 +37,22 @@ function Post (props) {
             .format('auto')
             .toURL())
 
+        const mdContent = remark()
+            .use(remarkParse, { commonMark: true })
+            .processSync(post.value.content.text).contents
+
+    // ${post.value.content.text}
+    // <p>
+    //     ${post.value.content.text}
+    //     <${Markdown} markdown=${mdContent}
+    // </p></$>
+
     return html`<li class="post">
         <a href="/post/${encodeURIComponent(post.key)}">
             <img src=${url} />
-            <p>${post.value.content.text}</p>
+            <p>
+                <${Markdown} markdown=${mdContent} />
+            </p>
         </a>
 
         <hr />
