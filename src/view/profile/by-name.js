@@ -30,10 +30,12 @@ function byName (props) {
             client.getProfileByName(username)
         ])
             .then(([feed, profiles]) => {
+                console.log('profiles', profiles)
                 const ev = {}
-                ev[feed[0].value.author] = {
+                console.log('feeeeeeeeeeeed', feed)
+                ev[((profiles[0] || {}).value || {}).author] = {
                     posts: feed,
-                    profile: (profiles[profiles.length - 1]).value.content
+                    profile: (profiles[0]).value.content
                 }
                 emit(evs.feed.got, ev)
             })

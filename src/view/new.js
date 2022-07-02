@@ -2,7 +2,8 @@ import { html } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks';
 const dragDrop = require('drag-drop')
 var evs = require('../EVENTS')
-const { Button, TextInput } = require('@nichoth/forms/preact')
+// const { Button, TextInput } = require('@nichoth/forms/preact')
+const { Button } = require('@nichoth/forms/preact')
 
 function NewPost (props) {
     console.log('props in new post', props)

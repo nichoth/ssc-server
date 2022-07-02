@@ -35,9 +35,13 @@ function Profile (props) {
 
     return html`<div class="route profile">
         <div class="user-info">
-            <div class="user-text-info">
+            <div class="profile-image">
                 <h2>${profile.username}</h2>
 
+                <img src=${avatarUrl} alt="user's avatar" />
+            </div>
+
+            <div class="user-text-info">
                 <p>
                     ${'DID '}
                     <button class="icon" onclick=${copyDid}>
@@ -49,10 +53,6 @@ function Profile (props) {
                     }
                     <pre><code>${profile.about}</code></pre>
                 </p>
-            </div>
-
-            <div class="profile-image">
-                <img src=${avatarUrl} alt="user's avatar" />
             </div>
         </div>
 

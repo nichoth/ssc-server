@@ -44,11 +44,15 @@ exports.handler = function (ev, ctx) {
 
         console.log('doing username', username)
 
+        // would want to look at the path/params to check for an index number
+        // if there is an index,
+        //   then you should get that profile at the query start
+
         return client.query(
             q.Map(
-                [q.Get( q.Reverse(
+                [q.Get( 
                     q.Match(q.Index("profile_by_name"), username),
-                ) )],
+                )],
                 q.Lambda(
                     "profile",
                     q.Map(
