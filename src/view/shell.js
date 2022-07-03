@@ -133,7 +133,7 @@ function Shell (props) {
 
             ${isAdmin ?
                 html`<li class="${active('/create-invitation')} create-inv">
-                    <a href="/create-invitation">create an invitation</a>
+                    <a href="/create-invitation">invitations</a>
                 </li>` :
                 null
             }
