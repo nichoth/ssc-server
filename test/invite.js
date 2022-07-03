@@ -45,6 +45,9 @@ if (require.main === module) {
 }
 
 
+module.exports = invite
+
+
 function invite (test, keys, did) {
     var _inv
     var _code
@@ -84,7 +87,7 @@ function invite (test, keys, did) {
                 t.equal(res.value.content.username, 'alice',
                     'should set the username')
                 t.equal(res.value.content.image,
-                    'GmuzSvBeEBT5tvt1vhtRkhl1a7V8MkTqCxT4Z4jFz_s.sha256',
+                    '&GmuzSvBeEBT5tvt1vhtRkhl1a7V8MkTqCxT4Z4jFz_s.sha256',
                     'should set the right hash for the avatar')
                 t.end()
             })

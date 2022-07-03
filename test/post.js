@@ -48,6 +48,8 @@ if (require.main === module) {
     })
 }
 
+module.exports = postTest
+
 function postTest (test, keys) {
     // `keys` here is an admin user
     var firstPost

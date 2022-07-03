@@ -75,7 +75,8 @@ function profileTests (test, keys, did) {
             .then(res => {
                 const { image, db } = res
                 t.equal(db.value.author, did, 'should a good response from DB')
-                t.ok(image.asset_id, 'should have the image in response')
+                t.ok(image.asset_id,
+                    'should have the image in response')
                 t.end()
             })
             .catch(err => {
@@ -221,8 +222,7 @@ function profileTests (test, keys, did) {
             })
             .then(json => {
                 const msgContent = json.db.value.content
-                t.equal(msgContent.username, 'alice',
-                    'should set the username')
+                t.equal(msgContent.username, 'alice', 'should set the username')
                 t.end()
             })
     })

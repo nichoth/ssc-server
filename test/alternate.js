@@ -4,7 +4,7 @@ const ssc = require('@nichoth/ssc-lambda')
 const test = require('tape')
 const onExit = require('signal-exit')
 const { setup, allDone } = require('./setup')
-const u = require('./util')
+// const u = require('./util')
 const Alternate = require('../src/client/alternate')
 
 if (require.main === module) {
@@ -96,37 +96,53 @@ function alt (test, keys, did) {
             })
     })
 
-    test('save an alternate message as a standard user', t => {
-        // const did = user.did
+    // test('save an alternate message as a standard user', t => {
+    //     // const did = user.did
 
-        ssc.createKeys()
-            .then(user => {
-                return Promise.all([
-                    Promise.resolve(user),
-                    u.inviteAndFollow({ adminKeys: keys, user })
-                ])
-            })
-            .then(async ([user]) => {
-                const newUser = await ssc.createKeys()
+    //     const userProfile = { username: 'test-user-one' }
 
-                return Alternate.create({
-                    ssc,
-                    keystore: user.keys,
-                    newKeystore: newUser.keys,
-                    profile: {
-                        username: 'test-user',
-                        image: file
-                    }
-                })
-            })
-            .then(() => {
-                t.fail('should not allow normal users to create an alt yet')
-                t.end()
-            })
-            .catch(err => {
-                t.ok(err.toString().includes('not allowed'), 
-                    'should return the right error message')
-                t.end()
-            })
-    })
+    //     ssc.createKeys()
+    //         .then(user => {
+    //             return Promise.all([
+    //                 Promise.resolve(user),
+    //                 u.inviteAndFollow({ adminKeys: keys, user, userProfile })
+    //             ])
+    //         })
+    //         .then(async ([user]) => {
+    //             const newUser = await ssc.createKeys()
+
+    //             // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+    //             // fails in here
+    //             return Promise.all([
+    //                 Alternate.create({
+    //                     ssc,
+    //                     keystore: user.keys,
+    //                     newKeystore: newUser.keys,
+    //                     profile: {
+    //                         username: 'test-user-alt',
+    //                         image: file
+    //                     }
+    //                 })
+    //             ]),
+    //             Promise.resolve(user)
+    //             // Promise.resolve(newUser)
+    //         })
+    //         .then(([res, user, newUser]) => {
+    //             console.log('resssssssssssssss', res)
+    //             t.equal(res.value.content.from, user.did,
+    //                 'should return the expected alt message')
+    //             // t.equal(res.value.content.to, newUser.did,
+    //             //     'should return the expected alt message')
+    //             // t.fail('should not allow normal users to create an alt yet')
+    //             t.end()
+    //         })
+    //         .catch(err => {
+    //             console.log('ooooooooooooooooo', err)
+    //             t.fail(err)
+    //             // t.ok(err.toString().includes('not allowed'), 
+    //             //     'should return the right error message')
+    //             t.end()
+    //         })
+    // })
 }

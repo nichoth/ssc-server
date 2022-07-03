@@ -217,7 +217,7 @@ async function update ({ did, msg, pubKey, file }) {
                     return {
                         statusCode: 200,
                         body: JSON.stringify({
-                            image: res,
+                            image: res.response,
                             // this is b/c the DB I think strips out `null`
                             // values from the message objects
                             db: Object.assign(_res.data, {

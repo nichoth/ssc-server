@@ -160,7 +160,6 @@ exports.handler = async function (ev, ctx) {
         })
         .catch(err => {
             if (err.toString().includes('instance not found')) {
-                console.log('errrrrrrrrrrrr', err)
                 return {
                     statusCode: 404,
                     body: 'invitation not found'
