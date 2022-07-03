@@ -46,20 +46,18 @@
     list-style: none;
     padding: 0;
 
-    li {
-        border: 1px solid;
+    li.reply {
+        border: 1px solid gray;
         border-radius: 10px;
         background-color: white;
 
-        p {
-            margin: 1rem;
-        }
-    }
-
-    .reply {
         hr {
             margin: 0.5rem;
             border-top: 1px solid lightgray;
+        }
+
+        p {
+            margin: 1rem;
         }
     }
 

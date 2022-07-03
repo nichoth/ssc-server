@@ -33,25 +33,9 @@ function Post (props) {
     const { key } = params
 
     useEffect(() => {
-
         client.getPostWithReplies(key).then(res => {
             emit(evs.post.gotWithReplies, res)
         })
-        // this would optimize the fetching of posts,
-        // however, you *still* need to get the replies to the post
-        // const existingPost = relevantPosts.find(post => post.key === key)
-
-        // if (existingPost) {
-        //     emit(evs.post.got, existingPost)
-        //     client.getPostWithReplies(key).then(res => {
-        //         emit(evs.replies.got, res)
-        //     })
-        //     return
-        // }
-
-        // client.getPostWithReplies(key).then(res => {
-        //     emit(evs.post.gotWithReplies, res)
-        // })
     }, [key])
 
     if (!singlePost.msg) return null
@@ -87,8 +71,7 @@ function Post (props) {
 
         // need to call the server
         // then when you get a response, append it to an array in
-        //   `feeds[thisUser]`
-
+        //   `feeds[thisUser].feed`
 
         // `feeds[userDID] = { profile, feed }`
 
@@ -101,12 +84,6 @@ function Post (props) {
             <img src=${url} />
         </div>
 
-        <p>
-            <${Markdown} markdown=${singlePost.msg.value.content.text} />
-        </p>
-
-        <hr />
-
         <div class="user-info">
             <a class="user-link" href=${'/' + singlePost.msg.value.author}>
                 <span class="author-image">
@@ -115,6 +92,12 @@ function Post (props) {
                 <span class="author-name">${profile.username}</span>
             </a>
         </div>
+
+        <hr />
+
+        <p>
+            <${Markdown} markdown=${singlePost.msg.value.content.text} />
+        </p>
 
         ${singlePost.replies && singlePost.replies.length ?
             html`<ul class="post-replies">

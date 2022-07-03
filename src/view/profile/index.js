@@ -61,7 +61,7 @@ function Profile (props) {
         <ul class="user-feed">
             ${feed.map(post => {
                 const url = (cld
-                    .image(post.value.content.mentions[0])
+                    .image(encodeURIComponent(post.value.content.mentions[0]))
                     .resize( scale().width(600) )
                     .format('auto')
                     .toURL())

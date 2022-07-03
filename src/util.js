@@ -1,6 +1,6 @@
 const { getHash } = require('@nichoth/multihash')
 
-module.exorts = {
+module.exports = {
     blobHash: function (file) {
         return '&' + getHash(file)
     }

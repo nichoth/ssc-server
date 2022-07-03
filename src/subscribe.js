@@ -28,6 +28,7 @@ function subscribe (bus, state, client) {
         }
 
         state.feeds.set(Object.assign({}, state.feeds(), newState))
+        state.relevantPosts.set(([post]).concat(state.relevantPosts()))
     })
 
     bus.on(evs.following.got, followList => {
