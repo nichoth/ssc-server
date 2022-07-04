@@ -15,6 +15,7 @@ function State (keystore, { admins, dids }) {
             replies: null
         }),
         relevantPosts: observ([]),
+        invitations: observ(null),
 
         // an object, indexed by DID
         feeds: observ(null),

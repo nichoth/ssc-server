@@ -103,6 +103,10 @@ function subscribe (bus, state, client) {
         // console.log('got feed', ev)
         state.feeds.set(Object.assign({}, (state.feeds() || {}), ev))
     })
+
+    bus.on(evs.invitation.got, ev => {
+        state.invitations.set(ev)
+    })
 }
 
 module.exports = subscribe

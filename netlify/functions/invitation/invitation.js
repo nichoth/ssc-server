@@ -32,8 +32,6 @@ exports.handler = async function (ev, ctx) {
                     }))
                 }
             })
-
-
     }
 
     if (ev.httpMethod !== 'POST') {
