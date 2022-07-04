@@ -27,9 +27,8 @@ exports.handler = async function (ev, ctx) {
                 return {
                     statusCode: 200,
                     body: JSON.stringify(res.data.map(doc => {
-                        const redacted = Object.assign({}, doc.data)
-                        delete redacted.value.content.code
-                        return redacted
+                        delete doc.data.value.content.code
+                        return doc.data
                     }))
                 }
             })
