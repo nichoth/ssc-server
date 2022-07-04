@@ -29,7 +29,7 @@ exports.handler = async function (ev, ctx) {
                     body: JSON.stringify(res.data.map(doc => {
                         const redacted = Object.assign({}, doc.data)
                         delete redacted.value.content.code
-                        return doc.data
+                        return redacted
                     }))
                 }
             })

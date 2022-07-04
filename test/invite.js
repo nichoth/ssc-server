@@ -69,7 +69,6 @@ function invite (test, keys, did) {
     test('client.getInvitations', t => {
         Invitation.getByDid(did)
             .then(res => {
-                // console.log('res', JSON.stringify(res, null, 2))
                 t.equal(res[0].value.author, did,
                     'should have the right author')
                 t.notOk(res[0].value.content.code,
