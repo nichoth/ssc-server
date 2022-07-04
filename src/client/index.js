@@ -126,6 +126,10 @@ module.exports = function Client (_keystore) {
             return Invitation.create(ssc, keys, content)
         },
 
+        getInvitations: function (did) {
+            return Invitation.getByDid(did)
+        },
+
         // redeem: function redeemInvitation (ssc, keys, code, content) {
         redeemInvitation: function (keys, code, content) {
             return Invitation.redeem(ssc, keys, code, content)

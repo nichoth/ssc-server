@@ -100,7 +100,7 @@ function subscribe (bus, state, client) {
     })
 
     bus.on(evs.feed.got, ev => {
-        console.log('got feed', ev)
+        // console.log('got feed', ev)
         state.feeds.set(Object.assign({}, (state.feeds() || {}), ev))
     })
 }

@@ -10,12 +10,41 @@ const { admins } = require('../../../src/config.json')
 // this route is to *create* an invitation
 
 exports.handler = async function (ev, ctx) {
+    if (ev.httpMethod === 'GET') {
+        const { did } = ev.queryStringParameters
+
+        // get any invitations that *this DID has created*
+        return client.query(
+            q.Map(
+                q.Paginate(
+                    q.Match( q.Index("invitation_by_inviter"), did )
+                ),
+                
+                q.Lambda( "invitation", q.Get(q.Var("invitation")) )
+            )
+        )
+            .then(res => {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(res.data.map(doc => {
+                        const redacted = Object.assign({}, doc.data)
+                        delete redacted.value.content.code
+                        return doc.data
+                    }))
+                }
+            })
+
+
+    }
+
     if (ev.httpMethod !== 'POST') {
         return {
             statusCode: 405,
             body: 'invalid http method'
         }
     }
+
+    // ------------- *is a POST request* -----------------------
 
     var msg
     try {

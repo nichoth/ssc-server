@@ -56,7 +56,7 @@ function CreateInvitation (props) {
             This server is usable by invitation only. Create a new invitation here.
         </p>
 
-        <p>This code should be copied and pasted to whoever you want to invite.</p>
+        <p>This code should be copy and pasted to whoever you want to invite.</p>
 
         <form onsubmit=${createInv}>
             <${TextInput} name="note" displayName="note"

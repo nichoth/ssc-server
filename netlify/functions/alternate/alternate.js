@@ -7,7 +7,6 @@ var client = new faunadb.Client({
 const { admins } = require('../../../src/config.json')
 const { PUBLIC_KEY } = process.env
 const upload = require('../upload')
-// const { blobHash } = require('../../../src/util')
 const { getHash: blobHash } = require('@nichoth/blob-store')
 
 exports.handler = async function (ev, ctx) {

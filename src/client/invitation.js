@@ -31,6 +31,20 @@ module.exports = {
             })
     },
 
+    getByDid: function (did) {
+        const qs = new URLSearchParams({ did }).toString()
+        const url = (BASE + '/api/invitation' + '?' + qs)
+
+        return fetch(url)
+            .then(res => {
+                if (res.ok) return res.json()
+
+                return res.text().then(text => {
+                    throw new Error(text)
+                })
+            })
+    },
+
     // redeemInvitation: function ({ code, did, username, image }) {
     redeem: function redeemInvitation (ssc, keys, code, content, file) {
         const { did, username } = content
