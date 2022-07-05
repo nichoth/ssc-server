@@ -3,6 +3,7 @@ import Markdown from 'preact-markdown'
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const { CLOUDINARY_CLOUD_NAME } = require('../../../config.json')
+const Eye = require('../../components/eye')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -30,6 +31,8 @@ function Post (props) {
 
     const isFollowing = !!(me.following[post.value.author])
 
+    const isYou = (post.value.author === me.did)
+
     return html`<li class="post">
         <a href="/post/${encodeURIComponent(post.key)}">
             <img src=${url} />
@@ -37,8 +40,6 @@ function Post (props) {
                 <${Markdown} markdown=${post.value.content.text} />
             </p>
         </a>
-
-        <hr />
 
         <div class="user-info">
             <a class="user-link" href="/${post.value.author}">
@@ -48,7 +49,7 @@ function Post (props) {
 
                 <span class="author-name">
                     ${authorProfile.username}
-                    ${post.value.author === me.did ?
+                    ${isYou ?
                         html`<span class="is-you">
                             (you)
                         </span>` :
@@ -57,13 +58,16 @@ function Post (props) {
                 </span>
             </a>
 
-            ${isFollowing ?
-                html`<span>
-                    ${isFollowing ?
-                        'foll' :
-                        ''}
-                </span>` :
-                null
+            ${isYou ?
+                null :
+                (isFollowing ?
+                    html`<span class="following-eye">
+                        <${Eye} />
+                    </span>` :
+
+                    html`<span class="not-following-eye">
+                        <${Eye} />
+                    </span>`)
             }
         </div>
     </li>`
