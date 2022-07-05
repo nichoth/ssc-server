@@ -95,9 +95,7 @@ function Post (props) {
 
         <hr />
 
-        <p>
-            <${Markdown} markdown=${singlePost.msg.value.content.text} />
-        </p>
+        <${Markdown} markdown=${singlePost.msg.value.content.text} />
 
         ${singlePost.replies && singlePost.replies.length ?
             html`<ul class="post-replies">

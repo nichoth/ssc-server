@@ -33,12 +33,11 @@ function Post (props) {
 
     const isYou = (post.value.author === me.did)
 
+            // <${Markdown} markdown=${post.value.content.text} />
+
     return html`<li class="post">
         <a href="/post/${encodeURIComponent(post.key)}">
             <img src=${url} />
-            <p>
-                <${Markdown} markdown=${post.value.content.text} />
-            </p>
         </a>
 
         <div class="user-info">

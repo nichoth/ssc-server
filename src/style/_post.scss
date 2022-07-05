@@ -20,7 +20,7 @@
         // max-height: 90vh;
         height: 90vh;
         width: 100%;
-        margin-bottom: 4rem;
+        // margin-bottom: 4rem;
 
         @include media.portrait {
             height: initial;
@@ -45,6 +45,7 @@
 .post-replies {
     list-style: none;
     padding: 0;
+    margin-top: 4rem;
 
     li.reply {
         border: 1px solid gray;

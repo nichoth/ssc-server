@@ -21,12 +21,11 @@ function Post (props) {
         .format('auto')
         .toURL())
 
+            // <${Markdown} markdown=${post.value.content.text} />
+
     return html`<li class="post">
         <a href="/post/${encodeURIComponent(post.key)}">
             <img src=${url} />
-            <p>
-                <${Markdown} markdown=${post.value.content.text} />
-            </p>
         </a>
     </li>`
 
