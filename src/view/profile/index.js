@@ -61,27 +61,14 @@ function Profile (props) {
 
         <ul class="user-feed">
             ${feed.map(post => {
-                // const url = (cld
-                //     .image(encodeURIComponent(post.value.content.mentions[0]))
-                //     .resize( scale().width(600) )
-                //     .format('auto')
-                //     .toURL())
-
                 const authorProfile = post.value.author === me.did ?
                     me.profile :
-                    // TODO -- multiple users
+                    // TODO -- use `feed` key is state
                     me.following[post.value.author]
 
                 return html` <${Post} me=${me} authorProfile=${authorProfile}
                     post=${post}
                 />`
-
-                // return html`<li class="post">
-                //     <a href="/post/${encodeURIComponent(post.key)}">
-                //         <img src=${url} />
-                //         <p>${post.value.content.text}</p>
-                //     </a>
-                // </li>`
             })}
         </ul>
     </div>`

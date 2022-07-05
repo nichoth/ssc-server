@@ -101,15 +101,25 @@ function CreateInvitation (props) {
                         <span>note</span>
                     </li>`
                 ].concat(invitations.map(inv => {
-                    const invAuthor = inv.value.author
+                    console.log('inv.value.author', inv.value.author)
+                    console.log('me.profile', me.profile)
+
+                    console.log('eq???', inv.value.author === me.did)
+
+                    const invAuthor = (inv.value.author === me.did ?
+                        me.profile :
+                        ((feeds || {})[inv.value.author] || {}).profile || {})
+
+                    console.log('author', invAuthor)
+
+
+                    // TODO -- use `feeds` key in state
 
                     return html`<li class="pending-invitation">
                         <span class="invitation-author">
-                            ${invAuthor === me.did ?
-                                me.profile.username :
-                                ((((feeds || {})[invAuthor] || {}).profile|| {})
-                                    .username)
-                            }
+                            <a href=${'/@' + invAuthor.username}>
+                                ${invAuthor.username}
+                            </a>
                         </span>
 
                         <span class="invitation-note">
