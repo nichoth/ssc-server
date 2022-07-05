@@ -45,7 +45,17 @@ module.exports = {
             })
     },
 
-    // redeemInvitation: function ({ code, did, username, image }) {
+    getAll: function () {
+        return fetch(BASE + '/api/invitation')
+            .then(res => {
+                if (res.ok) return res.json()
+
+                return res.text().then(text => {
+                    throw new Error(text)
+                })
+            })
+    },
+
     redeem: function redeemInvitation (ssc, keys, code, content, file) {
         const { did, username } = content
         if (!did || !username) {

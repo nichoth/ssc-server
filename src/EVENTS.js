@@ -15,7 +15,7 @@ var evs = namespace({
     //     'change']
     feed: ['got'],
     identity: ['setProfile', 'newDid', 'change', 'setUsername'],
-    invitation: ['got'],
+    invitation: ['got', 'new'],
     reply: ['created']
 })
 

@@ -107,6 +107,10 @@ function subscribe (bus, state, client) {
     bus.on(evs.invitation.got, ev => {
         state.invitations.set(ev)
     })
+
+    bus.on(evs.invitation.new, ev => {
+        state.invitations.set((state.invitations() || []).concat(ev))
+    })
 }
 
 module.exports = subscribe

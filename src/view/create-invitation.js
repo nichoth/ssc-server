@@ -7,7 +7,7 @@ const evs = require('../EVENTS')
 const CopyIcon = require('./components/copy-solid.js')
 
 function CreateInvitation (props) {
-    const { me, emit, client, invitations } = props
+    const { me, feeds, emit, client, invitations } = props
     const [isResolving, setResolving] = useState(false)
     const [invCode, setInvCode] = useState(null)
     const [hasCopied, setCopied] = useState(false)
@@ -20,13 +20,19 @@ function CreateInvitation (props) {
         if (!me || !me.did) return
         if (!isAdmin) return
 
-        client.getInvitations(me.did)
-            .then(res => {
-                emit(evs.invitation.got, res)
-            })
+        client.getInvitations()
+            .then(res => emit(evs.invitation.got, res))
             .catch(err => {
                 console.log('arg', err)
             })
+
+        // client.getInvitations(me.did)
+        //     .then(res => {
+        //         emit(evs.invitation.got, res)
+        //     })
+        //     .catch(err => {
+        //         console.log('arg', err)
+        //     })
     }, [me.did])
 
     if (!isAdmin) return html`<div class="route create-invitation">
@@ -37,13 +43,15 @@ function CreateInvitation (props) {
         ev.preventDefault()
         const note = ev.target.note.value
 
-
-
         client.createInvitation(me.keys, { note })
             .then(res => {
                 setResolving(false)
                 setCopied(false)
                 setInvCode(res.value.content.code)
+                emit(evs.invitation.new, res)
+            })
+            .catch(err => {
+                console.log('err creating invitation', err)
             })
     }
 
@@ -72,9 +80,11 @@ function CreateInvitation (props) {
             This server is usable by invitation only. Create a new invitation here.
         </p>
 
-        <p>This code should be copy and pasted to whoever you want to invite.</p>
+        <p>
+            This code should be copy and pasted to whoever you want to invite.
+        </p>
 
-        <form onsubmit=${createInv}>
+        <form onsubmit=${createInv} class="invitation-form">
             <${TextInput} name="note" displayName="note"
                 minlength="1" required=${false}
             />
@@ -85,6 +95,34 @@ function CreateInvitation (props) {
                 Create an invitation
             <//>
         </form>
+
+        ${invitations && invitations.length ?
+            html`<h2>Pending Invitations</h2>
+            <ul class="pending-invitations">
+                ${[
+                    html`<li class="inv-head">
+                        <span>author</span>
+                        <span>note</span>
+                    </li>`
+                ].concat(invitations.map(inv => {
+                    const invAuthor = inv.value.author
+
+                    return html`<li class="pending-invitation">
+                        <span class="invitation-author">
+                            ${invAuthor === me.did ?
+                                me.profile.username :
+                                (((feeds || {})[invAuthor] || {}).profile|| {})
+                                    .username
+                            }
+                        </span>
+                        <span class="invitation-note">
+                            ${inv.value.content.note || html`<em>none</em>`}
+                        </span>
+                    </li>`
+                }))}
+            </ul>` :
+            null
+        }
     </div>`
 }
 

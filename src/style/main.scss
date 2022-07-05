@@ -13,6 +13,7 @@ $main-blue: #4285f4;
 @use './hamburger';
 @use './post';
 @use './profile';
+@use './invitations';
 // @use './feed';
 @use "../../node_modules/@nichoth/forms/style/text-input";
 @use "../../node_modules/@nichoth/forms/style/button";

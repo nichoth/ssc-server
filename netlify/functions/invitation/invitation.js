@@ -13,14 +13,42 @@ exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
         const { did } = ev.queryStringParameters
 
-        // get any invitations that *this DID has created*
+        if (did) {
+            // get any invitations that *this DID has created*
+            return client.query(
+                q.Map(
+                    q.Paginate(
+                        q.Match( q.Index("invitation_by_inviter"), did )
+                    ),
+                    
+                    q.Lambda( "invitation", q.Get(q.Var("invitation")) )
+                )
+            )
+                .then(res => {
+                    return {
+                        statusCode: 200,
+                        body: JSON.stringify(res.data.map(doc => {
+                            delete doc.data.value.content.code
+                            return doc.data
+                        }))
+                    }
+                })
+                .catch(err => {
+                    return {
+                        statusCode: 500,
+                        body: err.toString()
+                    }
+                })
+        }
+
+        // q.Paginate(q.Documents(q.Collection('<your collection>'))),
         return client.query(
             q.Map(
                 q.Paginate(
-                    q.Match( q.Index("invitation_by_inviter"), did )
+                    q.Documents(q.Collection('invitations'))
                 ),
-                
-                q.Lambda( "invitation", q.Get(q.Var("invitation")) )
+
+                q.Lambda("inv", q.Get(q.Var("inv")))
             )
         )
             .then(res => {
@@ -30,6 +58,12 @@ exports.handler = async function (ev, ctx) {
                         delete doc.data.value.content.code
                         return doc.data
                     }))
+                }
+            })
+            .catch(err => {
+                return {
+                    statusCode: 500,
+                    body: err.toString()
                 }
             })
     }

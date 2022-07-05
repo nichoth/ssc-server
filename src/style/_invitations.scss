@@ -1,0 +1,28 @@
+.pending-invitations {
+    // display: table;
+    list-style: none;
+}
+
+li.pending-invitation, .inv-head {
+    // max-width: 20rem;
+    max-width: 30rem;
+    // display: flex;
+    // justify-content: flex-start;
+    // display: table-row;
+    
+    > span {
+        // margin-right: 1rem;
+        column-width: 30rem;
+        display: table-cell;
+    }
+}
+
+.pending-invitation {
+    margin-bottom: 0.5rem;
+}
+
+.inv-head {
+    // display: table-header-group;
+    border-bottom: 1px solid;
+    margin-bottom: 0.5rem;
+}
