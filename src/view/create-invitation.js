@@ -25,14 +25,6 @@ function CreateInvitation (props) {
             .catch(err => {
                 console.log('arg', err)
             })
-
-        // client.getInvitations(me.did)
-        //     .then(res => {
-        //         emit(evs.invitation.got, res)
-        //     })
-        //     .catch(err => {
-        //         console.log('arg', err)
-        //     })
     }, [me.did])
 
     if (!isAdmin) return html`<div class="route create-invitation">
@@ -59,6 +51,10 @@ function CreateInvitation (props) {
         ev.preventDefault()
         navigator.clipboard.writeText(invCode)
         setCopied(true)
+    }
+
+    function revoke (ev) {
+
     }
 
     return html`<div class="route create-invitation">
@@ -111,12 +107,19 @@ function CreateInvitation (props) {
                         <span class="invitation-author">
                             ${invAuthor === me.did ?
                                 me.profile.username :
-                                (((feeds || {})[invAuthor] || {}).profile|| {})
-                                    .username
+                                ((((feeds || {})[invAuthor] || {}).profile|| {})
+                                    .username)
                             }
                         </span>
+
                         <span class="invitation-note">
                             ${inv.value.content.note || html`<em>none</em>`}
+                        </span>
+
+                        <span class="revoke-inv">
+                            <button onclick=${revoke}>
+                                revoke
+                            </button>
                         </span>
                     </li>`
                 }))}
