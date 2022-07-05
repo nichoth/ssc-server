@@ -48,12 +48,12 @@ function Post (props) {
 
                 <span class="author-name">
                     ${authorProfile.username}
-                    <span class="is-you">
-                        ${post.value.author === me.did ?
-                            ' (you)' :
-                            null
-                        }
-                    </span>
+                    ${post.value.author === me.did ?
+                        html`<span class="is-you">
+                            (you)
+                        </span>` :
+                        null
+                    }
                 </span>
             </a>
 

@@ -129,6 +129,10 @@ button, .form-stuff button {
     align-items: center;
     justify-content: space-between;
 
+    .is-you {
+        margin-left: 1rem;
+    }
+
     a.user-link {
         display: flex;
         align-items: center;
