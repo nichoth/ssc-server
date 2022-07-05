@@ -1,7 +1,6 @@
 import { html } from 'htm/preact'
 const { marked } = require('marked')
-// const Post = require('./post')
-const Post = require('../post-li')
+const Post = require('../components/post-li/with-author')
 
 function Home (props) {
     console.log('home props', props)

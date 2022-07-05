@@ -3,8 +3,7 @@ import { useState } from 'preact/hooks';
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
-// const evs = require('../../EVENTS')
-const Post = require('../post-li')
+const Post = require('../components/post-li')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -23,6 +22,7 @@ function Profile (props) {
     const avatarUrl = (cld
         .image(encodeURIComponent(profile.image))
         .format('auto')
+        .resize( scale().width(600) )
         .toURL()
     )
 
@@ -63,12 +63,10 @@ function Profile (props) {
             ${feed.map(post => {
                 const authorProfile = post.value.author === me.did ?
                     me.profile :
-                    // TODO -- use `feed` key is state
+                    // TODO -- use `feed` key in state
                     me.following[post.value.author]
 
-                return html` <${Post} me=${me} authorProfile=${authorProfile}
-                    post=${post}
-                />`
+                return html` <${Post} post=${post} />`
             })}
         </ul>
     </div>`
