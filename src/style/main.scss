@@ -121,10 +121,13 @@ button, .form-stuff button {
     margin-left: 1rem;
 }
 
-// multiple routes
+// used in multiple routes
 .user-info {
     display: inline-block;
     max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     a.user-link {
         display: flex;

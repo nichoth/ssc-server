@@ -22,11 +22,13 @@ function Post (props) {
             .toURL()) :
         ''
 
-        const url = (cld
-            .image(encodeURIComponent(post.value.content.mentions[0]))
-            .resize( scale().width(400) )
-            .format('auto')
-            .toURL())
+    const url = (cld
+        .image(encodeURIComponent(post.value.content.mentions[0]))
+        .resize( scale().width(400) )
+        .format('auto')
+        .toURL())
+
+    const isFollowing = !!(me.following[post.value.author])
 
     return html`<li class="post">
         <a href="/post/${encodeURIComponent(post.key)}">
@@ -54,9 +56,17 @@ function Post (props) {
                     </span>
                 </span>
             </a>
+
+            ${isFollowing ?
+                html`<span>
+                    ${isFollowing ?
+                        'foll' :
+                        ''}
+                </span>` :
+                null
+            }
         </div>
     </li>`
-
 }
 
 module.exports = Post

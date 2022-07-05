@@ -35,7 +35,7 @@ function Profile (props) {
     if (!feed) return null
 
     return html`<div class="route profile">
-        <div class="user-info">
+        <div class="profile-user-info">
             <div class="profile-image">
                 <h2>${profile.username}</h2>
 
