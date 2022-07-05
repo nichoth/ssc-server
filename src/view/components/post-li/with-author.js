@@ -1,9 +1,9 @@
 import { html } from 'htm/preact'
-import Markdown from 'preact-markdown'
+// import Markdown from 'preact-markdown'
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const { CLOUDINARY_CLOUD_NAME } = require('../../../config.json')
-const Eye = require('../../components/eye')
+// const Eye = require('../../components/eye')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -42,7 +42,9 @@ function Post (props) {
 
         <div class="user-info">
             <a class="user-link" href="/${post.value.author}">
-                <span class="author-image">
+                <span class=${'author-image' + (isFollowing ?
+                    ' is-following' : '')}
+                >
                     <img src=${authorImg} alt="user avatar" />
                 </span>
 
@@ -56,18 +58,6 @@ function Post (props) {
                     }
                 </span>
             </a>
-
-            ${isYou ?
-                null :
-                (isFollowing ?
-                    html`<span class="following-eye">
-                        <${Eye} />
-                    </span>` :
-
-                    html`<span class="not-following-eye">
-                        <${Eye} />
-                    </span>`)
-            }
         </div>
     </li>`
 }

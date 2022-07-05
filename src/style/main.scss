@@ -179,6 +179,12 @@ button, .form-stuff button {
         width: 2rem;
         margin-right: 1rem;
 
+        &.is-following {
+            img {
+                border: 3px solid blue;
+            }
+        }
+
         img {
             width: 100%!important;
             height: 100%!important;
