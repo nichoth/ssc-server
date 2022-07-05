@@ -4,6 +4,7 @@ const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const { CLOUDINARY_CLOUD_NAME } = require('../../config.json')
 // const evs = require('../../EVENTS')
+const Post = require('../post-li')
 
 const cld = cloudinaryUrl({
     cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
@@ -60,18 +61,27 @@ function Profile (props) {
 
         <ul class="user-feed">
             ${feed.map(post => {
-                const url = (cld
-                    .image(encodeURIComponent(post.value.content.mentions[0]))
-                    .resize( scale().width(600) )
-                    .format('auto')
-                    .toURL())
+                // const url = (cld
+                //     .image(encodeURIComponent(post.value.content.mentions[0]))
+                //     .resize( scale().width(600) )
+                //     .format('auto')
+                //     .toURL())
 
-                return html`<li class="post">
-                    <a href="/post/${encodeURIComponent(post.key)}">
-                        <img src=${url} />
-                        <p>${post.value.content.text}</p>
-                    </a>
-                </li>`
+                const authorProfile = post.value.author === me.did ?
+                    me.profile :
+                    // TODO -- multiple users
+                    me.following[post.value.author]
+
+                return html` <${Post} me=${me} authorProfile=${authorProfile}
+                    post=${post}
+                />`
+
+                // return html`<li class="post">
+                //     <a href="/post/${encodeURIComponent(post.key)}">
+                //         <img src=${url} />
+                //         <p>${post.value.content.text}</p>
+                //     </a>
+                // </li>`
             })}
         </ul>
     </div>`
