@@ -101,11 +101,6 @@ function CreateInvitation (props) {
                         <span>note</span>
                     </li>`
                 ].concat(invitations.map(inv => {
-                    console.log('inv.value.author', inv.value.author)
-                    console.log('me.profile', me.profile)
-
-                    console.log('eq???', inv.value.author === me.did)
-
                     const invAuthor = (inv.value.author === me.did ?
                         me.profile :
                         ((feeds || {})[inv.value.author] || {}).profile || {})

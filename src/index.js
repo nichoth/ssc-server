@@ -40,6 +40,24 @@ const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 
 
+
+if ('serviceWorker' in navigator) {
+    console.log('registering')
+
+    navigator.serviceWorker
+        .register( "./service-worker.js", { scope: './' })
+        .then(function() {
+            console.log( "Service Worker Registered" );
+        })
+        .catch(function( err ) {
+            console.log( "Service Worker Failed to Register", err );
+        });
+}
+
+
+
+
+
 console.log('**storename**', storeName)
 ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     const state = State(keystore, { admins, dids })
@@ -47,11 +65,9 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     const client = Client(keystore)
     subscribe(bus, state, client)
 
-
     if (process.env.NODE_ENV === 'test') {
         window.client = client
     }
-
 
     state(function onChange (newState) {
         console.log('change', newState)
