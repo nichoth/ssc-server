@@ -6,6 +6,7 @@ const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const EditableTextarea = require('./components/editable-textarea')
 const Profile = require('./components/profile')
+// const MiniProfile = require('./components/profile')
 import Markdown from 'preact-markdown'
 
 const cld = cloudinaryUrl({
@@ -84,14 +85,11 @@ function Post (props) {
             <img src=${url} />
         </div>
 
-        <div class="user-info">
-            <a class="user-link" href=${'/' + singlePost.msg.value.author}>
-                <span class="author-image">
-                    <img class="author-image" src=${avatarUrl} />
-                </span>
-                <span class="author-name">${profile.username}</span>
-            </a>
-        </div>
+
+        <${Profile} profile=${profile}
+            href=${'/@' + profile.username}
+            className="user-info"
+        />
 
         <hr />
 

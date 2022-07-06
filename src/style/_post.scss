@@ -63,33 +63,16 @@
     }
 
     a.profile-link {
-        display: flex;
-        align-items: center;
-        width: fit-content;
         transition: opacity 0.3s;
         opacity: 0.6;
 
         @include media.touch {
             opacity: 1;
         }
-
-        &:hover {
-            opacity: 1;
-            filter: drop-shadow(2px 4px 6px black);
-        }
     }
 
     .replier-info {
         margin: 0.2rem 1rem;
         margin-top: 0.5rem;
-
-        img {
-            width: 2rem;
-            height: 2rem;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 1px solid;
-            margin-right: 1rem;
-        }
     }
 }
