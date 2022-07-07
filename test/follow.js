@@ -147,6 +147,8 @@ function followTests (test, keys, did) {
     test('client.follow', t => {
         Follow.post(ssc, keys, [alice.did])
             .then((res) => {
+                // res is an array b/c you can follow multiple people
+                // in this request
                 t.equal(res[0].value.author, did,
                     'should have the expected message author')
                 t.equal(res[0].value.content.contact, alice.did,

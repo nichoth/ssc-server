@@ -11,7 +11,8 @@
       "did": "did:key:z82T5Z5a12L4fQEgT8SUXoFJTWXnxbHBCwTvveaFiQPXXfKwebaJimKw2dK6i8ETgisL9rKCaMstKsmW6FwY9JC455RQT"
     },
     {
-      "did": "did:key:z82T5Yjfd8wNvVJJN627CmdH6ZZzxTJirkNZpAS4rnyhrY8qi9HR4xzgjAhZWthM3HzZLsr6tkCVedkVYkaMTyV7eqido"
+      "//": "for netlify (live site)",
+      "did": "did:key:z82T5VhYdBgx9csjo3cojvuKndDxGRueCXucRvwFjwZrFcWT6MFdYiYXsrKpj38xFHhwp8ySdXAH3WYBY19DQ1PCj6iJS"
     }
   ]
 }

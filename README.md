@@ -30,8 +30,10 @@ did:key:z82T5ZbpFp9b6nbTVJDTwU7CX8FU3tsiV4mXRkaarHsmXpzWGC4EgJNFLM4CDJrS8HRb3zTX
 
 * [How to make PWAs installable](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Installable_PWAs)
 
+* [Add to Home screen](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen)
+
 needs the following things:
-  - [a webmanifest](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen)
+  - [a webmanifest](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen#manifest)
   - [a service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
   - [link in html](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen#link_the_html_to_the_manifest)
 
