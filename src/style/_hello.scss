@@ -1,0 +1,81 @@
+.hello {
+    form, label {
+        max-width: 40rem;
+    }
+}
+
+body {
+    &.hello {
+        backdrop-filter: brightness(1.8);
+        background: linear-gradient(304deg,
+            rgb(248, 242, 146), rgb(7, 190, 216), rgb(253, 87, 144),
+            rgb(255, 168, 73), rgb(248, 242, 146)) rgb(255, 255, 255);
+        min-height: 150vh;
+        height: fit-content;
+        margin: 0;
+        padding: 1rem;
+        margin-top: -1rem;
+
+        h2 {
+            margin-top: 2rem;
+        }
+
+        .json-example {
+            background-color: white;
+            padding: 2rem;
+            border: 1px solid gray;
+            border-radius: 8px;
+            overflow: auto;
+        }
+
+        .my-did {
+            margin-top: 0.2rem;
+        }
+
+        .my-avatar {
+            margin-right: 0.4rem;
+            padding: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+
+            &:hover {
+                opacity: 0.4;
+            }
+
+            img {
+                height: 4rem;
+                width: 4rem;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+        }
+
+        #avatar-input {
+            display: none;
+        }
+
+    }
+
+
+    .set-profile {
+        margin-bottom: 2rem;
+        background-color: whitesmoke;
+        padding: 1rem;
+        border: 1px solid;
+        border-radius: 8px;
+
+        .form-stuff {
+            &:last-child {
+                display: block;
+            }
+        }
+    }
+}

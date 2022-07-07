@@ -15,6 +15,6 @@ exports.handler = function (ev, ctx) {
     return createDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
         console.log('Fauna Database schema has been created')
     }).catch(err => {
-        console.log('*oh no*', err)
+        console.log('*db create err*', err)
     })
 }

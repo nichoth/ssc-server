@@ -1,133 +1,175 @@
 import { html } from 'htm/preact'
-import { useState } from 'preact/hooks';
 import { render } from 'preact'
 var route = require('route-event')()
 var Bus = require('@nichoth/events')
-var raf = require('raf')
-var evs = require('./EVENTS')
-var Keys  = require('./keys')
-var Identity = require('./identity')
+const ssc = require('@nichoth/ssc/web')
 var subscribe = require('./subscribe')
 var State = require('./state')
-var router = require('./router')()
-var Shell = require('./view/shell')
+const Connector = require('./connector')
+const config = require('./config.json')
+var { appName, admins, CLOUDINARY_CLOUD_NAME } = config
+appName = appName || 'ssc-demo'
+const Client = require('./client')
+const evs = require('./EVENTS')
+const { LS_NAME } = require('./constants')
+const Profile = require('./profile')
 
-var bus = Bus({ memo: true })
+console.log('*appName*', appName)
+console.log('*NODE_ENV*', process.env.NODE_ENV)
+console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
 
-// @TODO -- should use server to store the user name
-var profile = Identity.get() || null
-var keys = Keys.get() || null
-bus.emit(evs.keys.got, keys)
-var state = State(keys, profile)
-subscribe(bus, state)
+// const env = process.env.NODE_ENV
+
+// dids is a map of { did: { did, username, image: hash, storeName } }
+// storeName is the name for the localForage store
+const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+const lastUser = dids ? dids.lastUser : null
+
+console.log('*alternate dids*', dids)
+
+// function getRandomInt (max) {
+//     return Math.floor(Math.random() * max);
+// }
+
+// const storeName = env === 'cypress' ?
+//     // how to get a random storeName?
+//     getRandomInt(9999) :
+//     (dids ? dids[lastUser] : {}).storeName || appName
+
+const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 
-// for testing
-window.state = state
 
 
-if (process.env.NODE_ENV === 'test') {
-    require('./test-stuff')(state)
-    window.bus = bus
+if ('serviceWorker' in navigator) {
+    console.log('registering')
+
+    navigator.serviceWorker
+        .register( "./service-worker.js", { scope: './' })
+        .then(function() {
+            console.log( "Service Worker Registered" );
+        })
+        .catch(function( err ) {
+            console.log( "Service Worker Failed to Register", err );
+        });
 }
 
 
-// TODO -- around here, make a request to get the profile from server,
-// and set the profile in state/local-storage if it is different
 
-// TODO -- need to handle the case where state.me is not set
 
-var emit = bus.emit.bind(bus)
 
-// save the profile to localStorage when it changes
-// it gets set in the view functions i think
-// should do this is the subscription
-state.me.profile(function onChange (profile) {
-    console.log('***profile change', profile)
-    Identity.save(profile)
-})
+console.log('**storename**', storeName)
+ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
+    const state = State(keystore, { admins, dids })
+    var bus = Bus({ memo: true })
+    const client = Client(keystore)
+    subscribe(bus, state, client)
 
-route(function onRoute (path) {
-    // we update the state here with the path
-    // then the `connector` finds the view via the router
-
-    // do you have an ID?
-    // does the server follow you?
-    // if not go to /login
-
-    console.log('***on route', path)
-
-    // check this synchronously for now,
-    // change it later if necessary
-    if (!state.me.secrets().id && path !== '/hello') {
-        console.log('!!!not id!!!')
-        // if you don't have an id, then go to a login screen
-        return route.setRoute('/hello')
+    if (process.env.NODE_ENV === 'test') {
+        window.client = client
     }
 
-    // if you have an ID, but the server is not following you,
-    // show an invitation route
-
-    state.route.set(path)
-})
-
-render(html`<${Connector} emit=${emit} state=${state}
-    setRoute=${route.setRoute}
-/>`, document.getElementById('content'))
-
-
-// connect preact state with observ state
-function Connector ({ emit, state, setRoute }) {
-    const [_state, setState] = useState(state())
-
-    // here we connect `state` to the preact state
     state(function onChange (newState) {
-        raf(() => {
-            setState(newState)
-        })
+        console.log('change', newState)
     })
 
-    var match = router.match(_state.route)
-    if (!match) {
-        console.log('not match')
-        return null
+    // for testing
+    window.state = state
+    window.LS_NAME = LS_NAME
+
+    var emit = bus.emit.bind(bus)
+
+    route(function onRoute (path) {
+        console.log('**on route**', path)
+        state.route.set(path)
+        window.scrollTo(0, 0)
+    })
+
+    function getFirstData (did) {
+        return Promise.all([
+            client.serverFollows(did),
+            client.getProfile(did),
+            client.getFeed(did),
+            client.getRelevantPosts(did),
+            client.getFollowing(did)
+        ])
+            .then(([serverFollows, profile, feed, posts, following]) => {
+                console.log('initial fetch', serverFollows, profile, feed,
+                    posts, following)
+
+                console.log('feed', feed)
+                console.log('postssssssssssssssssss', posts)
+                console.log('follllllllllllll', following)
+
+                state.relevantPosts.set(posts)
+                state.me.profile.hasFetched.set(true)
+                Profile.set(profile.value.content)
+                emit(evs.identity.setProfile, profile.value.content)
+                const feedEv = {}
+                feedEv[did] = {
+                    posts: feed,
+                    profile: profile.value.content
+                }
+                emit(evs.feed.got, feedEv)
+                emit(evs.following.got, following.reduce((obj, msg) => {
+                    obj[msg.value.author] = msg.value.content
+                    return obj
+                }, {}))
+
+                // render the app *after* you fetch the profile initially
+                render(html`<${Connector} emit=${emit} state=${state}
+                    setRoute=${route.setRoute} client=${client}
+                />`, document.getElementById('content'))
+            })
+            .catch(err => {
+                console.log('***profile errrr***', err)
+                route.setRoute('/hello')
+                render(html`<${Connector} emit=${emit} state=${state}
+                    setRoute=${route.setRoute} client=${client}
+                />`, document.getElementById('content'))
+            })
     }
-    var { params } = match
-    var route = match ? match.action(match) : null
-    var routeView = route ? route.view : null
-    var subView = route ? route.subView : null
 
-    // var { serverFollowing } = _state
+    // don't show anything before your username has returned
+    ssc.getDidFromKeys(keystore).then(did => {
+        state.me.did.set(did)
 
-    // do you have an ID?
-    // does the server follow you?
-    // if not:
-    // if (!serverFollowing) {
-    //     return html`<div class="login">
+        if (process.env.NODE_ENV === 'test') {
+            console.log('**my did**', did)
+        }
 
-    //     </div>`
-    // }
+        const isAdmin = (admins || []).find(user => user.did === did)
+        if (isAdmin) {
+            // you can only invite people if you are an *admin*
+            // that rule may change in the future
+            client.getRedemptions(did)
+                .then(res => {
+                    const didsToFollow = res.map(msg => msg.value.author)
+                    console.log('dids to follow', didsToFollow)
 
-    if (match.route === '/hello' || match.route === '/invitation') {
-        // don't show the `shell` component in this case
-        return html`<${routeView} setRoute=${setRoute} emit=${emit}
-            ...${_state} path=${_state.route}
-        />`
-    }
+                    // here, make a function, like `followViaInvitation`
+                    // that will follow them, and also delete the redemption msg
+                    // return client.follow(didsToFollow)
 
-    return html`<${Shell} setRoute=${setRoute} emit=${emit} ...${_state}
-        path=${_state.route}
-    >
-        <${routeView} emit=${emit} ...${_state} params=${params}
-            setRoute=${setRoute}
-            path=${_state.route}
-        >
-            ${subView ?
-                html`<${subView} emit=${emit} ...${_state}
-                    setRoute=${setRoute}
-                />` :
-                null
-            }
-        <//>
-    <//>`
-}
+                    if (!didsToFollow.length) return null
+
+                    return client.followViaInvitation(didsToFollow)
+                })
+                .then(followResponse => {
+                    console.log('follow response', followResponse)
+                    return getFirstData(did)
+                })
+                .catch(err => {
+                    if (err.toString().includes('no redemptions waiting')) {
+                        // do nothing
+                        console.log('you dont have to follow anyone')
+                        return getFirstData(did)
+                    }
+
+                    throw err
+                })
+        } else {
+            getFirstData(did)
+        }
+    })
+})

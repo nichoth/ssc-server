@@ -1,0 +1,118 @@
+@use './media' as media;
+
+$nav-opacity: 0.8;
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: $nav-opacity; }
+}
+
+.shell {
+    hr {
+        border: 1px solid black;
+        margin: 0;
+    }
+
+    h1 {
+        display: inline-block;
+        margin: 0;
+        margin-right: 0.2rem;
+    }
+
+    li.name {
+        &.resolving {
+            opacity: 0.4;
+        }
+
+        .name-editor.resolving {
+            // TODO -- change this so the style makes more sense
+            border-bottom: 4px solid gray;
+        }
+    }
+
+    .mobile-nav {
+        display: none;
+        text-align: right;
+        padding-right: 1rem;
+
+        @include media.mobile {
+            display: block;
+        }
+
+        &.open {
+            .burger {
+                .line {
+                    background-color: white;
+                }
+            }
+        }
+    }
+
+    .mobile-nav-list {
+        display: none;
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        animation: fadeIn 1s;
+
+        &.open {
+            opacity: $nav-opacity;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+
+            ul {
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin: 0;
+                margin-bottom: 30vh;
+
+                li {
+                    margin-bottom: 2rem;
+
+                    a {
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.nav-part {
+    margin: 0;
+    list-style: none;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    padding-top: 0.4rem;
+    // background-color: white;
+    background-color: #ffffffb0;
+    padding-bottom: 0.2rem;
+
+    @include media.mobile {
+        display: none;
+    }
+
+    li {
+        a {
+            &:hover {
+                border-bottom: 2px solid gray;
+            }
+        }
+
+        &.active {
+            border-bottom: 3px solid;
+            a {
+                border: none;
+            }
+        }
+    }
+}

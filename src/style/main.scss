@@ -1,10 +1,20 @@
+$main-blue: #4285f4;
+
+@use './z-index';
+@use './variables';
 @use './whoami';
-@use './post-list';
-@use './single-image';
 @use './shell';
-@use './new';
-@use './profile';
 @use './hello';
+@use './components';
+@use './home';
+@use './new-pin';
+@use './new-post';
+@use './create-invitation.scss';
+@use './hamburger';
+@use './post';
+@use './profile';
+@use './invitations';
+// @use './feed';
 @use "../../node_modules/@nichoth/forms/style/text-input";
 @use "../../node_modules/@nichoth/forms/style/button";
 
@@ -12,14 +22,45 @@
     to {transform: rotate(360deg);}
 }
 
+.route {
+    margin: 1rem;
+}
+
+.err-msg {
+    border-radius: 8px;
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid red;
+    background-color: #fda6a6;
+}
+
+.icon {
+    height: 1rem;
+    width: 1rem;
+    background: none;
+    border: none;
+    padding: 0;
+
+    &:hover {
+        opacity: 0.4;
+    }
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
+
 .success {
-    color: green;
+    color: #008000;
 }
 
 body {
-    // background-color: pink;
-    background-color: lightgray;
-    margin-bottom: 6rem;
+    background: linear-gradient(228deg, #cbc8c8, #ffffff, #dcdcdc, #ffffff, #b6b6b6);
+    min-height: 100vh;
+    margin: 6rem 0;
+    margin-top: 0;
+    font-family: sans-serif;
 }
 
 h1 {
@@ -41,36 +82,11 @@ a {
     padding: 1rem;
 }
 
-button {
-    &:disabled {
-        &:hover {
-            cursor: wait;
-        }
-    }
+button, .form-stuff button {
     &:hover {
         cursor: pointer;
     }
-}
-
-// this is here b/c it's in two routes -- the home and profile views
-.icons {
-    .follow-btn {
-        font-family: initial;
-        font-size: 3rem;
-        padding: 0;
-        background: none;
-        border: none;
-        &:hover {
-            color: blue;
-        }
-
-        &.is-following {
-            color: blue;
-            &:hover {
-                color: cyan;
-            }
-        }
+    &:disabled {
+        cursor: not-allowed;
     }
-    display: inline-block;
-    margin-left: 1rem;
 }

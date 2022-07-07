@@ -1,0 +1,128 @@
+.route.whoami {
+    margin: 1vw;
+
+    .other-dids {
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: center;
+        }
+
+        .is-admin {
+            margin-left: 2rem;
+            border: 2px solid;
+            padding: 0.2rem 0.8rem;
+            color: blue;
+        }
+
+        .avatar {
+            display: inline-block;
+            margin-right: 1rem;
+
+            img {
+                border: 1px solid;
+                border-radius: 50%;
+                height: 2rem;
+                width: 2rem;
+                object-fit: cover;
+            }
+        }
+
+        li {
+            margin-bottom: 1rem;
+
+            button {
+                margin-left: 1rem;
+            }
+        }
+    }
+
+    label.avatar-label {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+    }
+
+    form.new-id {
+        border: 1px solid;
+        padding: 1rem;
+        background-color: #ffffff61;
+
+        p {
+            background-color: transparent;
+            padding: 0;
+            border: none;
+        }
+    }
+
+    #profile-description {
+        width: 50vw;
+        min-width: 10rem;
+        height: 40vh;
+    }
+
+    .my-profile {
+        display: flex;
+
+        form.editable-textarea {
+            margin: 1rem 0;
+        }
+
+        p.editable-textarea {
+            font-weight: normal;
+            width: 50vw;
+            display: inline-block;
+        }
+
+        img {
+            flex-wrap: wrap;
+            display: flex;
+            margin: 1rem 2rem;
+            border-radius: 50%;
+            border: 1px solid black;
+            width: 50vmin;
+            height: 50vmin;
+            object-fit: cover;
+        }
+
+        dl {
+            margin-left: 2rem;
+        }
+
+        dt {
+            text-decoration: underline;
+        }
+
+        dd {
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+    }
+
+    .icon {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+
+    .has-copied {
+        color: #7502df;
+    }
+
+    p {
+        background-color: #ffffff61;
+        padding: 1rem;
+        border: 1px solid gray;
+    }
+
+    pre {
+        border: 1px solid;
+        background-color: white;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+
+    .form-controls {
+        margin-top: 1rem;
+    }
+}

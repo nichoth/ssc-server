@@ -1,0 +1,23 @@
+@mixin mobile {
+    @media (max-width: 600px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin touch {
+    @media (hover: none) {
+        @content;
+    } 
+}
+
+@mixin portrait {
+    @media (orientation: portrait) {
+        @content;
+    }
+}

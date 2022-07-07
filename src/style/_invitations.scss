@@ -1,0 +1,49 @@
+.pending-invitations {
+    // display: table;
+    list-style: none;
+
+    .revoke-inv {
+        column-width: 4rem;
+
+        button {
+            background-color: transparent;
+            border: none;
+            outline: 1px solid;
+            padding: 0.3rem 1rem;
+            transition: outline 0.2s, background-color 0.2s;
+
+            &:hover {
+                outline-width: 3px;
+                background-color: aliceblue;
+            }
+        }
+    }
+}
+
+.invitation-form {
+    margin-bottom: 2rem;
+}
+
+li.pending-invitation, .inv-head {
+    // max-width: 20rem;
+    max-width: 30rem;
+    // display: flex;
+    // justify-content: flex-start;
+    // display: table-row;
+    
+    > span {
+        // margin-right: 1rem;
+        column-width: 30rem;
+        display: table-cell;
+    }
+}
+
+.pending-invitation {
+    margin-bottom: 0.5rem;
+}
+
+.inv-head {
+    // display: table-header-group;
+    border-bottom: 1px solid;
+    margin-bottom: 0.5rem;
+}

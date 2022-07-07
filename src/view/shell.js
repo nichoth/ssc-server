@@ -1,204 +1,184 @@
 import { html } from 'htm/preact'
-import { useState, useEffect } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { generateFromString } from 'generate-avatar'
-var ssc = require('@nichoth/ssc')
-var evs = require('../EVENTS')
+import { scale } from "@cloudinary/url-gen/actions/resize";
+const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
+const EditableImg = require('./components/editable-img')
+const EditableField = require('./components/editable-field')
+const evs = require('../EVENTS')
+const { CLOUDINARY_CLOUD_NAME, admins } = require('../config.json')
+const { LS_NAME } = require('../constants')
+const Hamburger = require('./components/hamburger')
+
+const cld = cloudinaryUrl({
+    cloud: { cloudName: CLOUDINARY_CLOUD_NAME },
+    url: {
+        secure: true // force https, set to false to force http
+    }
+})
 
 function Shell (props) {
-    var { path, emit, me } = props
-    var { profile } = me
-
-    // console.log('props in shell', props)
-
-    // component did mount
-    // get avatar
-    useEffect(() => {
-        if (!me || !me.secrets || !me.secrets.id) return
-        var qs = new URLSearchParams({ aboutWho: me.secrets.id }).toString();
-
-        fetch('/.netlify/functions/avatar' + '?' + qs)
-            .then(res => {
-                if (!res.ok) {
-                    return res.text().then(t => {
-                        console.log('aaaaa', t)
-                    })
-                }
-                return res.json()
-            })
-            .then(res => {
-                emit(evs.identity.gotAvatar, res)
-            })
-            .catch(err => {
-                console.log('oh no', err)
-            })
-    }, [])
-
+    const { route, me, client, emit } = props
+    const isAdmin = (admins || []).some(admin => admin.did === me.did)
+    const { profile } = me
+    const [ isResolving, setResolving ] = useState(false)
+    const [ mobileNav, setMobileNav ] = useState(false)
 
     async function saveName (me, newName) {
-        console.log('set name in here', newName)
-
-        var msgContent = {
-            type: 'about',
-            about: me.secrets.id,
-            name: newName
-        }
-
-        var keys = me.secrets
-        var qs = new URLSearchParams({ author: me.secrets.id }).toString();
-        var url = '/.netlify/functions/abouts' + '?' + qs
-
-        try {
-            var _prev = await fetch(url).then(res => res.json())
-        } catch (err) {
-            console.log('about fetch errr', err)
-        }
-
-        var prev = _prev && _prev.msg && _prev.msg.value || null
-        var msg = ssc.createMsg(keys, prev || null, msgContent)
-
-        // make the fetch call to set the name,
-        // then emit the event after success
-        return fetch('/.netlify/functions/set-name', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                keys: { public: me.secrets.public },
-                msg: msg
-            })
+        setResolving(true)
+        return client.postProfile({
+            did: me.did,
+            username: newName,
+            imgHash: me.profile.image
         })
-            .then(res => res.json())
             .then(res => {
-                console.log('**set name**', res)
-                emit(evs.identity.setName, res.value.content.name)
-                return res
+                const { username } = res.db.value.content
+                emit(evs.identity.setUsername, { username })
+                // update localStorage with the new profile info
+                // TODO -- should refactor into a single object
+                //   that handles localStorage & server-side storage
+                const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+                dids[me.did] = Object.assign(dids[me.did], { username })
+                window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
+                setResolving(false)
             })
             .catch(err => {
-                console.log('errrrr', err)
+                console.log('err in shell', err)
+                setResolving(false)
             })
     }
+
+    function selectImg (ev) {
+        ev.preventDefault()
+        console.log('on image select', ev)
+        var file = ev.target.files[0]
+        console.log('*file*', file)
+
+        const reader = new FileReader()
+
+        reader.onloadend = () => {
+            // console.log('*done reading file*')
+            // in here, want to upload the image
+
+            const username = me.profile.username
+            const image = reader.result
+
+            setResolving(true)
+            
+            client.postProfile({
+                did: me.did,
+                username,
+                imgHash: null,
+                image,
+                desc: profile.description
+            })
+                .then(res => {
+                    setResolving(false)
+                    const { image } = res.db.value.content
+                    const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+                    dids[me.did] = Object.assign({}, dids[me.did], { image })
+                    window.localStorage.setItem(LS_NAME, JSON.stringify(dids))
+                    emit(evs.identity.setProfile, { image })
+                })
+                .catch(err => {
+                    setResolving(false)
+                    console.log('errrrrrrrrrrr', err)
+                })
+        }
+
+        // this gives us base64
+        reader.readAsDataURL(file)
+    }
+
 
     function active (href) {
         var baseHref = href.split('/')[1]
-        var basePath = path.split('/')[1]
+        var basePath = route.split('/')[1]
         return baseHref === basePath ? 'active' : ''
     }
 
-    var avatarUrl = (me.avatar && me.avatar.url) ||
-        ('data:image/svg+xml;utf8,' + generateFromString((me && me.secrets && 
-            me.secrets.public) || '')
-        )
+    function mobileNavHandler (ev) {
+        setMobileNav(!mobileNav)
+    }
 
+    function navClick () {
+        console.log('nav click***************')
+        setMobileNav(false)
+    }
+
+    const avatarUrl = me.profile.image ?
+        (cld.image(encodeURIComponent(me.profile.image))
+            .format('auto')
+            .resize( scale().width(100) )
+            .toURL()) :
+        ('data:image/svg+xml;utf8,' + generateFromString((me && me.did) || ''))
+    
     return html`<div class="shell">
         <ul class="nav-part">
-            <li class="name">
-                <${EditableImg} url=${avatarUrl}
+            <li class="name${isResolving ? ' resolving' : ''}">
+                <${EditableImg} url=${avatarUrl} name="image"
                     title="set your avatar"
-                    onSelect=${ev => {
-                        ev.preventDefault()
-                        console.log('on select', ev)
-                        emit(evs.identity.setAvatar, ev)
-                    }}
+                    onSelect=${selectImg}
                 />
 
                 <${EditableField} name="username"
                     class="name-editor"
-                    value=${getName(profile) || 'Anonymous'}
+                    isResolving=${isResolving}
+                    value=${profile.username || 'Anonymous'}
                     onSave=${saveName.bind(null, me)}
                 />
             </li>
             <li class="${active('/')}"><a href="/">home</a></li>
             <li class="${active('/new')}"><a href="/new">new</a></li>
-            <li class="${active('/create-invitation')} create-inv">
-                <a href="/create-invitation">create an invitation</a>
-            </li>
+
+            ${isAdmin ?
+                html`<li class="${active('/create-invitation')} create-inv">
+                    <a href="/create-invitation">invitations</a>
+                </li>` :
+                null
+            }
+
             <li class="${active('/whoami')}">
                 <a href="/whoami">whoami</a>
             </li>
         </ul>
 
+        <div class="mobile-nav${mobileNav ? ' open' : ''}">
+            <${Hamburger} isOpen=${mobileNav} onClick=${mobileNavHandler} />
+        </div>
+
         <hr />
+
+        <div class="mobile-nav-list${mobileNav ? ' open' : ' closed'}">
+            <ul>
+                <li class="${active('/')}">
+                    <a onclick=${navClick} href="/">home</a>
+                </li>
+
+                <li onclick=${navClick} class="${active('/new')}">
+                    <a onclick=${navClick} href="/new">new</a>
+                </li>
+
+                ${isAdmin ?
+                    html`<li onclick=${navClick}
+                        class="${active('/create-invitation')} create-inv"
+                    >
+                        <a onclick=${navClick} href="/create-invitation">
+                            create an invitation
+                        </a>
+                    </li>` :
+                    null
+                }
+
+                <li class="${active('/whoami')}">
+                    <a onclick=${navClick} href="/whoami">whoami</a>
+                </li>
+            </ul>
+        </div>
 
         ${props.children}
     </div>`
 }
 
-function getName (profile) {
-    return (profile && profile.userName) || null
-}
-
 module.exports = Shell
 
-
-function EditableImg (props) {
-    var { url, onSelect, title } = props
-
-    return html`
-        <label for="avatar-input" class="my-avatar" id="avatar-label"
-            title=${title}
-        >
-            <img class="avatar" src="${url}" title="set avatar" />
-        </label>
-        <input type="file" id="avatar-input" name="avatar"
-            accept="image/png, image/jpeg"
-            onchange=${onSelect}
-        />
-    `
-}
-
-function EditableField (props) {
-    var { value, onSave, name } = props
-    var [isEditing, setEditing] = useState(false)
-    var [isResolving, setResolving] = useState(false)
-
-    function _setEditing (ev) {
-        ev.preventDefault()
-        setEditing(true)
-    }
-
-    function stopEditing (ev) {
-        ev.preventDefault()
-        setEditing(false)
-    }
-
-    function _onSave (ev) {
-        ev.preventDefault()
-        var val = ev.target.elements[name].value
-        setResolving(true)
-        onSave(val)
-            .then(() => {
-                setResolving(false)
-                setEditing(false)
-            })
-            .catch(err => {
-                setResolving(false)
-                console.log('errrrrr', err)
-            })
-    }
-
-    var _class = 'editable-field' +
-        (isResolving ? ' resolving' : '') +
-        (props.class ? (' ' + props.class) : '')
-
-    if (isEditing) {
-        return html`<form onreset=${stopEditing}
-            onsubmit=${_onSave}
-            class=${_class}
-        >
-            <input name=${name} id=${name} placeholder="${value}" />
-            <button type="reset" disabled=${isResolving}>cancel</button>
-            <button type="submit" disabled=${isResolving}>save</button>
-        </form>`;
-    }
-
-    return html`
-        <h1>${value}</h1>
-
-        <!-- pencil emoji -->
-        <button class="edit-pencil"
-            onClick=${_setEditing}
-            title="edit"
-        >
-            ✏
-        </button>
-    `;
-}

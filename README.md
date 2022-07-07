@@ -16,14 +16,32 @@ website. This uses netlify lambda functions to call a faunaDB. As such, it is "s
 
 It's not ready yet though
 
--------------------------------------
+------------------------------
 
-## note
-Netlify *does* run the _deploy-succeeded_ function the first time you deploy. Meaning after you click the _deploy to netlify_ button.
+dev server's public key
+```
+did:key:z82T5ZbpFp9b6nbTVJDTwU7CX8FU3tsiV4mXRkaarHsmXpzWGC4EgJNFLM4CDJrS8HRb3zTXQY1YdzuHo4rMCC9ke3tPT
+```
 
-Should use that hook to create indexes and collections in the DB.
+---------------------------------------
 
--------------------------------------------
+
+## PWA things
+
+* [How to make PWAs installable](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Installable_PWAs)
+
+needs the following things:
+  - [a webmanifest](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen)
+  - [a service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+  - [link in html](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen#link_the_html_to_the_manifest)
+
+### cloudinary + PWA
+
+* see https://cloudinary.com/labs/cloudinary-serviceworker
+* https://gist.github.com/ukmadlz/5d55ca5f6c0d4233e193caad47403fe4
+
+
+---------------------------------------
 
 
 ## what is this?
@@ -90,78 +108,78 @@ Another key element is that it depends on Netlify's lambda functions. These are 
 
 Also we are using [faunaDB](https://fauna.com/) to store messages.
 
--------------------------------------------------
+## admin users
+
+There are special users that are defined in the `admins` field inside the JSON file `src/config.json`.
+
+What happens if you delete the admin user from the `config.json` file?
+
+You would be using a standard 'new' user with the app. It would prompt you to input an invitation. To have admin privilege, you must copy and paste the default DID for your machine into the `config.admins` array inside `src/config.json`.
+
+-------------------------------------------------------------------------
+
+## new users
+What do you see when you visit the home page as a new user?
+
+New users see the `/hello` page. It asks for an invitation code.
+
+When a user enters an invitation code, the server will start following them,
+which allows them to save posts here. And the new user will start by following
+the person who invited them, and the inviter will follow the new user.
 
 
-## blocking/following
+--------------------------------------------------------------------------
 
-Blocking a user means we don't want to save any message from them. So we will
-not replicate their content regardless of FOAF status.
 
-We may still save messages from users we are not following, because by
-default we save any message from a friend of a friend.
+## ipfs
+What to do about blobs?
 
-If you _are_ following someone, then you will save all their messages, and
-all messages from their friends (your FOAFs).
+Should hash them in a good way. Meaning no characters that are bad for URLs. see https://www.npmjs.com/package/urlsafe-base64
 
+I think they use`'hex'` encoding in ssb -- see https://github.com/ssbc/multiblob/blob/master/index.js#L31
 
 -----------------------------------------------
+Or you could use IPFS — I assume that would return a good hash
+🙁 you lose the `cloudinary` functions if you use a different (ipfs) host
 
+----------------------------------------------
 
-## start a local server
+## note
+
+Netlify *does* run the _deploy-succeeded_ function the first time you deploy. Meaning after you click the _deploy to netlify_ button.
+
+This is a good way to create indexes and collections in the DB.
+
+-----------------------------------------
+
+* currently using the `test` DB in fauna
+
+-------------------------------------------------
+
+## dev instructions
+
+### start a local server
 ```
 npm start
 ```
 
-## run one test
+### run one test
+The `alternate` test:
 
-The `post` test:
 ```
-NODE_ENV=test node test/follow/ | npx tap-arc
+NODE_ENV=test node test/alternate.js | npx tap-arc
 ```
 
-## run all tests
+### run all tests
 
 ```
 $ npm test
 ```
 
-## configure things
-
-### Add passwords that can be used to make the server follow you
-Edit `/netlify/functions/passwords.json`. The value in this file should be a
-password that has been hashed with `bcrypt`. See `/hash.js` for a node CLI that
-will hash a string.
-
-### block a user ID from posting
-Edit `/netlify/functions/block.json`. This is a JSON array of public keys
-(IDs) that the server should block.
-
-Being on the block list means you can't do anything on this server.
-
 ------------------------------------------
 
-## util
-
-Create some keys and print them to stdout
-```
-$ ./util.js keys
-
-{
-  "curve": "ed25519",
-  "public": "B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519",
-  "private": "OpwS91tI7yXkilysrjGgnyGHm//AaxjsNnVVDYJuaAIHuC1AQgfuNOWuixwzRYl+V92/BjDDvZOGoy2jPQHntw==.ed25519",
-  "id": "@B7gtQEIH7jTlroscM0WJflfdvwYww72ThqMtoz0B57c=.ed25519"
-}
-```
-
-I'm using those keys in the `test/invitation/` file to test blocked users
-incidentally.
-
-------------------------------------------------
-
-## add invitation passwords
-You need to edit `/netlify/functions/passwords.json`, and add the hashed version of a password; the plaintext version is kept secret. You can use the script `/hash.js` to hash a password --
+### passwords
+You can use the script `/hash.js` to hash a password --
 
 ```
 $ ./hash.js myPassword
@@ -176,92 +194,6 @@ $ echo "myPassword" | ./hash.js | pbcopy
 
 ----------------------------
 
-The invite passwords are used with the `/follow-me` endpoint. You send a POST request like `{ user: userId, password }`. After doing that the server will save your posts to a DB.
-
----------------------------------
-
-## invitations
-It's like a country club -- you need to be invited by a member.
-
-### create an invitation
-Call `/.netlify/functions/create-invitation`. Send a message like this:
-
-```js
-body: JSON.stringify({
-    publicKey: keys.public,
-    msg: ssc.createMsg(keys, null, {
-        type: 'invitation',
-        from: keys.id
-    })
-})
-```
-The server will check it's DB to make sure that the given id is being followed
-by the server.
-
-Get back:
-```js
-{ code: '123' }
-```
-
-Then the person you are inviting needs to send a message like this:
-```js
-var redeemer = ssc.createKeys()
-var signature = ssc.sign(redeemer, code)
-
-body: JSON.stringify({
-    publicKey: redeemer.public,
-    code: code,
-    signature: signature
-})
-```
-
-Visit this URL to send such a message: `/invitation?code=abc`
-
-### foafs
-When the app starts, you call `/.netlify/get-relevant-posts` with a
-query parameter of `foafs=true`
-
-```js
-var foafs = ev.queryStringParameters.foafs
-if (foafs) {
-  // return posts with foafs
-}
-```
-
-
-----------------------------------------------------------------
-
-
-## start a local server, with test data
-```
-$ npm run start-test
-```
-
-This creates some functions on `window`
-
-`window.testStuff` -- will create a second user and some test data
-
-* `window.userOneKeys`
-* `window.userTwoKeys`
-
-
-## cypress tests
-Run tests with the cypress GUI
-
-```
-$ npm run cypress-test
-```
-
-## test
-Start some tests in a node environment
-
-```
-$ npm test
-```
-
---------------------------------------------------------------
-
-
 ## cloudinary API
 
 * [upload API](https://cloudinary.com/documentation/node_asset_administration#upload_api)
@@ -273,27 +205,11 @@ $ npm test
 * [cloudinary browser API](https://cloudinary.com/documentation/javascript_integration#get_started_with_the_javascript_sdk)
 
 
------------------------------------------------------------
+------------------------------------------
 
+## sotrage
 
-The plan for now is just to make something that works for basic crud and stuff
-
-
-----------------------------------------------------------------
-
-There are no invite codes because we want to follow anyone/everyone. 
-
-Another way to do it is to treat the server as a peer, & decide who they are following.
-
-On the server, could keep a list of who you are following. That lets you revoke access also.
-
-An invite system + REST would mean that we verify that a write request is from our list of allowed users before writing it to the DB.
-
-Then replication requests would happen periodically since this is not using websockets.
-
-----------------------------------------------------------------
-
-## forks
-
-What happens if you fork your feed? This server doesn not allow you to fork your feed. I could imagine implementing something like [forkdb](https://github.com/substack/forkdb), where there could be multiple 'heads' of a feed that you would then need to 'merge' into one. But for now the server will just reject any write with the wrong 'previous' message in the merkle-list. 
+* [storj](https://www.storj.io/)
+* [cloudinary](https://cloudinary.com/)
+* [web3.storage](https://web3.storage/)
 

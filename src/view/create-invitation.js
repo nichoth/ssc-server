@@ -1,76 +1,136 @@
 import { html } from 'htm/preact'
-var ssc = require('@nichoth/ssc')
-import { useState } from 'preact/hooks';
+const { Button, TextInput } = require('@nichoth/forms/preact')
+const { admins } = require('../config.json')
+var ssc = require('@nichoth/ssc/web')
+import { useState, useEffect } from 'preact/hooks'
+const evs = require('../EVENTS')
+const CopyIcon = require('./components/copy-solid.js')
 
 function CreateInvitation (props) {
-    // var { params } = props
-    // var { key } = params
+    const { me, feeds, emit, client, invitations } = props
+    const [isResolving, setResolving] = useState(false)
+    const [invCode, setInvCode] = useState(null)
+    const [hasCopied, setCopied] = useState(false)
+    const isAdmin = admins.some(admin => admin.did === me.did)
 
-    // dont really need to check if we are followed in here, because
-    // the link to this route only shows if you are followed,
-    // and there is server side verification of following status when you
-    //   submit the request
+    console.log('invitation props', props)
 
-    // but there is the case where you have an ID, but the server is not 
-    //   following you. Do we even want to support that scenario? Since
-    //   this app is served from a certain domain, we could consider
-    //   that domain to be the source of truth
+    useEffect(() => {
+        if (invitations) return
+        if (!me || !me.did) return
+        if (!isAdmin) return
 
-    var { me } = props
+        client.getInvitations()
+            .then(res => emit(evs.invitation.got, res))
+            .catch(err => {
+                console.log('arg', err)
+            })
+    }, [me.did])
 
-    var [invitation, setInv] = useState(null)
-    var [invErr, setErr] = useState(null)
+    if (!isAdmin) return html`<div class="route create-invitation">
+        <div>You must have admin status to create an invitation</div>
+    </div>`
 
     function createInv (ev) {
         ev.preventDefault()
-        var msg = ssc.createMsg(me.secrets, null, {
-            type: 'invitation',
-            from: me.secrets.id
-        })
+        const note = ev.target.note.value
 
-        console.log('msgggggggg', msg)
-
-        fetch('/.netlify/functions/create-invitation', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            // var { publicKey, msg } = req
-            body: JSON.stringify({
-                publicKey: me.secrets.public,
-                msg: msg
-            })
-        })
+        client.createInvitation(me.keys, { note })
             .then(res => {
-                if (!res.ok) {
-                    res.text().then(t => {
-                        setErr(t)
-                    })
-                    return
-                }
-                return res.json()
+                setResolving(false)
+                setCopied(false)
+                setInvCode(res.value.content.code)
+                emit(evs.invitation.new, res)
             })
-            .then(res => {
-                if (res) setInv(res)
+            .catch(err => {
+                console.log('err creating invitation', err)
             })
     }
 
-    if (invitation) {
-        return html`<div class="create-invitation-route">
-            <p>Invitation code: <code>${invitation.code}</code></p>
-        </div>`
+    function copy (ev) {
+        ev.preventDefault()
+        navigator.clipboard.writeText(invCode)
+        setCopied(true)
     }
 
-    if (invErr) {
-        return html`<div class="create-invitation-route">
-            <p class="error">${invErr}</p>
-        </div>`
+    function revoke (ev) {
+
     }
 
-    return html`<div class="create-invitation-route">
-        <p>invite someone</p>
+    return html`<div class="route create-invitation">
+        ${invCode ?
+            html`<button class="copy" onClick=${copy} title="copy">
+                <${CopyIcon} />
+            </button>
 
-        <form class="invitation" onSubmit=${createInv}>
-            <button type="submit">create an invitation</button>
+            ${hasCopied ? html`<span class="has-copied">Copied!</span>` : null}
+
+            <dl class="invitation-code">
+                <dt>Invitation code</dt>
+                <dd>${invCode}</dd>
+            </dl>` :
+            null
+        }
+
+        <p>
+            This server is usable by invitation only. Create a new invitation here.
+        </p>
+
+        <p>
+            This code should be copy and pasted to whoever you want to invite.
+        </p>
+
+        <form onsubmit=${createInv} class="invitation-form">
+            <${TextInput} name="note" displayName="note"
+                minlength="1" required=${false}
+            />
+
+            <${Button} disabled=${isResolving} type="submit"
+                isSpinning=${isResolving}
+            >
+                Create an invitation
+            <//>
         </form>
+
+        ${invitations && invitations.length ?
+            html`<h2>Pending Invitations</h2>
+            <ul class="pending-invitations">
+                ${[
+                    html`<li class="inv-head">
+                        <span>author</span>
+                        <span>note</span>
+                    </li>`
+                ].concat(invitations.map(inv => {
+                    const invAuthor = (inv.value.author === me.did ?
+                        me.profile :
+                        ((feeds || {})[inv.value.author] || {}).profile || {})
+
+                    console.log('author', invAuthor)
+
+
+                    // TODO -- use `feeds` key in state
+
+                    return html`<li class="pending-invitation">
+                        <span class="invitation-author">
+                            <a href=${'/@' + invAuthor.username}>
+                                ${invAuthor.username}
+                            </a>
+                        </span>
+
+                        <span class="invitation-note">
+                            ${inv.value.content.note || html`<em>none</em>`}
+                        </span>
+
+                        <span class="revoke-inv">
+                            <button onclick=${revoke}>
+                                revoke
+                            </button>
+                        </span>
+                    </li>`
+                }))}
+            </ul>` :
+            null
+        }
     </div>`
 }
 

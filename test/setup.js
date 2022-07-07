@@ -1,4 +1,13 @@
-var { spawn } = require('child_process')
+const path = require('path')
+const fs = require('fs')
+const { spawn } = require('child_process')
+const config = require('../src/config.json')
+const { admins } = config
+// const ssc = require('@nichoth/ssc')
+const ssc = require('@nichoth/ssc-lambda')
+
+const configPath = path.resolve(__dirname, '..', 'src',
+    'config.json')
 
 function setup (test, cb) {
     test('setup the server', function (t) {
@@ -6,8 +15,34 @@ function setup (test, cb) {
 
         ntl.stdout.on('data', function (d) {
             if (d.toString().includes('Server now ready')) {
-                cb(ntl)
-                t.end()
+                ssc.createKeys().then(user => {
+                    // console.log('**created keys**', user)
+                    // user is
+                    // {
+                    // did: 'did:key:z82T5YHoUFJX4QxwZ2sSBLeqmTyiNqHZEWs4r4eoghJ2fgfpLGGz3VsK3zSXwWAtVZrZWQFSF4GrWNrZ61jFpuWjDFbKG',
+                    // id: '@BJtIKGtmgLy5Ibk0erQLMWrJ2n+ZzZoLbAc2WGC5gbc3q0Ue+DDMip7KoSP1C2uNUgczmgy9pntd/Zfo/ZxLhFs=.ed25519',
+                    // keys : {
+                    //      publicKey,
+                    //      privateKey
+                    //    }
+                    // }
+                    keys = user.keys
+                    ssc.exportKeys(keys).then(exported => {
+                        // need to write this did to config.admins
+                        const did = ssc.publicKeyToDid(exported.public)
+                        // did = _did
+                        admins.push({ did })
+
+                        fs.writeFileSync( configPath, JSON.stringify(
+                            Object.assign({}, config, { admins }), null, 2
+                        ) )
+
+                        t.end()
+
+                        cb({ netlify: ntl, keys: user.keys, did })
+                    })
+                })
+
             }
         })
 
@@ -28,4 +63,14 @@ function setup (test, cb) {
     })
 }
 
-module.exports = setup
+function allDone (ntl) {
+    ntl.kill()
+    admins.pop()
+
+    fs.writeFileSync( configPath, JSON.stringify(
+        Object.assign({}, config, { admins }), null, 2
+    ) )
+}
+
+// export default setup
+module.exports = { setup, allDone }

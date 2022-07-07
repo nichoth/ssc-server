@@ -1,0 +1,88 @@
+.hamburger {
+    display: inline-block;
+
+    /* --------------- The important stuff --------------------------- */
+    .line {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .container {
+        transition: transform 0.2s ease-in-out 0.1s;
+
+        &.top {
+            transform: translateY(-3px) scaleX(.88235);
+        }
+        &.bottom {
+            transform: translateY(3px) scaleX(.88235);
+        }
+    }
+
+    &.open {
+        .line {
+            &.bottom {
+                transform: none;
+                transition-delay: 0.1s;
+            }
+            &.top {
+                transform: none;
+                transition-delay: 0.1s;
+            }
+        }
+
+        .container {
+            transition-delay: 0s;
+
+            .line {
+                &.bottom {
+                    transform: rotateZ(45deg);
+                }
+                &.top {
+                    transform: rotateZ(-45deg);
+                }
+            }
+
+            &.bottom {
+                transform: none;
+            }
+            &.top {
+                transform: none;
+            }
+        }
+    }
+    
+    
+    /* ----------------- The boilerplate stuff --------------------- */
+    button {
+        all: unset;
+        cursor: pointer;
+        display: block;
+    }
+    
+    button * {
+        pointer-events: none;
+    }
+    
+    .burger {
+        height: 31px;
+        width: 31px;
+        display: block;
+        position: relative;
+    }
+    
+    .container {
+        position: absolute;
+        left: 7px;
+        top: 15px;
+    }
+    
+    .line {
+        height: 1px;
+        border-radius: 3px;
+        background: black;
+        width: 17px;
+    }
+    
+    input {
+        display: none;
+    }
+}

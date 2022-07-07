@@ -1,5 +1,246 @@
 # the log
 
+## 5-20-2022
+
+### multiple DIDs per machine
+
+Any DID that has been created on this machine is visible here
+
+
+
+
+## 5-18-2022
+
+### The `create-db` function
+```
+node ./netlify/functions/deploy-succeeded/create-db.js
+```
+
+
+## 5-13-2022
+
+*linking profiles*
+
+
+
+
+I send a request to server1 from serber2, that says "I'm requesting to link IDs. This is my DID"
+
+On server1 I am logged in, and I click "link an ID"
+
+(create record -- `{ status: pending, did: DID2 }`)
+
+On server1 I must enter the DID from server2, to be able to get it by DID a for it amongst the pending link requests
+  * it would be nice to have a search/autocomplete situation here
+
+Once I enter the DID from server2, then the DID on server1 will create a UCAN
+that says, "I am the same as person2"
+
+The pending request from server2 could be a signed UCAN stating, "person2 is the same as person1"
+
+So to link, each server needs a UCAN from each party. 
+Each server needs to have *both UCANs* for it to view the link as valid.
+
+
+UCAN from person1 to person2 alleging identity
+
+UCAN from person2 to person1 alleging identity
+
+
+
+
+----------------------------------------------------------------
+
+
+What happens if I *only* link from server2???
+
+Write a message to the DB on server2 that says, "I am the same as person1"???
+
+
+
+
+
+
+
+from alice2's perspective
+
+We can host an endpoint, like `/link-id` or something on alice2's primary server. Requests to that endpoint should have a UCAN from alice to alice2. 
+
+Once we get that request, with a UCAN linking alice -> alice2, then we record the UCAN in our DB, and import the profile info.
+
+
+this makes me think of an ID server. A network just for DIDs and UCANs
+
+
+
+
+------------------------------------------------------------
+
+
+## 5-10-2022
+
+**Playwright always starts the tests with a new DID**
+
+but, **cypress starts with the same DID every time**
+
+*cypress DID:*
+did:key:z82T5ZsScqa5WWLLN2cHwZgxV4kcmxVLxXro3XZTopxoE4i154mhNEmxcxX9cAgMfFL4MrSAkj2q3kHxQke6GeaWQe4j2
+
+
+
+----------------------------------------------------------
+
+
+* DID1 signs a UCAN that says it is the same as DID2
+  - DID1 needs to know DID2 somehow.
+      + Could use an input with the format `foo@server2.com`.
+        server1 then calls server2 and gets the profile info
+      + or could have an input that just takes a DID from server2.
+        server1 would still need the address of server2 to get the assets for profile.
+        So two inputs -- one for DID and one for address.
+  - must record the DID and also the domain that it is from (as a `fact` in the UCAN)
+
+* DID1 needs to fetch the avatar and username from server2
+
+Can use the format `nichoth@server1.com`. The server *must return the first* user with that username. That way it wont break if additional users use the same name.
+
+
+
+## 5-9-2022
+
+**sharing an ID**
+How to handle repeating the same ID across multiple servers?
+
+**Need to use UCAN to sign a new DID for another domain**, because you can't share IDs across domains.
+
+----------------------------------------
+
+* Can do [cross tab communication](https://blog.bitsrc.io/4-ways-to-communicate-across-browser-tabs-in-realtime-e4f5f6cbedca)
+* can use a query param on a link if opening the page via link
+* can do WebRTC or WSS between machines
+* QR code
+
+-------------------------------
+
+Could have a route like `/link-id?did=123abc`
+
+Every domain has a "primary" DID. The primary must sign a UCAN linking a second DID to the first. If you sign that UCAN, the signing key is the *originating* ID
+
+* signs a UCAN that means this other DID is me too.
+
+* when you visit that link, the primary DID signs a doc meaning DID2 is equivalent
+
+as an example,
+server 2 creates a link like `hermes.com/link-id?myDID=123abc`
+
+You need to visit the link to sign the UCAN client-side. the page at `hermes.com` gets loaded and it signs a UCAN delegating to server2's ID. `hermes.com` returns a new UCAN doc meaning that server2 is equivalent. And also saves the UCAN to the DB.
+
+**Need to give that UCAN to server2 somehow.**
+
+You could serve the UCANs from `hermes.com` somehow: `hermes.com/ucan?did=123abc`
+`did` there is the DID for server2. (the DID that the UCAN is signed to)
+
+
+How does that help us? We want to share the *profile* info across multiple domains.
+
+* can record the originating domain per DID in a `fact` in the UCAN
+
+
+Need to get the *root* UCAN
+
+Could have a server-side route that records the UCAN and also transfers profile data to itself
+
+server 2 has a UCAN that means 'this is proof that this DID is the same as this DID from server 1'. and it's signed by ID 1
+
+
+
+---------------------------------------------------------------------
+
+
+
+[the interactive demo](https://cloudinary.com/documentation/resizing_and_cropping#resizing_and_cropping_interactive_demo) -- kind of cool
+
+[cloudingary browser API / chaining transformations](https://cloudinary.com/documentation/javascript_image_transformations#chaining_transformations)
+
+[cloudinary resizing cropping](https://cloudinary.com/documentation/resizing_and_cropping)
+
+[cloudinary 'fill' example](https://cloudinary.com/documentation/resizing_and_cropping#fill)
+
+### JS 'fill' example
+```js
+new CloudinaryImage("docs/models.jpg").resize(fill().width(250).height(250));
+```
+
+### chaining transformations example
+```js
+import {Cloudinary} from "@cloudinary/url-gen";
+
+// Import required actions.
+import {fill} from "@cloudinary/url-gen/actions/resize";
+import {source} from "@cloudinary/url-gen/actions/overlay";
+import {byAngle} from "@cloudinary/url-gen/actions/rotate"
+import {sepia} from "@cloudinary/url-gen/actions/effect";
+import {byRadius} from "@cloudinary/url-gen/actions/roundCorners";
+
+// Import required values.
+import {text} from "@cloudinary/url-gen/qualifiers/source";
+import {Position} from "@cloudinary/url-gen/qualifiers/position";
+import {TextStyle} from "@cloudinary/url-gen/qualifiers/textStyle";
+import {compass} from "@cloudinary/url-gen/qualifiers/gravity";
+
+
+// Create and configure your Cloudinary instance.
+const cld = new Cloudinary({
+  cloud: {
+    cloudName: 'demo'
+  }
+}); 
+
+// Use the image with public ID, 'sample'.
+const myImage = cld.image('sample');
+
+// Transform the image.
+myImage
+  .resize(fill(150, 150))
+  .roundCorners(byRadius(20))
+  .effect(sepia())
+  .overlay(   
+    source(
+      text('This is my picture', new TextStyle('arial',18))
+      .textColor('white')      
+    )
+    .position(new Position().gravity(compass('north')).offsetY(20)))
+  .rotate(byAngle(20))
+  .format('png');
+
+  // Return the delivery URL
+  const myUrl = myImage.toURL();
+```
+
+
+### example bad URL
+```
+https://res.cloudinary.com/nichoth/image/upload/v1652065651/%255Bobject%2520Object%255D.jpg
+```
+
+
+
+The old admin DID
+```js
+{
+    "admins": [
+        {
+            "did": "did:key:z82T5XeMUNk67GZtcQ2pYnc34ZyUnMrE1YC1bHQAveSZn7oHAz2xyouSRLYo5FYsi2LD9wGmMBQcobhT3JbKPDfhVF5D4"
+        }
+      ],
+      "appName": "ssc-demo"
+}
+
+```
+
+
+
+
 ## 5-1-2022
 
 Netlify *does* run the _deploy-succeeded_ function the first time you deploy.
@@ -670,3 +911,17 @@ It's worth noting that if you do the image upload server-side, it is still not a
 
 * [md5-hex](https://github.com/sindresorhus/md5-hex)
 * [hasha](https://github.com/sindresorhus/hasha)
+
+--------------------------------------------------------------
+
+
+
+
+did:key:z82T5VbUheY9iVJv26ZEXnH5Rn8vsgTZQmyfojJjqKVUG1AQxFi53JtooN1hAwfLcdnqjg7EQxpMQzdvwGUPmwsLPuhYd
+
+
+
+
+
+
+
