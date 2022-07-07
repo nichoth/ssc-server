@@ -91,6 +91,8 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
                 console.log('initial fetch', serverFollows, profile, feed,
                     posts, following)
 
+                console.log('server follows', serverFollows)
+                console.log('profile', profile)
                 console.log('feed', feed)
                 console.log('postssssssssssssssssss', posts)
                 console.log('follllllllllllll', following)
