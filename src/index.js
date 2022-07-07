@@ -62,10 +62,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     const client = Client(keystore)
     subscribe(bus, state, client)
 
-    if (process.env.NODE_ENV === 'test') {
-        window.client = client
-    }
-
     state(function onChange (newState) {
         console.log('change', newState)
     })
@@ -73,6 +69,7 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     // for testing
     window.state = state
     window.LS_NAME = LS_NAME
+    window.client = client
 
     var emit = bus.emit.bind(bus)
 
@@ -130,10 +127,6 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     // don't show anything before your username has returned
     ssc.getDidFromKeys(keystore).then(did => {
         state.me.did.set(did)
-
-        if (process.env.NODE_ENV === 'test') {
-            console.log('**my did**', did)
-        }
 
         const isAdmin = (admins || []).find(user => user.did === did)
         if (isAdmin) {
