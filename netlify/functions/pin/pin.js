@@ -21,9 +21,11 @@ exports.handler = async function (ev, ctx) {
             console.log('res in hererererererere', res)
             return {
                 statusCode: 200,
-                body: JSON.stringify(Array.isArray(res.data) ?
-                    res.data.map(d => d.data)[0] :
-                    res
+                body: JSON.stringify(res.data.length ?
+                    (Array.isArray(res.data) ?
+                        res.data.map(d => d.data)[0] :
+                        res) :
+                    ''
                 )
             }
         })
