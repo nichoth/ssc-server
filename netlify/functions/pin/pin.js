@@ -20,7 +20,16 @@ exports.handler = async function (ev, ctx) {
         ).then(res => {
             return {
                 statusCode: 200,
-                body: JSON.stringify(res.data.map(d => d.data)[0])
+                body: JSON.stringify(Array.isArray(res.data) ?
+                    res.data.map(d => d.data)[0] :
+                    res
+                )
+            }
+        })
+        .catch(err => {
+            return {
+                statusCode: 404,
+                body: err.toString()
             }
         })
     }
