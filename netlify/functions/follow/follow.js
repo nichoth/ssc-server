@@ -78,8 +78,6 @@ exports.handler = async function (ev, ctx) {
         return ssc.isValidMsg(msg, null, publicKey)
     }))
 
-    // console.log('is valids', isValids)
-
     const isOk = isValids.every(Boolean)
 
     if (!isOk) {
@@ -96,6 +94,14 @@ exports.handler = async function (ev, ctx) {
         return {
             statusCode: 422,
             body: 'invalid author'
+        }
+    }
+
+    const typeOk = msgs.every(msg => (msg.content.type === 'follow'))
+    if (!typeOk) {
+        return {
+            statusCode: 422,
+            body: 'invalid message type'
         }
     }
 
@@ -134,5 +140,4 @@ exports.handler = async function (ev, ctx) {
                 body: JSON.stringify(res.map(item => item.data))
             }
         })
-
 }

@@ -10,9 +10,7 @@
     }
 
     .profile-user-info {
-        // max-width: 45rem;
         display: flex;
-        // justify-content: space-between;
         justify-content: space-around;
         margin: 0 auto;
         margin-top: 2rem;
@@ -46,6 +44,22 @@
                 word-break: break-all;
                 white-space: pre-wrap;
             }
+        }
+    }
+
+    .follow-controls {
+        color: black;
+
+        &.is-following {
+            button {
+                font-size: 1.2rem;
+                color: blue;
+            }
+        }
+
+        button {
+            background-color: transparent;
+            border: none;
         }
     }
 }

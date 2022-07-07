@@ -20,25 +20,51 @@ module.exports = {
             })
     },
 
-    post: function (ssc, keys, contact) {
-        ssc.createMsg(keys, null, {
-            type: 'follow',
-            contact
-        }).then(msg => {
-            return fetch(BASE + '/.netlify/functions/follow', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify([msg])
+    unFollow: function (ssc, keys, dids) {
+        return Promise.all(dids.map(did => {
+            return ssc.createMsg(keys, null, {
+                type: 'unfollow',
+                contact: did
             })
-        })
-        .then(res => {
-            if (!res.ok) {
-                res.text().then(text => {
-                    t.fail(text)
-                    t.end()
+        }))
+            .then(msgs => {
+                return fetch(BASE + '/api/unfollow', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(msgs)
                 })
-            }
-            return res.json()
-        })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => {
+                        throw new Error(text)
+                    })
+                }
+                return res.json()
+            })
+    },
+
+    post: function (ssc, keys, contacts) {
+        return Promise.all(contacts.map(contact => {
+            return ssc.createMsg(keys, null, {
+                type: 'follow',
+                contact
+            })
+        }))
+            .then(msgs => {
+                return fetch(BASE + '/api/follow', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(msgs)
+                })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => {
+                        throw new Error(text)
+                    })
+                }
+                return res.json()
+            })
     }
 }

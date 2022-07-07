@@ -5,6 +5,7 @@ const test = require('tape')
 const onExit = require('signal-exit')
 const { setup, allDone } = require('./setup')
 const BASE = 'http://localhost:8888'
+const Follow = require('../src/client/follow')
 
 if (require.main === module) {
     var _keys
@@ -110,4 +111,34 @@ function followTests (test, keys, did) {
             t.end()
         })
     })
+
+    var alice
+    test('client.follow', t => {
+        ssc.createKeys()
+            .then(_alice => {
+                alice = _alice
+                return Follow.post(ssc, keys, [_alice.did])
+            })
+            .then(res => {
+                console.log('resssssssss', JSON.stringify(res, null, 2))
+                t.equal(res[0].value.author, did,
+                    'should have the expected message author')
+                t.equal(res[0].value.content.contact, alice.did,
+                    'should have the correct `contact` in message')
+                t.end()
+            })
+            .catch(err => {
+                t.fail(err)
+                t.end()
+            })
+    })
+
+    // unFollow: function (ssc, keys, dids) {
+    // test('client.unfollow', t => {
+    //     return Follow.unFollow(ssc, keys, [alice.did])
+    // })
+    // .then(res => {
+    //     console.log('aaaaaaaaaaaaaa', res)
+    //     t.end()
+    // })
 }

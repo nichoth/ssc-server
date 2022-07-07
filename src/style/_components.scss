@@ -11,6 +11,12 @@
 // }
 
 .mini-profile {
+    &.is-following {
+        img {
+            border: 4px solid blue!important;
+        }
+    }
+
     .profile-link {
         display: flex;
         align-items: center;
@@ -20,12 +26,6 @@
         &:hover {
             filter: drop-shadow(2px 4px 6px black);
             opacity: 1;
-        }
-
-        &.is-following {
-            img {
-                border: 4px solid blue;
-            }
         }
 
         img {

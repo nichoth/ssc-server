@@ -11,6 +11,7 @@ const Feed = require('./feed')
 const RelevantPosts = require('./relevant-posts')
 const Reply = require('./reply')
 const Profile = require('./profile')
+const Follow = require('./follow')
 
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
@@ -97,27 +98,17 @@ module.exports = function Client (_keystore) {
                 })
         },
 
+        // takes an array -- [did]
         follow: function (dids) {
-            return Promise.all(dids.map(did => {
-                return ssc.createMsg(keystore, null, {
-                    type: 'follow',
-                    contact: did
-                })
-            }))
-                .then(msgs => {
-                    return fetch(BASE + '/api/follow', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(msgs)
-                    })
-                })
-                .then(res => {
-                    if (res.ok) return res.json()
+            return Array.isArray(dids) ?
+                Follow.post(ssc, keystore, dids) :
+                Follow.post(ssc, keystore, [dids])
+        },
 
-                    res.text().then(text => {
-                        throw new Error(text)
-                    })
-                })
+        unfollow: function unfollow (dids) {
+            return Promise.all(dids.map(did => {
+                return ssc.createMsg
+            }))
         },
 
         getRedemptions: getRedemptions,

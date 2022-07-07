@@ -28,11 +28,23 @@ function Profile (props) {
 
     function copyDid (ev) {
         ev.preventDefault()
-        navigator.clipboard.writeText(me.did)
+        navigator.clipboard.writeText(profile.about)
         setCopied(true)
     }
 
     if (!feed) return null
+
+    const isFollowing = me.following[profile.about]
+
+    function startFollowing (ev) {
+        console.log('start following', ev)
+        ev.preventDefault()
+    }
+
+    function unfollow (ev) {
+        console.log('unfollow', ev)
+        ev.preventDefault()
+    }
 
     return html`<div class="route profile">
         <div class="profile-user-info">
@@ -43,6 +55,22 @@ function Profile (props) {
             </div>
 
             <div class="user-text-info">
+                ${isFollowing ?
+                    html`<div class="follow-controls is-following">
+                        <button onclick=${unfollow} title="unfollow">
+                            <i class="fa fa-asterisk" aria-hidden="true"></i>
+                        </button>
+                        <span>following</span>
+                    </div>` :
+
+                    html`<div class="follow-controls not-following">
+                        <button onclick=${startFollowing} title="follow this user">
+                            <i class="fa fa-asterisk" aria-hidden="true"></i>
+                        </button>
+                        <span>not following</span>
+                    </div>`
+                }
+
                 <p>
                     ${'DID '}
                     <button class="icon" onclick=${copyDid}>
@@ -54,6 +82,7 @@ function Profile (props) {
                     }
                     <pre><code>${profile.about}</code></pre>
                 </p>
+
             </div>
         </div>
 
@@ -61,10 +90,10 @@ function Profile (props) {
 
         <ul class="user-feed">
             ${feed.map(post => {
-                const authorProfile = post.value.author === me.did ?
-                    me.profile :
-                    // TODO -- use `feed` key in state
-                    me.following[post.value.author]
+                // const authorProfile = post.value.author === me.did ?
+                //     me.profile :
+                //     // TODO -- use `feed` key in state
+                //     me.following[post.value.author]
 
                 return html` <${Post} post=${post} />`
             })}

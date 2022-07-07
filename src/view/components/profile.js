@@ -9,7 +9,7 @@ const cld = cloudinaryUrl({
     }
 })
 
-function Profile ({ profile, className, href }) {
+function Profile ({ isFollowing, profile, className, href }) {
     const { username, image } = profile
 
     const imageUrl = (cld
@@ -18,7 +18,10 @@ function Profile ({ profile, className, href }) {
         .format('auto')
         .toURL())
 
-    return html`<div class=${'mini-profile' + (className ? (' ' + className) : '')}>
+    return html`<div class=${'mini-profile' +
+        (className ? (' ' + className) : '') +
+        (isFollowing ? ' is-following' : '')
+    }>
         <a class="profile-link" href=${href}>
             <img src=${imageUrl} />
             <span>${username}</span>
