@@ -54,10 +54,16 @@ exports.handler = async function (ev, ctx) {
             .then(res => {
                 return {
                     statusCode: 200,
-                    body: JSON.stringify(res.data.map(doc => {
-                        delete doc.data.value.content.code
-                        return doc.data
-                    }))
+                    body: JSON.stringify((res.data && res.data.lenghth) ?
+                        res.data.map(doc => {
+                            if (doc && doc.value && doc.value.content) {
+                                delete doc.data.value.content.code
+                            }
+                            return doc.data
+                        }) :
+
+                        ''
+                    )
                 }
             })
             .catch(err => {

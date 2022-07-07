@@ -27,7 +27,11 @@ function CreateInvitation (props) {
                     emit(evs.invitation.got, res)
                     return
                 }
+
+                // emit an empty array so that `invitations` above is truthy
+                // and we don't get in an infinite loop of fetching
                 console.log('no response', res)
+                emit(evs.invitation.got, [])
             })
             .catch(err => {
                 console.log('arg', err)
