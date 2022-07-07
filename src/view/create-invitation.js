@@ -23,6 +23,7 @@ function CreateInvitation (props) {
         client.getInvitations()
             .then(res => {
                 if (res) {
+                    console.log('resssssssss', res)
                     emit(evs.invitation.got, res)
                     return
                 }
