@@ -47,6 +47,7 @@ function Router () {
     function pinContent (state, client) {
         if (!state.pin()) {
             client.getPin().then(pin => {
+                console.log('got pinnnnnnnnnnnnn', pin)
                 state.pin.set(pin.value.content.text)
             })
         }
