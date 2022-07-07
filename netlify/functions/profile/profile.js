@@ -93,7 +93,8 @@ exports.handler = async function (ev, ctx) {
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
 
-        console.log(pubKey)
+        console.log('pub key', pubKey)
+        console.log('message', msg)
 
         // here, check the msg sig
         try {
