@@ -93,17 +93,21 @@ exports.handler = async function (ev, ctx) {
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
 
+        console.log(pubKey)
+
         // here, check the msg sig
         try {
             var isVal = await ssc.isValidMsg(msg, null, pubKey)
         } catch (err) {
+            console.log('errrr', err)
             return {
                 statusCode: 422,
-                body: 'invalid signature'
+                body: 'err -- invalid signature'
             }
         }
 
         if (!isVal) {
+            console.log('not valid')
             return {
                 statusCode: 422,
                 body: 'invalid signature'
