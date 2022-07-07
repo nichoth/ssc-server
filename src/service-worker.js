@@ -15,10 +15,10 @@ self.addEventListener("fetch", function (event) {
     // we cant intercept cloudinary requests because they are on a different
     // domain
 
-    const shouldIgnore = ((request.method !== "GET" ||
-        !request.url.match(/\.(jpe?g|png|gif|svg|ico)$/)) &&
-        !request.url.includes('cloudinary')
-    )
+    // const shouldIgnore = ((request.method !== "GET" ||
+    //     !request.url.match(/\.(jpe?g|png|gif|svg|ico)$/)) &&
+    //     !request.url.includes('cloudinary')
+    // )
 
     // console.log('should ignore', shouldIgnore)
 
