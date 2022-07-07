@@ -180,22 +180,6 @@ $ npm test
 
 ------------------------------------------
 
-### passwords
-You can use the script `/hash.js` to hash a password --
-
-```
-$ ./hash.js myPassword
-$2b$10$G8uSW1rs3JZS2YGjJLRbeekjmPwCWf0dQ6L37rFjCEIIKNvVyF97u
-```
-
-or
-
-```
-$ echo "myPassword" | ./hash.js | pbcopy
-```
-
-----------------------------
-
 ## cloudinary API
 
 * [upload API](https://cloudinary.com/documentation/node_asset_administration#upload_api)
@@ -209,9 +193,14 @@ $ echo "myPassword" | ./hash.js | pbcopy
 
 ------------------------------------------
 
-## sotrage
+## storage
 
 * [storj](https://www.storj.io/)
 * [cloudinary](https://cloudinary.com/)
 * [web3.storage](https://web3.storage/)
 
+-------------------------------------------------------
+
+## misc notes
+
+[netlify lambda node version](https://docs.netlify.com/functions/optional-configuration/?fn-language=js)
