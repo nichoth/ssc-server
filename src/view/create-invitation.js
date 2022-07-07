@@ -21,7 +21,13 @@ function CreateInvitation (props) {
         if (!isAdmin) return
 
         client.getInvitations()
-            .then(res => emit(evs.invitation.got, res))
+            .then(res => {
+                if (res) {
+                    emit(evs.invitation.got, res)
+                    return
+                }
+                console.log('no response', res)
+            })
             .catch(err => {
                 console.log('arg', err)
             })
