@@ -18,7 +18,6 @@ exports.handler = async function (ev, ctx) {
                 q.Lambda(x => q.Get(x))
             )
         ).then(res => {
-            console.log('res in hererererererere', res)
             return {
                 statusCode: 200,
                 body: JSON.stringify(res.data.length ?

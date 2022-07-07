@@ -233,7 +233,6 @@ module.exports = function Client (_keystore) {
         getPin: function () {
             return fetch(BASE + '/api/pin')
                 .then(res => {
-                    console.log('ressssssssssssss', res)
                     if (!res.ok) res.text().then(text => {
                         throw new Error(text)
                     })
