@@ -10,7 +10,7 @@ self.addEventListener("activate", function (event) {
 
 self.addEventListener("fetch", function (event) {
     var request = event.request;
-    console.log("Detected request", request)
+    // console.log("Detected request", request)
 
     // we cant intercept cloudinary requests because they are on a different
     // domain
@@ -20,7 +20,7 @@ self.addEventListener("fetch", function (event) {
         !request.url.includes('cloudinary')
     )
 
-    console.log('should ignore', shouldIgnore)
+    // console.log('should ignore', shouldIgnore)
 
     // return fetch(request.clone())
     return fetch(request)
