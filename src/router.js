@@ -50,6 +50,9 @@ function Router () {
                 console.log('got pinnnnnnnnnnnnn', pin)
                 state.pin.set(pin.value.content.text)
             })
+            .catch(err => {
+                console.log('pin errrrrrrrrrrrrrrr', err)
+            })
         }
     }
 
