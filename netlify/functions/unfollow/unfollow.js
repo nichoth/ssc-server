@@ -72,9 +72,12 @@ exports.handler = async function (ev, ctx) {
         secret: process.env.FAUNADB_SERVER_SECRET
     })
 
+    console.log('author did', authorDid)
+    console.log('msg.contact', msgs[0].content.contact)
+
     return client.query(
         q.Map(
-            msgs.map(msg => (msg.value.contact)),
+            msgs.map(msg => (msg.content.contact)),
             q.Lambda(
                 "contact",
                 q.If(
@@ -102,6 +105,18 @@ exports.handler = async function (ev, ctx) {
             )
         )
     )
+        .then(res => {
+            return {
+                statusCode: 200,
+                body: JSON.stringify(res.map(doc => doc.data))
+            }
+        })
+        .catch(err => {
+            return {
+                statusCode: 500,
+                body: err.toString()
+            }
+        })
 
 
 

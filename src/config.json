@@ -9,6 +9,9 @@
     {
       "//comment": "from cypress",
       "did": "did:key:z82T5Z5a12L4fQEgT8SUXoFJTWXnxbHBCwTvveaFiQPXXfKwebaJimKw2dK6i8ETgisL9rKCaMstKsmW6FwY9JC455RQT"
+    },
+    {
+      "did": "did:key:z82T5Yjfd8wNvVJJN627CmdH6ZZzxTJirkNZpAS4rnyhrY8qi9HR4xzgjAhZWthM3HzZLsr6tkCVedkVYkaMTyV7eqido"
     }
   ]
 }

@@ -83,20 +83,24 @@ module.exports = function Client (_keystore) {
                 })
         },
 
-        // get a list of who this user is following
         getFollowing: function (did) {
-            const qs = new URLSearchParams({ did }).toString()
-            const url = (BASE + '/api/following' + '?' + qs)
-
-            return fetch(url)
-                .then(res => {
-                    if (res.ok) return res.json()
-
-                    return res.text().then(text => {
-                        throw new Error(text)
-                    })
-                })
+            return Follow.get(did)
         },
+
+        // get a list of who this user is following
+        // getFollowing: function (did) {
+        //     const qs = new URLSearchParams({ did }).toString()
+        //     const url = (BASE + '/api/following' + '?' + qs)
+
+        //     return fetch(url)
+        //         .then(res => {
+        //             if (res.ok) return res.json()
+
+        //             return res.text().then(text => {
+        //                 throw new Error(text)
+        //             })
+        //         })
+        // },
 
         // takes an array -- [did]
         follow: function (dids) {

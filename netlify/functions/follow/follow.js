@@ -108,12 +108,16 @@ exports.handler = async function (ev, ctx) {
     // all msgs are valid at this point
     // should check if the server is following the author
     const isAdmin = admins.some(admin => admin.did === authorDid)
-    const serverIsFollowing = !(await client.query(
-        q.IsEmpty(q.Match(
-            q.Index('a_follows_b'),
-            [ serverDid, authorDid ]
+    var serverIsFollowing
+
+    if (!isAdmin) {
+        serverIsFollowing = !(await client.query(
+            q.IsEmpty(q.Match(
+                q.Index('a_follows_b'),
+                [ serverDid, authorDid ]
+            ))
         ))
-    ))
+    }
 
     if (!serverIsFollowing && !isAdmin) {
         return {

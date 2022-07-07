@@ -8,7 +8,7 @@ const BASE = (process.env.NODE_ENV === 'test' ?
 module.exports = {
     get: function (did) {
         const qs = new URLSearchParams({ did }).toString()
-        const url = (BASE + '/api/follow' + '?' + qs)
+        const url = (BASE + '/api/following' + '?' + qs)
 
         return fetch(url)
             .then(res => {
