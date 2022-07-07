@@ -3,7 +3,13 @@ var { appName } = config
 appName = appName || 'ssc-demo'
 const { LS_NAME } = require('./constants')
 
-const dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+var dids = null
+try {
+    dids = JSON.parse(window.localStorage.getItem(LS_NAME))
+} catch (err) {
+    // do nothing
+}
+
 const lastUser = dids ? dids.lastUser : null
 
 module.exports = {
