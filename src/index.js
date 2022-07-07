@@ -17,6 +17,8 @@ const Profile = require('./profile')
 console.log('*appName*', appName)
 console.log('*NODE_ENV*', process.env.NODE_ENV)
 console.log('*CLOUDINARY NAME*', CLOUDINARY_CLOUD_NAME)
+console.log('*************env', process.env)
+console.log('testtttttttttttttttttt', process.env.CLOUDINARY_API_SECRET)
 
 // const env = process.env.NODE_ENV
 
