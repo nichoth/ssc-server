@@ -1,4 +1,5 @@
 import { html } from 'htm/preact'
+import { useEffect, useState } from 'preact/hooks';
 const { marked } = require('marked')
 const Post = require('../components/post-li/with-author')
 
@@ -6,22 +7,36 @@ function Home (props) {
     console.log('home props', props)
     const { me, pin, relevantPosts } = props
     const { isAdmin } = me
+    const [prompt, setPrompt] = useState(null)
 
     function install (ev) {
         ev.preventDefault()
         console.log('install click', ev)
         // Show the prompt
+        // prompt.prompt()
         window._deferredPrompt.prompt()
+
         // Wait for the user to respond to the prompt
         window._deferredPrompt.userChoice.then((choiceResult) => {
+        // prompt.userChoice.then(choiceResult => {
             if (choiceResult.outcome === 'accepted') {
                 console.log('User accepted the A2HS prompt');
             } else {
                 console.log('User dismissed the A2HS prompt');
             }
-            window._deferredPrompt = null;
-        });
+            // setPrompt(null)
+        })
     }
+
+    // useEffect(() => {
+    //     window.addEventListener('beforeinstallprompt', (ev) => {
+    //         ev.preventDefault();
+    //         setPrompt(ev)
+    //         console.log('in home ------ before install prompt', ev)
+    //     })
+    // }, [])
+
+    console.log('prompt', prompt)
 
     return html`<div class="route home">
         ${isAdmin ?
@@ -52,6 +67,7 @@ function Home (props) {
 
         ${
             window._deferredPrompt ?
+            // prompt ?
                 html`<div class="install-btn">
                     <button onclick=${install}>install this as an app</button>
                 </div>` :

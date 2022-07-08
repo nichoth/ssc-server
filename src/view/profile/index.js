@@ -55,20 +55,22 @@ function Profile (props) {
             </div>
 
             <div class="user-text-info">
-                ${isFollowing ?
-                    html`<div class="follow-controls is-following">
-                        <button onclick=${unfollow} title="unfollow">
-                            <i class="fa fa-asterisk" aria-hidden="true"></i>
-                        </button>
-                        <span>following</span>
-                    </div>` :
+                ${me.did === profile.about ?
+                    null :
+                    isFollowing ?
+                        html`<div class="follow-controls is-following">
+                            <button onclick=${unfollow} title="unfollow">
+                                <i class="fa fa-asterisk" aria-hidden="true"></i>
+                            </button>
+                            <span>following</span>
+                        </div>` :
 
-                    html`<div class="follow-controls not-following">
-                        <button onclick=${startFollowing} title="follow this user">
-                            <i class="fa fa-asterisk" aria-hidden="true"></i>
-                        </button>
-                        <span>not following</span>
-                    </div>`
+                        html`<div class="follow-controls not-following">
+                            <button onclick=${startFollowing} title="follow this user">
+                                <i class="fa fa-asterisk" aria-hidden="true"></i>
+                            </button>
+                            <span>not following</span>
+                        </div>`
                 }
 
                 <p>

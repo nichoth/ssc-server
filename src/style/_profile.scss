@@ -50,9 +50,12 @@
     .follow-controls {
         color: black;
 
+        button {
+            font-size: 1.2rem;
+        }
+
         &.is-following {
             button {
-                font-size: 1.2rem;
                 color: blue;
             }
         }

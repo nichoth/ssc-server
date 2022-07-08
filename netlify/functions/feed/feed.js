@@ -42,8 +42,6 @@ exports.handler = function (ev, ctx) {
         // pasted from fauna shell
         // this get posts by the *first* author with given name
 
-        console.log('doing username', username)
-
         // would want to look at the path/params to check for an index number
         // if there is an index,
         //   then you should get that profile at the query start
