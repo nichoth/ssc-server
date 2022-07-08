@@ -36,6 +36,9 @@ console.log('*alternate dids*', dids)
 const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 
+window.addEventListener('beforeinstallprompt', (ev) => {
+    console.log('before install prompt', ev)
+})
 
 
 if ('serviceWorker' in navigator) {
@@ -48,7 +51,7 @@ if ('serviceWorker' in navigator) {
         })
         .catch(function( err ) {
             console.log( "Service Worker Failed to Register", err );
-        });
+        })
 }
 
 
