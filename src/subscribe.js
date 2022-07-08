@@ -1,5 +1,4 @@
 var evs = require('./EVENTS')
-const xtend = require('xtend')
 const { admins } = require('./config.json')
 
 function subscribe (bus, state, client) {
@@ -45,7 +44,7 @@ function subscribe (bus, state, client) {
         console.log('admins', admins)
         const isAdmin = admins.some(obj => obj.did === did)
         console.log('*is admin*', isAdmin)
-        state.me.profile.set(xtend(state.me.profile(), profile))
+        state.me.profile.set( Object.assign({}, state.me.profile(), profile) )
         if (state.me.isAdmin() !== isAdmin) {
             state.me.isAdmin.set(isAdmin)
         }

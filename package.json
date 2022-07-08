@@ -50,8 +50,7 @@
     "raf": "^3.4.1",
     "route-event": "^3.2.0",
     "ruta3": "^2.0.1",
-    "uuid": "^8.3.2",
-    "xtend": "^4.0.2"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
