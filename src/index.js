@@ -65,9 +65,9 @@ ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
     const client = Client(keystore)
     subscribe(bus, state, client)
 
-    state(function onChange (newState) {
-        console.log('change', newState)
-    })
+    // state(function onChange (newState) {
+    //     console.log('change', newState)
+    // })
 
     // for testing
     window.state = state

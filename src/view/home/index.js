@@ -7,6 +7,11 @@ function Home (props) {
     const { me, pin, relevantPosts } = props
     const { isAdmin } = me
 
+    function install (ev) {
+        ev.preventDefault()
+        console.log('install click', ev)
+    }
+
     return html`<div class="route home">
         ${isAdmin ?
             html`
@@ -33,6 +38,10 @@ function Home (props) {
                 }
             </div>`
         }
+
+        <div class="install-btn">
+            <button onclick=${install}>install this as an app</button>
+        </div>
 
         ${relevantPosts ? 
             html`<ul class="main-feed">${props.relevantPosts.map(post => {
