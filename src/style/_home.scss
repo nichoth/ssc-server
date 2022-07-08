@@ -22,7 +22,33 @@
 .install-btn {
     position: fixed;
     bottom: 1rem;
-    left: calc(50vw - 5rem)
+    // left: calc(50vw - 5rem);
+    padding: 1rem;
+    background-color: #000000ba;
+    width: 70vw;
+    left: calc(15vw - 1rem);
+    border: 3px solid aquamarine;
+    display: flex;
+    justify-content: space-between;
+
+    svg {
+        fill: white;
+        width: 30px;
+        height: 30px;
+    }
+
+    button {
+        color: white;
+        border: none;
+        background-color: transparent;
+
+        &:first-child {
+            border-radius: 12px;
+            padding: 0.2rem 1rem;
+            border: 2px solid white;
+            background-color: black;
+        }
+    }
 }
 
 .main-feed, .user-feed {

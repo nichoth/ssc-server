@@ -3,10 +3,8 @@ import { useEffect } from 'preact/hooks';
 const evs = require('../EVENTS')
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const { CLOUDINARY_CLOUD_NAME } = require('../config.json')
-import { scale } from "@cloudinary/url-gen/actions/resize";
 const EditableTextarea = require('./components/editable-textarea')
 const Profile = require('./components/profile')
-// const MiniProfile = require('./components/profile')
 import Markdown from 'preact-markdown'
 
 const cld = cloudinaryUrl({
@@ -54,12 +52,6 @@ function Post (props) {
     // @TODO -- show multiple images if they exist for this post
     const url = cld.image(encodeURIComponent(mentions[0])).toURL()
 
-    const avatarUrl = (cld
-        .image(encodeURIComponent(profile.image))
-        .resize( scale().width(100) )
-        .format('auto')
-        .toURL())
-
     function saveReply (replyText) {
         return client.postReply({
             replyTo: singlePost.msg.key,
@@ -84,7 +76,6 @@ function Post (props) {
         <div class="post-image-wrapper">
             <img src=${url} />
         </div>
-
 
         <${Profile} profile=${profile}
             href=${'/@' + profile.username}

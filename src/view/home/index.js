@@ -1,42 +1,30 @@
 import { html } from 'htm/preact'
-import { useEffect, useState } from 'preact/hooks';
-const { marked } = require('marked')
+import { useState } from 'preact/hooks';
+import Markdown from 'preact-markdown'
 const Post = require('../components/post-li/with-author')
+const { Cross } = require('../components/icons')
 
 function Home (props) {
     console.log('home props', props)
     const { me, pin, relevantPosts } = props
     const { isAdmin } = me
-    const [prompt, setPrompt] = useState(null)
 
     function install (ev) {
         ev.preventDefault()
         console.log('install click', ev)
         // Show the prompt
-        // prompt.prompt()
         window._deferredPrompt.prompt()
 
         // Wait for the user to respond to the prompt
-        window._deferredPrompt.userChoice.then((choiceResult) => {
+        window._deferredPrompt.userChoice.then(choiceResult => {
         // prompt.userChoice.then(choiceResult => {
             if (choiceResult.outcome === 'accepted') {
                 console.log('User accepted the A2HS prompt');
             } else {
                 console.log('User dismissed the A2HS prompt');
             }
-            // setPrompt(null)
         })
     }
-
-    // useEffect(() => {
-    //     window.addEventListener('beforeinstallprompt', (ev) => {
-    //         ev.preventDefault();
-    //         setPrompt(ev)
-    //         console.log('in home ------ before install prompt', ev)
-    //     })
-    // }, [])
-
-    console.log('prompt', prompt)
 
     return html`<div class="route home">
         ${isAdmin ?
@@ -48,18 +36,18 @@ function Home (props) {
                     </a>
 
                     ${pin ?
-                        html`<div dangerouslySetInnerHTML=${{
-                            __html: marked(pin)
-                        }} class="pin-content"></div>` :
+                        html`<div class="pin-content">
+                            <${Markdown} markdown=${pin} />
+                        </div>` :
                         null
                     }
                 </div>
             `:
             html`<div>
                 ${pin ?
-                    html`<div dangerouslySetInnerHTML=${{
-                        __html: marked(pin)
-                    }}></div>` :
+                    html`<div class="pin-content">
+                        <${Markdown} markdown=${pin} />
+                    </div>` :
                     null
                 }
             </div>`
@@ -67,10 +55,7 @@ function Home (props) {
 
         ${
             window._deferredPrompt ?
-            // prompt ?
-                html`<div class="install-btn">
-                    <button onclick=${install}>install this as an app</button>
-                </div>` :
+                html`<${InstallButton} onClick=${install} />` :
                 null
         }
 
@@ -83,9 +68,8 @@ function Home (props) {
                     me.following[post.value.author]
 
                 return html` <${Post} me=${me} authorProfile=${authorProfile}
-                        post=${post}
-                    />
-                `
+                    post=${post}
+                />`
             })}</ul>` :
 
             null
@@ -93,4 +77,23 @@ function Home (props) {
     </div>`
 }
 
+function InstallButton ({ onClick }) {
+    const [show, setShow] = useState(true)
+
+    function closeInstall (ev) {
+        ev.preventDefault()
+        setShow(false)
+    }
+
+    return show ?
+        html`<div class="install-btn">
+            <button onclick=${onClick}>install this as an app</button>
+            <button class="close-btn" onclick=${closeInstall}>
+                <${Cross} color="white" />
+            </button>
+        </div>` :
+        null
+}
+
+            // <${Cross} />
 module.exports = Home

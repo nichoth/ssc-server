@@ -1,5 +1,4 @@
 import { html } from 'htm/preact'
-import Markdown from 'preact-markdown'
 const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 import { scale } from "@cloudinary/url-gen/actions/resize";
 const { CLOUDINARY_CLOUD_NAME } = require('../../../config.json')
