@@ -19,6 +19,12 @@
     }
 }
 
+.install-btn {
+    position: fixed;
+    bottom: 1rem;
+    left: calc(50vw - 5rem)
+}
+
 .main-feed, .user-feed {
     list-style: none;
     display: grid;

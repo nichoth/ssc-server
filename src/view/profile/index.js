@@ -92,11 +92,6 @@ function Profile (props) {
 
         <ul class="user-feed">
             ${feed.map(post => {
-                // const authorProfile = post.value.author === me.did ?
-                //     me.profile :
-                //     // TODO -- use `feed` key in state
-                //     me.following[post.value.author]
-
                 return html` <${Post} post=${post} />`
             })}
         </ul>

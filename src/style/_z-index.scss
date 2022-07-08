@@ -1,3 +1,13 @@
 .burger {
     z-index: 99;
 }
+
+.install-btn {
+    z-index: 2;
+}
+
+.mobile-nav-list {
+    &.open {
+        z-index: 3;
+    }
+}

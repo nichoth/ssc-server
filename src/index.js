@@ -37,8 +37,8 @@ const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 
 window.addEventListener('beforeinstallprompt', (ev) => {
-    ev.preventDefault();
-    window._deferredPrompt = ev;
+    ev.preventDefault()
+    window._deferredPrompt = ev
     console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa before install prompt', ev)
 })
 
