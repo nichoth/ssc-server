@@ -37,7 +37,9 @@ const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 
 window.addEventListener('beforeinstallprompt', (ev) => {
-    console.log('before install prompt', ev)
+    ev.preventDefault();
+    window._deferredPrompt = ev;
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa before install prompt', ev)
 })
 
 
@@ -53,8 +55,6 @@ if ('serviceWorker' in navigator) {
             console.log( "Service Worker Failed to Register", err );
         })
 }
-
-
 
 
 
