@@ -16,7 +16,8 @@ var evs = namespace({
     feed: ['got'],
     identity: ['setProfile', 'newDid', 'change', 'setUsername'],
     invitation: ['got', 'new'],
-    reply: ['created']
+    reply: ['created'],
+    installPrompt: ['hide']
 })
 
 module.exports = evs

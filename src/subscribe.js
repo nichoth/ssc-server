@@ -6,6 +6,10 @@ function subscribe (bus, state, client) {
         console.log('***star***', name, ev)
     })
 
+    bus.on(evs.installPrompt.hide, () => {
+        state.promptInstall.set(false)
+    })
+
     bus.on(evs.post.got, post => {
         console.log('got post', post)
         // TODO -- replies

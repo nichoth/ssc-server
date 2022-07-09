@@ -3,11 +3,13 @@ import { useState } from 'preact/hooks';
 import Markdown from 'preact-markdown'
 const Post = require('../components/post-li/with-author')
 const { Cross } = require('../components/icons')
+const evs = require('../../EVENTS')
 
 function Home (props) {
     console.log('home props', props)
-    const { me, pin, relevantPosts } = props
+    const { me, pin, relevantPosts, promptInstall, emit } = props
     const { isAdmin } = me
+    // const [ prompt, setPrompt ] = useState(true)
 
     function install (ev) {
         ev.preventDefault()
@@ -55,7 +57,10 @@ function Home (props) {
 
         ${
             window._deferredPrompt ?
-                html`<${InstallButton} onClick=${install} />` :
+                html`<${InstallButton} prompt=${promptInstall}
+                    onClick=${install}
+                    onClose=${emit(evs.installPrompt.hide)}
+                />` :
                 null
         }
 
@@ -77,8 +82,10 @@ function Home (props) {
     </div>`
 }
 
-function InstallButton ({ onClick }) {
-    const [show, setShow] = useState(true)
+function InstallButton ({ onClick, prompt, onClose }) {
+    const [show, setShow] = (prompt === undefined) ?
+        useState(true) :
+        [prompt, onClose]
 
     function closeInstall (ev) {
         ev.preventDefault()
@@ -95,5 +102,4 @@ function InstallButton ({ onClick }) {
         null
 }
 
-            // <${Cross} />
 module.exports = Home

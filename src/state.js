@@ -9,6 +9,7 @@ function State (keystore, { admins, dids }) {
         route: observ(getRoute()),
         admins: observ(admins),
         pin: observ(null),
+        promptInstall: observ(true),
         dids: observ(dids),
         singlePost: observ({
             msg: null,
