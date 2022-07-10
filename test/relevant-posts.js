@@ -106,9 +106,7 @@ function relevantTests (test, keys, did) {
                     userProfile: { username: 'dod' }
                 })
             })
-            // .then(res => {
             .then(() => {
-                // console.log('following', res)
                 // this makes admin follow crob
                 return Follow.post(ssc, keys, [crob.did])
             })
