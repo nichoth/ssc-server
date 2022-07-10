@@ -7,7 +7,8 @@ const { setup, allDone } = require('./setup')
 const { v4: uuidv4 } = require('uuid')
 const getRedemptions = require('../src/client/get-redemptions')
 const BASE = 'http://localhost:8888'
-const { blobHash } = require('../src/util')
+// const { blobHash } = require('../src/util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 
 const file = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
 const hash = blobHash(file)
@@ -81,7 +82,6 @@ function invite (test, keys, did) {
             })
     })
 
-    // var _alice
     test('client.redeemInvitation', t => {
         const file = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
 
@@ -101,8 +101,9 @@ function invite (test, keys, did) {
                     'should return the profile for the new user')
                 t.equal(res.value.content.username, 'alice',
                     'should set the username')
+
                 t.equal(res.value.content.image,
-                    '&GmuzSvBeEBT5tvt1vhtRkhl1a7V8MkTqCxT4Z4jFz_s.sha256',
+                    '&1a6bb34af05e1014f9b6fb75be1b519219756bb57c3244ea0b14f86788c5cffb.sha256',
                     'should set the right hash for the avatar')
                 t.end()
             })
@@ -174,74 +175,75 @@ function invite (test, keys, did) {
     })
 
 
+    var hash
     test('redeem an invitation with a valid code', t => {
-        // var _alice
+        var _alice
         const inviterDid = did
 
-        let hash = blobHash(file)
-        // let _hash = createHash('sha256')
-        // _hash.update(file)
-        // const hash = _hash.digest('base64')
+        blobHash(file)
+            .then(_hash => {
+                hash = _hash
 
-        ssc.createKeys()
-            .then(alice => {
-                _alice = alice
+                ssc.createKeys()
+                    .then(alice => {
+                        _alice = alice
 
-                return ssc.exportKeys(alice.keys).then(exported => {
-                    const aliceDid = ssc.publicKeyToDid(exported.public)
-                    const username = 'alice'
+                        return ssc.exportKeys(alice.keys).then(exported => {
+                            const aliceDid = ssc.publicKeyToDid(exported.public)
+                            const username = 'alice'
 
-                    return Promise.all([
-                        ssc.createMsg(alice.keys, null, {
-                            type: 'redemption',
-                            inviter: inviterDid,
-                            code: _code
-                        }),
+                            return Promise.all([
+                                ssc.createMsg(alice.keys, null, {
+                                    type: 'redemption',
+                                    inviter: inviterDid,
+                                    code: _code
+                                }),
 
-                        ssc.createMsg(alice.keys, null, {
-                            type: 'follow',
-                            contact: inviterDid
-                        }),
+                                ssc.createMsg(alice.keys, null, {
+                                    type: 'follow',
+                                    contact: inviterDid
+                                }),
 
-                        ssc.createMsg(alice.keys, null, {
-                            type: 'about',
-                            about: aliceDid,
-                            username,
-                            desc: null,
-                            image: hash
+                                ssc.createMsg(alice.keys, null, {
+                                    type: 'about',
+                                    about: aliceDid,
+                                    username,
+                                    desc: null,
+                                    image: _hash
+                                })
+                            ])
                         })
-                    ])
-                })
-            })
-            .then(([msg, follow, profile]) => {
-                fetch(BASE + '/.netlify/functions/redeem-invitation', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        redemption: msg,
-                        follow,
-                        profile,
-                        file
                     })
-                })
-                    .then(res => {
-                        if (!res.ok) {
-                            return res.text().then(text => {
-                                t.fail(text)
-                                t.end()
-                                return
+                    .then(([msg, follow, profile]) => {
+                        fetch(BASE + '/.netlify/functions/redeem-invitation', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                redemption: msg,
+                                follow,
+                                profile,
+                                file
                             })
-                        }
+                        })
+                            .then(res => {
+                                if (!res.ok) {
+                                    return res.text().then(text => {
+                                        t.fail(text)
+                                        t.end()
+                                        return text
+                                    })
+                                }
 
-                        return res.json()
-                    })
-                    .then(res => {
-                        if (!res) return
-                        t.equal(res.value.content.type, 'about',
-                            "should return 'about' message")
-                        t.equal(res.value.content.about, _alice.did,
-                            'should follow the right person')
-                        t.end()
+                                return res.json()
+                            })
+                            .then(res => {
+                                if (!res) return
+                                t.equal(res.value.content.type, 'about',
+                                    "should return 'about' message")
+                                t.equal(res.value.content.about, _alice.did,
+                                    'should follow the right person')
+                                t.end()
+                            })
                     })
             })
     })
