@@ -1,7 +1,7 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-const { blobHash } = require('../../../src/util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 const { admins } = require('../../../src/config.json')
 const serverFollows = require('../server-follows')
 const upload = require('../upload')
@@ -10,7 +10,6 @@ var q = faunadb.query
 var client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
 })
-
 
 exports.handler = async function (ev, ctx) {
     if (ev.httpMethod === 'GET') {
@@ -105,8 +104,8 @@ exports.handler = async function (ev, ctx) {
 
     // test that each mention is the hash for a file
     // (file and mention arrays need to be in the same order)
-    const hashesOk = mentions.reduce((isOk, mention, i) => {
-        return (isOk && (blobHash(files[i]) === mention))
+    const hashesOk = mentions.reduce(async (isOk, mention, i) => {
+        return (isOk && (await blobHash(files[i]) === mention))
     }, true)
 
     if (!hashesOk) {
