@@ -8,6 +8,7 @@ const NewPin = require('./view/new-pin')
 const PostView = require('./view/post')
 const ProfileViewByDID = require('./view/profile/by-did')
 const ProfileViewByUsername = require('./view/profile/by-name')
+
 var router = _router()
 
 
