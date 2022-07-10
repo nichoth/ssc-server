@@ -110,7 +110,7 @@ function relevantTests (test, keys, did) {
             .then(() => {
                 // console.log('following', res)
                 // this makes admin follow crob
-                return Follow.post(ssc, keys, crob.did)
+                return Follow.post(ssc, keys, [crob.did])
             })
             .then(res => {
                 console.log('fol from admin to crob', res)
@@ -142,7 +142,7 @@ function relevantTests (test, keys, did) {
             })
     })
 
-    test('crob can see thier own messages', t => {
+    test('crob can see their own messages', t => {
         // in this case, we have `dod -> admin <-> crob`
 
         // should check here if dod can see their own posts

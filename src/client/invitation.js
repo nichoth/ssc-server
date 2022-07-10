@@ -46,6 +46,29 @@ module.exports = {
             })
     },
 
+    followViaInvitation: function (ssc, keys, dids) {
+        return Promise.all(dids.map(did => {
+            return ssc.createMsg(keys, null, {
+                type: 'follow',
+                contact: did
+            })
+        }))
+            .then(msgs => {
+                return fetch(BASE + '/api/follow-via-invitation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(msgs)
+                })
+            })
+            .then(res => {
+                if (res.ok) return res.json()
+
+                return res.text().then(text => {
+                    throw new Error(text)
+                })
+            })
+    },
+
     getAll: function () {
         return fetch(BASE + '/api/invitation')
             .then(res => {

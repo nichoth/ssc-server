@@ -22,6 +22,10 @@ function inviteAndFollow ({ adminKeys, user, userProfile }) {
             }
 
             return Invitation.redeem(ssc, user.keys, code, content, file)
+                .then(() => {
+                    return Invitation.followViaInvitation(ssc, adminKeys,
+                        [user.did])
+                })
         })
 }
 

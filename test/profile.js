@@ -148,7 +148,7 @@ function profileTests (test, keys, did) {
             }).then(res => {
                 t.equal(res.status, 422, 'should return code 422')
                 res.text().then(text => {
-                    t.equal(text,  'invalid signature',
+                    t.equal(text,  'invalid signature in profile',
                         'should have the expected error message')
                     t.end()
                 })
@@ -224,8 +224,7 @@ function profileTests (test, keys, did) {
                 t.equal(res.status, 200, 'should have 200 response')
                 if (res.ok) return res.json()
                 res.text().then(text => {
-                    console.log('status', res.status)
-                    console.log('boooo', text)
+                    t.fail(text)
                     t.end()
                 })
             })

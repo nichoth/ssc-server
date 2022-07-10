@@ -60,28 +60,33 @@ module.exports = function Client (_keystore) {
 
         getRelevantPosts: RelevantPosts.get,
 
-        followViaInvitation: function (did) {
-            return Promise.all(did.map(did => {
-                return ssc.createMsg(keystore, null, {
-                    type: 'follow',
-                    contact: did
-                })
-            }))
-                .then(msgs => {
-                    return fetch(BASE + '/api/follow-via-invitation', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(msgs)
-                    })
-                })
-                .then(res => {
-                    if (res.ok) return res.json()
-
-                    res.text().then(text => {
-                        throw new Error(text)
-                    })
-                })
+        followViaInvitation: function (dids) {
+            // followViaInvitation: function (ssc, dids) {
+            return Invitation.followViaInvitation(ssc, keystore, dids)
         },
+
+        // followViaInvitation: function (dids) {
+        //     return Promise.all(dids.map(did => {
+        //         return ssc.createMsg(keystore, null, {
+        //             type: 'follow',
+        //             contact: did
+        //         })
+        //     }))
+        //         .then(msgs => {
+        //             return fetch(BASE + '/api/follow-via-invitation', {
+        //                 method: 'POST',
+        //                 headers: { 'Content-Type': 'application/json' },
+        //                 body: JSON.stringify(msgs)
+        //             })
+        //         })
+        //         .then(res => {
+        //             if (res.ok) return res.json()
+
+        //             res.text().then(text => {
+        //                 throw new Error(text)
+        //             })
+        //         })
+        // },
 
         getFollowing: function (did) {
             return Follow.get(did)

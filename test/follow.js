@@ -194,7 +194,9 @@ function followTests (test, keys, did) {
     test('client.getFollowing', t => {
         Follow.get(did)
             .then(res => {
-                t.equal(res.length, 0, 'should not be following anyone')
+                // following is 1 because we did 'follow via invitation' in
+                //   `util` on the last person
+                t.equal(res.length, 1, 'should not be following one person')
                 t.end()
             })
             .catch(err => {
