@@ -17,6 +17,7 @@ test('setup', function (t) {
         _did = did
 
         onExit(() => {
+            console.log('its exit!!!!!!!!!!!!!!!!')
             ntl.kill('SIGINT')
         })
 

@@ -67,6 +67,9 @@ function relevantTests (test, keys, did) {
                     'should have the expected post author')
                 t.end()
             })
+            .catch(err => {
+                console.log('errrrrrrrrrrrrrrrrrrrr', err)
+            })
     })
 
     // now `crob` is following the admin
