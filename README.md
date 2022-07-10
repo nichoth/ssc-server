@@ -208,3 +208,8 @@ $ npm test
 ## misc notes
 
 [netlify lambda node version](https://docs.netlify.com/functions/optional-configuration/?fn-language=js)
+
+### tests
+
+The post tests get wonky because `relevant-posts` and `posts` both post
+with the same profile, so the sequence/previous gets messed up
