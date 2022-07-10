@@ -247,16 +247,11 @@ function profileTests (test, keys, did) {
                     return profile.value.author === _user.did
                 })
                 t.ok(match, 'should contain the new user')
-                console.log('hello')
-                console.log('res...', res.length - 1)
-                console.log('...', res[res.length  - 1].value)
-                console.log('__user did___', _user.did)
                 t.equal(res[res.length - 1].value.author, _user.did,
                     'should have the expected did at the end of the array')
                 t.end()
             })
             .catch(err => {
-                console.log('aaaarrrrrrrrrrrr', err)
                 t.fail(err.toString())
                 t.end()
             })
