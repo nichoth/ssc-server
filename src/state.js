@@ -1,9 +1,9 @@
-const ssc = require('@nichoth/ssc/web')
+// const ssc = require('@nichoth/ssc/web')
 const observ = require('observ')
 const struct = require('observ-struct')
 const { getRoute } = require('route-event')
 
-function State (keystore, { admins, dids }) {
+function State (ssc, keystore, { admins, dids }) {
 
     const state = struct({
         route: observ(getRoute()),

@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const ssc = require('@nichoth/ssc/web')
+// const ssc = require('@nichoth/ssc/web')
 const { blobHash } = require('../util')
 const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
@@ -17,7 +17,7 @@ const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
 // this is a client-side file that calls our API
 
-module.exports = function Client (_keystore) {
+module.exports = function Client (ssc, _keystore) {
     var keystore = _keystore
 
     const client = {

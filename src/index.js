@@ -37,6 +37,8 @@ const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 const ssc = Ssc(window.keystore)
 
+console.log('ssc', ssc)
+
 window.addEventListener('beforeinstallprompt', (ev) => {
     ev.preventDefault()
     window._deferredPrompt = ev
@@ -61,9 +63,9 @@ if ('serviceWorker' in navigator) {
 
 console.log('**storename**', storeName)
 ssc.createKeys(ssc.keyTypes.ECC, { storeName }).then(keystore => {
-    const state = State(keystore, { admins, dids })
+    const state = State(ssc, keystore, { admins, dids })
     var bus = Bus({ memo: true })
-    const client = Client(keystore)
+    const client = Client(ssc, keystore)
     subscribe(bus, state, client)
 
     // state(function onChange (newState) {
