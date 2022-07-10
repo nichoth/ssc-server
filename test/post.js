@@ -127,7 +127,9 @@ function postTest (test, keys) {
     })
 
     test('a valid message from a random user', t => {
-        ssc.createKeys().then(alice => {
+        var alice
+        ssc.createKeys().then(_alice => {
+            alice = _alice
             return blobHash(file)
         })
         .then(hash => {

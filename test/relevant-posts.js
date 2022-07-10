@@ -55,6 +55,7 @@ function relevantTests (test, keys, did) {
                 })
             })
             .then(() => {
+                // create a post from admin
                 return Post.create(ssc, keys, {
                     files: [file],
                     content: { text: 'wooo' },
@@ -72,7 +73,6 @@ function relevantTests (test, keys, did) {
     test('get relevant posts', t => {
         RelevantPosts.get(crob.did)
             .then(res => {
-                // console.log('got relevants', res)
                 t.equal(res.length, 1, 'should get 1 post')
                 t.equal(res[0].value.content.text, 'wooo',
                     'should have the expected message text')
@@ -111,7 +111,6 @@ function relevantTests (test, keys, did) {
                 return Follow.post(ssc, keys, [crob.did])
             })
             .then(res => {
-                console.log('fol from admin to crob', res)
                 // now make a post from crob
                 return Post.create(ssc, crob.keys, {
                     files: [file],

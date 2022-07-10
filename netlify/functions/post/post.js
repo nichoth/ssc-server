@@ -127,6 +127,7 @@ exports.handler = async function (ev, ctx) {
 
     return ssc.isValidMsg(msg, lastMsg, pubKey).then(isVal => {
         if (!isVal) {
+            console.log('not valid ', msg)
             return {
                 statusCode: 400,
                 body: 'invalid signature in post'
@@ -168,6 +169,7 @@ exports.handler = async function (ev, ctx) {
             })
     })
         .catch((err) => {
+            console.log('errrrrrrrrr in post', err)
             return {
                 statusCode: 400,
                 body: 'invalid signature in post'
