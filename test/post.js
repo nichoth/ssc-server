@@ -110,7 +110,7 @@ function postTest (test, keys) {
                     }
 
                     res.text().then(text => {
-                        t.equal(text, 'invalid signature',
+                        t.equal(text, 'invalid signature in post',
                             'should return the expected error message')
                         t.end()
                     })

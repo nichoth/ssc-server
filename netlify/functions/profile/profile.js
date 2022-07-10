@@ -108,7 +108,7 @@ exports.handler = async function (ev, ctx) {
             console.log('not valid')
             return {
                 statusCode: 422,
-                body: 'invalid signature'
+                body: 'invalid signature in profile'
             }
         }
 

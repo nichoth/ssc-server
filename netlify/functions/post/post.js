@@ -129,7 +129,7 @@ exports.handler = async function (ev, ctx) {
         if (!isVal) {
             return {
                 statusCode: 400,
-                body: 'invalid signature'
+                body: 'invalid signature in post'
             }
         }
 
@@ -170,7 +170,7 @@ exports.handler = async function (ev, ctx) {
         .catch((err) => {
             return {
                 statusCode: 400,
-                body: 'invalid signature'
+                body: 'invalid signature in post'
             }
         })
 }
