@@ -1,6 +1,7 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const { blobHash } = require('../util')
+// const { blobHash } = require('../util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
             })
     },
 
-    save: function (ssc, user, prev, profile, file) {
+    save: async function (ssc, user, prev, profile, file) {
         if (!profile.username) {
             return Promise.reject(new Error('missing username'))
         }
@@ -28,7 +29,7 @@ module.exports = {
             about: user.did,
             username: profile.username,
             desc: profile.desc || null,
-            image: blobHash(file)
+            image: await blobHash(file)
         })
             .then(msg => {
                 return fetch(BASE + '/api/profile', {

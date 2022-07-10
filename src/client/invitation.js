@@ -4,7 +4,8 @@ const BASE = (process.env.NODE_ENV === 'test' ?
     'http://localhost:8888' :
     '')
 const { v4: uuidv4 } = require('uuid')
-const { blobHash } = require('../util')
+// const { blobHash } = require('../util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 
 module.exports = {
     create: async function createInvitation (ssc, keys, msgContent) {
@@ -56,13 +57,13 @@ module.exports = {
             })
     },
 
-    redeem: function redeemInvitation (ssc, keys, code, content, file) {
+    redeem: async function redeemInvitation (ssc, keys, code, content, file) {
         const { did, username } = content
         if (!did || !username) {
             return Promise.reject(new Error('missing an argument'))
         }
 
-        const hash = blobHash(file)
+        const hash = await blobHash(file)
         const [ inviterDid ] = code.split('--')
 
         return Promise.all([

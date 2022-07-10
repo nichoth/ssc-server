@@ -2,7 +2,7 @@ import { html } from 'htm/preact'
 import { render } from 'preact'
 var route = require('route-event')()
 var Bus = require('@nichoth/events')
-const ssc = require('@nichoth/ssc/web')
+const Ssc = require('@nichoth/ssc/web')
 var subscribe = require('./subscribe')
 var State = require('./state')
 const Connector = require('./connector')
@@ -35,6 +35,7 @@ console.log('*alternate dids*', dids)
 
 const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
+const ssc = Ssc(window.keystore)
 
 window.addEventListener('beforeinstallprompt', (ev) => {
     ev.preventDefault()

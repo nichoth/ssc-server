@@ -72,11 +72,7 @@ exports.handler = async function (ev, ctx) {
 
     // if is an admin, create an alt
     if (admins.some(el => el.did === did)) {
-        // var hash = createHash('sha256')
-        // hash.update(file)
-        // const _hash = hash.digest('base64')
-        // const _hash = '&' + getHash(file)
-        const _hash = blobHash(file)
+        const _hash = await blobHash(file)
 
         if (_hash !== newProfile.content.image) {
             return {
