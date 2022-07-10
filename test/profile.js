@@ -233,6 +233,11 @@ function profileTests (test, keys, did) {
                 t.equal(msgContent.username, 'alice', 'should set the username')
                 t.end()
             })
+            .catch(err => {
+                console.log('ooooooooooooooo', err)
+                t.fail(err)
+                t.end()
+            })
     })
 
     test('client.getByName -- get a profile by username', t => {

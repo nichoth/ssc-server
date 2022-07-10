@@ -68,6 +68,8 @@ function relevantTests (test, keys, did) {
                 t.end()
             })
             .catch(err => {
+                t.fail(err)
+                t.end()
                 console.log('errrrrrrrrrrrrrrrrrrrr', err)
             })
     })

@@ -48,5 +48,9 @@ module.exports = {
                     throw new Error(text)
                 })
             })
+            .catch(err => {
+                console.log('errrrrrrrrrrrrrrrr', err)
+                throw err
+            })
     }
 }
