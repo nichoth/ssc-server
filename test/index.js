@@ -9,6 +9,8 @@ var _keys
 var _did
 
 test('setup', function (t) {
+    // t.plan(73)
+
     setup(t.test, ({ netlify, keys, did }) => {
         ntl = netlify
         _keys = keys

@@ -7,7 +7,8 @@ const cloudinaryUrl = require('@nichoth/blob-store/cloudinary/url')
 const { setup, allDone } = require('./setup')
 const Invitation = require('../src/client/invitation')
 const Post = require('../src/client/post')
-const { blobHash } = require('../src/util')
+// const { blobHash } = require('../src/util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 const { CLOUDINARY_CLOUD_NAME } = require('../src/config.json')
 const BASE = 'http://localhost:8888'
 
@@ -93,44 +94,50 @@ function postTest (test, keys) {
     })
 
     test('post an invalid message from a valid user', t => {
-        ssc.createMsg(keys, null, {
-            type: 'post',
-            text: 'bad merkle sequence',
-            mentions: [blobHash(file)]
-        }).then(msg => {
-            fetch(BASE + '/api/post', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ files: [file], msg })
-            })
-                .then(res => {
-                    if (res.ok) {
-                        t.fail('response should not be ok')
-                        t.end()
-                    }
+        blobHash(file).then(hash => {
+            ssc.createMsg(keys, null, {
+                type: 'post',
+                text: 'bad merkle sequence',
+                mentions: [hash]
+            }).then(msg => {
+                fetch(BASE + '/api/post', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ files: [file], msg })
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            t.fail('response should not be ok')
+                            t.end()
+                        }
 
-                    res.text().then(text => {
-                        t.equal(text, 'invalid signature in post',
-                            'should return the expected error message')
+                        res.text().then(text => {
+                            t.equal(text, 'invalid signature in post',
+                                'should return the expected error message')
+                            t.end()
+                        })
+                    })
+                    .catch(err => {
+                        console.log('errrrrr', err)
+                        t.fail('err')
                         t.end()
                     })
                 })
-                .catch(err => {
-                    console.log('errrrrr', err)
-                    t.fail('err')
-                    t.end()
-                })
-            })
+        })
     })
 
     test('a valid message from a random user', t => {
         ssc.createKeys().then(alice => {
+            return blobHash(file)
+        })
+        .then(hash => {
             return ssc.createMsg(alice.keys, null, {
                 type: 'post',
-                mentions: [blobHash(file)],
+                mentions: [hash],
                 text: 'random user message'
             })
-        }).then(msg => {
+        })
+        .then(msg => {
             fetch(BASE + '/api/post', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
