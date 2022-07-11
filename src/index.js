@@ -37,8 +37,6 @@ const storeName = (dids ? dids[lastUser] : {}).storeName || appName
 
 const ssc = Ssc(window.keystore)
 
-console.log('ssc', ssc)
-
 window.addEventListener('beforeinstallprompt', (ev) => {
     ev.preventDefault()
     window._deferredPrompt = ev

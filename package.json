@@ -33,7 +33,7 @@
     "@nichoth/blob-store": "^0.3.2",
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^1.0.0",
-    "@nichoth/ssc": "^0.12.0",
+    "@nichoth/ssc": "^0.14.1",
     "@nichoth/ssc-lambda": "^0.0.19",
     "dotenv": "^8.6.0",
     "drag-drop": "^7.0.1",
