@@ -7,6 +7,10 @@ This is a demo, but it not functioning while I refactor things
 
 -----------------------------------------------
 
+[Join the discord](https://discord.gg/SxWNsDMxT4)
+
+----------------------------------------------
+
 This is the frontend and also server-side code for ssc. A deployable netlify
 website. This uses netlify lambda functions to call a faunaDB. As such, it is "serverless", and only requires lambda functions, not a dedicated server.
 
