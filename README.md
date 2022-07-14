@@ -207,7 +207,14 @@ $ npm test
 
 ## misc notes
 
+### node version in lambda functions
+
 [netlify lambda node version](https://docs.netlify.com/functions/optional-configuration/?fn-language=js)
+
+Set the env variable
+```
+AWS_LAMBDA_JS_RUNTIME="nodejs16.x"
+```
 
 ### tests
 
