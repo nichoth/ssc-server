@@ -9,7 +9,6 @@ function Home (props) {
     console.log('home props', props)
     const { me, pin, relevantPosts, promptInstall, emit } = props
     const { isAdmin } = me
-    // const [ prompt, setPrompt ] = useState(true)
 
     function install (ev) {
         ev.preventDefault()

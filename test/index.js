@@ -9,12 +9,15 @@ var _keys
 var _did
 
 test('setup', function (t) {
+    // t.plan(73)
+
     setup(t.test, ({ netlify, keys, did }) => {
         ntl = netlify
         _keys = keys
         _did = did
 
         onExit(() => {
+            console.log('its exit!!!!!!!!!!!!!!!!')
             ntl.kill('SIGINT')
         })
 
@@ -50,9 +53,9 @@ test('relevant posts', t => {
     require('./relevant-posts')(t.test, _keys, _did)
 })
 
-test('replies', t => {
-    require('./reply')(t.test, _keys, _did)
-})
+// test('replies', t => {
+//     require('./reply')(t.test, _keys, _did)
+// })
 
 test('all done', function (t) {
     allDone(ntl)

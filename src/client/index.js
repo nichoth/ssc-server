@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const ssc = require('@nichoth/ssc/web')
+// const ssc = require('@nichoth/ssc/web')
 const { blobHash } = require('../util')
 const { SERVER_PUB_KEY } = require('../config.json')
 const getRedemptions = require('./get-redemptions')
@@ -17,7 +17,7 @@ const BASE = (process.env.NODE_ENV === 'test' ? 'http://localhost:8888' : '')
 
 // this is a client-side file that calls our API
 
-module.exports = function Client (_keystore) {
+module.exports = function Client (ssc, _keystore) {
     var keystore = _keystore
 
     const client = {
@@ -60,28 +60,33 @@ module.exports = function Client (_keystore) {
 
         getRelevantPosts: RelevantPosts.get,
 
-        followViaInvitation: function (did) {
-            return Promise.all(did.map(did => {
-                return ssc.createMsg(keystore, null, {
-                    type: 'follow',
-                    contact: did
-                })
-            }))
-                .then(msgs => {
-                    return fetch(BASE + '/api/follow-via-invitation', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(msgs)
-                    })
-                })
-                .then(res => {
-                    if (res.ok) return res.json()
-
-                    res.text().then(text => {
-                        throw new Error(text)
-                    })
-                })
+        followViaInvitation: function (dids) {
+            // followViaInvitation: function (ssc, dids) {
+            return Invitation.followViaInvitation(ssc, keystore, dids)
         },
+
+        // followViaInvitation: function (dids) {
+        //     return Promise.all(dids.map(did => {
+        //         return ssc.createMsg(keystore, null, {
+        //             type: 'follow',
+        //             contact: did
+        //         })
+        //     }))
+        //         .then(msgs => {
+        //             return fetch(BASE + '/api/follow-via-invitation', {
+        //                 method: 'POST',
+        //                 headers: { 'Content-Type': 'application/json' },
+        //                 body: JSON.stringify(msgs)
+        //             })
+        //         })
+        //         .then(res => {
+        //             if (res.ok) return res.json()
+
+        //             res.text().then(text => {
+        //                 throw new Error(text)
+        //             })
+        //         })
+        // },
 
         getFollowing: function (did) {
             return Follow.get(did)

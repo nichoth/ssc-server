@@ -1,11 +1,12 @@
-const { blobHash } = require('../util')
+// const { blobHash } = require('../util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 const BASE = 'http://localhost:8888'
 
 module.exports = {
     create: createAlternate
 }
 
-function createAlternate ({ ssc, keystore, newKeystore, profile }) {
+async function createAlternate ({ ssc, keystore, newKeystore, profile }) {
     if (!newKeystore) return Promise.reject(new Error('Missing keystore'))
     if (!profile) return Promise.reject(new Error('Missing profile'))
     const { username, image, desc } = profile
@@ -18,7 +19,7 @@ function createAlternate ({ ssc, keystore, newKeystore, profile }) {
     )
 
     // if we are passed an image, set _hash to the right hash
-    const hash = blobHash(image)
+    const hash = await blobHash(image)
 
     // create a msg signed by the old DID
     return ssc.getDidFromKeys(keystore)

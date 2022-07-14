@@ -72,5 +72,4 @@ function allDone (ntl) {
     ) )
 }
 
-// export default setup
 module.exports = { setup, allDone }

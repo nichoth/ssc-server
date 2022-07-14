@@ -177,3 +177,5 @@ function replyTest (test, keys) {
             })
     })
 }
+
+module.exports = replyTest

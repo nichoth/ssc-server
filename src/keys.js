@@ -1,20 +1,24 @@
-var ssc = require('@nichoth/ssc/web')
+var Ssc = require('@nichoth/ssc/web')
 
-var sscKeys = {
-    save: function (keys) {
-        window.localStorage.setItem( 'ssc-keys', JSON.stringify(keys) );
-        return keys
-    },
+module.exports = function Keys (keystore) {
+    const ssc = Ssc(keystore)
 
-    get: function () {
-        // const cat = localStorage.getItem('myCat');
-        var lsItem = localStorage.getItem('ssc-keys')
-        return lsItem ? JSON.parse(lsItem) : null
-    },
+    var sscKeys = {
+        save: function (keys) {
+            window.localStorage.setItem( 'ssc-keys', JSON.stringify(keys) );
+            return keys
+        },
 
-    create: function () {
-        return ssc.createKeys();
+        get: function () {
+            // const cat = localStorage.getItem('myCat');
+            var lsItem = localStorage.getItem('ssc-keys')
+            return lsItem ? JSON.parse(lsItem) : null
+        },
+
+        create: function () {
+            return ssc.createKeys();
+        }
     }
-}
 
-module.exports = sscKeys
+    return sscKeys
+}

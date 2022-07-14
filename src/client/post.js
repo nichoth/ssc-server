@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('isomorphic-fetch')
-const { blobHash } = require('../util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 const BASE = (process.env.NODE_ENV === 'test' ?
     'http://localhost:8888' :
     '')
@@ -9,11 +9,9 @@ const BASE = (process.env.NODE_ENV === 'test' ?
 // this means, get all invitees that you need to follow
 module.exports = {
     create: async function createPost (ssc, keys, { files, content, prev }) {
-        const mentions = files.map(file => {
+        const mentions = await Promise.all(files.map(file => {
             return blobHash(file)
-        })
-
-        console.log('mentionssssssssss', mentions)
+        }))
 
         const msg = await ssc.createMsg(keys, (prev || null),
             Object.assign({ type: 'post', mentions }, content))

@@ -55,6 +55,7 @@ function relevantTests (test, keys, did) {
                 })
             })
             .then(() => {
+                // create a post from admin
                 return Post.create(ssc, keys, {
                     files: [file],
                     content: { text: 'wooo' },
@@ -66,13 +67,17 @@ function relevantTests (test, keys, did) {
                     'should have the expected post author')
                 t.end()
             })
+            .catch(err => {
+                t.fail(err)
+                t.end()
+                console.log('errrrrrrrrrrrrrrrrrrrr', err)
+            })
     })
 
     // now `crob` is following the admin
     test('get relevant posts', t => {
         RelevantPosts.get(crob.did)
             .then(res => {
-                // console.log('got relevants', res)
                 t.equal(res.length, 1, 'should get 1 post')
                 t.equal(res[0].value.content.text, 'wooo',
                     'should have the expected message text')
@@ -106,14 +111,11 @@ function relevantTests (test, keys, did) {
                     userProfile: { username: 'dod' }
                 })
             })
-            // .then(res => {
             .then(() => {
-                // console.log('following', res)
                 // this makes admin follow crob
-                return Follow.post(ssc, keys, crob.did)
+                return Follow.post(ssc, keys, [crob.did])
             })
             .then(res => {
-                console.log('fol from admin to crob', res)
                 // now make a post from crob
                 return Post.create(ssc, crob.keys, {
                     files: [file],
@@ -142,7 +144,7 @@ function relevantTests (test, keys, did) {
             })
     })
 
-    test('crob can see thier own messages', t => {
+    test('crob can see their own messages', t => {
         // in this case, we have `dod -> admin <-> crob`
 
         // should check here if dod can see their own posts

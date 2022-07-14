@@ -1,9 +1,9 @@
-const ssc = require('@nichoth/ssc/web')
+// const ssc = require('@nichoth/ssc/web')
 const observ = require('observ')
 const struct = require('observ-struct')
 const { getRoute } = require('route-event')
 
-function State (keystore, { admins, dids }) {
+function State (ssc, keystore, { admins, dids }) {
 
     const state = struct({
         route: observ(getRoute()),
@@ -47,30 +47,6 @@ function State (keystore, { admins, dids }) {
     })
 
     return state
-
-    // var state = struct({
-    //     // feed: observ(null),
-    //     relevantPosts: observ(null),
-    //     route: observ(''),
-    //     following: observ(null),
-    //     userFeeds: observ({}),
-    //     profiles: observ({}),
-    //     me: struct({
-    //         source: observ(null),
-    //         secrets: observ(keys || {
-    //             id: null,
-    //             public: null,
-    //             private: null,
-    //             curve: null
-    //         }),
-    //         avatar: observ(null),
-    //         profile: struct({
-    //             userName: observ((profile && profile.userName) || null)
-    //         })
-    //     })
-    // })
-
-    // return state
 }
 
 module.exports = State

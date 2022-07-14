@@ -1,7 +1,7 @@
 require('dotenv').config()
 const ssc = require('@nichoth/ssc-lambda')
 const faunadb = require('faunadb')
-const { blobHash } = require('../../../src/util')
+const { getHash: blobHash } = require('@nichoth/blob-store')
 const upload = require('../upload')
 const q = faunadb.query
 const client = new faunadb.Client({
@@ -93,9 +93,6 @@ exports.handler = async function (ev, ctx) {
         const did = ssc.getAuthor(msg)
         const pubKey = ssc.didToPublicKey(did).publicKey
 
-        console.log('pub key', pubKey)
-        console.log('message', msg)
-
         // here, check the msg sig
         try {
             var isVal = await ssc.isValidMsg(msg, null, pubKey)
@@ -111,7 +108,7 @@ exports.handler = async function (ev, ctx) {
             console.log('not valid')
             return {
                 statusCode: 422,
-                body: 'invalid signature'
+                body: 'invalid signature in profile'
             }
         }
 
@@ -205,7 +202,7 @@ async function update ({ did, msg, pubKey, file }) {
     // the same file hash in the `msg.image` field, but no `file` key in
     // the request
     if (file) {
-        const _hash = blobHash(file)
+        const _hash = await blobHash(file)
 
         if (_hash !== msg.content.image) {
             return {

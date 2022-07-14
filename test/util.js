@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid')
 require('isomorphic-fetch')
 const ssc = require('@nichoth/ssc-lambda')
-const BASE = 'http://localhost:8888'
+// const BASE = 'http://localhost:8888'
 const Invitation = require('../src/client/invitation')
 
 module.exports = {
@@ -22,6 +22,10 @@ function inviteAndFollow ({ adminKeys, user, userProfile }) {
             }
 
             return Invitation.redeem(ssc, user.keys, code, content, file)
+                .then(() => {
+                    return Invitation.followViaInvitation(ssc, adminKeys,
+                        [user.did])
+                })
         })
 }
 

@@ -13,6 +13,15 @@
     {
       "//": "for netlify (live site)",
       "did": "did:key:z82T5VMCLAAuu28GfHwiAwvHSBhtWweGPWvEFEvnxLNagze67MLZhwLiY8BYgUDD27tZ44N5UceDMrkJZSotoGYz6abn3"
+    },
+    {
+      "did": "did:key:z82T5VRdpbwqSouHVpHquKfLfqgZuDZzpZJ1uKs4TbL6c5Hqj5vFrspY6vgcRAVBZ1JCmZWrEx3k2kD5rpcX1fJAmJUKE"
+    },
+    {
+      "did": "did:key:z82T5WgsuqFR2ZDhRuPNp5AQRbyJZ25S3pEUmVwGmwHuSzxDdLo9mHvKFuz2QEq7BYndfZVWYvVenmQggkowksdhGSp9T"
+    },
+    {
+      "did": "did:key:z82T5VLFakt2FDsMEwChAmPgBXNhY5aNU8i9r7CVS7UU79X8hZmXyTFzTjxtzZdGQ4QGyegSah75vjXXnk4XDfQgGnPGM"
     }
   ]
 }
