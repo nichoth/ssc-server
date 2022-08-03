@@ -920,8 +920,106 @@ It's worth noting that if you do the image upload server-side, it is still not a
 did:key:z82T5VbUheY9iVJv26ZEXnH5Rn8vsgTZQmyfojJjqKVUG1AQxFi53JtooN1hAwfLcdnqjg7EQxpMQzdvwGUPmwsLPuhYd
 
 
+------------------------------------------------
 
 
+## log from chat about private files
+
+### nichoth — 07/12/2022
+ok yes. So client-side, i make a UCAN that says "app A is granted permissions x". Then on the remote side, how does the fission server decide who is allowed to write?
+
+### quinn — 07/12/2022
+Unfortunately I'm not seeing a complete source of written documentation on that yet, but there's a work in progress spec here: https://github.com/WebNativeFileSystem/spec
+Importantly though, the remote side isn't "deciding" who is allowed to write, and it's just a case of whether someone has the keys required to do so. Philipp also gave a good overview of some of the ideas in a talk back in Feburary: https://talk.fission.codes/t/wnfs-v2-munch-learn/2517
+I'm not sure if @Philipp has a better reference in mind though 🙂
+
+### nichoth — 07/12/2022
+ah ha thanks for the links
+the remote side isn't "deciding" who is allowed to write, and it's just a case of whether someone has the keys required to do so
+
+hmm I'm trying to think of what this means
+"has the keys required to write" … naïvely I would think this means the server checking if a DID is on a list of allowed users
+
+### quinn — 07/12/2022
+It's not an exact match, but this paper on the Cryptree data structure occupies a similar design space: https://www.researchgate.net/publication/220960841_Cryptree_A_Folder_Tree_Structure_for_Cryptographic_File_Systems
+ResearchGate
+(PDF) Cryptree: A Folder Tree Structure for Cryptographic File Systems
+PDF | We present Cryptree, a cryptographic tree structure which facilitates access control in file systems operating on untrusted storage. Cryptree... | Find, read and cite all the research you need on ResearchGate
+Image
+
+### nichoth — 07/12/2022
+sorry I'm trying to grok that paper. I feel like it's kind of over my head. Being a data structure vs a program, this means that data is encrypted in such a way that only specific users are able to decrypt it? 
+
+all content is encrypted such that only legitimate accessors can decrypt it
+
+### quinn — 07/12/2022
+Exactly! Brooke or Philip would be able to get into more of the details than me, but the rough idea is that you have a key that deterministically rotates as the filesystem changes, and the different writers are given access to that key through a block that's encrypted using their public key 
+
+### nichoth — 07/12/2022
+thanks! 
+
+different writers are given access to that key through a block that's encrypted using their public key
+
+this reminds me of something I was just reading about, this private-box encryption module — https://github.com/dominictarr/group-box#broadcast-messages-from-a-singe-author-to-large-group
+
+they would send them a symmetric key for that group via a direct private message.
+
+the private message there being equivalent to the encrypted block in wnfs. 
+
+So here you write a 'file' that is encrypted 'to' a specific person, by encrypting it with their public key
+then the set of people who are able to read within this 'group' of messages is determined by the collection of users that you have written the current group key to (written a private message to). To revoke membership in a group means you would create a new key for the group, then only give access to it to a particular group of users.
+
+------------------
+this is something I'm not really familiar with from posix semantics in a filesystem. You can write your own private files, but I don't remember being able to write a secret file to a different user 
+
+### boris — 07/12/2022
+The guide has documentation on how this works https://guide.fission.codes/
+If you’re hand rolling DID stuff without Webnative then it’s going to be a lot harder
+
+### nichoth — 07/12/2022
+Great thank you
+
+### Philipp — 07/12/2022
+What if you wanted more fine-grained control of read access? For example, can you select a group of DIDs that have read access to a file?
+
+You'd need to give the encryption keys to just that group of DIDs. One way of doing that may be via shared private files (there's a section in the guide I think).
+
+Read access is governed by only giving the key to people who are supposed to be able to read the files. Write access is governed through UCANs. These UCANs are checked on the server, they need to originate in the original filesystem owner.
+We don't have super fine-grained write permissions in today's production system, but we'll have ones based on our name filter idea. The very surface-level description is that you provide the "identity" of the files you want to write inside the UCANs resource. And that identity reveals as little information about the files as possible.
+
+### nichoth — 07/12/2022
+I think this may be what I was thinking about — https://guide.fission.codes/developers/webnative/sharing-private-data
+
+### Philipp — 07/12/2022
+Yes exactly that.
+
+### nichoth — 07/12/2022
+thanks everyone. From reading the guide docs, I understand that you can share a "private" file
+```js
+const shareDetails = fs.sharePrivate(
+  [ webnative.path.file() ],
+  { shareWith: "username" } // alternative: list of usernames, or exchange DID(s)
+)
+```
+
+and that gives you shareDetails
+
+Then you need to transmit the shareDetails.shareId to the other user somehow, and the other user calls fs.acceptShare, and passes in the shareId they got already. 
+
+and this depends on both users having a fission account; that's how you're able to specify the share target with just a username 
+
+### nichoth — 07/12/2022
+so to share private files with a group of people, you would need to write down the list of people in the group. Then call fs.sharePrivate and pass it the list of other users.
+
+And wnfs here takes care of creating DIDs/keypairs for you. This happens via iframe right? because keypairs are per domain. So in the example if you pass in a username, it is relative to the fission domain/account.
+
+### icidasset — 07/13/2022
+Exactly, needs a list of fission usernames.
+
+It looks up the public exchange keys from the usernames you passed in. It does that by loading people's public filesystem, listing all the keys in their `.well-known/exchange/` folder, and creating a share for all those exchange keys.
+
+### nichoth — 07/13/2022
+Thanks. In the interest of dogfood, meaning that I just want to do this for myself, I will probably write a little app that provides some UI for sharing files amongst specific groups of people.
 
 
 
