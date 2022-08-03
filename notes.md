@@ -980,11 +980,12 @@ If you’re hand rolling DID stuff without Webnative then it’s going to be a l
 Great thank you
 
 ### Philipp — 07/12/2022
-What if you wanted more fine-grained control of read access? For example, can you select a group of DIDs that have read access to a file?
+> What if you wanted more fine-grained control of read access? For example, can you select a group of DIDs that have read access to a file?
 
 You'd need to give the encryption keys to just that group of DIDs. One way of doing that may be via shared private files (there's a section in the guide I think).
 
 Read access is governed by only giving the key to people who are supposed to be able to read the files. Write access is governed through UCANs. These UCANs are checked on the server, they need to originate in the original filesystem owner.
+
 We don't have super fine-grained write permissions in today's production system, but we'll have ones based on our name filter idea. The very surface-level description is that you provide the "identity" of the files you want to write inside the UCANs resource. And that identity reveals as little information about the files as possible.
 
 ### nichoth — 07/12/2022
