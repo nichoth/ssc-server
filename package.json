@@ -30,7 +30,7 @@
   "homepage": "https://github.com/nichoth/ssc-server#readme",
   "dependencies": {
     "@cloudinary/url-gen": "^1.8.0",
-    "@nichoth/blob-store": "^0.3.2",
+    "@nichoth/blob-store": "^0.3.3",
     "@nichoth/events": "^1.1.2",
     "@nichoth/forms": "^1.0.0",
     "@nichoth/ssc": "^0.14.1",
