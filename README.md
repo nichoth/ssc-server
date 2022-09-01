@@ -55,7 +55,7 @@ Messages here look like
 }
 ```
 
-The `mentions` array in the message is the hash of an image file. The `author` is the ID of a user, and user IDs are base58 encoded public keys. Notice the original format of author IDs -- a base64 encoded public key string prepended with `@`. The `previous` field is the hash of the immediately preceeding message (forming a merkle-list). `signature` is the signature of this message made from the user's private key, after the message has been stringified.
+The `mentions` array in the message is the hash of an image file. The `author` is the ID of a user, and user IDs are [base58 encoded public keys](https://whitepaper.fission.codes/authorization/did-doc). Notice the original format of author IDs -- a base64 encoded public key string prepended with `@`. The `previous` field is the hash of the immediately preceeding message (forming a merkle-list). `signature` is the signature of this message made from the user's private key, after the message has been stringified.
 
 This is how blobs are incorporated into the ssb merkle-list -- they are referenced by a unique hash, and must be stored somewhere that is addressed by hash that the application knows about. SSB uses [multiblob](https://github.com/ssbc/multiblob).
 
