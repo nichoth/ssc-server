@@ -48,7 +48,7 @@ Messages here look like
   content: {
     type: 'post',
     text: 'woooo',
-    mentions: ['my-hash']
+    mentions: ['&my-hash.sha256']
 },
   signature: 'LJUQXvR6SZ9lQSlF1w1RFQi3GFIU4B/Cc1sP6kjxnMZn3YW8X7nj9/hlWiTF3cJbWkc9xHvApJ+9uRtHxicXAQ==.sig.ed25519'
 }
