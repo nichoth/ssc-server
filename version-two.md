@@ -2,7 +2,7 @@
 
 ## Focus on privacy and sharing data with known people
 
-I've discovered that wnfs already has a way to do read permissions on a per-user basis. That's kind of interesting because it's all based on decryption capabilities instead of access control.
+I've discovered that [wnfs](https://guide.fission.codes/developers/webnative/file-system-wnfs) already has a way to do read permissions on a per-user basis. That's kind of interesting because it's all based on decryption capabilities instead of access control.
 
 And wnfs gives us a common backend for users, which makes identity easier.
 
