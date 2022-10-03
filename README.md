@@ -71,15 +71,9 @@ That's a workng idea that I have upheld throughout this -- just make something t
 
 So, how does a server know who to accept `posts` from? The server is like a 'pub' in traditional ssb, meaning that the server has it's own identity, and it keeps a list of people that it follows.
 
-In order for a server to follow you, you must be invited by someone who is already followed by the server. There are several ways to do the invitations. 
+I like doing things country club style, meaning that in order for a server to follow you, you must be invited by someone who is already followed by the server.
 
-The simplest is to just have a passward that is hashed (so it is secret) then saved to a text file in the repo. When the server gets a request to redeem an invitation, it checks if the request contains the right password. The drawback of this is that regular users cannot invite others. Only the server owner would be able to create a password in a file in the repo.
-
-You could create a record in the database with a hashed password. Then you would be able to record additional information like who invited who. This is necessary if you want to enable users to invite other users, vs just people the server operator chooses to invite.
-
-Users with a valid password then get saved to a list of allowed people. (You save the person's DID, which would need to be in the request).
-
-If the server has its own identity (an identity is a keypair) then it could create a UCAN for the invited user, but that means you need to store a private key for the server, whereas you don't need to if you are using the password method.
+For the initial version, only the server operator is able to invite new users. How this works is that the site admin (the DID listed in the config file) writes an 'invitation' document to the DB. This works because the server checks that the invitation is signed and valid from the admin. The invitation contains a unique code, and the new user must enter the code. Then the server writes the new user's DID to a DB, and it will save any posts from them in the future.
 
 ### how it's made
 
