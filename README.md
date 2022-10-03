@@ -36,8 +36,7 @@ The good news is that you don't need to trust this server at all, because you ar
 
 Because servers are *still useful* -- it's a peer that is always online. We are at a point where making an application is about deciding *how much* you want to depend on servers. On one end you have something like *instagram* where the server controls your posts and identity. Your instagram identity means nothing to a different server. At the other end you have a *fully p2p* network. This is maybe like bittorrent clients. It *relies* on a peer being online at the same time, if there is not a peer then you're out of luck.
 
----------------------------------------
-
+## messages
 Messages here look like
 
 ```js
@@ -63,6 +62,7 @@ This is how blobs are incorporated into the ssb merkle-list -- they are referenc
 
 I thought it would be easier to keep things 'serverless', so I've used something called [cloudinary](https://cloudinary.com/) as an image host. Images are saved using their hash as a name, so it's still functionally a content addressable store. Then the client uses the hash of the image to construct a `src` url for the image file, similar to what you would do on ssb, where an image would be hosted on `localhost`.
 
+## database
 One of the cool things about ssb is that it uses a database that was more-or-less custom written for the application -- [flume db](https://github.com/flumedb/flumedb). Again in the interest of doing things 'serverlessly', I've used [fauna db](https://fauna.com/).
 
 That's another questionable decision I've made. I think it would be cooler if this used a *local* DB, then the local DB synchronized with the server DB. That's a drawback of my setup -- there is no offline first, or use without internet. I did make [another version](https://nichoth.com/projects/dev-diary-ssc-flume/) of the DB behind this, using flume & muxrpc. That could be worthwhile if you were wanting to do more with the DB side of things.
@@ -77,7 +77,7 @@ I like doing things country club style, meaning that in order for a server to fo
 
 For the initial version, only the server operator is able to invite new users. How this works is that the site admin (the DID listed in the config file) writes an 'invitation' document to the DB. This works because the server checks that the invitation is signed and valid from the admin. The invitation contains a unique code, and the new user must enter the code. Then the server writes the new user's DID to a DB, and it will save any posts from them in the future.
 
-### how it's made
+## how it's made
 
 I used [preact](https://preactjs.com/) (a small react-like library) and [htm](https://github.com/developit/htm) as a view layer. A nice thing about `htm` is that it obviates the need for `babel`, but still allows you to use an `html`-like syntax.
 
