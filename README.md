@@ -36,6 +36,8 @@ The good news is that you don't need to trust this server at all, because you ar
 
 Because servers are *still useful* -- it's a peer that is always online. We are at a point where making an application is about deciding *how much* you want to depend on servers. On one end you have something like *instagram* where the server controls your posts and identity. Your instagram identity means nothing to a different server. At the other end you have a *fully p2p* network. This is maybe like bittorrent clients. It *relies* on a peer being online at the same time, if there is not a peer then you're out of luck.
 
+---------------------------------------
+
 Messages here look like
 
 ```js
