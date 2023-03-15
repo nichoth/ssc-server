@@ -2,12 +2,8 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ae03a3bc-b5a6-4fb8-b9dc-d95cc4606ca1/deploy-status)](https://app.netlify.com/sites/ssc-server/deploys)
 
-This is a demo, but it not functioning while I refactor things
-~~[https://ssc-server.netlify.app/](https://ssc-server.netlify.app/)~~
-
------------------------------------------------
-
-[Join the discord](https://discord.gg/SxWNsDMxT4)
+* [Join the discord](https://discord.gg/SxWNsDMxT4)
+* Read more about deployment here -- [nichoth.com/ssc](https://nichoth.com/ssc/)
 
 ----------------------------------------------
 
@@ -15,12 +11,6 @@ This is the frontend and also server-side code for ssc, a deployable netlify
 website. This uses netlify lambda functions to call a faunaDB. As such, it is "serverless", and only requires lambda functions, not a dedicated server.
 
 -----------------------------------------------
-
-~~Deploy your own here -- [nichoth.com/ssc](https://nichoth.com/ssc/)~~
-
-It's not ready yet though
-
----------------------------------------
 
 ## what is this?
 
